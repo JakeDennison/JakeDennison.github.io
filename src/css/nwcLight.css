@@ -1,5 +1,5 @@
-#cdk-step-label-0-1 > div.mat-step-label.mat-step-label-active > div > div > div > h4:hover{
-    overflow: visible; 
-    white-space: normal;
+h4.nx-theme-heading-1:hover{
+    overflow: visible!important; 
+    white-space: normal!important;
     height:auto;  /* just added this line */
 }
