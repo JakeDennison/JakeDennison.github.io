@@ -1,1 +1,5 @@
-.nx-theme-styles .nx-theme-form { background-color: #afe754;}
+.nx-theme-heading-1:hover{
+    overflow: visible; 
+    white-space: normal;
+    height:auto;  /* just added this line */
+}
