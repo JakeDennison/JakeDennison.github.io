@@ -2,5 +2,5 @@
 h4.nx-theme-heading-1:hover
 {
     overflow: visible!important; 
-    white-space: normal!important;
+    white-space: nowrap!important;
 }
