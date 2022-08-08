@@ -1,5 +1,9 @@
 .nx-form *:not(.nx-action-panel) {
-    direction: rtl!important;
+    direction: rtl;
+}
+
+.nx-action-panel {
+    direction:unset;
 }
 
 /*Margin Correction*/
