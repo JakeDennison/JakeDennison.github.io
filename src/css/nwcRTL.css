@@ -2,6 +2,10 @@
     direction: rtl;
 }
 
+body {
+    text-align: right;
+}
+
 .nx-action-panel {
     direction:unset;
 }
@@ -9,7 +13,6 @@
 /*Margin Correction*/
 
 .nx-checkbox-toggle .nx-checkbox-toggle-groove,
-.nx-title,
 .nx-control-richtext-label
  {
     margin-right: 10px;
