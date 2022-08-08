@@ -19,5 +19,8 @@ body {
 
 /*groups*/
 
+.nx-group-control-container>.nx-control-richtext-label {
+    margin-right: 10px;
+}
 
 /*Navigation Button*/
