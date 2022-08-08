@@ -7,7 +7,7 @@ body {
 }
 
 .nx-action-panel {
-    direction:unset;
+    direction:ltr;
 }
 
 /*Margin Correction*/
