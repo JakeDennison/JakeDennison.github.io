@@ -10,13 +10,14 @@ body {
     direction:ltr;
 }
 
-/*Margin Correction*/
+/*Toggle Box*/
 
-.nx-checkbox-toggle .nx-checkbox-toggle-groove,
-.nx-control-richtext-label
+.nx-checkbox-toggle .nx-checkbox-toggle-groove
  {
     margin-right: 10px;
 }
 
-/*Navigation Button*/
+/*groups*/
 
+
+/*Navigation Button*/
