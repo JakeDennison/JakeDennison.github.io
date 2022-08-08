@@ -1,13 +1,34 @@
-.nx-form *:not(.nx-action-panel) {
+.nx-form *:not(
+.nx-action-panel,
+.nx-button-container,
+.nx-datetimepicker,
+.nx-simple-currency-control,
+.custom-css-dialog-modal) {
     direction: rtl;
-}
-
-body {
     text-align: right;
 }
 
-.nx-action-panel {
+.nx-action-panel,
+.nx-button-container,
+.nx-datetimepicker,
+.nx-simple-currency-control,
+.custom-css-dialog-modal
+ {
     direction:ltr;
+}
+
+.mat-vertical-stepper-header .mat-step-icon {
+    margin-right: 0px;
+    margin-left: 12px;
+}
+
+[dir] .nx-theme-styles .mat-step-label > * {
+    float: right!important;
+}
+
+.nx-button-container
+ {
+    text-align: left;
 }
 
 /*Toggle Box*/
@@ -19,6 +40,6 @@ body {
 
 /*groups*/
 
-.nx-theme-richtext ul {
-    margin-right: 10px;
+.nx-control-richtext-label .nx-theme-richtext ol, .nx-control-richtext-label .nx-config-panel #showSaveAndContinueButton-group-control .nx-form-label ol, .nx-config-panel #showSaveAndContinueButton-group-control .nx-control-richtext-label .nx-form-label ol, .nx-control-richtext-label .nx-theme-richtext ul, .nx-control-richtext-label .nx-config-panel #showSaveAndContinueButton-group-control .nx-form-label ul, .nx-config-panel #showSaveAndContinueButton-group-control .nx-control-richtext-label .nx-form-label ul, .nx-control-richtext-label .nx-theme-richtext dl, .nx-control-richtext-label .nx-config-panel #showSaveAndContinueButton-group-control .nx-form-label dl, .nx-config-panel #showSaveAndContinueButton-group-control .nx-control-richtext-label .nx-form-label dl {
+    padding: 0 20px 0 1px;
 }
