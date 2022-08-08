@@ -1,3 +1,15 @@
-.nx-form * {
+.nx-form *:not(.nx-action-panel) {
     direction: rtl!important;
 }
+
+/*Margin Correction*/
+
+.nx-checkbox-toggle .nx-checkbox-toggle-groove,
+.nx-title,
+.nx-control-richtext-label
+ {
+    margin-right: 10px;
+}
+
+/*Navigation Button*/
+
