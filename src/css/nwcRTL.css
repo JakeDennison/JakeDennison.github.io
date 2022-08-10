@@ -1,22 +1,47 @@
-.nx-form *:not(
-.nx-action-panel,
-.nx-button-container,
-.nx-datetimepicker,
-.nx-simple-currency-control,
-.custom-css-dialog-modal) {
+/*Main target*/
+
+/*
+.nx-panel-content,
+*/
+
+ntx-richtext-label,
+ntx-address,
+mat-step-header,
+ntx-barcode,
+ntx-currency,
+ntx-data-lookup,
+ntx-datetime,
+ntx-email,
+ntx-file-upload,
+ntx-geolocation,
+ntx-number,
+ntx-people-picker,
+ntx-repeating-section,
+ntx-signature,
+ntx-modal,
+ntx-multilinetext,
+ntx-textbox,
+ntx-choice-dropdown,
+ntx-boolean,
+ntx-choice-radio,
+.nx-panel-header,
+.nx-theme-richtext,
+.pac-target-input:not(:-webkit-autofill),
+.pac-container
+{
     direction: rtl;
     text-align: right;
 }
 
-.nx-action-panel,
-.nx-button-container,
-.nx-datetimepicker,
-.nx-simple-currency-control,
-.custom-css-dialog-modal
- {
-    direction:ltr;
+ntx-multichoice ntx-label,
+.nx-modal-dialog-content .nx-zinc-control-label {
+    display: flex;
+    flex-direction: row-reverse;
 }
 
+/*Corrections*/
+
+/*page navigation correction - vertical*/
 .mat-vertical-stepper-header .mat-step-icon {
     margin-right: 0px;
     margin-left: 12px;
@@ -31,6 +56,16 @@
     text-align: left;
 }
 
+ntx-multi-page mat-vertical-stepper .mat-vertical-content {
+    padding: 6px 8px 24px 24px;
+}
+
+/*page navigation correction - horizontal*/
+
+[dir] .nx-theme-styles .mat-step-label > * {
+    float: none!important;
+}
+
 /*Toggle Box*/
 
 .nx-checkbox-toggle .nx-checkbox-toggle-groove
@@ -42,4 +77,75 @@
 
 .nx-control-richtext-label .nx-theme-richtext ol, .nx-control-richtext-label .nx-config-panel #showSaveAndContinueButton-group-control .nx-form-label ol, .nx-config-panel #showSaveAndContinueButton-group-control .nx-control-richtext-label .nx-form-label ol, .nx-control-richtext-label .nx-theme-richtext ul, .nx-control-richtext-label .nx-config-panel #showSaveAndContinueButton-group-control .nx-form-label ul, .nx-config-panel #showSaveAndContinueButton-group-control .nx-control-richtext-label .nx-form-label ul, .nx-control-richtext-label .nx-theme-richtext dl, .nx-control-richtext-label .nx-config-panel #showSaveAndContinueButton-group-control .nx-form-label dl, .nx-config-panel #showSaveAndContinueButton-group-control .nx-control-richtext-label .nx-form-label dl {
     padding: 0 20px 0 1px;
+}
+
+/*Make repeating sections better*/
+
+.ntx-repeating-section-overlay {
+    position:absolute;
+    padding: 20px 0 0 0!important;
+    left: -5%;
+}
+
+.btn-repeating-section-new-row {
+    float:right;
+}
+
+/*required*/
+
+.nx-form-label .nx-required-star {
+    margin-left: 0px;
+    margin-right: 5px;
+}
+
+/*check box*/
+
+.nx-checkbox-container {
+    flex-flow: row-reverse nowrap!important;
+    padding-left:0px!important;
+}
+
+.nx-checkbox .nx-checkbox-faux {
+    position:unset!important;
+    margin-left: 24px;
+}
+
+.nx-checkbox-group {
+    float:right;
+
+}
+
+.nx-checkbox-inline {
+    padding-right: 0rem!important;
+    padding-left: .75rem;
+}
+
+/* span correction*/
+
+.nx-simple-currency-control,
+.nx-zinc-control-input,
+.nx-datetimepicker,
+.input-group-append,
+.ng-select .ng-select-container,
+.ntx-simple-select-single-async {
+    flex-direction: row-reverse!important;
+}
+
+/*dropdown*/
+
+.ng-select .ng-dropdown-panel .ng-dropdown-panel-items .nx-select__option {
+    justify-content: right;
+}
+
+.ng-select .ng-clear-wrapper {
+    position:absolute;
+}
+
+ng-clear-wrapper ng-star-inserted {
+    width:0px!important;
+    margin-left: calc(.75rem + 7px);
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-input {
+    z-index:unset;
 }
