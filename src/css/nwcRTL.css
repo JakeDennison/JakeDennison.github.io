@@ -24,6 +24,7 @@ ntx-textbox,
 ntx-choice-dropdown,
 ntx-boolean,
 ntx-choice-radio,
+ntx-control-loading,
 .nx-panel-header,
 .nx-theme-richtext,
 .pac-target-input:not(:-webkit-autofill),
@@ -38,8 +39,6 @@ ntx-multichoice ntx-label,
     display: flex;
     flex-direction: row-reverse;
 }
-
-
 
 /*Corrections*/
 
@@ -108,8 +107,8 @@ ntx-multi-page mat-vertical-stepper .mat-vertical-content {
 }
 
 .nx-checkbox .nx-checkbox-faux {
-    position:unset!important;
-    margin-left: 24px;
+    position:relative!important;
+    margin-left: 19px;
 }
 
 .nx-checkbox-group {
