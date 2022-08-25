@@ -12,18 +12,18 @@
     }
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 940px) {
     .nx-form {
         width:900px;
         padding: 20px 15px;
     }
 }
 
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1280px) {
     .nx-form {
-        width:1150px;
+        width:1200px;
         padding: 25px 15px;
-        max-width: 1150px;
+        max-width: 1200px;
     }
 }
 
