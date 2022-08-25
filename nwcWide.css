@@ -1,0 +1,36 @@
+@media screen and (min-width: 0) {
+    .nx-form {
+        width:100%;
+        padding: 20px 15px
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .nx-form {
+        width:100%;
+        padding: 20px 15px
+    }
+}
+
+@media screen and (min-width: 920px) {
+    .nx-form {
+        width:900px;
+        padding: 20px 15px;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .nx-form {
+        width:1230px;
+        padding: 25px 15px;
+        max-width: 1230px;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    .nx-form {
+        width:1500px;
+        padding: 25px 15px;
+        max-width: 1500px;
+    }
+}
