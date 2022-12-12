@@ -17,12 +17,7 @@ $grad: ();
 }
 
 // The CSS
-html {
-  height: 100%;
-  background: linear-gradient(#123 30%, #667);
-  overflow: hidden;
-}
-body, body:before, .snow:after {
+.nx-form-runtime-content, .nx-form-runtime-content:before, .nx-form-runtime-content:after {
   position: absolute;
   top: -$w + px;
   left: 0;
@@ -33,14 +28,14 @@ body, body:before, .snow:after {
   animation: snow $s linear infinite;
   content: "";
 }
-body:after {
+.nx-form-runtime-content:after {
   margin-left: -$w/3 + px;
   opacity: .4;
   animation-duration: $s*2;
   animation-direction: reverse;
   filter: blur(3px);
 }
-body:before {
+.nx-form-runtime-content:before {
   animation-duration: $s*3;
   animation-direction: reverse;
   margin-left: -$w/2 + px;
