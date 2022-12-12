@@ -22,7 +22,7 @@ html {
   background: linear-gradient(#123 30%, #667);
   overflow: hidden;
 }
-.snow, .snow:before, .snow:after {
+body, body:before, .snow:after {
   position: absolute;
   top: -$w + px;
   left: 0;
@@ -33,14 +33,14 @@ html {
   animation: snow $s linear infinite;
   content: "";
 }
-.snow:after {
+body:after {
   margin-left: -$w/3 + px;
   opacity: .4;
   animation-duration: $s*2;
   animation-direction: reverse;
   filter: blur(3px);
 }
-.snow:before {
+body:before {
   animation-duration: $s*3;
   animation-direction: reverse;
   margin-left: -$w/2 + px;
