@@ -3,7 +3,7 @@ import {LitElement, html, css} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/
 export class MyElement extends LitElement {
     static async getMetaConfig() {
     return {
-        controlName: 'Custom input',
+        controlName: 'my-element',
         fallbackDisableSubmit: false,
         version: '1.2',
     };
