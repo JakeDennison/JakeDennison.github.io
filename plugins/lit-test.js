@@ -12,7 +12,7 @@ export class CustomInput extends LitElement {
   }
 ​
   render() {
-    return html`<input placeholder="custom-input" />`;
+    return html`<input placeholder="custom input" />`;
   }
 }
 ​
