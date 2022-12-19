@@ -1,0 +1,49 @@
+{
+"swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Download File from URL",
+        "description": "Retrieves a file from a URL"
+    },
+    "host": "io.nintex.com",
+    "schemes": [
+        "https"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+            "get": {
+                "summary": "Get a file from URL",
+                "description": "Insert a direct link to a file or image to retreive",
+                "operationId": "getFileFromURL",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "filepath",
+                        "in": "path",
+                        "type": "string",
+                        "required": true,
+                        "x-ntx-summary": "Enter direct link to file"
+                    }
+                ],
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "download_uri": {
+                                "type": "string",
+                                "x-ntx-summary": "Downloaded file",
+                                "format": "x-ntx-file-reference"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

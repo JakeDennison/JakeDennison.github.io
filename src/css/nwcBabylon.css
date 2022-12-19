@@ -1,0 +1,45 @@
+/* Start - Control - "Original Text"*/
+
+.class {
+    visibility: hidden;
+    position: relative;
+}
+/* Instructions::
+1. Place Translation in content property
+ */
+.class:after {
+    visibility: visible;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+    display:inline-block;
+}
+/* End - Control - "Original Text"*/
+
+
+/* ========================================================================== */
+
+
+/* Start - File Upload - "Drag files here or"*/
+
+div.nx-upload-action-bar.d-print-none > div > p {
+    visibility: hidden;
+    position: relative;
+}
+/* 
+1. Place Translation in content property
+2. Check width of text content
+3. Change width property as needed
+ */
+div.nx-upload-action-bar.d-print-none > div > p:after {
+    visibility: visible;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "Sleep bestanden hierheen of";
+    display:inline-block;
+    width:200px;
+}
+
+/* File Upload - "Select Files button"*/
