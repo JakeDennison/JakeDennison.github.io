@@ -1,7 +1,15 @@
 import {LitElement, html, css} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 
 export class MyElement extends LitElement {
-  static properties = {
+    static async getMetaConfig() {
+    return {
+        controlName: 'Custom input',
+        fallbackDisableSubmit: false,
+        version: '1.2',
+    };
+    }
+
+    static properties = {
     greeting: {},
     planet: {},
   };
@@ -18,15 +26,7 @@ export class MyElement extends LitElement {
       color: var(--planet-color, blue);
     }
   `;
-
-    static async getMetaConfig() {
-        return {
-        controlName: 'My Element',
-        fallbackDisableSubmit: false,
-        version: '1.0',
-        };
-    }
-
+  
   constructor() {
     super();
     // Define reactive properties--updating a reactive property causes
