@@ -19,6 +19,14 @@ export class MyElement extends LitElement {
     }
   `;
 
+    static async getMetaConfig() {
+        return {
+        controlName: 'My Element',
+        fallbackDisableSubmit: false,
+        version: '1.0',
+        };
+    }
+
   constructor() {
     super();
     // Define reactive properties--updating a reactive property causes
@@ -47,4 +55,6 @@ export class MyElement extends LitElement {
     this.planet = this.planet === 'World' ? 'Mars' : 'World';
   }
 }
+
+const elementName = 'my-element';
 customElements.define('my-element', MyElement);
