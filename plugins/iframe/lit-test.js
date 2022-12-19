@@ -19,4 +19,3 @@ export class CustomInput extends LitElement {
 // registering the web component
 const elementName = 'custom-input';
 customElements.define(elementName, CustomInput);
-		
