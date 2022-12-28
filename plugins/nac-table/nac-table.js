@@ -25,6 +25,14 @@ const config = {
 };
 
 class MyTable extends LitElement {
+  static async getMetaConfig() {
+    return {
+      controlName: 'nac-table',
+      fallbackDisableSubmit: false,
+      version: '1.2',
+    };
+  }
+  
   async loadData() {
     try {
       const response = await fetch('data.json');
