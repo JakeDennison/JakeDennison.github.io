@@ -3,7 +3,7 @@ import { LitElement, html } from 'lit-element';
 class MyTable extends LitElement {
   static async getMetaConfig() {
     return {
-      controlName: 'JSON Table Viewer',
+      controlName: 'nac-table',
       fallbackDisableSubmit: false,
       version: '1.0',
     };
