@@ -1,6 +1,13 @@
 import { LitElement, html } from 'lit-element';
 
 class MyTable extends LitElement {
+  static async getMetaConfig() {
+    return {
+      controlName: 'JSON Table Viewer',
+      fallbackDisableSubmit: false,
+      version: '1.0',
+    };
+  }
   async loadData() {
     try {
       const response = await fetch('data.json');
