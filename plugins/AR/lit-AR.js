@@ -1,5 +1,5 @@
-import { html,LitElement} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
-import * as AR from 'https://raw.githack.com/AR-js-org/AR.js/3.4.2/aframe/build/aframe-ar-nft.js';
+import {html, render} from 'lit-html';
+import * as AR from 'ar.js';
 
 class MyARComponent extends LitElement {
   static get properties() {

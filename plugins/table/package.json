@@ -1,0 +1,24 @@
+{
+  "name": "nac-table",
+  "version": "1.0.0",
+  "description": "table displayer for NAC",
+  "main": "nac-table.js",
+  "scripts": {
+    "start": "es-dev-server --app-index index.html --node-resolve --watch --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/JSDenintex/JSDenintex.github.io"
+  },
+  "keywords": [
+    "nac",
+    "table"
+  ],
+  "author": "Jake Dennison",
+  "license": "UNLICENCED",
+  "dependencies": {
+    "bootstrap": "^5.2.3",
+    "lit-element": "^3.2.2",
+    "lit-html": "^2.5.0"
+  }
+}
