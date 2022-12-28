@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit-element/lit-element.js";
+import { LitElement, html } from 'lit-element';
 import { Chart } from 'chart.js';
 
 export class ChartElement extends LitElement {
@@ -43,6 +43,7 @@ export class ChartElement extends LitElement {
       <canvas></canvas>
     `;
   }
+
 }
 
 customElements.define('chart-element', ChartElement);
