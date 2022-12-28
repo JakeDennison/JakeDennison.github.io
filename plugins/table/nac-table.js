@@ -1,5 +1,4 @@
 import { LitElement, html } from 'lit-element';
-import 'bootstrap/dist/css/bootstrap.css';
 
 class MyTable extends LitElement {
   async loadData() {
