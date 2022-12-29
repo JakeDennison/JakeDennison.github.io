@@ -71,5 +71,5 @@ export class ZwcIframe extends LitElement {
 }
 
 // registering the web component.
-const elementName = 'zwc-iframe-new';
+const elementName = 'jwc-iframe-new';
 customElements.define(elementName, ZwcIframe);
