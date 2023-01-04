@@ -9,7 +9,7 @@ export class MyElement extends LitElement {
     };
     }
 
-    static properties = {
+  static properties = {
     greeting: {},
     planet: {},
   };
