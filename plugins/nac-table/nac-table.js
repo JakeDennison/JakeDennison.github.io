@@ -76,4 +76,5 @@ class MyTable extends LitElement {
   }
 }
 
+const elementName = 'nac-table';
 customElements.define('nac-table', MyTable);
