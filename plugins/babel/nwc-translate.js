@@ -1,7 +1,7 @@
 import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 
 export class TranslateMod extends LitElement {
-    
+
     static getMetaConfig() {
         // plugin contract information
         return {
@@ -26,20 +26,24 @@ export class TranslateMod extends LitElement {
         };
     }
   
-    render() {
-      return html`
-        <script>
-            function setSignatureValues() {
-            alert( 'Function is calling' );
-            const element = document.querySelectorAll('ntx-signature > div > div > div > div > h5.d-print-none.ng-star-inserted');
-            element.forEach(element => {
-                element.innerHTML = ${this.Signature};
-            })
-            }
-            setSignatureValues()
-        </script>
-      `;
+    setSignatureValues() {
+        const element = document.querySelectorAll('ntx-signature > h5.d-print-none.ng-star-inserted');
+        element.forEach(element => {
+            element.innerHTML = $.Signature;
+        });
+        alert( 'change is calling' );
     }
+
+    render() {
+        return html`
+          <!-- element template -->
+          <p>Translation</p>
+          <script>
+          alert( 'reder is working' );
+          setSignatureValues()
+          </script>
+        `;
+      }
 }
 
 // registering the web component.
