@@ -1,6 +1,6 @@
 import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 
-export class MyElement extends LitElement {
+export class TranslateMod extends LitElement {
     
     static getMetaConfig() {
         // plugin contract information
