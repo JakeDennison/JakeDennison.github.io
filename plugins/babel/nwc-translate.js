@@ -25,34 +25,17 @@ export class TranslateMod extends LitElement {
             }
         };
     }
-    
-    setElementValues() {
-      const elements = this.shadowRoot.querySelectorAll('ntx-signature div div div div h5.d-print-none.ng-star-inserted');
-      elements.forEach(element => {
-        element.innerHTML =$.Signature;
-      });
-    }
   
     render() {
       return html`
-        <!-- element template -->
-        <ntx-signature>
-          <div>
-            <div>
-              <div>
-                <div>
-                  <h5 class="d-print-none ng-star-inserted">Select to sign</h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ntx-signature>
+        <script>
+            function setSignatureValue() {
+            const element = document.querySelector('ntx-signature div div div div h5.d-print-none.ng-star-inserted');
+            element.innerHTML =${this.Signature};
+            }
+            setSignatureValue()
+        </script>
       `;
-    }
-  
-    connectedCallback() {
-      super.connectedCallback();
-      this.setElementValues();
     }
 }
 
