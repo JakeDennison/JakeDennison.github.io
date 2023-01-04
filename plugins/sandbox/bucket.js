@@ -12,7 +12,7 @@ export class MyElement extends LitElement {
             groupName: 'Translators',
             version: '1.0',
             properties: {
-                Value: {
+                value: {
                     type: 'string',
                     title: 'Select to sign',
                     description: 'value to replace'
@@ -26,9 +26,13 @@ export class MyElement extends LitElement {
         };
     }
   
+    static properties = {
+        value: 'base'
+    }
+
     constructor() {
         super();
-        var myValue = $this.properties.Value
+        var myValue = $this.value
       }
 
     firstUpdated() {
@@ -38,7 +42,7 @@ export class MyElement extends LitElement {
   
     render() {
       return html`
-        <div>My variable is: ${this.myValue}</div>
+        <div>My variable is: ${this.value}</div>
       `;
     }
   
