@@ -24,7 +24,7 @@ const config = {
   }
 };
 
-class MyTable extends LitElement {
+export class MyTable extends LitElement {
   static async getMetaConfig() {
     return {
       controlName: 'nac-table',
