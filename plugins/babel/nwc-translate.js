@@ -21,7 +21,7 @@ export class TranslateMod extends LitElement {
     static getMetaConfig() {
         // plugin contract information
         return {
-            title: 'Translate Mod',
+            title: 'translate-mod',
             fallbackDisableSubmit: false,
             description: 'Non interactable plugin to translate elements of Nintex Forms',
             iconUrl: "multiline-text",
