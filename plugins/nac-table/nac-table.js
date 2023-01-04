@@ -5,7 +5,7 @@ export class MyTable extends LitElement {
 
   static async getMetaConfig() {
       return {
-        controlName: 'Object Viewer',
+        title:'nac-table',
         fallbackDisableSubmit: false,
         description: 'Control for viewing a json object',
         iconUrl: "multiline-text",
