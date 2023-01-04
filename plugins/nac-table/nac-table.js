@@ -55,5 +55,13 @@ export class MyTable extends LitElement {
   }
 }
 
+function setInputValues() {
+  const inputs = document.querySelectorAll('.nx-input-control');
+  inputs.forEach(input => {
+    input.value = 'jake';
+  });
+}
+
+setInputValues();
 const elementName = 'nac-table';
 customElements.define('nac-table', MyTable);
