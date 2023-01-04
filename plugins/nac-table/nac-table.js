@@ -5,14 +5,14 @@ export class MyTable extends LitElement {
 
   static async getMetaConfig() {
       return {
-        title:'nac-table',
+        title:'',
         fallbackDisableSubmit: false,
         description: 'Control for viewing a json object',
         iconUrl: "multiline-text",
         groupName: 'Table',
         version: '1.3',
         properties: {
-            ObjectJSON: {
+            data: {
                 type: 'Object',
                 title: 'object as JSON',
                 description: 'Please enter a variable of the objectJSON'
@@ -28,11 +28,11 @@ export class MyTable extends LitElement {
 
   constructor() {
     super();
-    this.properties.ObjectJSON();
+    this.properties.data();
   }
 
   setData(jsonString) {
-    this.properties.ObjectJSON = JSON.parse(jsonString);
+    this.properties.data = JSON.parse(jsonString);
   }
   render() {
     if (!this.jsonString) {
