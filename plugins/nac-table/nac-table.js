@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit-element';
+import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 import './query-assigned-elements-214d6340.js';
 import { Z as ZincVersion } from './zinc-api-f0859f9f.js';
 
