@@ -41,18 +41,11 @@ function replaceH5(newText) {
     // Get all h5 elements with the "d-print-none ng-star-inserted" class
     var h5Elements = document.querySelectorAll('h5.d-print-none.ng-star-inserted');
     
-    // Check for the h5Elements list at regular intervals until it is no longer empty
-    var interval = setInterval(function() {
-      if (h5Elements.length > 0) {
-        // Loop through all h5 elements
-        for (var i = 0; i < h5Elements.length; i++) {
-          // Replace the inner HTML of the current h5 element with the new text
-          h5Elements[i].innerHTML = newText;
-        }
-        // Clear the interval to stop the loop from running indefinitely
-        clearInterval(interval);
-      }
-    }, 1000); // 1000 milliseconds = 1 second
+    // Loop through all h5 elements
+    for (var i = 0; i < h5Elements.length; i++) {
+      // Replace the inner HTML of the current h5 element with the new text
+      h5Elements[i].innerHTML = newText;
+    }
   }
   
   window.addEventListener('load', function() {
