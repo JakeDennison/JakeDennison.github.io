@@ -44,4 +44,4 @@ export class TranslateMod extends LitElement {
 
 // registering the web component.
 const elementName = 'translate-mod';
-customElements.define(elementName, TranslateMod);
+customElements.define('translate-mod', TranslateMod);
