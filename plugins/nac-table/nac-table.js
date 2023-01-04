@@ -3,7 +3,7 @@ import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/d
 export class MyTable extends LitElement {
   static async getMetaConfig() {
     return {
-      Title: 'nac-table',
+      title: 'nac-table',
       fallbackDisableSubmit: false,
       version: '1.2',
     };
