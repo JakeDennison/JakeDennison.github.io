@@ -28,11 +28,11 @@ export class MyTable extends LitElement {
 
   constructor() {
     super();
-    this.properties.data();
+    this.data();
   }
 
   setData(jsonString) {
-    this.properties.data = JSON.parse(jsonString);
+    this.data = JSON.parse(jsonString);
   }
   render() {
     if (!this.jsonString) {
