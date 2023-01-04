@@ -1,23 +1,6 @@
 import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 
 export class TranslateMod extends LitElement {
-    // Define scoped styles right with your component, in plain CSS
-    static styles = css`
-      :host {
-        height: 100%;
-        width: 100%;
-        display: block;
-      }
-
-      .frame {
-        display: inline-block;
-        height: 100%;
-        width: 100%;
-        background-color: transparent;
-        border: none;
-      }
-    `;
-
     static getMetaConfig() {
         // plugin contract information
         return {
@@ -36,7 +19,7 @@ export class TranslateMod extends LitElement {
             },
             standardProperties: {
                 readOnly: true,
-                required: true,ß
+                required: true,
                 description: true,
             }
         };
