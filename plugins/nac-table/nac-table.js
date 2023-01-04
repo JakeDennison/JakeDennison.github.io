@@ -2,50 +2,41 @@ import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/d
 
 
 export class MyTable extends LitElement {
-
   static async getMetaConfig() {
-      return {
-        title:'',
-        fallbackDisableSubmit: false,
-        description: 'Control for viewing a json object',
-        iconUrl: "multiline-text",
-        groupName: 'Table',
-        version: '1.3',
-        properties: {
-            data: {
-                type: 'Object',
-                title: 'object as JSON',
-                description: 'Please enter a variable of the objectJSON'
-            },
-        },
-        standardProperties: {
-            readOnly: true,
-            required: true,
-            description: true,
-        }
+    return {
+      title: 'nac-table',
+      fallbackDisableSubmit: false,
+      version: '1.2',
     };
+  }
+  
+  async loadData() {
+    try {
+      const response = await fetch('https://jsdenintex.github.io/plugins/nac-table/data.json');
+      this.data = await response.json();
+      this.requestUpdate();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   constructor() {
     super();
-    this.data();
+    this.loadData();
   }
 
-  setData(jsonString) {
-    this.data = JSON.parse(jsonString);
-  }
   render() {
-    if (!this.jsonString) {
+    if (!this.data) {
       return html``;
     }
   
-    const rows = this.jsonString.map(row => html`
+    const rows = this.data.map(row => html`
       <tr>
         ${Object.values(row).map(cell => html`<td>${cell}</td>`)}
       </tr>
     `);
 
-    const headers = Object.keys(this.jsonString[0]).map(header => html`<th>${header}</th>`);
+    const headers = Object.keys(this.data[0]).map(header => html`<th>${header}</th>`);
 
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -63,7 +54,6 @@ export class MyTable extends LitElement {
     `;
   }
 }
-
 
 const elementName = 'nac-table';
 customElements.define('nac-table', MyTable);
