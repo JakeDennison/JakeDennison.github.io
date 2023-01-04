@@ -25,30 +25,41 @@ export class TranslateMod extends LitElement {
             }
         };
     }
-  
-    setSignatureValues() {
-        const element = document.querySelectorAll('ntx-signature > h5.d-print-none.ng-star-inserted');
-        element.forEach(element => {
-            element.innerHTML = $.Signature;
-        });
-        console.log( 'change is calling' );
-    }
 
     render() {
         return html`
           <!-- element template -->
           <p>Translation</p>
           <script>
-          console.log( 'reder is working' );
-          setSignatureValues()
+          console.log('render is working');
           </script>
         `;
       }
 }
 
-// registering the web component.
+function replaceH5(newText) {
+    // Get all h5 elements with the "d-print-none ng-star-inserted" class
+    var h5Elements = document.querySelectorAll('h5.d-print-none.ng-star-inserted');
+    
+    // Check for the h5Elements list at regular intervals until it is no longer empty
+    var interval = setInterval(function() {
+      if (h5Elements.length > 0) {
+        // Loop through all h5 elements
+        for (var i = 0; i < h5Elements.length; i++) {
+          // Replace the inner HTML of the current h5 element with the new text
+          h5Elements[i].innerHTML = newText;
+        }
+        // Clear the interval to stop the loop from running indefinitely
+        clearInterval(interval);
+      }
+    }, 1000); // 1000 milliseconds = 1 second
+  }
+  
+  window.addEventListener('load', function() {
+    replaceH5('This is the new h5 text');
+  });
 
-const elementName = 'translate-mod';
+// registering the web component.
 customElements.define('translate-mod', TranslateMod);
 
 
