@@ -30,6 +30,7 @@ export class TranslateMod extends LitElement {
       return html`
         <script>
             function setSignatureValue() {
+            alert( 'Function is calling' );
             const element = document.querySelector('ntx-signature div div div div h5.d-print-none.ng-star-inserted');
             element.innerHTML =${this.Signature};
             }
