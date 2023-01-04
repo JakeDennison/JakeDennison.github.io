@@ -9,7 +9,7 @@ export class TranslateMod extends LitElement {
             description: 'Non interactable plugin to translate elements of Nintex Forms',
             iconUrl: "multiline-text",
             groupName: 'Translators',
-            version: '0.1',
+            version: '1.0',
             properties: {
                 Signature: {
                     type: 'string',
