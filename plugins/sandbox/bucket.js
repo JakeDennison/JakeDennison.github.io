@@ -26,6 +26,11 @@ export class MyElement extends LitElement {
         };
     }
   
+    constructor() {
+        super();
+        var myValue = $this.properties.Value
+      }
+
     firstUpdated() {
       // Execute a JavaScript function when the element loads
       this.onLoad();
