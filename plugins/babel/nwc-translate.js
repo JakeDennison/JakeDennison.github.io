@@ -31,7 +31,7 @@ export class TranslateMod extends LitElement {
         element.forEach(element => {
             element.innerHTML = $.Signature;
         });
-        alert( 'change is calling' );
+        console.log( 'change is calling' );
     }
 
     render() {
@@ -39,7 +39,7 @@ export class TranslateMod extends LitElement {
           <!-- element template -->
           <p>Translation</p>
           <script>
-          alert( 'reder is working' );
+          console.log( 'reder is working' );
           setSignatureValues()
           </script>
         `;
