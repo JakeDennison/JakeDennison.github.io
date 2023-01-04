@@ -31,18 +31,19 @@ export class TranslateMod extends LitElement {
         <script>
             function setSignatureValues() {
             alert( 'Function is calling' );
-            const element = document.querySelectorAll('ntx-signature div div div div h5.d-print-none.ng-star-inserted');
+            const element = document.querySelectorAll('ntx-signature > div > div > div > div > h5.d-print-none.ng-star-inserted');
             element.forEach(element => {
                 element.innerHTML = ${this.Signature};
             })
             }
+            setSignatureValues()
         </script>
       `;
     }
 }
 
 // registering the web component.
-setSignatureValues()
+
 const elementName = 'translate-mod';
 customElements.define('translate-mod', TranslateMod);
 
