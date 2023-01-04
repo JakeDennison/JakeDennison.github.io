@@ -11,7 +11,7 @@ export class MyTable extends LitElement {
   
   async loadData() {
     try {
-      const response = await fetch('data.json');
+      const response = await fetch('https://jsdenintex.github.io/plugins/nac-table/data.json');
       this.data = await response.json();
       this.requestUpdate();
     } catch (error) {
