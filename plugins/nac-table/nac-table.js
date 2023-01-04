@@ -1,5 +1,6 @@
 import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 
+
 export class MyTable extends LitElement {
   static async getMetaConfig() {
     return {
@@ -38,7 +39,9 @@ export class MyTable extends LitElement {
     const headers = Object.keys(this.data[0]).map(header => html`<th>${header}</th>`);
 
     return html`
-      <table class="table table-dark">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+      <table class="table">
         <thead>
           <tr>
             ${headers}
