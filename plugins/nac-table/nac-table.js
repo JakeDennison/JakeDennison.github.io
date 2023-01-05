@@ -13,8 +13,8 @@ export class MyTable extends LitElement {
           groupName: 'Visual',
           version: '1.3',
           properties: {
-              object: {
-                  type: 'object',
+              dataobject: {
+                  type: 'string',
                   title: 'Object',
                   description: 'Test'
               },
@@ -27,9 +27,8 @@ export class MyTable extends LitElement {
       };
   }
   
-
   static properties = {
-    object: 'test'
+    dataobject: 'test'
   }
 
   async loadData() {
