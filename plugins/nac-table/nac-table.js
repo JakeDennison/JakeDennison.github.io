@@ -35,7 +35,9 @@ export class MyTable extends LitElement {
 
   render() {
     if (!this.dataobject) {
-      return html``;
+      return html`
+      <p>No Data Loaded</p>
+      `;
     }
 
     const data = JSON.parse(this.dataobject);
@@ -44,7 +46,7 @@ export class MyTable extends LitElement {
         ${Object.values(row).map(cell => html`<td>${cell}</td>`)}
       </tr>
     `);
-    
+
     const headers = Object.keys(data[0]).map(header => html`<th>${header}</th>`);
 
     return html`
