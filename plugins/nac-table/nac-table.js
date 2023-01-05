@@ -72,6 +72,9 @@ export class MyTable extends LitElement {
           ${rows}
         </tbody>
       </table>
+      <p>
+        ${dataobject}
+      </p>
     `;
   }
 }
