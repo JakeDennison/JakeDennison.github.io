@@ -74,7 +74,7 @@ export class MyTable extends LitElement {
         </tbody>
       </table>
       <p>
-        ${dataobject}
+        ${dost}
       </p>
     `;
   }
