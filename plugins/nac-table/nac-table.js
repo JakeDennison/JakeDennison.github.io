@@ -14,7 +14,7 @@ export class MyTable extends LitElement {
           version: '1.3',
           properties: {
               object: {
-                  type: 'string',
+                  type: 'object',
                   title: 'Object',
                   description: 'Test'
               },
@@ -29,9 +29,9 @@ export class MyTable extends LitElement {
   
 
   static properties = {
-    name: 'Object',
-    title: 'Object',
-    object: '[{"name": "Alice","age": 25},{"name": "Bob","age": 30}]'
+    name: 'test',
+    title: 'test',
+    object: 'test'
   }
 
   async loadData() {
