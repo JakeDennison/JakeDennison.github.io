@@ -14,7 +14,7 @@ export class MyTable extends LitElement {
           version: '1.3',
           properties: {
               object: {
-                  type: 'object',
+                  type: 'string',
                   title: 'Object',
                   description: 'Test'
               },
