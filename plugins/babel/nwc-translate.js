@@ -8,11 +8,6 @@ export class Placeholder extends LitElement {
       version: '1.2',
     };
   }
-  
-  render() {
-    return html`
-    `;
-  }
 }
 
 function setInputValues() {
