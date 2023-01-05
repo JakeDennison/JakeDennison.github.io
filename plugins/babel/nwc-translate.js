@@ -1,14 +1,40 @@
 import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 
+
+
 export class Placeholder extends LitElement {
-  static async getMetaConfig() {
+  static getMetaConfig() {
+    // plugin contract information
     return {
-      title: 'ph-translate',
+      title: 'babel',
       fallbackDisableSubmit: false,
-      version: '1.2',
+      description: 'provide a plugin to translate the form',
+      iconUrl: "group-control",
+      groupName: 'Languages',
+      version: '1.3',
+      properties: {
+        dataobject: {
+          type: 'string',
+          title: 'Object',
+          description: 'Test'
+        },
+      },
+      standardProperties: {
+        readOnly: true,
+        required: true,
+        description: true,
+      }
     };
   }
   
+  static properties = {
+    dataobject: 'test'
+  }
+
+  render() {
+    return html`
+        <p>Translating from English to </p>`;
+  }
 
 }
 

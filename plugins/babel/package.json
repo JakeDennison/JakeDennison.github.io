@@ -1,0 +1,27 @@
+{
+  "name": "babel",
+  "version": "1.0.0",
+  "description": "NAC forms translator",
+  "main": "nwc-translate.js",
+  "scripts": {
+    "start": "es-dev-server --app-index index.html --node-resolve --watch --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JSDenintex/JSDenintex.github.io.git"
+  },
+  "keywords": [
+    "translate",
+    "NAC"
+  ],
+  "author": "Jake Dennison",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/JSDenintex/JSDenintex.github.io/issues"
+  },
+  "homepage": "https://github.com/JSDenintex/JSDenintex.github.io#readme",
+  "devDependencies": {
+    "@web/dev-server": "^0.1.35",
+    "es-dev-server": "^2.1.0"
+  }
+}
