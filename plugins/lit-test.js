@@ -21,7 +21,7 @@ export class ZwcIframe extends LitElement {
     static getMetaConfig() {
         // plugin contract information
         return {
-            controlName: 'IFrame-new',
+            title: 'IFrame-new',
             fallbackDisableSubmit: false,
             description: 'IFrame component which can render url view with the frame',
             iconUrl: "one-line-text",

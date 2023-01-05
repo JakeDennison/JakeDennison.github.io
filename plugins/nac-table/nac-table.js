@@ -2,14 +2,38 @@ import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/d
 
 
 export class MyTable extends LitElement {
-  static async getMetaConfig() {
-    return {
-      title: 'nac-table',
-      fallbackDisableSubmit: false,
-      version: '1.2',
-    };
+
+    static getMetaConfig() {
+      // plugin contract information
+      return {
+          title: 'nac-table',
+          fallbackDisableSubmit: false,
+          description: 'Display object as a table',
+          iconUrl: "group-control",
+          groupName: 'Visual',
+          version: '1.3',
+          properties: {
+              object: {
+                  type: 'object',
+                  title: 'Object',
+                  description: 'Test'
+              },
+          },
+          standardProperties: {
+              readOnly: true,
+              required: true,
+              description: true,
+          }
+      };
   }
   
+
+  static properties = {
+    name: 'Object',
+    title: 'Object',
+    object: '[{"name": "Alice","age": 25},{"name": "Bob","age": 30}]'
+  }
+
   async loadData() {
     try {
       const response = await fetch('https://jsdenintex.github.io/plugins/nac-table/data.json');
