@@ -37,4 +37,5 @@ class TranslateElement extends LitElement {
       `;
     }
   }
-  customElements.define('translate-element', TranslateElement);
+
+customElements.define('translate-element', TranslateElement);
