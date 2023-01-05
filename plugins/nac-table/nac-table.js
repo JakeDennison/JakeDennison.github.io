@@ -29,8 +29,6 @@ export class MyTable extends LitElement {
   
 
   static properties = {
-    name: 'test',
-    title: 'test',
     object: 'test'
   }
 
