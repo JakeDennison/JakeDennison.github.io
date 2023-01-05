@@ -57,6 +57,7 @@ export class MyTable extends LitElement {
       </tr>
     `);
 
+    const dost = this.dataobject;
     const headers = Object.keys(this.data[0]).map(header => html`<th>${header}</th>`);
 
     return html`
