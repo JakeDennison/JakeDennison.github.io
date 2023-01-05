@@ -8,12 +8,14 @@ export class Placeholder extends LitElement {
       version: '1.2',
     };
   }
+  
+
 }
 
 function setInputValues() {
   const elements = document.querySelectorAll('h5.d-print-none.ng-star-inserted');
   elements.forEach(element => {
-    element.innerHTML = 'Klik hier om te ondertekenen';
+    element.innerHTML = 'Klicken Sie hier, um zu unterschreiben';
   });
 }
 
