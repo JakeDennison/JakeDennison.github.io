@@ -44,8 +44,7 @@ export class MyTable extends LitElement {
         ${Object.values(row).map(cell => html`<td>${cell}</td>`)}
       </tr>
     `);
-
-    const dost = this.dataobject;
+    
     const headers = Object.keys(data[0]).map(header => html`<th>${header}</th>`);
 
     return html`
@@ -61,9 +60,6 @@ export class MyTable extends LitElement {
           ${rows}
         </tbody>
       </table>
-      <p>
-        ${dost}
-      </p>
     `;
   }
 }
