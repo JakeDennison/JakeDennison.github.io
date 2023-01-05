@@ -24,5 +24,11 @@
   "homepage": "https://github.com/JSDenintex/JSDenintex.github.io#readme",
   "dependencies": {
     "@google-cloud/translate": "^7.0.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.20.7",
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "@google-cloud/translate": "^7.0.5"
   }
 }
