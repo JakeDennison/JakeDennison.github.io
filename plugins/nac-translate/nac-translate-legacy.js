@@ -33,7 +33,8 @@ const signhere = "Klicken Sie hier, um zu unterschreiben";
 // --- Enter an address
 const enteradd = "Gib eine Adresse ein";
 //Address finder is not enabled. Please manually enter an address.
-const addnotenabled = "Die Adresssuche ist nicht aktiviert. Bitte geben Sie manuell eine Adresse ein."
+const addnotcurrent = "Address finder is not enabled. Please manually enter an address."
+const addnotnew = "Die Adresssuche ist nicht aktiviert. Bitte geben Sie manuell eine Adresse ein."
 
 // --- Translate Signature Field
 function trSignature(targetClass, signText) {
@@ -44,6 +45,7 @@ function trSignature(targetClass, signText) {
 }
 
 // Translate Address Field
+// --- Placeholder
 function trAddressPH(className, placeholder) {
   var elements = document.getElementsByClassName(className);
   
@@ -52,15 +54,45 @@ function trAddressPH(className, placeholder) {
   }
 }
 
-function trAddressError(className, text) {
-  var element = document.getElementsByClassName(className)[0];
-  element.innerHTML = text;
+// --- Address Control Not enabled
+// Function to change the text of an element with a specific class name
+function trAddressNE(className, currentText, newText) {
+  // Get all elements with the specified class name
+  var elements = document.getElementsByClassName(className);
+  
+  // Loop through all elements
+  for (var i = 0; i < elements.length; i++) {
+    // If the element's text matches the currentText parameter, change it to the newText parameter
+    if (elements[i].textContent === currentText) {
+      elements[i].textContent = newText;
+    }
+  }
 }
 
+// Select the target node
+var target = document.body;
+
+// Create an observer instance
+var observer = new MutationObserver(function(mutations) {
+  mutations.forEach(function(mutation) {
+    // If a new element with the specified class name and current text is added to the page, change its text
+    if (mutation.addedNodes.length > 0 && mutation.addedNodes[0].classList.contains(className) && mutation.addedNodes[0].textContent === currentText) {
+      mutation.addedNodes[0].textContent = newText;
+    }
+  });
+});
+
+// Configuration of the observer:
+var config = { attributes: true, childList: true, subtree: true };
+
+// Pass in the target node, as well as the observer options
+observer.observe(target, config);
 
 trSignature("h5.d-print-none.ng-star-inserted", signhere);
 trAddressPH("nx-address-input", enteradd);
-trAddressError("nx-address-input-panel",addnotenabled);
+trAddressNE("nx-address-input-panel", addnotcurrent, addnotnew);
+
+// END of translations
 
 const elementName = 'translate-legacy';
 customElements.define('translate-legacy', Placeholder);
