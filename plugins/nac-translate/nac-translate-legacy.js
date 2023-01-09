@@ -25,11 +25,15 @@ export class Placeholder extends LitElement {
 }
 
 // Translations here
-// Signature control
+// Signature control ---
+// Click to sign
 const signhere = "Klicken Sie hier, um zu unterschreiben";
-// Address control
-const enteradd = "Gib eine Adresse ein";
 
+// Address control
+// Enter an address
+const enteradd = "Gib eine Adresse ein";
+//Address finder is not enabled. Please manually enter an address.
+const addnotenabled = "Die Adresssuche ist nicht aktiviert. Bitte geben Sie manuell eine Adresse ein."
 
 // Translate Signature Field
 function trSignature() {
@@ -41,18 +45,22 @@ function trSignature() {
 
 // Translate Address Field
 function trAddressPH(className, placeholder) {
-  // Get all elements with the specified class name
   var elements = document.getElementsByClassName(className);
   
-  // Loop through all elements
   for (var i = 0; i < elements.length; i++) {
-    // Set the placeholder attribute for each element
     elements[i].setAttribute("placeholder", placeholder);
   }
+}
+
+function trAddressError(className, text) {
+  var element = document.getElementsByClassName(className)[0];
+  element.textContent = text;
 }
 
 
 trSignature();
 trAddressPH("nx-address-input", enteradd);
+trAddressError("nx-address-input-panel",addnotenabled);
+
 const elementName = 'translate-legacy';
 customElements.define('translate-legacy', Placeholder);
