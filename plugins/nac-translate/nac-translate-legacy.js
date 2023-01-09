@@ -36,6 +36,12 @@ const enteradd = "Gib eine Adresse ein";
 const addnotcurrent = "Address finder is not enabled. Please manually enter an address."
 const addnotnew = "Die Adresssuche ist nicht aktiviert. Bitte geben Sie manuell eine Adresse ein."
 
+//File Upload
+// Drag files here
+const draghere = "Ziehen Sie Dateien hierher oder"
+// Select Files button
+const uploadbutton = "Dateien auswählen"
+
 // --- Translate Signature Field
 function trSignature(targetClass, signText) {
   const elements = document.querySelectorAll(targetClass);
@@ -54,39 +60,18 @@ function trAddressPH(className, placeholder) {
   }
 }
 
-// --- Address Control Not enabled
-window.onload = function trAddressNE(className, currentText, newText) {
-  var elements = document.getElementsByClassName(className);
-  
-  for (var i = 0; i < elements.length; i++) {
-    if (elements[i].textContent === currentText) {
-      elements[i].textContent = newText;
-    }
-  }
+// Translate file upload
+// --- drag files here
+function trFileUpload(targetClass, Dragheretxt) {
+  const elements = document.querySelectorAll(targetClass);
+  elements.forEach(element => {
+    element.innerHTML = Dragheretxt;
+  });
 }
 
-// Select the target node
-var target = document.body;
-
-// Create an observer instance
-var observer = new MutationObserver(function(mutations) {
-  mutations.forEach(function(mutation) {
-    // If a new element with the specified class name and current text is added to the page, change its text
-    if (mutation.addedNodes.length > 0 && mutation.addedNodes[0].classList.contains('nx-address-input-panel') && mutation.addedNodes[0].textContent === currentText) {
-      mutation.addedNodes[0].textContent = newText;
-    }
-  });
-});
-
-// Configuration of the observer:
-var config = { attributes: true, childList: true, subtree: true };
-
-// Pass in the target node, as well as the observer options
-observer.observe(target, config);
-
 trSignature("h5.d-print-none.ng-star-inserted", signhere);
-trAddressPH("nx-address-input", enteradd);
-trAddressNE("nx-address-input-panel", addnotcurrent, addnotnew);
+trAddressPH(".nx-address-input", enteradd);
+trFileUpload(".drag-file-label", draghere);
 
 // END of translations
 
