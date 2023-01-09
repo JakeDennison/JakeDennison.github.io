@@ -40,15 +40,19 @@ function trSignature() {
 }
 
 // Translate Address Field
-function trAddress() {
-  const elements = document.querySelectorAll('.nx-address-input');
-  elements.forEach(element => {
-    element.setAttribute = ('Enter an address',enteradd);
-  });
+function trAddressPH(className, placeholder) {
+  // Get all elements with the specified class name
+  var elements = document.getElementsByClassName(className);
+  
+  // Loop through all elements
+  for (var i = 0; i < elements.length; i++) {
+    // Set the placeholder attribute for each element
+    elements[i].setAttribute("placeholder", placeholder);
+  }
 }
 
 
 trSignature();
-trAddress();
+trAddressPH("nx-address-input", enteradd);
 const elementName = 'translate-legacy';
 customElements.define('translate-legacy', Placeholder);
