@@ -55,7 +55,7 @@ function trAddressPH(className, placeholder) {
 }
 
 // --- Address Control Not enabled
-function trAddressNE(className, currentText, newText) {
+window.onload = function trAddressNE(className, currentText, newText) {
   var elements = document.getElementsByClassName(className);
   
   for (var i = 0; i < elements.length; i++) {
