@@ -6,7 +6,7 @@ export class Placeholder extends LitElement {
   static getMetaConfig() {
     // plugin contract information
     return {
-      title: 'babel',
+      title: 'translate-legacy',
       fallbackDisableSubmit: false,
       description: 'provide a plugin to translate the form',
       iconUrl: "group-control",
@@ -33,7 +33,7 @@ export class Placeholder extends LitElement {
 
   render() {
     return html`
-        <p>Translating from English to </p>`;
+        <p>Translating from English to Dutch</p>`;
   }
 
 }
@@ -46,5 +46,5 @@ function setInputValues() {
 }
 
 setInputValues();
-const elementName = 'ph-translate';
-customElements.define('ph-translate', Placeholder);
+const elementName = 'translate-legacy';
+customElements.define('translate-legacy', Placeholder);
