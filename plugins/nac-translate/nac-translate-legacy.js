@@ -25,21 +25,21 @@ export class Placeholder extends LitElement {
 }
 
 // Translations here
-// Signature control ---
-// Click to sign
+// Signature control
+// --- Click to sign
 const signhere = "Klicken Sie hier, um zu unterschreiben";
 
 // Address control
-// Enter an address
+// --- Enter an address
 const enteradd = "Gib eine Adresse ein";
 //Address finder is not enabled. Please manually enter an address.
 const addnotenabled = "Die Adresssuche ist nicht aktiviert. Bitte geben Sie manuell eine Adresse ein."
 
-// Translate Signature Field
-function trSignature() {
-  const elements = document.querySelectorAll('h5.d-print-none.ng-star-inserted');
+// --- Translate Signature Field
+function trSignature(targetClass, signText) {
+  const elements = document.querySelectorAll(targetClass);
   elements.forEach(element => {
-    element.innerHTML = signhere;
+    element.innerHTML = signText;
   });
 }
 
@@ -54,11 +54,11 @@ function trAddressPH(className, placeholder) {
 
 function trAddressError(className, text) {
   var element = document.getElementsByClassName(className)[0];
-  element.textContent = text;
+  element.innerHTML = text;
 }
 
 
-trSignature();
+trSignature("h5.d-print-none.ng-star-inserted", signhere);
 trAddressPH("nx-address-input", enteradd);
 trAddressError("nx-address-input-panel",addnotenabled);
 
