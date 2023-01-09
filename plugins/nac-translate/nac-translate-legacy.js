@@ -68,10 +68,18 @@ function trFileUpload(targetClass, Dragheretxt) {
     element.innerHTML = Dragheretxt;
   });
 }
+// --- select files button
+function trUploadBtn(targetClass, btntext) {
+  const elements = document.querySelectorAll(targetClass);
+  elements.forEach(element => {
+    element.innerHTML = btntext;
+  });
+}
 
 trSignature("h5.d-print-none.ng-star-inserted", signhere);
-trAddressPH(".nx-address-input", enteradd);
+trAddressPH("nx-address-input", enteradd);
 trFileUpload(".drag-file-label", draghere);
+trUploadBtn(".nx-upload-button", uploadbutton);
 
 // END of translations
 
