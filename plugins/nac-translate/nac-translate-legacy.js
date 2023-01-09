@@ -41,7 +41,7 @@ export class Placeholder extends LitElement {
 function setInputValues() {
   const elements = document.querySelectorAll('h5.d-print-none.ng-star-inserted');
   elements.forEach(element => {
-    element.innerHTML = 'Klicken Sie hier, um zu unterschreiben';
+    element.innerHTML = 'Klicken Sie hier, um zu unterschreiben.';
   });
 }
 
