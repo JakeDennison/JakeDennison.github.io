@@ -32,9 +32,6 @@ const signhere = "Klicken Sie hier, um zu unterschreiben";
 // Address control
 // --- Enter an address
 const enteradd = "Gib eine Adresse ein";
-//Address finder is not enabled. Please manually enter an address.
-const addnotcurrent = "Address finder is not enabled. Please manually enter an address."
-const addnotnew = "Die Adresssuche ist nicht aktiviert. Bitte geben Sie manuell eine Adresse ein."
 
 //File Upload
 // Drag files here
