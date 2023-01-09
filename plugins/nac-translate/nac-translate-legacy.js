@@ -55,14 +55,10 @@ function trAddressPH(className, placeholder) {
 }
 
 // --- Address Control Not enabled
-// Function to change the text of an element with a specific class name
 function trAddressNE(className, currentText, newText) {
-  // Get all elements with the specified class name
   var elements = document.getElementsByClassName(className);
   
-  // Loop through all elements
   for (var i = 0; i < elements.length; i++) {
-    // If the element's text matches the currentText parameter, change it to the newText parameter
     if (elements[i].textContent === currentText) {
       elements[i].textContent = newText;
     }
@@ -76,7 +72,7 @@ var target = document.body;
 var observer = new MutationObserver(function(mutations) {
   mutations.forEach(function(mutation) {
     // If a new element with the specified class name and current text is added to the page, change its text
-    if (mutation.addedNodes.length > 0 && mutation.addedNodes[0].classList.contains(className) && mutation.addedNodes[0].textContent === currentText) {
+    if (mutation.addedNodes.length > 0 && mutation.addedNodes[0].classList.contains('nx-address-input-panel') && mutation.addedNodes[0].textContent === currentText) {
       mutation.addedNodes[0].textContent = newText;
     }
   });
