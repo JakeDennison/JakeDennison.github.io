@@ -33,7 +33,7 @@ export class Placeholder extends LitElement {
 
   render() {
     return html`
-        <p>Translating from English to Dutch</p>`;
+        <p>Translating from English to German</p>`;
   }
 
 }
