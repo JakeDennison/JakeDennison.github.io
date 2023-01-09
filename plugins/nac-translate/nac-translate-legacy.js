@@ -32,7 +32,7 @@ const enteradd = "Gib eine Adresse ein";
 
 
 // Translate Signature Field
-function setInputValues() {
+function trSignature() {
   const elements = document.querySelectorAll('h5.d-print-none.ng-star-inserted');
   elements.forEach(element => {
     element.innerHTML = signhere;
@@ -40,7 +40,7 @@ function setInputValues() {
 }
 
 // Translate Address Field
-function setInputValues() {
+function trAddress() {
   const elements = document.querySelectorAll('.nx-address-input');
   elements.forEach(element => {
     element.setAttribute = ('Enter an address',enteradd);
@@ -48,6 +48,7 @@ function setInputValues() {
 }
 
 
-setInputValues();
+trSignature();
+trAddress();
 const elementName = 'translate-legacy';
 customElements.define('translate-legacy', Placeholder);
