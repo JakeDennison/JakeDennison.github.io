@@ -69,7 +69,7 @@ function trFileUpload(targetClass, Dragheretxt) {
 function trUploadBtn(targetClass, btntext) {
   const elements = document.querySelectorAll(targetClass);
   elements.forEach(element => {
-    elements.innerHTML = newText + elements.innerHTML.slice(elements.innerHTML.indexOf('<'));
+    element.innerHTML = btntext + element.innerHTML.slice(element.innerHTML.indexOf('<'));
   });
 }
 
