@@ -5,6 +5,7 @@ export class Placeholder extends LitElement {
     // plugin contract information
     return {
       title: 'translate-legacy',
+      controlName: 'translate-legacy',
       fallbackDisableSubmit: false,
       description: 'provide a plugin to translate the form',
       iconUrl: "group-control",

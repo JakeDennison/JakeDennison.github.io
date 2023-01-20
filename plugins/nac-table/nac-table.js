@@ -5,6 +5,7 @@ export class MyTable extends LitElement {
     // plugin contract information
     return {
       title: 'nac-table',
+      controlName: 'nac-table',
       fallbackDisableSubmit: false,
       description: 'Display object as a table',
       iconUrl: "group-control",
