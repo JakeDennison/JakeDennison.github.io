@@ -63,7 +63,7 @@ export class Placeholder extends LitElement {
 
   constructor() {
     super();
-    this.select = $(this.choiceAttr);
+    this.select = this.choiceAttr;
   }
 
   translate() {
