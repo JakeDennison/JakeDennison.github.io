@@ -66,7 +66,6 @@ export class Placeholder extends LitElement {
     this.draghere_NL = "Sleep bestanden hierheen of"
     this.uploadbutton_NL = "Selecteer bestanden"
     this.select = "English"
-    this.select = this.shadowRoot.querySelector("#language-select");
     this.select.addEventListener("change", this.translate.bind(this));
   }
 
