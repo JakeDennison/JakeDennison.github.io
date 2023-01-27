@@ -10,6 +10,16 @@ export class Placeholder extends LitElement {
       iconUrl: "group-control",
       groupName: 'Languages',
       version: '1.3',
+      properties: {
+        choiceAttr: {
+          title: 'Language',
+          type: 'string',
+        enum: ['Option A', 'Option B', 'Option C'],
+          showAsRadio: true,
+          verticalLayout: true,
+          defaultValue: 'Option A',
+        },
+      },
       standardProperties: {
         readOnly: true,
         description: true,
@@ -101,13 +111,7 @@ export class Placeholder extends LitElement {
 
   render() {
     return html`
-    <label for="language-select">Select language:</label>
-    <select id="language-select">
-      <option value="english">English</option>
-      <option value="german">German</option>
-      <option value="spanish">Spanish</option>
-      <option value="english">Dutch</option>
-    </select>
+    <label for="language-select">Translate Plugin</label>
     `;
   }
 

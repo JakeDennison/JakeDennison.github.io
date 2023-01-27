@@ -8,7 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 
 <body>
@@ -18,7 +18,6 @@
       <a class="navbar-brand" href="#">
         <img src="https://www.nintex.com/wp-content/themes/portent_nintex/ui/images/nintex_logo.svg" alt="" width="146"
           height="36">
-
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +26,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="nav nav-pills">
           <li class="nav-item">
-            <a class="nav-link" href="#scrollspyHeading1">Automation Cloud</a>
+            <a class="nav-link active" href="#scrollspyHeading1" >Automation Cloud</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#scrollspyHeading2">Nintex for O365</a>
@@ -70,47 +69,114 @@
 
   <!-- Content -->
 
-  <div class="container-fluid p-5">
-  <div class="card text-center">
-    <div class="card-header">
-      <ul class="nav nac-pills nav-fill card-header-pills" id="nacQTabs" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" id="nacQ1" data-toggle="tab" href="#nacQ1Content" role="tab" aria-controls="Q1" aria-selected="true">Q1</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="nacQ2" data-toggle="tab" href="#nacQ2Content" role="tab" aria-controls="Q2" aria-selected="false">Q2</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="nacQ3" data-toggle="tab" href="#nacQ3Content" role="tab" aria-controls="Q3" aria-selected="false">Q3</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="nacQ4" data-toggle="tab" href="#nacQ4Content" role="tab" aria-controls="Q4" aria-selected="false">Q4</a>
-        </li>
-      </ul>
+
+
+  <div class="container-fluid p-5 h-100">
+    <div class="row p-0" style="height:96%">
+  <div class="card p-0 rounded-0 h-100 col-6">
+    <div class="card-header text-center alert-primary">
+      <h2>Q1 2023 | January - March</h2>
     </div>
-    <div class="tab-content" id="nacContent">
-    <div class="card-body tab-pane fade show active" id="nacQ1Content" role="tabpanel" aria-labelledby="nacQ1">
-      <h5 class="card-title">Q1</h5>
-      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
-    <div class="card-body tab-pane fade" id="nacQ2Content" role="tabpanel" aria-labelledby="nacQ2">
-      <h5 class="card-title">Q2</h5>
-      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
-    <div class="card-body tab-pane fade" id="nacQ3Content" role="tabpanel" aria-labelledby="nacQ3">
-      <h5 class="card-title">Q3</h5>
-      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
-    <div class="card-body tab-pane fade" id="nacQ4Content" role="tabpanel" aria-labelledby="nacQ4">
-      <h5 class="card-title">Q4</h5>
-      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Forms Extensibility</div>
+          Provide the ability to Plug-in custom controls in Forms.
+        </div>
+        <span class="badge bg-primary rounded-pill p-2 m-2 h-auto">Planned - <i class="bi-calendar-event-fill" style="color: rgb(255, 255, 255);"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Regional settings</div>
+          Enable a workflow to format data tpes such as integer, decimal, and date time, to the selected locale and time zone.
+        </div>
+        <span class="badge bg-primary rounded-pill p-2 m-2 h-auto">Planned - <i class="bi-calendar-event-fill" style="color: rgb(255, 255, 255);"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">User and Group Management APIs</div>
+          User and group endpoints available to allow ease of managing programmatically. i.e., Adding users, creating groups, updating groups, etc.
+        </div>
+        <span class="badge bg-primary rounded-pill p-2 m-2 h-auto">Planned - <i class="bi-calendar-event-fill" style="color: rgb(255, 255, 255);"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Workflow Instance Data Deletion</div>
+          Ability to remove workflow instances including the initiation data.
+        </div>
+        <span class="badge bg-primary rounded-pill p-2 m-2 h-auto">Planned - <i class="bi-calendar-event-fill" style="color: rgb(255, 255, 255);"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Button Control in Forms</div>
+          Ability to add a button control onto a form configured to perform an event on click.
+        </div>
+        <span class="badge bg-success rounded-pill p-2 m-2 h-auto">Released - <i class="bi-calendar-check-fill" style="color: rgb(255, 255, 255);"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Repeating section in Task Forms</div>
+          Use the data and repeating section control that was on a Start form or a Task form in subsequent forms within the workflow.
+        </div>
+        <span class="badge bg-danger rounded-pill p-2 m-2 h-auto">Cancelled - <i class="bi-calendar-x-fill" style="color: rgb(255, 255, 255);"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Product Naming updates</div>
+          With the recent renaming of Nintex Workflow Cloud to Nintex Automation Cloud, references to Nintex Workflow Cloud and NWC will be replaced.
+        </div>
+        <span class="badge bg-primary rounded-pill p-2 m-2 h-auto">Planned - <i class="bi-calendar-event-fill" style="color: rgb(255, 255, 255);"></i></span>
+      </li>
+    </ul>
   </div>
+  <div class="card p-0 rounded-0 h-100 col-6">
+    <div class="card-header text-center">
+      <h2>Q2 2023 | April - June</h2>
+    </div>
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">Forms permissions</div>
+        Provide the ability to set user permissions to access Forms.
+      </div>
+      <span class="badge bg-primary rounded-pill p-2 m-2 h-auto">Planned - <i class="bi-calendar-event-fill" style="color: rgb(255, 255, 255);"></i></span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">Tasks - long term delegation</div>
+        Ability to delegate tasks to another person for a period.
+      </div>
+      <span class="badge bg-primary rounded-pill p-2 m-2 h-auto">Planned - <i class="bi-calendar-event-fill" style="color: rgb(255, 255, 255);"></i></span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">Forms extensibility enhancements</div>
+        Expand or improve capabilities for custom controls in Forms.
+      </div>
+      <span class="badge bg-primary rounded-pill p-2 m-2 h-auto">Planned - <i class="bi-calendar-event-fill" style="color: rgb(255, 255, 255);"></i></span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">Forms global styling</div>
+        Ability to adhere to brand compliance by setting or modifying a style for all forms created.
+      </div>
+      <span class="badge bg-primary rounded-pill p-2 m-2 h-auto">Planned - <i class="bi-calendar-event-fill" style="color: rgb(255, 255, 255);"></i></span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">Workflow error handling</div>
+        Ability to set rules for handling errors within a workflow at runtime.
+      </div>
+      <span class="badge bg-primary rounded-pill p-2 m-2 h-auto">Planned - <i class="bi-calendar-event-fill" style="color: rgb(255, 255, 255);"></i></span>
+    </li>
+  </ul>
   </div>
+  <div class="p-2 alert-secondary col-10" style="height:6%">
+    This roadmap contains Nintex Confidential Information intended for access by Nintex employees, customers, and partners only. Distribution to third parties is not permitted without a Non-Disclosure Agreement ("NDA"). The information in this presentation is not a commitment, promise or other obligation to deliver any material, code or functionality. This content is subject to change, without prior notice, at the sole discretion of Nintex.
+  </div>
+  <img class="col-2 alert-secondary p-1"  style="height:6%" src="https://www.nintex.com/wp-content/themes/portent_nintex/ui/images/nintex_logo.svg" alt="" width="146"
+  height="36">
+</div>
 </div>
 
   <!-- Content -->
