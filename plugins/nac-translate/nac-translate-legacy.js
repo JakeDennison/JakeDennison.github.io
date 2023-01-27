@@ -64,8 +64,8 @@ export class Placeholder extends LitElement {
   }
 
   translate() {
-    console. log(this.select.value);
-    console. log("Translate is calling");
+    console.log(this.select.value);
+    console.log("Translate is calling");
     if (this.select.value === "dutch") {
       // dutch translations
       trSignature("h5.d-print-none.ng-star-inserted", signhere_NL);
