@@ -10,23 +10,11 @@ export class Placeholder extends LitElement {
       iconUrl: "group-control",
       groupName: 'Languages',
       version: '1.3',
-      properties: {
-        choiceAttr: {
-          title: 'Language',
-          type: 'string',
-        enum: ['English', 'German', 'Spanish', 'Dutch'],
-          defaultValue: 'English',
-        },
-      },
       standardProperties: {
         readOnly: true,
         description: true,
       }
     };
-  }
-
-  static properties = {
-    choiceAttr: 'English'
   }
 
   trSignature(targetClass, signText) {
@@ -60,25 +48,26 @@ export class Placeholder extends LitElement {
 
   constructor() {
     super();
-    this.translate();
+    this.select = this.shadowRoot.querySelector("#language-select");
+    this.select.addEventListener("change", this.translate.bind(this));
   }
 
   translate() {
-    console.log(this.choiceAttr.value);
+    console.log(this.select.value);
     console.log("Translate is calling");
-    if (this.choiceAttr.value === "dutch") {
+    if (this.select.value === "dutch") {
       // dutch translations
       trSignature("h5.d-print-none.ng-star-inserted", signhere_NL);
       trAddressPH("nx-address-input", enteradd_NL);
       trFileUpload(".drag-file-label", draghere_NL);
       trUploadBtn(".nx-upload-button", uploadbutton_NL);
-    } else if (this.choiceAttr.value === "german") {
+    } else if (this.select.value === "german") {
       // german translations
       trSignature("h5.d-print-none.ng-star-inserted", signhere_DE);
       trAddressPH("nx-address-input", enteradd_DE);
       trFileUpload(".drag-file-label", draghere_DE);
       trUploadBtn(".nx-upload-button", uploadbutton_DE);
-    } else if (this.choiceAttr.value === "spanish") {
+    } else if (this.select.value === "spanish") {
       // spanish translations
       trSignature("h5.d-print-none.ng-star-inserted", signhere_ES);
       trAddressPH("nx-address-input", enteradd_ES);
@@ -89,7 +78,14 @@ export class Placeholder extends LitElement {
 
   render() {
     return html`
-    <p>Translate Mod</p>`;
+    <label for="language-select">Select language:</label>
+    <select id="language-select">
+      <option value="english">English</option>
+      <option value="german">German</option>
+      <option value="spanish">Spanish</option>
+      <option value="english">Dutch</option>
+    </select>
+    `;
   }
 
 }
