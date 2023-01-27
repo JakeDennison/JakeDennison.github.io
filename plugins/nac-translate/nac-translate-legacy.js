@@ -10,6 +10,14 @@ export class Placeholder extends LitElement {
       iconUrl: "group-control",
       groupName: 'Languages',
       version: '1.3',
+      properties: {
+        choiceAttr: {
+          title: 'Language',
+          type: 'string',
+        enum: ['English', 'German', 'Spanish', 'Dutch'],
+          defaultValue: 'English',
+        },
+      },
       standardProperties: {
         readOnly: true,
         description: true,
@@ -17,66 +25,94 @@ export class Placeholder extends LitElement {
     };
   }
 
+  static properties = {
+    choiceAttr: 'English'
+  }
+
+  // --- Translate Signature Field
+  trSignature(targetClass, signText) {
+    const elements = document.querySelectorAll(targetClass);
+    elements.forEach(element => {
+      element.innerHTML = signText;
+    });
+  }
+  // Translate Address Field
+  // --- Placeholder
+  trAddressPH(className, placeholder) {
+    var elements = document.getElementsByClassName(className);
+    
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].setAttribute("placeholder", placeholder);
+    }
+  }
+  // Translate file upload
+  // --- drag files here
+  trFileUpload(targetClass, Dragheretxt) {
+    const elements = document.querySelectorAll(targetClass);
+    elements.forEach(element => {
+      element.innerHTML = Dragheretxt;
+    });
+  }
+  // --- select files button
+  trUploadBtn(targetClass, btntext) {
+    const elements = document.querySelectorAll(targetClass);
+    elements.forEach(element => {
+      element.innerHTML = btntext + element.innerHTML.slice(element.innerHTML.indexOf('<'));
+    });
+  }
+
+  constructor() {
+    super();
+    this.select = $(this.choiceAttr);
+  }
+
+  translate() {
+    if (this.select.value === "dutch") {
+      // dutch translations
+      trSignature("h5.d-print-none.ng-star-inserted", signhere_NL);
+      trAddressPH("nx-address-input", enteradd_NL);
+      trFileUpload(".drag-file-label", draghere_NL);
+      trUploadBtn(".nx-upload-button", uploadbutton_NL);
+    } else if (this.select.value === "german") {
+      // german translations
+      trSignature("h5.d-print-none.ng-star-inserted", signhere_DE);
+      trAddressPH("nx-address-input", enteradd_DE);
+      trFileUpload(".drag-file-label", draghere_DE);
+      trUploadBtn(".nx-upload-button", uploadbutton_DE);
+    } else if (this.select.value === "spanish") {
+      // spanish translations
+      trSignature("h5.d-print-none.ng-star-inserted", signhere_ES);
+      trAddressPH("nx-address-input", enteradd_ES);
+      trFileUpload(".drag-file-label", draghere_ES);
+      trUploadBtn(".nx-upload-button", uploadbutton_ES);
+    }
+  };
+
   render() {
     return html`
-    <p>Translating from English to German</p>`;
+    <p>Translating from English to $(this.choiceAttr)</p>`;
   }
 
 }
 
 // Translations here
-// Signature control
-// --- Click to sign
-const signhere = "Klicken Sie hier, um zu unterschreiben";
+// German
+const signhere_DE = "Klicken Sie hier, um zu unterschreiben";
+const enteradd_DE = "Gib eine Adresse ein";
+const draghere_DE = "Ziehen Sie Dateien hierher oder"
+const uploadbutton_DE = "Dateien auswählen"
 
-// Address control
-// --- Enter an address
-const enteradd = "Gib eine Adresse ein";
+//Spanish
+const signhere_ES = "Haga clic aquí para firmar";
+const enteradd_ES = "Ingrese una dirección";
+const draghere_ES = "Arrastre archivos aquí o";
+const uploadbutton_ES = "Seleccionar archivos";
 
-//File Upload
-// Drag files here
-const draghere = "Ziehen Sie Dateien hierher oder"
-// Select Files button
-const uploadbutton = "Dateien auswählen"
-
-// --- Translate Signature Field
-function trSignature(targetClass, signText) {
-  const elements = document.querySelectorAll(targetClass);
-  elements.forEach(element => {
-    element.innerHTML = signText;
-  });
-}
-
-// Translate Address Field
-// --- Placeholder
-function trAddressPH(className, placeholder) {
-  var elements = document.getElementsByClassName(className);
-  
-  for (var i = 0; i < elements.length; i++) {
-    elements[i].setAttribute("placeholder", placeholder);
-  }
-}
-
-// Translate file upload
-// --- drag files here
-function trFileUpload(targetClass, Dragheretxt) {
-  const elements = document.querySelectorAll(targetClass);
-  elements.forEach(element => {
-    element.innerHTML = Dragheretxt;
-  });
-}
-// --- select files button
-function trUploadBtn(targetClass, btntext) {
-  const elements = document.querySelectorAll(targetClass);
-  elements.forEach(element => {
-    element.innerHTML = btntext + element.innerHTML.slice(element.innerHTML.indexOf('<'));
-  });
-}
-
-trSignature("h5.d-print-none.ng-star-inserted", signhere);
-trAddressPH("nx-address-input", enteradd);
-trFileUpload(".drag-file-label", draghere);
-trUploadBtn(".nx-upload-button", uploadbutton);
+//Dutch
+const signhere_NL = "Klik hier om te ondertekenen";
+const enteradd_NL = "Voer een adres in";
+const draghere_NL = "Sleep bestanden hierheen of"
+const uploadbutton_NL = "Selecteer bestanden"
 
 // END of translations
 
