@@ -29,15 +29,13 @@ export class Placeholder extends LitElement {
     choiceAttr: 'English'
   }
 
-  // --- Translate Signature Field
   trSignature(targetClass, signText) {
     const elements = document.querySelectorAll(targetClass);
     elements.forEach(element => {
       element.innerHTML = signText;
     });
   }
-  // Translate Address Field
-  // --- Placeholder
+
   trAddressPH(className, placeholder) {
     var elements = document.getElementsByClassName(className);
     
@@ -45,15 +43,14 @@ export class Placeholder extends LitElement {
       elements[i].setAttribute("placeholder", placeholder);
     }
   }
-  // Translate file upload
-  // --- drag files here
+
   trFileUpload(targetClass, Dragheretxt) {
     const elements = document.querySelectorAll(targetClass);
     elements.forEach(element => {
       element.innerHTML = Dragheretxt;
     });
   }
-  // --- select files button
+
   trUploadBtn(targetClass, btntext) {
     const elements = document.querySelectorAll(targetClass);
     elements.forEach(element => {
@@ -67,6 +64,8 @@ export class Placeholder extends LitElement {
   }
 
   translate() {
+    console. log(this.select.value);
+    console. log("Translate is calling");
     if (this.select.value === "dutch") {
       // dutch translations
       trSignature("h5.d-print-none.ng-star-inserted", signhere_NL);
@@ -90,7 +89,7 @@ export class Placeholder extends LitElement {
 
   render() {
     return html`
-    <p>Translating from English to $(this.choiceAttr)</p>`;
+    <p>Translate Mod</p>`;
   }
 
 }
