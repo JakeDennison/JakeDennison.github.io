@@ -60,25 +60,25 @@ export class Placeholder extends LitElement {
 
   constructor() {
     super();
-    this.select = this.choiceAttr;
+    this.translate();
   }
 
   translate() {
-    console.log(this.select.value);
+    console.log(this.choiceAttr.value);
     console.log("Translate is calling");
-    if (this.select.value === "dutch") {
+    if (this.choiceAttr.value === "dutch") {
       // dutch translations
       trSignature("h5.d-print-none.ng-star-inserted", signhere_NL);
       trAddressPH("nx-address-input", enteradd_NL);
       trFileUpload(".drag-file-label", draghere_NL);
       trUploadBtn(".nx-upload-button", uploadbutton_NL);
-    } else if (this.select.value === "german") {
+    } else if (this.choiceAttr.value === "german") {
       // german translations
       trSignature("h5.d-print-none.ng-star-inserted", signhere_DE);
       trAddressPH("nx-address-input", enteradd_DE);
       trFileUpload(".drag-file-label", draghere_DE);
       trUploadBtn(".nx-upload-button", uploadbutton_DE);
-    } else if (this.select.value === "spanish") {
+    } else if (this.choiceAttr.value === "spanish") {
       // spanish translations
       trSignature("h5.d-print-none.ng-star-inserted", signhere_ES);
       trAddressPH("nx-address-input", enteradd_ES);
