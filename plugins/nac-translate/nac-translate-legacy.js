@@ -48,6 +48,24 @@ export class Placeholder extends LitElement {
 
   constructor() {
     super();
+    // German
+    this.signhere_DE = "Klicken Sie hier, um zu unterschreiben";
+    this.enteradd_DE = "Gib eine Adresse ein";
+    this.draghere_DE = "Ziehen Sie Dateien hierher oder"
+    this.uploadbutton_DE = "Dateien auswählen"
+
+    //Spanish
+    this.signhere_ES = "Haga clic aquí para firmar";
+    this.enteradd_ES = "Ingrese una dirección";
+    this.draghere_ES = "Arrastre archivos aquí o";
+    this.uploadbutton_ES = "Seleccionar archivos";
+
+    //Dutch
+    this.signhere_NL = "Klik hier om te ondertekenen";
+    this.enteradd_NL = "Voer een adres in";
+    this.draghere_NL = "Sleep bestanden hierheen of"
+    this.uploadbutton_NL = "Selecteer bestanden"
+
     this.select = this.shadowRoot.querySelector("#language-select");
     this.select.addEventListener("change", this.translate.bind(this));
   }
@@ -55,24 +73,30 @@ export class Placeholder extends LitElement {
   translate() {
     console.log(this.select.value);
     console.log("Translate is calling");
-    if (this.select.value === "dutch") {
-      // dutch translations
-      trSignature("h5.d-print-none.ng-star-inserted", signhere_NL);
-      trAddressPH("nx-address-input", enteradd_NL);
-      trFileUpload(".drag-file-label", draghere_NL);
-      trUploadBtn(".nx-upload-button", uploadbutton_NL);
-    } else if (this.select.value === "german") {
+    if (this.select.value === "English") {
+      // original translations
+      trSignature("h5.d-print-none.ng-star-inserted", "Select to sign");
+      trAddressPH("nx-address-input", "Enter an address");
+      trFileUpload(".drag-file-label", "Drag files here or");
+      trUploadBtn(".nx-upload-button", "Select files");
+    } else if (this.select.value === "German") {
       // german translations
-      trSignature("h5.d-print-none.ng-star-inserted", signhere_DE);
-      trAddressPH("nx-address-input", enteradd_DE);
-      trFileUpload(".drag-file-label", draghere_DE);
-      trUploadBtn(".nx-upload-button", uploadbutton_DE);
-    } else if (this.select.value === "spanish") {
+      trSignature("h5.d-print-none.ng-star-inserted", this.signhere_DE);
+      trAddressPH("nx-address-input", this.enteradd_DE);
+      trFileUpload(".drag-file-label", this.draghere_DE);
+      trUploadBtn(".nx-upload-button", this.uploadbutton_DE);
+    } else if (this.select.value === "Spanish") {
       // spanish translations
-      trSignature("h5.d-print-none.ng-star-inserted", signhere_ES);
-      trAddressPH("nx-address-input", enteradd_ES);
-      trFileUpload(".drag-file-label", draghere_ES);
-      trUploadBtn(".nx-upload-button", uploadbutton_ES);
+      trSignature("h5.d-print-none.ng-star-inserted", this.signhere_ES);
+      trAddressPH("nx-address-input", this.enteradd_ES);
+      trFileUpload(".drag-file-label", this.draghere_ES);
+      trUploadBtn(".nx-upload-button", this.uploadbutton_ES);
+    } else if (this.select.value === "Dutch") {
+      // dutch translations
+      trSignature("h5.d-print-none.ng-star-inserted", this.signhere_NL);
+      trAddressPH("nx-address-input", this.enteradd_NL);
+      trFileUpload(".drag-file-label", this.draghere_NL);
+      trUploadBtn(".nx-upload-button", this.uploadbutton_NL);
     }
   };
 
@@ -90,26 +114,6 @@ export class Placeholder extends LitElement {
 
 }
 
-// Translations here
-// German
-const signhere_DE = "Klicken Sie hier, um zu unterschreiben";
-const enteradd_DE = "Gib eine Adresse ein";
-const draghere_DE = "Ziehen Sie Dateien hierher oder"
-const uploadbutton_DE = "Dateien auswählen"
-
-//Spanish
-const signhere_ES = "Haga clic aquí para firmar";
-const enteradd_ES = "Ingrese una dirección";
-const draghere_ES = "Arrastre archivos aquí o";
-const uploadbutton_ES = "Seleccionar archivos";
-
-//Dutch
-const signhere_NL = "Klik hier om te ondertekenen";
-const enteradd_NL = "Voer een adres in";
-const draghere_NL = "Sleep bestanden hierheen of"
-const uploadbutton_NL = "Selecteer bestanden"
-
-// END of translations
 
 const elementName = 'translate-legacy';
 customElements.define('translate-legacy', Placeholder);
