@@ -4,7 +4,6 @@ export class Placeholder extends LitElement {
   static getMetaConfig() {
     // plugin contract information
     return {
-      title: 'translate-legacy',
       controlName: 'translate-legacy',
       fallbackDisableSubmit: false,
       description: 'provide a plugin to translate the form',
