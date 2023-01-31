@@ -82,15 +82,7 @@ export class Placeholder extends LitElement {
       element.innerHTML = btntext + element.innerHTML.slice(element.innerHTML.indexOf('<'));
     });
   }
-
-  constructor() {
-    super();
-    if (this.shadowRoot) {
-      this.select = this.shadowRoot.querySelector("#language-select");
-      this.select.addEventListener("change", this.translate.bind(this));
-    }
-  }
-
+  
   translate(selectLang, defaultValue = properties.propLang) {
     console.log(selectLang+" "+this.defaultValue);
     console.log("Translate is calling");
@@ -136,6 +128,9 @@ export class Placeholder extends LitElement {
 
 }
 
-
 const elementName = 'translate-legacy';
 customElements.define('translate-legacy', Placeholder);
+customElements.whenDefined('translate-legacy').then(() => {
+  this.select = this.shadowRoot.querySelector("#language-select");
+  this.select.addEventListener("change", this.translate.bind(this));
+} )
