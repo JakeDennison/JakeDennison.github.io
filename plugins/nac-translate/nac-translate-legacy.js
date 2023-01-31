@@ -122,7 +122,7 @@ export class Placeholder extends LitElement {
   render() {
     return html`
     <label for="language-select">Translate Plugin</label>
-    <select id="language-select" @change="${(e) => console.log(e.target)}">
+    <select id="language-select" @change="${(e) => console.log("changed")}">
       <option value="english">English</option>
       <option value="german">German</option>
       <option value="spanish">Spanish</option>
