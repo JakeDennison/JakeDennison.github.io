@@ -110,7 +110,6 @@ export class Placeholder extends LitElement {
 
   constructor() {
     super();
-    const propLang =  'English';
     console.log(propLang);
     const select = propLang;
     this._translate(select);
