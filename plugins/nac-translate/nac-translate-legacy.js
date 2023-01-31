@@ -84,10 +84,10 @@ export class Placeholder extends LitElement {
   }
 
   _translate(selectLang) {
-    console.log(this.selectLang+" "+this.propLang);
+    console.log(this.selectLang+" "+this.properties.propLang);
     console.log("Translate is calling");
     if (!selectLang) {
-      const dropLang = document.querySelector("#language-select");
+      selectLang = document.querySelector("#language-select");
     }
     if (selectLang === "English") {
       // original translations
@@ -118,8 +118,9 @@ export class Placeholder extends LitElement {
 
   constructor() {
     super();
-    this._translate(this.propLang)
-    console.log(this.propLang);
+    this.propLang = "English"
+    this._translate(this.properties.propLang)
+    console.log(this.properties.propLang);
   }
   _resetMessage;
 
