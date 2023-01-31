@@ -59,6 +59,27 @@ export class Placeholder extends LitElement {
   _translate(selectLang) {
     console.log("Translate is calling");
     const select = document.querySelector("#language-select");
+    // English
+    const signhere_EN = 'Select to sign';
+    const enteradd_EN = 'Enter an address';
+    const draghere_EN = 'Drag files here or';
+    const uploadbutton_EN = 'Select files';
+    // German
+    const signhere_DE = 'Klicken Sie hier; um zu unterschreiben';
+    const enteradd_DE = 'Gib eine Adresse ein';
+    const draghere_DE = 'Ziehen Sie Dateien hierher oder';
+    const uploadbutton_DE = 'Dateien auswählen';
+    //Spanish
+    const signhere_ES = 'Haga clic aquí para firmar';
+    const enteradd_ES = 'Ingrese una dirección';
+    const draghere_ES = 'Arrastre archivos aquí o';
+    const uploadbutton_ES = 'Seleccionar archivos';
+    //Dutch
+    const signhere_NL = 'Klik hier om te ondertekenen';
+    const enteradd_NL = 'Voer een adres in';
+    const draghere_NL = 'Sleep bestanden hierheen of';
+    const uploadbutton_NL = 'Selecteer bestanden';
+
     console.log(selectLang);
     if (selectLang === "English") {
       // original translations
@@ -89,29 +110,7 @@ export class Placeholder extends LitElement {
 
   constructor() {
     super();
-    // English
-    signhere_EN = 'Select to sign';
-    enteradd_EN = 'Enter an address';
-    draghere_EN = 'Drag files here or';
-    uploadbutton_EN = 'Select files';
-  // German
-    signhere_DE = 'Klicken Sie hier; um zu unterschreiben';
-    enteradd_DE = 'Gib eine Adresse ein';
-    draghere_DE = 'Ziehen Sie Dateien hierher oder';
-    uploadbutton_DE = 'Dateien auswählen';
-  //Spanish
-    signhere_ES = 'Haga clic aquí para firmar';
-    enteradd_ES = 'Ingrese una dirección';
-    draghere_ES = 'Arrastre archivos aquí o';
-    uploadbutton_ES = 'Seleccionar archivos';
-  //Dutch
-    signhere_NL = 'Klik hier om te ondertekenen';
-    enteradd_NL = 'Voer een adres in';
-    draghere_NL = 'Sleep bestanden hierheen of';
-    uploadbutton_NL = 'Selecteer bestanden';
-  //call language
     propLang =  'English';
-
     console.log(propLang);
     const select = propLang;
     this._translate(select);
