@@ -56,9 +56,12 @@ export class Placeholder extends LitElement {
     });
   };
 
-  _translate(selectLang) {
+  _translate(selectLang,onchange) {
     console.log("Translate is calling");
-    const select = document.querySelector("#language-select");
+    if (onchange===true ){
+      selectLang = document.querySelector("#language-select");
+    }
+    
     // English
     const signhere_EN = 'Select to sign';
     const enteradd_EN = 'Enter an address';
@@ -121,7 +124,7 @@ export class Placeholder extends LitElement {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <label for="language-select">Translate Plugin</label>
-    <select class="form-select" aria-label="English" id="language-select" @change="${this._translate}">
+    <select class="form-select" aria-label="English" id="language-select" @change="${this._translate("null",true)}">
       <option selected>English</option>
       <option value="German">German</option>
       <option value="Spanish">Spanish</option>
