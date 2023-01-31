@@ -116,7 +116,6 @@ export class Placeholder extends LitElement {
 
   constructor() {
     super();
-    this.selectLang = properties.propLang;
   }
   _resetMessage;
 
