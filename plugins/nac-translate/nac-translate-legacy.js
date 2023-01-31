@@ -85,7 +85,8 @@ export class Placeholder extends LitElement {
 
   _translate(selectLang) {
     console.log("Translate is calling");
-    selectLang = document.querySelector("#language-select");
+    const select = document.querySelector("#language-select");
+    const selectLang = select.options[select.selectedIndex].value;
     console.log(selectLang);
     if (selectLang === "English") {
       // original translations
@@ -124,13 +125,20 @@ export class Placeholder extends LitElement {
 
   render() {
     return html`
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <label for="language-select">Translate Plugin</label>
-    <select id="language-select" @change="${this._translate}">
-      <option value="english">English</option>
-      <option value="german">German</option>
-      <option value="spanish">Spanish</option>
-      <option value="dutch">Dutch</option>
-    </select>
+    <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="language-select" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Language
+    </button>
+    <div class="dropdown-menu" aria-labelledby="language-select">
+      <a class="dropdown-item" href="#">English</a>
+      <a class="dropdown-item" href="#">German</a>
+      <a class="dropdown-item" href="#">Spanish</a>
+      <a class="dropdown-item" href="#">Dutch</a>
+    </div>
+  </div>
     `;
   }
 
