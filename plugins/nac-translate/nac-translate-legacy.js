@@ -83,7 +83,7 @@ export class Placeholder extends LitElement {
     });
   }
 
-  translate(selectLang, defaultValue = properties.propLang) {
+  _translate(selectLang) {
     console.log(selectLang+" "+this.defaultValue);
     console.log("Translate is calling");
     const dropLang = document.querySelector("#language-select");
@@ -116,13 +116,14 @@ export class Placeholder extends LitElement {
 
   constructor() {
     super();
+    this._translate(properties.propLang)
   }
   _resetMessage;
 
   render() {
     return html`
     <label for="language-select">Translate Plugin</label>
-    <select id="language-select" @change="${(e) => console.log("changed")}">
+    <select id="language-select" @change="${this._translate}">
       <option value="english">English</option>
       <option value="german">German</option>
       <option value="spanish">Spanish</option>
