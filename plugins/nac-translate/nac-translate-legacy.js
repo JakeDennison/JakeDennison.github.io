@@ -119,7 +119,7 @@ export class Placeholder extends LitElement {
     super();
     console.log(this.propLang);
     const select = this.propLang;
-    this._translate();
+    this._translate("German");
   }
   _resetMessage;
 
