@@ -115,6 +115,10 @@ export class Placeholder extends LitElement {
   };
 
   render() {
+    const dropLang = document.querySelector("#language-select");
+    dropLang.addEventListener("change", () => {
+      this.translate(dropLang.value);
+    });
     return html`
     <label for="language-select">Translate Plugin</label>
     <select id="language-select">
@@ -130,7 +134,3 @@ export class Placeholder extends LitElement {
 
 const elementName = 'translate-legacy';
 customElements.define('translate-legacy', Placeholder);
-customElements.whenDefined('translate-legacy').then(() => {
-  this.select = this.querySelector("#language-select");
-  this.select.addEventListener("change", this.translate.bind(this));
-} )
