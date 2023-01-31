@@ -86,8 +86,12 @@ export class Placeholder extends LitElement {
   constructor(){
     super();
     document.addEventListener("DOMContentLoaded", function() {
+      console.log("DOM has loaded");
       this.select = this.shadowRoot.querySelector("#language-select");
-      this.select.addEventListener("change", this.translate.bind(this))
+      this.select.addEventListener("change", () => {
+        console.log("Event has called");
+        this.translate.bind(this);
+      });
     });
   }
 
