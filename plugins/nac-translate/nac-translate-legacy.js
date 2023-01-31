@@ -119,6 +119,7 @@ export class Placeholder extends LitElement {
   constructor() {
     super();
     this._translate(this.propLang)
+    console.log(this.propLang);
   }
   _resetMessage;
 
