@@ -25,63 +25,36 @@ export class Placeholder extends LitElement {
         description: true,
       }
     };
-  }
-
-  static get properties() {
-    return {
-      // English
-        signhere_EN: "Select to sign",
-        enteradd_DE:"Enter an address",
-        draghere_DE:"Drag files here or",
-        uploadbutton_DE:"Select files",
-      // German
-        signhere_DE: "Klicken Sie hier, um zu unterschreiben",
-        enteradd_DE:"Gib eine Adresse ein",
-        draghere_DE:"Ziehen Sie Dateien hierher oder",
-        uploadbutton_DE:"Dateien auswählen",
-      //Spanish
-        signhere_ES:"Haga clic aquí para firmar",
-        enteradd_ES:"Ingrese una dirección",
-        draghere_ES:"Arrastre archivos aquí o",
-        uploadbutton_ES:"Seleccionar archivos",
-      //Dutch
-        signhere_NL:"Klik hier om te ondertekenen",
-        enteradd_NL:"Voer een adres in",
-        draghere_NL:"Sleep bestanden hierheen of",
-        uploadbutton_NL:"Selecteer bestanden",
-      //call language
-        propLang: "English",
-    };
-  }
+  };
 
   trSignature(targetClass, signText) {
     const elements = document.querySelectorAll(targetClass);
     elements.forEach(element => {
       element.innerHTML = signText;
     });
-  }
+  };
 
-  trAddressPH(className, placeholder) {
+  _trAddressPH(className, placeholder) {
     var elements = document.getElementsByClassName(className);
     
     for (var i = 0; i < elements.length; i++) {
       elements[i].setAttribute("placeholder", placeholder);
     }
-  }
+  };
 
-  trFileUpload(targetClass, Dragheretxt) {
+  _trFileUpload(targetClass, Dragheretxt) {
     const elements = document.querySelectorAll(targetClass);
     elements.forEach(element => {
       element.innerHTML = Dragheretxt;
     });
-  }
+  };
 
-  trUploadBtn(targetClass, btntext) {
+  _trUploadBtn(targetClass, btntext) {
     const elements = document.querySelectorAll(targetClass);
     elements.forEach(element => {
       element.innerHTML = btntext + element.innerHTML.slice(element.innerHTML.indexOf('<'));
     });
-  }
+  };
 
   _translate(selectLang) {
     console.log("Translate is calling");
@@ -89,37 +62,60 @@ export class Placeholder extends LitElement {
     console.log(selectLang);
     if (selectLang === "English") {
       // original translations
-      trSignature("h5.d-print-none.ng-star-inserted", signhere_EN);
-      trAddressPH("nx-address-input", enteradd_EN);
-      trFileUpload(".drag-file-label", draghere_EN);
-      trUploadBtn(".nx-upload-button", uploadbutton_EN);
+      _trSignature("h5.d-print-none.ng-star-inserted", signhere_EN);
+      _trAddressPH("nx-address-input", enteradd_EN);
+      _trFileUpload(".drag-file-label", draghere_EN);
+      _trUploadBtn(".nx-upload-button", uploadbutton_EN);
     } else if (selectLang === "German") {
       // german translations
-      trSignature("h5.d-print-none.ng-star-inserted", signhere_DE);
-      trAddressPH("nx-address-input", enteradd_DE);
-      trFileUpload(".drag-file-label", draghere_DE);
-      trUploadBtn(".nx-upload-button", uploadbutton_DE);
+      _trSignature("h5.d-print-none.ng-star-inserted", signhere_DE);
+      _trAddressPH("nx-address-input", enteradd_DE);
+      _trFileUpload(".drag-file-label", draghere_DE);
+      _trUploadBtn(".nx-upload-button", uploadbutton_DE);
     } else if (selectLang === "Spanish") {
       // spanish translations
-      trSignature("h5.d-print-none.ng-star-inserted", signhere_ES);
-      trAddressPH("nx-address-input", enteradd_ES);
-      trFileUpload(".drag-file-label", draghere_ES);
-      trUploadBtn(".nx-upload-button", uploadbutton_ES);
+      _trSignature("h5.d-print-none.ng-star-inserted", signhere_ES);
+      _trAddressPH("nx-address-input", enteradd_ES);
+      _trFileUpload(".drag-file-label", draghere_ES);
+      _trUploadBtn(".nx-upload-button", uploadbutton_ES);
     } else if (selectLang === "Dutch") {
       // dutch translations
-      trSignature("h5.d-print-none.ng-star-inserted", signhere_NL);
-      trAddressPH("nx-address-input", enteradd_NL);
-      trFileUpload(".drag-file-label", draghere_NL);
-      trUploadBtn(".nx-upload-button", uploadbutton_NL);
+      _trSignature("h5.d-print-none.ng-star-inserted", signhere_NL);
+      _trAddressPH("nx-address-input", enteradd_NL);
+      _trFileUpload(".drag-file-label", draghere_NL);
+      _trUploadBtn(".nx-upload-button", uploadbutton_NL);
     }
   };
 
   constructor() {
     super();
-    console.log(this.propLang);
-    const select = this.propLang;
-    this._translate("German");
-  }
+    // English
+    const signhere_EN = 'Select to sign';
+    const enteradd_EN = 'Enter an address';
+    const draghere_EN = 'Drag files here or';
+    const uploadbutton_EN = 'Select files';
+  // German
+    const signhere_DE = 'Klicken Sie hier; um zu unterschreiben';
+    const enteradd_DE = 'Gib eine Adresse ein';
+    const draghere_DE = 'Ziehen Sie Dateien hierher oder';
+    const uploadbutton_DE = 'Dateien auswählen';
+  //Spanish
+    const signhere_ES = 'Haga clic aquí para firmar';
+    const enteradd_ES = 'Ingrese una dirección';
+    const draghere_ES = 'Arrastre archivos aquí o';
+    const uploadbutton_ES = 'Seleccionar archivos';
+  //Dutch
+    const signhere_NL = 'Klik hier om te ondertekenen';
+    const enteradd_NL = 'Voer een adres in';
+    const draghere_NL = 'Sleep bestanden hierheen of';
+    const uploadbutton_NL = 'Selecteer bestanden';
+  //call language
+    const propLang =  'English';
+
+    console.log(propLang);
+    const select = propLang;
+    this._translate(select);
+  };
   _resetMessage;
 
   render() {
@@ -134,9 +130,9 @@ export class Placeholder extends LitElement {
       <option value="Dutch">Dutch</option>
     </select>
     `;
-  }
+  };
 
-}
+};
 
 const elementName = 'translate-legacy';
 customElements.define('translate-legacy', Placeholder);
