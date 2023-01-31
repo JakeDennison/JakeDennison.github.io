@@ -91,34 +91,34 @@ export class Placeholder extends LitElement {
     }
     if (selectLang === "English") {
       // original translations
-      trSignature("h5.d-print-none.ng-star-inserted", properties.signhere_EN);
-      trAddressPH("nx-address-input", properties.enteradd_EN);
-      trFileUpload(".drag-file-label", properties.draghere_EN);
-      trUploadBtn(".nx-upload-button", properties.uploadbutton_EN);
+      trSignature("h5.d-print-none.ng-star-inserted", this.signhere_EN);
+      trAddressPH("nx-address-input", this.enteradd_EN);
+      trFileUpload(".drag-file-label", this.draghere_EN);
+      trUploadBtn(".nx-upload-button", this.uploadbutton_EN);
     } else if (selectLang === "German") {
       // german translations
-      trSignature("h5.d-print-none.ng-star-inserted", properties.signhere_DE);
-      trAddressPH("nx-address-input", properties.enteradd_DE);
-      trFileUpload(".drag-file-label", properties.draghere_DE);
-      trUploadBtn(".nx-upload-button", properties.uploadbutton_DE);
+      trSignature("h5.d-print-none.ng-star-inserted", this.signhere_DE);
+      trAddressPH("nx-address-input", this.enteradd_DE);
+      trFileUpload(".drag-file-label", this.draghere_DE);
+      trUploadBtn(".nx-upload-button", this.uploadbutton_DE);
     } else if (selectLang === "Spanish") {
       // spanish translations
-      trSignature("h5.d-print-none.ng-star-inserted", properties.signhere_ES);
-      trAddressPH("nx-address-input", properties.enteradd_ES);
-      trFileUpload(".drag-file-label", properties.draghere_ES);
-      trUploadBtn(".nx-upload-button", properties.uploadbutton_ES);
+      trSignature("h5.d-print-none.ng-star-inserted", this.signhere_ES);
+      trAddressPH("nx-address-input", this.enteradd_ES);
+      trFileUpload(".drag-file-label", this.draghere_ES);
+      trUploadBtn(".nx-upload-button", this.uploadbutton_ES);
     } else if (selectLang === "Dutch") {
       // dutch translations
-      trSignature("h5.d-print-none.ng-star-inserted", properties.signhere_NL);
-      trAddressPH("nx-address-input", properties.enteradd_NL);
-      trFileUpload(".drag-file-label", properties.draghere_NL);
-      trUploadBtn(".nx-upload-button", properties.uploadbutton_NL);
+      trSignature("h5.d-print-none.ng-star-inserted", this.signhere_NL);
+      trAddressPH("nx-address-input", this.enteradd_NL);
+      trFileUpload(".drag-file-label", this.draghere_NL);
+      trUploadBtn(".nx-upload-button", this.uploadbutton_NL);
     }
   };
 
   constructor() {
     super();
-    this._translate("English")
+    this._translate(this.propLang)
   }
   _resetMessage;
 
