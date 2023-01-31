@@ -128,11 +128,12 @@ export class Placeholder extends LitElement {
 
 }
 
-const elementName = 'translate-legacy';
-customElements.define('translate-legacy', Placeholder);
-customElements.whenDefined('translate-legacy').then(() => {
+document.addEventListener("DOMContentLoaded", function() {
   const dropLang = document.querySelector("#language-select");
   dropLang.addEventListener("change", () => {
     this.translate(dropLang.value);
   });
-} )
+});
+
+const elementName = 'translate-legacy';
+customElements.define('translate-legacy', Placeholder);
