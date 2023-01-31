@@ -86,8 +86,10 @@ export class Placeholder extends LitElement {
   _translate(selectLang) {
     console.log(selectLang+" "+this.defaultValue);
     console.log("Translate is calling");
-    const dropLang = document.querySelector("#language-select");
     if (!selectLang) {
+      const dropLang = document.querySelector("#language-select");
+    }
+    if (selectLang === "English") {
       // original translations
       trSignature("h5.d-print-none.ng-star-inserted", properties.signhere_EN);
       trAddressPH("nx-address-input", properties.enteradd_EN);
