@@ -84,7 +84,7 @@ export class Placeholder extends LitElement {
   }
 
   _translate(selectLang) {
-    console.log(selectLang+" "+this.defaultValue);
+    console.log(this.selectLang+" "+this.propLang);
     console.log("Translate is calling");
     if (!selectLang) {
       const dropLang = document.querySelector("#language-select");
