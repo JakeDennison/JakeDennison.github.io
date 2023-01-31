@@ -83,6 +83,16 @@ export class Placeholder extends LitElement {
     });
   }
 
+  constructor(){
+    super();
+    document.addEventListener("DOMContentLoaded", function() {
+      const dropLang = document.querySelector("#language-select");
+      dropLang.addEventListener("change", () => {
+        this.translate(dropLang.value);
+      });
+    });
+  }
+
   translate(selectLang, defaultValue = properties.propLang) {
     console.log(selectLang+" "+this.defaultValue);
     console.log("Translate is calling");
@@ -127,13 +137,6 @@ export class Placeholder extends LitElement {
   }
 
 }
-
-document.addEventListener("DOMContentLoaded", function() {
-  const dropLang = document.querySelector("#language-select");
-  dropLang.addEventListener("change", () => {
-    this.translate(dropLang.value);
-  });
-});
 
 const elementName = 'translate-legacy';
 customElements.define('translate-legacy', Placeholder);
