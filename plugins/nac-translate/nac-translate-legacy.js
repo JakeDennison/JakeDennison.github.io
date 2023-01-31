@@ -83,6 +83,14 @@ export class Placeholder extends LitElement {
     });
   }
 
+  constructor() {
+    super();
+    if (this.shadowRoot) {
+      this.select = this.shadowRoot.querySelector("#language-select");
+      this.select.addEventListener("change", this.translate.bind(this));
+    }
+  }
+
   translate(selectLang, defaultValue = properties.propLang) {
     console.log(selectLang+" "+properties.propLang);
     console.log("Translate is calling");
@@ -115,8 +123,6 @@ export class Placeholder extends LitElement {
   };
 
   render() {
-    this.select = this.shadowRoot.querySelector("#language-select");
-    this.select.addEventListener("change", this.translate.bind(this));
     return html`
     <label for="language-select">Translate Plugin</label>
     <select id="language-select">
