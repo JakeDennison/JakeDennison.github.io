@@ -90,27 +90,27 @@ export class Placeholder extends LitElement {
   constructor() {
     super();
     // English
-    const signhere_EN = 'Select to sign';
-    const enteradd_EN = 'Enter an address';
-    const draghere_EN = 'Drag files here or';
-    const uploadbutton_EN = 'Select files';
+    signhere_EN = 'Select to sign';
+    enteradd_EN = 'Enter an address';
+    draghere_EN = 'Drag files here or';
+    uploadbutton_EN = 'Select files';
   // German
-    const signhere_DE = 'Klicken Sie hier; um zu unterschreiben';
-    const enteradd_DE = 'Gib eine Adresse ein';
-    const draghere_DE = 'Ziehen Sie Dateien hierher oder';
-    const uploadbutton_DE = 'Dateien auswählen';
+    signhere_DE = 'Klicken Sie hier; um zu unterschreiben';
+    enteradd_DE = 'Gib eine Adresse ein';
+    draghere_DE = 'Ziehen Sie Dateien hierher oder';
+    uploadbutton_DE = 'Dateien auswählen';
   //Spanish
-    const signhere_ES = 'Haga clic aquí para firmar';
-    const enteradd_ES = 'Ingrese una dirección';
-    const draghere_ES = 'Arrastre archivos aquí o';
-    const uploadbutton_ES = 'Seleccionar archivos';
+    signhere_ES = 'Haga clic aquí para firmar';
+    enteradd_ES = 'Ingrese una dirección';
+    draghere_ES = 'Arrastre archivos aquí o';
+    uploadbutton_ES = 'Seleccionar archivos';
   //Dutch
-    const signhere_NL = 'Klik hier om te ondertekenen';
-    const enteradd_NL = 'Voer een adres in';
-    const draghere_NL = 'Sleep bestanden hierheen of';
-    const uploadbutton_NL = 'Selecteer bestanden';
+    signhere_NL = 'Klik hier om te ondertekenen';
+    enteradd_NL = 'Voer een adres in';
+    draghere_NL = 'Sleep bestanden hierheen of';
+    uploadbutton_NL = 'Selecteer bestanden';
   //call language
-    const propLang =  'English';
+    propLang =  'English';
 
     console.log(propLang);
     const select = propLang;
