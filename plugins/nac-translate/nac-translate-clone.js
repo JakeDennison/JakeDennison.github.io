@@ -54,34 +54,26 @@ export class Placeholder extends LitElement {
     };
   }
 
-  trSignature(targetClass, signText) {
+TranslateInnerHTML(targetClass,translation){
     const elements = document.querySelectorAll(targetClass);
     elements.forEach(element => {
-      element.innerHTML = signText;
+      element.innerHTML = translation;
     });
-  };
+}
 
-  _trAddressPH(className, placeholder) {
-    var elements = document.getElementsByClassName(className);
-    
+TranslatePlaceholder(targetClass,translation){
+    var elements = document.getElementsByClassName(targetClass);
     for (var i = 0; i < elements.length; i++) {
-      elements[i].setAttribute("placeholder", placeholder);
+        elements[i].setAttribute("placeholder", translation);
     }
-  };
+}
 
-  _trFileUpload(targetClass, Dragheretxt) {
+TranslateBtn(targetClass,translation){
     const elements = document.querySelectorAll(targetClass);
     elements.forEach(element => {
-      element.innerHTML = Dragheretxt;
+      element.innerHTML = translation + element.innerHTML.slice(element.innerHTML.indexOf('<'));
     });
-  };
-
-  _trUploadBtn(targetClass, btntext) {
-    const elements = document.querySelectorAll(targetClass);
-    elements.forEach(element => {
-      element.innerHTML = btntext + element.innerHTML.slice(element.innerHTML.indexOf('<'));
-    });
-  };
+}
 
   _translate(selectLang,onchange) {
     console.log("Translate is calling");

@@ -27,6 +27,10 @@ export class TranslateMod extends LitElement {
     enteradd: {type: String},
     draghere: {type: String},
     uploadbtn: {type: String},
+    signTar: {type: String},
+    addTar: {type: String},
+    dragTar: {type: String},
+    uploadTar: {type: String},
   }
   
   constructor() {
@@ -36,6 +40,10 @@ export class TranslateMod extends LitElement {
     this.enteradd = 'Enter an address';
     this.draghere = 'Drag files here or';
     this.uploadbtn = 'Select files';
+    this.signTar = 'h5.d-print-none.ng-star-inserted';
+    this.addTar = 'nx-address-input';
+    this.dragTar = '.drag-file-label';
+    this.uploadTar = '.nx-upload-button';
   }
 
   static get styles() {
@@ -78,6 +86,7 @@ export class TranslateMod extends LitElement {
       this.enteradd = 'Gib eine Adresse ein';
       this.draghere = 'Ziehen Sie Dateien hierher oder';
       this.uploadbtn = 'Dateien auswählen';
+      this.TranslateInnerHTML(this.signTar,this.signhere);
     } else if (event.target.value === "Spanish") {
       // spanish translations
       this.signhere = 'Haga clic aquí para firmar';
@@ -92,6 +101,28 @@ export class TranslateMod extends LitElement {
       this.uploadbtn = 'Selecteer bestanden';
     }
   }
+
+  TranslateInnerHTML(targetClass,translation){
+      const elements = document.querySelectorAll(targetClass);
+      elements.forEach(element => {
+        element.innerHTML = translation;
+      });
+  }
+
+  TranslatePlaceholder(targetClass,translation){
+      var elements = document.getElementsByClassName(targetClass);
+      for (var i = 0; i < elements.length; i++) {
+          elements[i].setAttribute("placeholder", translation);
+      }
+  }
+
+  TranslateBtn(targetClass,translation){
+      const elements = document.querySelectorAll(targetClass);
+      elements.forEach(element => {
+        element.innerHTML = translation + element.innerHTML.slice(element.innerHTML.indexOf('<'));
+      });
+  }
+
 }
 
 const elementName = 'translate-mod';
