@@ -66,11 +66,6 @@ export class TranslateMod extends LitElement {
         <option value="Spanish">Spanish</option>
         <option value="Dutch">Dutch</option>
       </select>
-      <p>Language is: ${this.propLang}</p>
-      <p>Select to sign: ${this.signhere}</p>
-      <p>Enter an address: ${this.enteradd}</p>
-      <p>Drag files here or: ${this.draghere}</p>
-      <p>Select files: ${this.uploadbtn}</p>
     `;
   }
 
