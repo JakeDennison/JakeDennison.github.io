@@ -1,0 +1,20 @@
+[
+    {
+        "cardTitle": "Nintex Learning",
+        "cardText": "Link to Nintex learning",
+        "imageUrl": "https://www.nintex.com/wp-content/uploads/2019/05/nintex-logo-reverse.jpg",
+        "link": "https://www.nintex.com/"
+    },
+    {
+        "cardTitle": "Nintex Gallery",
+        "cardText": "Link to the gallery",
+        "imageUrl": "https://www.nintex.com/wp-content/uploads/2019/05/nintex-logo-reverse.jpg",
+        "link": "https://gallery.nintex.com/"
+    },
+    {
+        "cardTitle": "Nintex Help",
+        "cardText": "Link to the help",
+        "imageUrl": "https://www.nintex.com/wp-content/uploads/2019/05/nintex-logo-reverse.jpg",
+        "link": "https://learn.nintex.com/"
+    }
+]
