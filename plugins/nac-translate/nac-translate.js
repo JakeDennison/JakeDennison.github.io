@@ -63,7 +63,7 @@ export class TranslateMod extends LitElement {
       <select class="form-select w-25" aria-label="English" id="language-select" @change="${this._handleLanguageChange}">
         <option selected>English</option>
         <option value="German">Deutsch</option>
-        <option value="German">Français</option>
+        <option value="French">Français</option>
         <option value="Spanish">Español</option>
         <option value="Dutch">Nederlands</option>
       </select>
@@ -72,31 +72,31 @@ export class TranslateMod extends LitElement {
 
   _handleLanguageChange(event) {
     this.propLang = event.target.value;
-    if (event.target.value === "English") {
+    if (this.propLang === "English") {
       // original translations
       this.signhere = 'Select to sign';
       this.enteradd = 'Enter an address';
       this.draghere = 'Drag files here or';
       this.uploadbtn = 'Select files';
-    } else if (event.target.value === "Deutsch") {
+    } else if (this.propLang === "German") {
       // german translations
       this.signhere = 'Klicken Sie hier; um zu unterschreiben';
       this.enteradd = 'Gib eine Adresse ein';
       this.draghere = 'Ziehen Sie Dateien hierher oder';
       this.uploadbtn = 'Dateien auswählen';
-    } else if (this.propLang === "Français") {
+    } else if (this.propLang === "French") {
       // spanish translations
       this.signhere = 'Sélectionnez pour signer';
       this.enteradd = 'Entrer une adresse';
       this.draghere = 'Faites glisser des fichiers ici ou';
       this.uploadbtn = 'Sélectionnez des fichiers';
-    } else if (event.target.value === "Español") {
+    } else if (this.propLang === "Spanish") {
       // spanish translations
       this.signhere = 'Haga clic aquí para firmar';
       this.enteradd = 'Ingrese una dirección';
       this.draghere = 'Arrastre archivos aquí o';
       this.uploadbtn = 'Seleccionar archivos';
-    } else if (event.target.value === "Nederlands") {
+    } else if (this.propLang === "Dutch") {
       // dutch translations
       this.signhere = 'Klik hier om te ondertekenen';
       this.enteradd = 'Voer een adres in';
