@@ -60,7 +60,7 @@ export class Placeholder extends LitElement {
     console.log("Translate is calling");
     if (onchange===true ){
       selectLang = document.querySelector("#language-select");
-    }
+    };
     
     // English
     const signhere_EN = 'Select to sign';
