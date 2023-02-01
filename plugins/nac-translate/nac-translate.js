@@ -86,7 +86,6 @@ export class TranslateMod extends LitElement {
       this.enteradd = 'Gib eine Adresse ein';
       this.draghere = 'Ziehen Sie Dateien hierher oder';
       this.uploadbtn = 'Dateien auswählen';
-      this.TranslateInnerHTML(this.signTar,this.signhere);
     } else if (event.target.value === "Spanish") {
       // spanish translations
       this.signhere = 'Haga clic aquí para firmar';
@@ -99,7 +98,11 @@ export class TranslateMod extends LitElement {
       this.enteradd = 'Voer een adres in';
       this.draghere = 'Sleep bestanden hierheen of';
       this.uploadbtn = 'Selecteer bestanden';
-    }
+    };
+    this.TranslateInnerHTML(this.signTar,this.signhere);
+    this.TranslatePlaceholder(this.addTar,this.enteradd);
+    this.TranslateInnerHTML(this.dragTar,this.draghere);
+    this.TranslateBtn(this.uploadTar,this.uploadbtn);
   }
 
   TranslateInnerHTML(targetClass,translation){
