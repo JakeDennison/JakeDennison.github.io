@@ -1,5 +1,4 @@
 import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
-import translations from './translations.json';
 
 export class TranslateMod extends LitElement {
   static getMetaConfig() {
@@ -24,31 +23,27 @@ export class TranslateMod extends LitElement {
 
   static properties = {
     propLang: {type: String},
+    signhere: {type: String},
+    enteradd: {type: String},
+    draghere: {type: String},
+    uploadbtn: {type: String},
     signTar: {type: String},
     addTar: {type: String},
     dragTar: {type: String},
     uploadTar: {type: String},
-    translations: { type: Object },
   }
   
   constructor() {
     super();
     this.propLang = 'English';
-    this.translations = translations;
+    this.signhere = 'Select to sign';
+    this.enteradd = 'Enter an address';
+    this.draghere = 'Drag files here or';
+    this.uploadbtn = 'Select files';
     this.signTar = 'h5.d-print-none.ng-star-inserted';
     this.addTar = 'nx-address-input';
     this.dragTar = '.drag-file-label';
     this.uploadTar = '.nx-upload-button';
-  }
-
-  static get styles() {
-    return css`
-      select {
-        font-size: 16px;
-        padding: 8px;
-        margin: 8px;
-      }
-    `;
   }
 
   render() {
@@ -56,23 +51,49 @@ export class TranslateMod extends LitElement {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-      <select class="w-25 m-0 dropdown-menu" aria-label="English" id="language-select" @change="${this._handleLanguageChange}">
-        <option class="dropdown-item" selected value="English">English</option>
-        <option class="dropdown-item" value="German">Deutsch</option>
-        <option class="dropdown-item" value="French">Français</option>
-        <option class="dropdown-item" value="Spanish">Español</option>
-        <option class="dropdown-item" value="Dutch">Nederlands</option>
+      <select class="form-select w-25 m-0" aria-label="English" id="language-select" @change="${this._handleLanguageChange}">
+        <option selected value="English" data-content='<i class="fi fi-gb"></i>'>English</option>
+        <option value="German" data-content='<i class="fi fi-de"></i>'>Deutsch</option>
+        <option value="French" data-content='<i class="fi fi-fr"></i>'>Français</option>
+        <option value="Spanish" data-content='<i class="fi fi-es"></i>'>Español</option>
+        <option value="Dutch" data-content='<i class="fi fi-nl"></i>'>Nederlands</option>
       </select>
     `;
   }
 
-  _handleLanguageChange(e) {
-    this.propLang = e.target.value;
-    this.signhere = this.translations[this.propLang].signhere;
-    this.enteradd = this.translations[this.propLang].enteradd;
-    this.draghere = this.translations[this.propLang].draghere;
-    this.uploadbtn = this.translations[this.propLang].uploadbtn;
-
+  _handleLanguageChange(event) {
+    this.propLang = event.target.value;
+    if (this.propLang === "English") {
+      // original translations
+      this.signhere = 'Select to sign';
+      this.enteradd = 'Enter an address';
+      this.draghere = 'Drag files here or';
+      this.uploadbtn = 'Select files';
+    } else if (this.propLang === "German") {
+      // german translations
+      this.signhere = 'Klicken Sie hier; um zu unterschreiben';
+      this.enteradd = 'Gib eine Adresse ein';
+      this.draghere = 'Ziehen Sie Dateien hierher oder';
+      this.uploadbtn = 'Dateien auswählen';
+    } else if (this.propLang === "French") {
+      // spanish translations
+      this.signhere = 'Sélectionnez pour signer';
+      this.enteradd = 'Entrer une adresse';
+      this.draghere = 'Faites glisser des fichiers ici ou';
+      this.uploadbtn = 'Sélectionnez des fichiers';
+    } else if (this.propLang === "Spanish") {
+      // spanish translations
+      this.signhere = 'Haga clic aquí para firmar';
+      this.enteradd = 'Ingrese una dirección';
+      this.draghere = 'Arrastre archivos aquí o';
+      this.uploadbtn = 'Seleccionar archivos';
+    } else if (this.propLang === "Dutch") {
+      // dutch translations
+      this.signhere = 'Klik hier om te ondertekenen';
+      this.enteradd = 'Voer een adres in';
+      this.draghere = 'Sleep bestanden hierheen of';
+      this.uploadbtn = 'Selecteer bestanden';
+    };
     this.TranslateInnerHTML(this.signTar,this.signhere);
     this.TranslatePlaceholder(this.addTar,this.enteradd);
     this.TranslateInnerHTML(this.dragTar,this.draghere);
