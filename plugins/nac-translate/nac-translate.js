@@ -57,4 +57,5 @@ export class TranslateMod extends LitElement {
   }
 }
 
+const elementName = 'translate-mod';
 customElements.define('translate-mod', TranslateMod);
