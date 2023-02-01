@@ -1,32 +1,32 @@
 {
     "English": {
-        "signhere": "Hello",
-        "enteradd": "Welcome to the website",
-        "draghere": "Welcome to the website",
-        "uploadbtn": "Welcome to the website"
+        "signhere": "Select to sign",
+        "enteradd": "Enter an address",
+        "draghere": "Drag files here or",
+        "uploadbtn": "Select files"
     },
     "German": {
-        "signhere": "Hello",
-        "enteradd": "Welcome to the website",
-        "draghere": "Welcome to the website",
-        "uploadbtn": "Welcome to the website"
+        "signhere": "Klicken Sie hier; um zu unterschreiben",
+        "enteradd": "Gib eine Adresse ein",
+        "draghere": "Ziehen Sie Dateien hierher oder",
+        "uploadbtn": "Dateien auswählen"
     },
     "French": {
-        "signhere": "Hello",
-        "enteradd": "Welcome to the website",
-        "draghere": "Welcome to the website",
-        "uploadbtn": "Welcome to the website"
+        "signhere": "Sélectionnez pour signer",
+        "enteradd": "Entrer une adresse",
+        "draghere": "Faites glisser des fichiers ici ou",
+        "uploadbtn": "Sélectionnez des fichiers"
     },
     "Spanish": {
-        "signhere": "Hello",
-        "enteradd": "Welcome to the website",
-        "draghere": "Welcome to the website",
-        "uploadbtn": "Welcome to the website"
+        "signhere": "Haga clic aquí para firmar",
+        "enteradd": "Ingrese una dirección",
+        "draghere": "Arrastre archivos aquí o",
+        "uploadbtn": "Seleccionar archivos"
     },
     "Dutch": {
-        "signhere": "Hello",
-        "enteradd": "Welcome to the website",
-        "draghere": "Welcome to the website",
-        "uploadbtn": "Welcome to the website"
+        "signhere": "Klik hier om te ondertekenen",
+        "enteradd": "Voer een adres in",
+        "draghere": "Sleep bestanden hierheen of",
+        "uploadbtn": "Selecteer bestanden"
     }
 }
