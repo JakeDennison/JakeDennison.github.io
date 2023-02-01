@@ -58,7 +58,7 @@ export default class NacCards extends LitElement {
         return html`
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-            <div class="row  row-cols-1 row-cols-md-4 g-4">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
                 <div class="col">
                     <div class="card ${centerTextStyle} ${cardStyle} mb-3">
                         <h5 class="card-header">${this.cardTitle}</h5>
