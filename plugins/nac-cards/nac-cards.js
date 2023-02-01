@@ -77,7 +77,7 @@ export default class NacCards extends LitElement {
         this.darkMode = false;
         this.centerText = false;
         this.cardsData = [];
-        fetch('./cards.json')
+        fetch('https://jsdenintex.github.io/plugins/nac-cards/cards.json')
             .then(response => response.json())
             .then(data => {
                 this.cardsData = data;
