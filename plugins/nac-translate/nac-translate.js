@@ -1,26 +1,56 @@
 import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 
-class TranslateElement extends LitElement {
-    static get properties() {
-      return {
-        language: { type: String },
-        apiKey: { type: String },
-      };
-    }
+export class TranslateMod extends LitElement {
+  static getMetaConfig() {
+    // plugin contract information
+    return {
+      controlName: 'translate-mod',
+      fallbackDisableSubmit: false,
+      description: 'provide a plugin to translate the form',
+      iconUrl: "multiline-text",
+      groupName: 'Languages',
+      version: '1.3',
+      properties: {
+        propLang: {title: 'Language',type: 'string',enum: ['English', 'German', 'Spanish', 'Dutch'],showAsRadio: false,verticalLayout: true,defaultValue: 'English',
+      },
+      },
+      standardProperties: {
+        readOnly: true,
+        description: true,
+      }
+    };
+  };
   
-    render() {
-      return html`
-<div id="google_translate_element"></div>
-
-<script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
-}
-</script>
-
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-      `;
-    }
+  constructor() {
+    super();
+    this.propLang = 'English';
   }
 
-customElements.define('translate-element', TranslateElement);
+  static get styles() {
+    return css`
+      select {
+        font-size: 16px;
+        padding: 8px;
+        margin: 8px;
+      }
+    `;
+  }
+
+  render() {
+    return html`
+      <select @change="${this._handleLanguageChange}">
+        <option value="English">English</option>
+        <option value="German">German</option>
+        <option value="Spanish">Spanish</option>
+        <option value="Dutch">Dutch</option>
+      </select>
+      <p>Selected Option: ${this.selectedOption}</p>
+    `;
+  }
+
+  _handleLanguageChange(event) {
+    this.selectedOption = event.target.value;
+  }
+}
+
+customElements.define('translate-mod', TranslateMod);

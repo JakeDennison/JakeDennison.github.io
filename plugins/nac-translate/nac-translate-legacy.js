@@ -11,14 +11,18 @@ export class Placeholder extends LitElement {
       groupName: 'Languages',
       version: '1.3',
       properties: {
-        propLang: {
-          title: 'Language',
-          type: 'string',
-        enum: ['English', 'German', 'Spanish', 'Dutch'],
-          showAsRadio: false,
-          verticalLayout: true,
-          defaultValue: 'English',
-        },
+        propLang: {title: 'Language',type: 'string',enum: ['English', 'German', 'Spanish', 'Dutch'],showAsRadio: false,verticalLayout: true,defaultValue: 'English',
+        hasChanged(newLang, oldLang) {
+          if (newLang > oldLang) {
+            console.log(`${newLang} > ${oldLang}. hasChanged: true.`);
+            return true;
+          }
+          else {
+            console.log(`${newLang} <= ${oldLang}. hasChanged: false.`);
+            return false;
+          }
+        }
+      },
       },
       standardProperties: {
         readOnly: true,
@@ -26,6 +30,29 @@ export class Placeholder extends LitElement {
       }
     };
   };
+
+  static get properties(){ return {
+      signhere_EN: {type: String},
+      enteradd_EN: {type: String},
+      draghere_EN: {type: String},
+      uploadbutton_EN: {type: String},
+      //
+      signhere_DE: {type: String},
+      enteradd_DE: {type: String},
+      draghere_DE: {type: String},
+      uploadbutton_DE: {type: String},
+      //
+      signhere_ES: {type: String},
+      enteradd_ES: {type: String},
+      draghere_ES: {type: String},
+      uploadbutton_ES: {type: String},
+      //
+      signhere_NL: {type: String},
+      enteradd_NL: {type: String},
+      draghere_NL: {type: String},
+      uploadbutton_NL: {type: String},
+    };
+  }
 
   trSignature(targetClass, signText) {
     const elements = document.querySelectorAll(targetClass);
@@ -61,7 +88,7 @@ export class Placeholder extends LitElement {
     console.log(this.selectLang);
     console.log(selectLang);
     if (onchange===true ){
-      selectLang = document.querySelector("#language-select");
+      
     };
     
     // English
@@ -115,9 +142,9 @@ export class Placeholder extends LitElement {
 
   constructor() {
     super();
-    console.log(this.propLang);
+    this.propLang = "English";
     const select = this.propLang;
-    //this._translate(select);
+    this._translate(select);
   };
   _resetMessage;
 
@@ -125,8 +152,8 @@ export class Placeholder extends LitElement {
     return html`
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <label for="language-select">Translate Plugin</label>
-    <select class="form-select" aria-label="English" id="language-select" @change="${this._translate("null",true)}">
+    <label for="language-select">Translate Plugin - showing ${this.propLang}</label>
+    <select class="form-select" aria-label="English" id="language-select" @change="${this.getNewVal}">
       <option selected>English</option>
       <option value="German">German</option>
       <option value="Spanish">Spanish</option>
@@ -134,6 +161,15 @@ export class Placeholder extends LitElement {
     </select>
     `;
   };
+
+  updated(){
+    console.log('Language changed to '+this.propLang);
+  }
+
+  getNewVal(){
+    let newLang = document.querySelector("#language-select");
+    this.propLang = newLang;
+  }
 
 };
 
