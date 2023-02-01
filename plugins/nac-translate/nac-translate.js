@@ -48,12 +48,12 @@ export class TranslateMod extends LitElement {
         <option value="Spanish">Spanish</option>
         <option value="Dutch">Dutch</option>
       </select>
-      <p>Selected Option: ${this.selectedOption}</p>
+      <p>Selected Option: ${this.propLang}</p>
     `;
   }
 
   _handleLanguageChange(event) {
-    this.selectedOption = event.target.value;
+    this.propLang = event.target.value;
   }
 }
 
