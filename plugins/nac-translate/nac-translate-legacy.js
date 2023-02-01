@@ -86,28 +86,28 @@ export class Placeholder extends LitElement {
     console.log(selectLang);
     if (selectLang === "English") {
       // original translations
-      _trSignature("h5.d-print-none.ng-star-inserted", signhere_EN);
-      _trAddressPH("nx-address-input", enteradd_EN);
-      _trFileUpload(".drag-file-label", draghere_EN);
-      _trUploadBtn(".nx-upload-button", uploadbutton_EN);
+      this._trSignature("h5.d-print-none.ng-star-inserted", this.signhere_EN);
+      this._trAddressPH("nx-address-input", this.enteradd_EN);
+      this._trFileUpload(".drag-file-label", this.draghere_EN);
+      this._trUploadBtn(".nx-upload-button", this.uploadbutton_EN);
     } else if (selectLang === "German") {
       // german translations
-      _trSignature("h5.d-print-none.ng-star-inserted", signhere_DE);
-      _trAddressPH("nx-address-input", enteradd_DE);
-      _trFileUpload(".drag-file-label", draghere_DE);
-      _trUploadBtn(".nx-upload-button", uploadbutton_DE);
+      this._trSignature("h5.d-print-none.ng-star-inserted", this.signhere_DE);
+      this._trAddressPH("nx-address-input", this.enteradd_DE);
+      this._trFileUpload(".drag-file-label", this.draghere_DE);
+      this._trUploadBtn(".nx-upload-button", this.uploadbutton_DE);
     } else if (selectLang === "Spanish") {
       // spanish translations
-      _trSignature("h5.d-print-none.ng-star-inserted", signhere_ES);
-      _trAddressPH("nx-address-input", enteradd_ES);
-      _trFileUpload(".drag-file-label", draghere_ES);
-      _trUploadBtn(".nx-upload-button", uploadbutton_ES);
+      this._trSignature("h5.d-print-none.ng-star-inserted", this.signhere_ES);
+      this._trAddressPH("nx-address-input", this.enteradd_ES);
+      this._trFileUpload(".drag-file-label", this.draghere_ES);
+      this._trUploadBtn(".nx-upload-button", this.uploadbutton_ES);
     } else if (selectLang === "Dutch") {
       // dutch translations
-      _trSignature("h5.d-print-none.ng-star-inserted", signhere_NL);
-      _trAddressPH("nx-address-input", enteradd_NL);
-      _trFileUpload(".drag-file-label", draghere_NL);
-      _trUploadBtn(".nx-upload-button", uploadbutton_NL);
+      this._trSignature("h5.d-print-none.ng-star-inserted", this.signhere_NL);
+      this._trAddressPH("nx-address-input", this.enteradd_NL);
+      this._trFileUpload(".drag-file-label", this.draghere_NL);
+      this._trUploadBtn(".nx-upload-button", this.uploadbutton_NL);
     }
   };
 
