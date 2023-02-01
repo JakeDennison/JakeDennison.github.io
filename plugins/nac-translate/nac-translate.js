@@ -58,49 +58,28 @@ export class TranslateMod extends LitElement {
 
   render() {
     return html`
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <div class="dropdown">
-        <a class="dropdown-toggle" href="#" id="Dropdown" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-            <i class="flag-united-kingdom flag m-0"></i>
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="Dropdown">
-            <li>
-                <a class="dropdown-item" href="#"  @click="${() => this._handleLanguageChange('English')}">
-                    <i class="flag-united-kingdom flag"></i>English <i class="fa fa-check text-success ms-2"></i></a>
-            </li>
-            <li><hr class="dropdown-divider" /></li>
-            <li>
-                <a class="dropdown-item" href="#" @click="${() => this._handleLanguageChange('Deutsch')}">
-                    <i class="flag-germany flag"></i>Deutsch</a>
-            </li>
-            <li>
-                <a class="dropdown-item" href="#" @click="${() => this._handleLanguageChange('Français')}">
-                    <i class="flag-france flag"></i>Français</a>
-            </li>
-            <li>
-                <a class="dropdown-item" href="#" @click="${() => this._handleLanguageChange('Español')}">
-                    <i class="flag-spain flag"></i>Español</a>
-            </li>
-            <li>
-                <a class="dropdown-item" href="#" @click="${() => this._handleLanguageChange('Nederlands')}">
-                    <i class="flag-portugal flag"></i>Nederlands</a>
-            </li>
-        </ul>
-    </div>
+      <select class="ng-select-container" aria-label="English" id="language-select" @change="${this._handleLanguageChange}">
+        <option selected><span class="fi fi-GB"></span> English</option>
+        <option value="German"><span class="fi fi-DE"></span> Deutsch</option>
+        <option value="German"><span class="fi fi-FR"></span> Français</option>
+        <option value="Spanish"><span class="fi fi-ES"></span> Español</option>
+        <option value="Dutch"><span class="fi fi-NL"></span> Nederlands</option>
+      </select>
     `;
   }
 
-  _handleLanguageChange(e) {
-    this.propLang = e.target.textContent;
-    if (this.propLang === "English") {
+  _handleLanguageChange(event) {
+    this.propLang = event.target.value;
+    if (event.target.value === "English") {
       // original translations
       this.signhere = 'Select to sign';
       this.enteradd = 'Enter an address';
       this.draghere = 'Drag files here or';
       this.uploadbtn = 'Select files';
-    } else if (this.propLang === "Deutsch") {
+    } else if (event.target.value === "Deutsch") {
       // german translations
       this.signhere = 'Klicken Sie hier; um zu unterschreiben';
       this.enteradd = 'Gib eine Adresse ein';
@@ -112,13 +91,13 @@ export class TranslateMod extends LitElement {
       this.enteradd = 'Entrer une adresse';
       this.draghere = 'Faites glisser des fichiers ici ou';
       this.uploadbtn = 'Sélectionnez des fichiers';
-    } else if (this.propLang === "Español") {
+    } else if (event.target.value === "Español") {
       // spanish translations
       this.signhere = 'Haga clic aquí para firmar';
       this.enteradd = 'Ingrese una dirección';
       this.draghere = 'Arrastre archivos aquí o';
       this.uploadbtn = 'Seleccionar archivos';
-    } else if (this.propLang === "Nederlands") {
+    } else if (event.target.value === "Nederlands") {
       // dutch translations
       this.signhere = 'Klik hier om te ondertekenen';
       this.enteradd = 'Voer een adres in';
