@@ -19,7 +19,11 @@ export class TranslateMod extends LitElement {
         description: true,
       }
     };
-  };
+  }
+
+  static properties = {
+    propLang: {type: String},
+  }
   
   constructor() {
     super();
