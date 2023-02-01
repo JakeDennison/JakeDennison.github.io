@@ -1,0 +1,32 @@
+{
+    "English": {
+        "signhere": "Hello",
+        "enteradd": "Welcome to the website",
+        "draghere": "Welcome to the website",
+        "uploadbtn": "Welcome to the website"
+    },
+    "German": {
+        "signhere": "Hello",
+        "enteradd": "Welcome to the website",
+        "draghere": "Welcome to the website",
+        "uploadbtn": "Welcome to the website"
+    },
+    "French": {
+        "signhere": "Hello",
+        "enteradd": "Welcome to the website",
+        "draghere": "Welcome to the website",
+        "uploadbtn": "Welcome to the website"
+    },
+    "Spanish": {
+        "signhere": "Hello",
+        "enteradd": "Welcome to the website",
+        "draghere": "Welcome to the website",
+        "uploadbtn": "Welcome to the website"
+    },
+    "Dutch": {
+        "signhere": "Hello",
+        "enteradd": "Welcome to the website",
+        "draghere": "Welcome to the website",
+        "uploadbtn": "Welcome to the website"
+    }
+}
