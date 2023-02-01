@@ -61,12 +61,12 @@ export class TranslateMod extends LitElement {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-      <select class="ng-select-container" aria-label="English" id="language-select" @change="${this._handleLanguageChange}">
-        <option selected><span class="fi fi-GB"></span> English</option>
-        <option value="German"><span class="fi fi-DE"></span> Deutsch</option>
-        <option value="German"><span class="fi fi-FR"></span> Français</option>
-        <option value="Spanish"><span class="fi fi-ES"></span> Español</option>
-        <option value="Dutch"><span class="fi fi-NL"></span> Nederlands</option>
+      <select class="select-picker" aria-label="English" id="language-select" @change="${this._handleLanguageChange}">
+        <option selected><span class="fi fi-GB"></span>English</option>
+        <option value="German"><span class="fi fi-DE"></span>Deutsch</option>
+        <option value="German"><span class="fi fi-FR"></span>Français</option>
+        <option value="Spanish"><span class="fi fi-ES"></span>Español</option>
+        <option value="Dutch"><span class="fi fi-NL"></span>Nederlands</option>
       </select>
     `;
   }
