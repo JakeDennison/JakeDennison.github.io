@@ -60,7 +60,7 @@ export class TranslateMod extends LitElement {
     return html`
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-      <select class="select-picker" aria-label="English" id="language-select" @change="${this._handleLanguageChange}">
+      <select class="form-select w-25" aria-label="English" id="language-select" @change="${this._handleLanguageChange}">
         <option selected>English</option>
         <option value="German">Deutsch</option>
         <option value="German">Français</option>
