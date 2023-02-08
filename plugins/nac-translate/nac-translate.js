@@ -1,5 +1,5 @@
 import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
-import {translations} from 'https://jsdenintex.github.io/plugins/nac-translate/traslations.js';
+import {translations} from 'https://jsdenintex.github.io/plugins/nac-translate/translations.js';
 
 export class TranslateMod extends LitElement {
   static getMetaConfig() {
