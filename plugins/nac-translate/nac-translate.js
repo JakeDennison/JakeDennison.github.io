@@ -29,6 +29,8 @@ export class TranslateMod extends LitElement {
     enteradd: {type: String},
     draghere: {type: String},
     uploadbtn: {type: String},
+    y: {type: String},
+    n: {type: String},
     signTar: {type: String},
     addTar: {type: String},
     dragTar: {type: String},
@@ -42,10 +44,14 @@ export class TranslateMod extends LitElement {
     this.enteradd = 'Enter an address';
     this.draghere = 'Drag files here or';
     this.uploadbtn = 'Select files';
+    this.y = 'Yes';
+    this.n = 'No';
     this.signTar = 'h5.d-print-none.ng-star-inserted';
     this.addTar = 'nx-address-input';
     this.dragTar = '.drag-file-label';
     this.uploadTar = '.nx-upload-button';
+    this.toggleOn = '.nx-checkbox-toggle-on'
+    this.toggleOff = '.nx-checkbox-toggle-off'
   }
 
   render() {
@@ -88,10 +94,14 @@ export class TranslateMod extends LitElement {
       this.enteradd = translations[this.propLang].enteradd;
       this.draghere = translations[this.propLang].draghere;
       this.uploadbtn = translations[this.propLang].uploadbtn;
+      this.y = translations[this.propLang].y;
+      this.n = translations[this.propLang].n;
     this.TranslateInnerHTML(this.signTar,this.signhere);
     this.TranslatePlaceholder(this.addTar,this.enteradd);
     this.TranslateInnerHTML(this.dragTar,this.draghere);
     this.TranslateBtn(this.uploadTar,this.uploadbtn);
+    this.TranslateInnerHTML(this.toggleOn,this.y);
+    this.TranslateInnerHTML(this.toggleOff,this.n);
   }
 
   TranslateInnerHTML(targetClass,translation){
