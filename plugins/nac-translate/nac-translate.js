@@ -50,17 +50,17 @@ export class TranslateMod extends LitElement {
 
   render() {
     return html`
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/0.8.2/css/flag-icon.min.css"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <div class="container-fluid">
       <div class="row">
         <select class="form-select m-0 col-md-3 col-sm-12" aria-label="English" id="language-select" @change="${this._handleLanguageChange}">
-          <option selected value="English" data-content='<i class="fi fi-gb"></i>'>English</option>
-          <option value="German" data-content='<i class="fi fi-de"></i>'>Deutsch</option>
-          <option value="French" data-content='<i class="fi fi-fr"></i>'>Français</option>
-          <option value="Spanish" data-content='<i class="fi fi-es"></i>'>Español</option>
-          <option value="Dutch" data-content='<i class="fi fi-nl"></i>'>Nederlands</option>
+          <option selected value="English" data-content='<span class="flag-icon flag-icon-gb"></span> English'>English</option>
+          <option value="German" data-content='<span class="flag-icon flag-icon-de"></span> Deutsch'>Deutsch</option>
+          <option value="French" data-content='<span class="flag-icon flag-icon-fr"></span> Français'>Français</option>
+          <option value="Spanish" data-content='<span class="flag-icon flag-icon-fr"></span> Español'>>Español</option>
+          <option value="Dutch" data-content='<span class="flag-icon flag-icon-nl"></span> Nederlands'>Nederlands</option>
         </select>
       </div>
     </div>
