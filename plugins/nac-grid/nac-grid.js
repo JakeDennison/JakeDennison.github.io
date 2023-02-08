@@ -28,7 +28,7 @@ export class MyGrid extends LitElement {
   }
   
   static properties = {
-    dataobject: ''
+    dataobject: '[]'
   }
 
   constructor() {
