@@ -5,7 +5,8 @@ export const translations ={
         "draghere": "Drag files here or",
         "uploadbtn": "Select files",
         "y": "Yes",
-        "n": "No"
+        "n": "No",
+        "todayBtn": "Today"
     },
     "German": {
         "signhere": "Klicken Sie hier; um zu unterschreiben",
@@ -13,7 +14,8 @@ export const translations ={
         "draghere": "Ziehen Sie Dateien hierher oder",
         "uploadbtn": "Dateien auswählen",
         "y": "Ja",
-        "n": "Nein"
+        "n": "Nein",
+        "todayBtn": "Heute"
     },
     "French": {
         "signhere": "Sélectionnez pour signer",
@@ -21,7 +23,8 @@ export const translations ={
         "draghere": "Faites glisser des fichiers ici ou",
         "uploadbtn": "Sélectionnez des fichiers",
         "y": "Oui",
-        "n": "Non"
+        "n": "Non",
+        "todayBtn": "Aujourd'hui"
     },
     "Spanish": {
         "signhere": "Haga clic aquí para firmar",
@@ -29,7 +32,8 @@ export const translations ={
         "draghere": "Arrastre archivos aquí o",
         "uploadbtn": "Seleccionar archivos",
         "y": "Sí",
-        "n": "No"
+        "n": "No",
+        "todayBtn": "Hoy"
     },
     "Dutch": {
         "signhere": "Klik hier om te ondertekenen",
@@ -37,6 +41,7 @@ export const translations ={
         "draghere": "Sleep bestanden hierheen of",
         "uploadbtn": "Selecteer bestanden",
         "y": "Ja",
-        "n": "Nee"
+        "n": "Nee",
+        "todayBtn": "Vandaag"
     }
 }
