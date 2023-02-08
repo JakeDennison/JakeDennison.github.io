@@ -59,7 +59,7 @@ export class TranslateMod extends LitElement {
           <option selected value="English" data-content='<span class="flag-icon flag-icon-gb"></span> English'>English</option>
           <option value="German" data-content='<span class="flag-icon flag-icon-de"></span> Deutsch'>Deutsch</option>
           <option value="French" data-content='<span class="flag-icon flag-icon-fr"></span> Français'>Français</option>
-          <option value="Spanish" data-content='<span class="flag-icon flag-icon-fr"></span> Español'>>Español</option>
+          <option value="Spanish" data-content='<span class="flag-icon flag-icon-fr"></span> Español'>Español</option>
           <option value="Dutch" data-content='<span class="flag-icon flag-icon-nl"></span> Nederlands'>Nederlands</option>
         </select>
       </div>
