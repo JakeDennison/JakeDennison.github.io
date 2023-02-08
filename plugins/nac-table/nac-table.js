@@ -8,7 +8,7 @@ export class MyTable extends LitElement {
       fallbackDisableSubmit: false,
       description: 'Display object as a table',
       iconUrl: "group-control",
-      groupName: 'Visual',
+      groupName: 'Visual Data',
       version: '1.3',
       properties: {
         dataobject: {
@@ -18,6 +18,7 @@ export class MyTable extends LitElement {
         },
       },
       standardProperties: {
+        fieldLabel: true,
         readOnly: true,
         required: true,
         description: true,
@@ -26,7 +27,7 @@ export class MyTable extends LitElement {
   }
   
   static properties = {
-    dataobject: 'test'
+    dataobject: ''
   }
 
   constructor() {

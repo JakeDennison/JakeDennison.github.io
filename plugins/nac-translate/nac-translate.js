@@ -15,6 +15,7 @@ export class TranslateMod extends LitElement {
       },
       },
       standardProperties: {
+        fieldLabel: true,
         readOnly: true,
         description: true,
       }

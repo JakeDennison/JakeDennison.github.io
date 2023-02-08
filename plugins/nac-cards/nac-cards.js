@@ -41,7 +41,7 @@ export default class NacCards extends LitElement {
                 }
             },
             standardProperties: {
-                fieldLabel: false,
+                fieldLabel: true,
                 description: false,
                 defaultValue: false,
                 readOnly: false,

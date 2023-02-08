@@ -13,13 +13,14 @@ export class Placeholder extends LitElement {
       standardProperties: {
         readOnly: true,
         description: true,
+        thistranslation: {type:string}
       }
     };
   }
 
   render() {
     return html`
-    <p>Translating from English to German</p>`;
+    <p>Translating from English to ${this.planet}</p>`;
   }
 
 }
