@@ -1,7 +1,7 @@
 import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 import { Grid, GridHeader, GridRow, GridCell } from 'https://cdn.jsdelivr.net/npm/@gridjs/core@2/dist/grid.min.js';
 
-export class MyTable extends LitElement {
+export class MyGrid extends LitElement {
   static getMetaConfig() {
     // plugin contract information
     return {
@@ -61,4 +61,4 @@ export class MyTable extends LitElement {
 }
 
 const elementName = 'nac-grid';
-customElements.define('nac-grid', MyTable);
+customElements.define('nac-grid', MyGrid);
