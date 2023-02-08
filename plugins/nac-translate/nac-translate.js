@@ -35,6 +35,7 @@ export class TranslateMod extends LitElement {
     addTar: {type: String},
     dragTar: {type: String},
     uploadTar: {type: String},
+    todayBtn: {type: String}
   }
   
   constructor() {
@@ -50,8 +51,9 @@ export class TranslateMod extends LitElement {
     this.addTar = 'nx-address-input';
     this.dragTar = '.drag-file-label';
     this.uploadTar = '.nx-upload-button';
-    this.toggleOn = '.nx-checkbox-toggle-on'
-    this.toggleOff = '.nx-checkbox-toggle-off'
+    this.toggleOnTar = '.nx-checkbox-toggle-on';
+    this.toggleOffTar = '.nx-checkbox-toggle-off';
+    this.todayBtnTar = 'flatpickr-action-todayBtn'
   }
 
   render() {
@@ -96,12 +98,14 @@ export class TranslateMod extends LitElement {
       this.uploadbtn = translations[this.propLang].uploadbtn;
       this.y = translations[this.propLang].y;
       this.n = translations[this.propLang].n;
+      this.todayBtn = translations[this.propLang].todayBtn;
     this.TranslateInnerHTML(this.signTar,this.signhere);
     this.TranslatePlaceholder(this.addTar,this.enteradd);
     this.TranslateInnerHTML(this.dragTar,this.draghere);
     this.TranslateBtn(this.uploadTar,this.uploadbtn);
-    this.TranslateInnerHTML(this.toggleOn,this.y);
-    this.TranslateInnerHTML(this.toggleOff,this.n);
+    this.TranslateInnerHTML(this.toggleOnTar,this.y);
+    this.TranslateInnerHTML(this.toggleOffTar,this.n);
+    this.TranslateBtn(this.todayBtnTar,this.todayBtn);
   }
 
   TranslateInnerHTML(targetClass,translation){
