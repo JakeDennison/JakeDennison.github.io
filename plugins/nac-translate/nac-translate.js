@@ -69,10 +69,10 @@ export class TranslateMod extends LitElement {
 
   _handleLanguageChange(event) {
     this.propLang = event.target.value;
-      this.signhere = translations.$[this.propLang].signhere;
-      this.enteradd = translations.$[this.propLang].enteradd;
-      this.draghere = translations.$[this.propLang].draghere;
-      this.uploadbtn = translations.$[this.propLang].uploadbtn;
+      this.signhere = translations[this.propLang].signhere;
+      this.enteradd = translations[this.propLang].enteradd;
+      this.draghere = translations[this.propLang].draghere;
+      this.uploadbtn = translations[this.propLang].uploadbtn;
     this.TranslateInnerHTML(this.signTar,this.signhere);
     this.TranslatePlaceholder(this.addTar,this.enteradd);
     this.TranslateInnerHTML(this.dragTar,this.draghere);
