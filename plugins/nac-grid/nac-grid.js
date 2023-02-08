@@ -1,5 +1,5 @@
 import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
-import { Grid, GridHeader, GridRow, GridCell } from 'https://cdn.jsdelivr.net/npm/@gridjs/core@2/dist/grid.min.js';
+//import { Grid, GridHeader, GridRow, GridCell } from 'https://cdn.jsdelivr.net/npm/@gridjs/core@2/dist/grid.min.js';
 
 export class MyGrid extends LitElement {
   static getMetaConfig() {
