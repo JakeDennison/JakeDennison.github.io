@@ -1,4 +1,5 @@
 import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
+import {translations} from 'https://jsdenintex.github.io/plugins/nac-translate/traslations.js';
 
 export class TranslateMod extends LitElement {
   static getMetaConfig() {
@@ -68,37 +69,10 @@ export class TranslateMod extends LitElement {
 
   _handleLanguageChange(event) {
     this.propLang = event.target.value;
-    if (this.propLang === "English") {
-      // original translations
-      this.signhere = 'Select to sign';
-      this.enteradd = 'Enter an address';
-      this.draghere = 'Drag files here or';
-      this.uploadbtn = 'Select files';
-    } else if (this.propLang === "German") {
-      // german translations
-      this.signhere = 'Klicken Sie hier; um zu unterschreiben';
-      this.enteradd = 'Gib eine Adresse ein';
-      this.draghere = 'Ziehen Sie Dateien hierher oder';
-      this.uploadbtn = 'Dateien auswählen';
-    } else if (this.propLang === "French") {
-      // spanish translations
-      this.signhere = 'Sélectionnez pour signer';
-      this.enteradd = 'Entrer une adresse';
-      this.draghere = 'Faites glisser des fichiers ici ou';
-      this.uploadbtn = 'Sélectionnez des fichiers';
-    } else if (this.propLang === "Spanish") {
-      // spanish translations
-      this.signhere = 'Haga clic aquí para firmar';
-      this.enteradd = 'Ingrese una dirección';
-      this.draghere = 'Arrastre archivos aquí o';
-      this.uploadbtn = 'Seleccionar archivos';
-    } else if (this.propLang === "Dutch") {
-      // dutch translations
-      this.signhere = 'Klik hier om te ondertekenen';
-      this.enteradd = 'Voer een adres in';
-      this.draghere = 'Sleep bestanden hierheen of';
-      this.uploadbtn = 'Selecteer bestanden';
-    };
+      this.signhere = translations.$[this.propLang].signhere;
+      this.enteradd = translations.$[this.propLang].enteradd;
+      this.draghere = translations.$[this.propLang].draghere;
+      this.uploadbtn = translations.$[this.propLang].uploadbtn;
     this.TranslateInnerHTML(this.signTar,this.signhere);
     this.TranslatePlaceholder(this.addTar,this.enteradd);
     this.TranslateInnerHTML(this.dragTar,this.draghere);

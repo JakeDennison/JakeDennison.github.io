@@ -1,4 +1,4 @@
-{
+export const translations ={
     "English": {
         "signhere": "Select to sign",
         "enteradd": "Enter an address",
