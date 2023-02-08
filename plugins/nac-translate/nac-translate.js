@@ -1,5 +1,6 @@
 import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 import {translations} from 'https://jsdenintex.github.io/plugins/nac-translate/translations.js';
+import 'https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.6/css/flag-icon.min.css'
 
 export class TranslateMod extends LitElement {
   static getMetaConfig() {
@@ -52,14 +53,30 @@ export class TranslateMod extends LitElement {
     return html`
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.6/css/flag-icon.min.css"/>
     <div class="container-fluid">
       <div class="row">
         <select class="form-select m-0 col-md-3 col-sm-12" aria-label="English" id="language-select" @change="${this._handleLanguageChange}">
-          <option selected value="English">English</option>
-          <option value="German">Deutsch</option>
-          <option value="French">Français</option>
-          <option value="Spanish">Español</option>
-          <option value="Dutch">Nederlands</option>
+          <option selected value="English">
+            <span class="flag-icon flag-icon-us"></span>
+            English
+          </option>
+          <option value="German">
+            <span class="flag-icon flag-icon-de"></span>
+            Deutsch
+          </option>
+          <option value="French">
+            <span class="flag-icon flag-icon-fr"></span>
+            Français
+          </option>
+          <option value="Spanish">
+            <span class="flag-icon flag-icon-es"></span>
+            Español
+          </option>
+          <option value="Dutch">
+            <span class="flag-icon flag-icon-nl"></span>
+            Nederlands
+          </option>
         </select>
       </div>
     </div>
