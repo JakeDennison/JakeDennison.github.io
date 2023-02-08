@@ -1,5 +1,6 @@
 import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 import {translations} from 'https://jsdenintex.github.io/plugins/nac-translate/translations.js';
+import {flatpickr} from 'https://gbo-app-znc.nintex.io/assets/runtime-web-component/main.js?_=645d2b07-ac08-49a2-b417-99ee72fa8ff6';
 
 export class TranslateMod extends LitElement {
   static getMetaConfig() {
@@ -106,6 +107,7 @@ export class TranslateMod extends LitElement {
     this.TranslateInnerHTML(this.toggleOnTar,this.y);
     this.TranslateInnerHTML(this.toggleOffTar,this.n);
     this.TranslateBtn(this.todayBtnTar,this.todayBtn);
+    flatpickr.localize(flatpickr.l10ns.ru);
   }
 
   TranslateInnerHTML(targetClass,translation){
