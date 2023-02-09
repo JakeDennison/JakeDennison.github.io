@@ -46,20 +46,20 @@ class CarouselElement extends LitElement {
             `;
         }
         
-        this.imageList = this.images.split(';');
+        this.imageList = this.images.split(';').filter(image => image.trim() !== '');;
 
         return html`
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
             <div id="carouselControls" class="carousel slide" data-bs-ride="true">
-            <ol class="carousel-indicators">
+            <div class="carousel-indicators">
                 ${this.imageList.map((_, i) => {
                     return html`
-                    <li data-target="#carouselControls" data-bs-slide-to="${i}" class="${i === this.index ? 'active' : ''}"></li>
+                    <button type="button" data-target="#carouselControls" data-bs-slide-to="${i}" class="${i === this.index ? 'active' : ''}"></button>
                     `;
                 })}
-            </ol>
+            </div>
             <div class="carousel-inner">
                 ${this.imageList.map((image, i) => {
                 return html`
