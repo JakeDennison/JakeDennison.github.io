@@ -55,7 +55,10 @@ class CarouselElement extends LitElement {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
             .carousel-item {
-                transition: transform .6s ease-in-out;
+                -webkit-transition: opacity 0.6s ease-in-out;
+                -moz-transition: opacity 0.6s ease-in-out;
+                -o-transition: opacity 0.6s ease-in-out;
+                transition: opacity 0.6s ease-in-out;
             }
         </style>
 
