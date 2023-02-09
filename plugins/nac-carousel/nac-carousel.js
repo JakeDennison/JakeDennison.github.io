@@ -63,7 +63,7 @@ class CarouselElement extends LitElement {
             <div class="carousel-inner">
                 ${this.imageList.map((image, i) => {
                 return html`
-                    <div class="carousel-item ${i === this.index ? 'active' : ''}" style="transform: translateX(${i === this.index ? '0' : '100%'});">
+                    <div class="carousel-item w-100 ${i === this.index ? 'active' : ''}" style="transform: translateX(${i === this.index ? '0' : '100%'});">
                         <img src="${image}" class="d-block w-auto" width="800" height="500" preserveAspectRatio="xMidYMid slice" focusable="false" alt="">
                     </div>
                     `;
