@@ -52,7 +52,7 @@ class CarouselElement extends LitElement {
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
         
-        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+        <div id="carouselControls" class="carousel slide" data-bs-ride="true">
             <div class="carousel-inner">
             ${this.imageList.map((image, i) => {
             return html`
@@ -62,14 +62,14 @@ class CarouselElement extends LitElement {
                 `;
         })}
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" @click="${this.handlePrev}">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" @click="${this.handleNext}">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-            </a>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
         `;
     }
