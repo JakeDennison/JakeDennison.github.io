@@ -4,9 +4,9 @@ class CarouselElement extends LitElement {
     static getMetaConfig() {
         // plugin contract information
         return {
-          controlName: 'nac-table',
+          controlName: 'nac-carousel',
           fallbackDisableSubmit: false,
-          description: 'Display object as a table',
+          description: 'Display images in a carousel',
           iconUrl: "image",
           groupName: 'Visual Data',
           version: '1.3',
@@ -74,4 +74,4 @@ class CarouselElement extends LitElement {
     }
 }
 
-customElements.define('carousel-element', CarouselElement);
+customElements.define('nac-carousel', CarouselElement);
