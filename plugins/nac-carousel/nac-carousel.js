@@ -68,7 +68,7 @@ class CarouselElement extends LitElement {
                 ${this.imageList.map((image, i) => {
                 return html`
                     <div class="carousel-item ${i === this.index ? 'active' : ''}">
-                        <img src="${image}" class="d-block w-100" alt="">
+                        <img src="${image}" class="d-block w-100" width="800" height="400" preserveAspectRatio="xMidYMid slice" focusable="false" alt="">
                     </div>
                     `;
             })}
