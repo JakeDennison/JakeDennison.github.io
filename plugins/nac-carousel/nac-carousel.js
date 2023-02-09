@@ -59,7 +59,7 @@ class CarouselElement extends LitElement {
             }
         </style>
 
-            <div id="carouselControls" class="carousel slide" data-bs-ride="true">
+            <div id="carouselControls" class="carousel carousel-dark slide" data-bs-ride="true">
             <div class="carousel-inner">
                 ${this.imageList.map((image, i) => {
                 return html`
