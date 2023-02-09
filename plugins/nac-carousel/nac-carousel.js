@@ -32,10 +32,12 @@ class CarouselElement extends LitElement {
     }
 
     handleNext() {
+        console.log("Next clicked")
         this.index = this.index === this.imageList.length - 1 ? 0 : this.index + 1;
     }
 
     handlePrev() {
+        console.log("Prev clicked")
         this.index = this.index === 0 ? this.imageList.length - 1 : this.index - 1;
     }
 
