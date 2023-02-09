@@ -7,7 +7,7 @@ class CarouselElement extends LitElement {
           controlName: 'nac-table',
           fallbackDisableSubmit: false,
           description: 'Display object as a table',
-          iconUrl: "group-control",
+          iconUrl: "image",
           groupName: 'Visual Data',
           version: '1.3',
           properties: {
