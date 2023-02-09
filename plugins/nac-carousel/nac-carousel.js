@@ -60,6 +60,9 @@ class CarouselElement extends LitElement {
                 -o-transition: opacity 0.6s ease-in-out;
                 transition: opacity 0.6s ease-in-out;
             }
+            img {
+                object-fit: contain;
+            }
         </style>
 
             <div id="carouselControls" class="carousel carousel-dark slide" data-bs-ride="true">
