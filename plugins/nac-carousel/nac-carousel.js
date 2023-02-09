@@ -51,16 +51,23 @@ class CarouselElement extends LitElement {
         return html`
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        
-        <div id="carouselControls" class="carousel slide" data-bs-ride="true">
+
+            <div id="carouselControls" class="carousel slide" data-bs-ride="true">
+            <ol class="carousel-indicators">
+                ${this.imageList.map((_, i) => {
+                    return html`
+                    <li data-target="#carouselControls" data-bs-slide-to="${i}" class="${i === this.index ? 'active' : ''}"></li>
+                    `;
+                })}
+            </ol>
             <div class="carousel-inner">
-            ${this.imageList.map((image, i) => {
-            return html`
-                <div class="carousel-item ${i === this.index ? 'active' : ''}">
-                    <img src="${image}" class="d-block w-100" alt="">
-                </div>
-                `;
-        })}
+                ${this.imageList.map((image, i) => {
+                return html`
+                    <div class="carousel-item ${i === this.index ? 'active' : ''}">
+                        <img src="${image}" class="d-block w-100" alt="">
+                    </div>
+                    `;
+            })}
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselControls" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
