@@ -49,29 +49,34 @@ class CarouselElement extends LitElement {
         this.imageList = this.images.split(';');
 
         return html`
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
+          <ol class="carousel-indicators">
+            ${this.imageList.map((_, i) => {
+              return html`
+                <li data-target="#carouselExampleControls" data-slide-to="${i}" class="${i === this.index ? 'active' : ''}"></li>
+              `;
+            })}
+          </ol>
+          <div class="carousel-inner">
             ${this.imageList.map((image, i) => {
-            return html`
+              return html`
                 <div class="carousel-item ${i === this.index ? 'active' : ''}">
-                    <img src="${image}" class="d-block w-100" alt="">
+                  <img src="${image}" class="d-block w-100" alt="">
                 </div>
-                `;
-        })}
-            </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" @click="${this.handlePrev}">
+              `;
+            })}
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" @click="${this.handlePrev}">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" @click="${this.handleNext}">
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" @click="${this.handleNext}">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
-            </a>
+          </a>
         </div>
-        `;
+      `;
     }
-}
+  }
 
 customElements.define('nac-carousel', CarouselElement);
