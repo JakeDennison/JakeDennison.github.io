@@ -32,13 +32,11 @@ class CarouselElement extends LitElement {
     }
 
     handleNext() {
-        console.log("Next clicked")
         this.index = this.index === this.imageList.length - 1 ? 0 : this.index + 1;
         this.requestUpdate();
     }
 
     handlePrev() {
-        console.log("Prev clicked")
         this.index = this.index === 0 ? this.imageList.length - 1 : this.index - 1;
         this.requestUpdate();
     }
@@ -66,7 +64,7 @@ class CarouselElement extends LitElement {
                 ${this.imageList.map((image, i) => {
                 return html`
                     <div class="carousel-item ${i === this.index ? 'active' : ''}" style="transform: translateX(${i === this.index ? '0' : '100%'});">
-                        <img src="${image}" class="d-block w-100" width="800" height="400" preserveAspectRatio="xMidYMid slice" focusable="false" alt="">
+                        <img src="${image}" class="d-block w-auto" width="800" height="500" preserveAspectRatio="xMidYMid slice" focusable="false" alt="">
                     </div>
                     `;
             })}
