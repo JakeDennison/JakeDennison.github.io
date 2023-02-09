@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/JSDenintex/JSDenintex.github.io#readme",
   "dependencies": {
-    "@google-cloud/translate": "^7.0.5"
+    "@google-cloud/translate": "^7.0.5",
+    "lit-flatpickr": "^0.4.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.20.7",

@@ -1,6 +1,7 @@
 import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 import {translations} from 'https://jsdenintex.github.io/plugins/nac-translate/translations.js';
 
+
 export class TranslateMod extends LitElement {
   static getMetaConfig() {
     // plugin contract information
@@ -12,8 +13,6 @@ export class TranslateMod extends LitElement {
       groupName: 'Languages',
       version: '1.3',
       properties: {
-        propLang: {title: 'Language',type: 'string',enum: ['English', 'German', 'Spanish', 'Dutch'],showAsRadio: false,verticalLayout: true,defaultValue: 'English',
-      },
       },
       standardProperties: {
         fieldLabel: true,
