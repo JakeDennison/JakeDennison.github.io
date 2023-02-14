@@ -71,7 +71,6 @@ class CarouselElement extends LitElement {
                   <div
                     id="item-${i}"
                     class="carousel-item ${isActive ? 'active' : ''} ${isPrev || isNext ? 'visible' : ''}"
-                    style="transform: translateX(${isActive ? '0' : isPrev ? '-100%' : '100%'});"
                   >
                     <img src="${image}" alt="">
                   </div>
@@ -86,7 +85,7 @@ class CarouselElement extends LitElement {
             </button>
           </div>
         `;
-      }
     }
+  }
     
-    customElements.define('nac-carousel', CarouselElement);
+customElements.define('nac-carousel', CarouselElement);
