@@ -35,7 +35,7 @@ class CarouselElement extends LitElement {
         if (this.index === this.imageList.length - 1) {
           // Set index to 0 and wait for transition
           this.index = 0;
-          setTimeout(() => this.requestUpdate(), 10);
+          setTimeout(() => this.requestUpdate(), 50);
         } else {
           this.index++;
           this.requestUpdate();
@@ -46,13 +46,13 @@ class CarouselElement extends LitElement {
         if (this.index === 0) {
           // Set index to last image and wait for transition
           this.index = this.imageList.length - 1;
-          setTimeout(() => this.requestUpdate(), 10);
+          setTimeout(() => this.requestUpdate(), 50);
         } else {
           this.index--;
           this.requestUpdate();
         }
       }
-    
+          
       updated() {
         const prevIndex = this.index === 0 ? this.imageList.length - 1 : this.index - 1;
         const nextIndex = this.index === this.imageList.length - 1 ? 0 : this.index + 1;
