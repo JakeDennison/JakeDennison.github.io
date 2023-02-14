@@ -75,11 +75,11 @@ class CarouselElement extends LitElement {
                     `;
             })}
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselControls" data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselControls" data-bs-slide="prev" @click="${this.handlePrev}>
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselControls" data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselControls" data-bs-slide="next" @click="${this.handleNext}">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
