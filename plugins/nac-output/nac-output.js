@@ -43,15 +43,27 @@ export class MyElement extends LitElement {
         this.dispatchEvent(event);
     }
 
-    static properties = {
-        input: '',
-        output: ''
+    static get properties() {
+        return {
+            input: { type: String },
+            output: { type: String }
+        }
     }
 
     constructor() {
         super();
         this.output = this.input;
-        this.requestUpdate();
+    }
+
+    set input(value) {
+        let oldValue = this._input;
+        this._input = value;
+        this.requestUpdate('input', oldValue);
+        this.output = value; // update output when input changes
+    }
+
+    get input() {
+        return this._input;
     }
 
     render() {
