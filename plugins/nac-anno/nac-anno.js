@@ -1,5 +1,5 @@
 import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
-import Marker from 'https://cdn.jsdelivr.net/npm/markerjs2@2.28.1/+esm/marker.js';
+import * as markerjs2 from 'https://jsdenintex.github.io/plugins/nac-anno/src/markerjs2/markerjs2.js';
 
 class AnnoElement extends LitElement {
     static getMetaConfig() {
