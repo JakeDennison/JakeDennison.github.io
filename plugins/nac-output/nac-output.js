@@ -37,7 +37,7 @@ export class MyElement extends LitElement {
             cancelable: false,
             composed: true,
             // value coming from input change event. 
-            detail: e.target.output,
+            detail: e.target.value,
         };
         const event = new CustomEvent('ntx-value-change', args);
         this.dispatchEvent(event);
@@ -51,7 +51,7 @@ export class MyElement extends LitElement {
     constructor() {
         super();
         this.output = this.input;
-        this.onChange()
+        this.onChange(this.output)
         this.requestUpdate();
     }
 
