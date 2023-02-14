@@ -6,9 +6,9 @@ export class MyElement extends LitElement {
         return {
             controlName: 'nac-output',
             fallbackDisableSubmit: false,
-            description: '',
-            iconUrl: "",
-            groupName: '',
+            description: 'Example of data input and output',
+            iconUrl: "multiline-text",
+            groupName: 'AI',
             version: '1.0',
             properties: {
                 input: {
@@ -45,16 +45,19 @@ export class MyElement extends LitElement {
     }
 
     static properties = {
-        data: ''
+        input: '',
+        output: ''
     }
 
     constructor() {
         super();
+        this.output = this.input
     }
 
     render() {
         return html`
-        <p>${this.output}</p>
+        <p>Input: ${this.input}</p></br>
+        <p>Output: ${this.output}</p>
     `;
     }
 }
