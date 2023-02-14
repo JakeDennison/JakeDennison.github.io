@@ -78,10 +78,8 @@ class CarouselElement extends LitElement {
               })}
             </div>
             <button class="carousel-control carousel-control-prev" @click="${this.handlePrev}">
-              &lt;
             </button>
             <button class="carousel-control carousel-control-next" @click="${this.handleNext}">
-              &gt;
             </button>
             <div class="carousel-dots">
               ${this.imageList.map((image, i) => {
