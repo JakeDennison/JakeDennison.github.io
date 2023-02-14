@@ -56,11 +56,11 @@ class CarouselElement extends LitElement {
         if (!this.images) {
           return html`<p>No images found</p>`;
         }
-    
+      
         this.imageList = this.images.split(';').filter(image => image.trim() !== '');
-    
+      
         return html`
-        <link href="https://jsdenintex.github.io/plugins/nac-carousel/nac-carousel.css" rel="stylesheet">
+          <link href="https://jsdenintex.github.io/plugins/nac-carousel/nac-carousel.css" rel="stylesheet">
           <div class="carousel">
             <div class="carousel-inner">
               ${this.imageList.map((image, i) => {
@@ -68,7 +68,7 @@ class CarouselElement extends LitElement {
                   <div
                     id="item-${i}"
                     class="carousel-item ${i === this.index ? 'active' : ''}"
-                    style="transform: translateX(${i === this.index ? '0' : i < this.index ? '-100%' : '100%'}); transition: transform 0.5s ease-in-out;"
+                    style="transform: translateX(${i === this.index ? '0' : i < this.index ? '100%' : '-100%'}); transition: transform 0.5s ease-in-out;"
                   >
                     <img src="${image}" alt="">
                   </div>
