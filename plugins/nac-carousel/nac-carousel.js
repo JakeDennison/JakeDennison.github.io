@@ -81,18 +81,6 @@ class CarouselElement extends LitElement {
             </button>
             <button class="carousel-control carousel-control-next" @click="${this.handleNext}">
             </button>
-            <div class="carousel-dots">
-              ${this.imageList.map((image, i) => {
-                return html`
-                  <button
-                    class="carousel-dot ${i === this.index ? 'active' : ''}"
-                    @click="${() => { this.index = i; }}"
-                  >
-                    <span class="visually-hidden"></span>
-                  </button>
-                `;
-              })}
-            </div>
           </div>
         `;
     }
