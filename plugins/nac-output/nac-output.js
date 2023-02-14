@@ -51,7 +51,7 @@ export class MyElement extends LitElement {
 
     constructor() {
         super();
-        this.output = this.input
+        this.output = this.input;
     }
 
     render() {
