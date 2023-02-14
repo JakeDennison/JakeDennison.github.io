@@ -1,5 +1,5 @@
 import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
-import { Marker } from 'https://cdn.jsdelivr.net/npm/markerjs2@2.28.1/markerjs2.min.js';
+import MarkerJS from 'https://cdn.jsdelivr.net/npm/markerjs2@2.28.1/markerjs2.min.js';
 
 class AnnoElement extends LitElement {
     static getMetaConfig() {
@@ -34,7 +34,7 @@ class AnnoElement extends LitElement {
     firstUpdated() {
         super.firstUpdated();
         const markerContainer = this.shadowRoot.querySelector('#marker-container');
-        this.marker = new Marker(markerContainer);
+        this.marker = new MarkerJS(markerContainer);
       }
       
       render() {
