@@ -70,24 +70,3 @@
   .carousel-control-next::before {
     content: '\203A';
   }
-  
-  .carousel-dots {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 10px;
-  }
-  
-  .carousel-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #fff;
-    border: 1px solid #ccc;
-    margin: 0 5px;
-    cursor: pointer;
-  }
-  
-  .carousel-dot.active {
-    background: #ccc;
-  }
