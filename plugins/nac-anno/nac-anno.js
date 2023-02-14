@@ -33,18 +33,22 @@ class AnnoElement extends LitElement {
 
     firstUpdated() {
         super.firstUpdated();
-        const markerContainer = this.shadowRoot.querySelector('#marker-container');
-        this.marker = new markerjs2(markerContainer);
+        const imgElement = this.shadowRoot.querySelector('img');
+        this.markerArea = new markerjs2.MarkerArea(imgElement);
+        this.markerArea.addEventListener('render', event => {
+          imgElement.src = event.dataUrl;
+        });
       }
+      
       
       render() {
         if (!this.image) {
           return html`<p>No image found</p>`;
         }
         return html`
-          <div id="marker-container"></div>
-          <img src="${this.image}" onclick="${() => this.marker.start()}" />
-        `;
+        <div id="marker-container"></div>
+        <img src="${this.image}" @click="${() => this.markerArea.show()}" />
+      `;
       }
 }
 
