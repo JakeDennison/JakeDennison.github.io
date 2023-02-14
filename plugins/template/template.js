@@ -4,7 +4,7 @@ export class MyElement extends LitElement {
     static getMetaConfig() {
         // plugin contract information
         return {
-            controlName: 'nac-output',
+            controlName: 'nac-',
             fallbackDisableSubmit: false,
             description: '',
             iconUrl: "",
@@ -58,5 +58,5 @@ export class MyElement extends LitElement {
     }
 }
 
-const elementName = 'nac-output';
-customElements.define('nac-output', MyElement);
+const elementName = 'nac-';
+customElements.define('nac-', MyElement);
