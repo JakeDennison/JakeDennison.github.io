@@ -26,25 +26,26 @@ class AnnoElement extends LitElement {
             }
         };
     }
-    
+
     constructor() {
         super();
         this.image = '';
       }
-    
-      firstUpdated() {
-        super.firstUpdated();
-        const imgElement = this.shadowRoot.querySelector('img');
-        this.markerArea = new markerjs2.MarkerArea(imgElement, {});
-        this.markerArea.on('done', (dataUrl) => {
-          imgElement.src = dataUrl;
-        });
+
+      showMarkerArea() {
+        const markerArea = new markerjs2.MarkerArea(this.shadowRoot.querySelector('img'));
+        markerArea.addEventListener('render', (event) => (this.shadowRoot.querySelector('img').src = event.dataUrl));
+        markerArea.show();
       }
     
       render() {
         return html`
-          <div id="marker-container"></div>
-          <img src="${this.image}" @click="${() => this.markerArea.showMarkerDialog()}" />
+          <style>
+            :host {
+              display: block;
+            }
+          </style>
+          <img src="${this.image}" @click="${this.showMarkerArea}" />
         `;
       }
     }
