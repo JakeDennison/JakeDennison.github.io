@@ -1,5 +1,4 @@
 import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
-import { Marker } from 'https://cdn.jsdelivr.net/npm/markerjs2@1.1.0/dist/marker.min.js';
 
 class AnnoElement extends LitElement {
     static getMetaConfig() {
