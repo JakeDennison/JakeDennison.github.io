@@ -47,12 +47,11 @@ class AnnoElement extends LitElement {
       }
     }
     
+    customElements.define('nac-anno', AnnoElement);
+
     let markerArea = new markerjs2.MarkerArea(document.getElementById('annoimg'));
     markerArea.addEventListener('render', event => {
       document.getElementById('annoimg').src = event.dataUrl;
     });
     
-    // finally, call the show() method and marker.js UI opens
     markerArea.show();
-
-    customElements.define('nac-anno', AnnoElement);
