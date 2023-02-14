@@ -1,5 +1,5 @@
 import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
-import * as MarkerJS from 'https://cdn.jsdelivr.net/npm/markerjs2@2.28.1/markerjs2.min.js';
+import { Marker } from 'https://cdn.jsdelivr.net/npm/markerjs2@2.28.1/markerjs2.min.js';
 
 class AnnoElement extends LitElement {
     static getMetaConfig() {
@@ -34,18 +34,18 @@ class AnnoElement extends LitElement {
     firstUpdated() {
         super.firstUpdated();
         const markerContainer = this.shadowRoot.querySelector('#marker-container');
-        this.marker = new MarkerJS.Marker(markerContainer);
-    }
-
-    render() {
+        this.marker = new Marker(markerContainer);
+      }
+      
+      render() {
         if (!this.image) {
-            return html`<p>No image found</p>`;
+          return html`<p>No image found</p>`;
         }
         return html`
           <div id="marker-container"></div>
           <img src="${this.image}" onclick="${() => this.marker.start()}" />
         `;
-    }
+      }
 }
 
 customElements.define('nac-anno', AnnoElement);
