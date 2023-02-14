@@ -35,18 +35,20 @@
   .carousel-control {
     position: absolute;
     top: 50%;
-    width: 5%;
-    height: 10%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 30px;
+    height: 30px;
+    transform: translateY(-50%);
     color: #fff;
     background: rgba(0, 0, 0, 0.3);
     border: none;
     outline: none;
     cursor: pointer;
-    padding:10px;
-    margin:10px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
   }
 
   .carousel-control:hover {
@@ -54,9 +56,38 @@
   }
 
   .carousel-control-prev {
-    left: 0;
+    left: 15px;
+  }
+  
+  .carousel-control-next {
+    right: 15px;
   }
 
-  .carousel-control-next {
-    right: 0;
+  .carousel-control-prev::before {
+    content: '\2039';
+  }
+  
+  .carousel-control-next::before {
+    content: '\203A';
+  }
+  
+  .carousel-dots {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #ccc;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  
+  .carousel-dot.active {
+    background: #ccc;
   }
