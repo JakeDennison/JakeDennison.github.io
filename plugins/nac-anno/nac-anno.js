@@ -32,22 +32,27 @@ class AnnoElement extends LitElement {
         this.image = '';
       }
 
-      showMarkerArea() {
-        const markerArea = new markerjs2.MarkerArea(this.shadowRoot.querySelector('img'));
-        markerArea.addEventListener('render', (event) => (this.shadowRoot.querySelector('img').src = event.dataUrl));
-        markerArea.show();
-      }
-    
       render() {
+        if (!this.image) {
+            return html`<p>No image found</p>`;
+          }
         return html`
           <style>
             :host {
               display: block;
             }
           </style>
-          <img src="${this.image}" @click="${this.showMarkerArea}" />
+          <img id="annoimg" src="${this.image}"/>
         `;
       }
     }
     
+    let markerArea = new markerjs2.MarkerArea(document.getElementById('annoimg'));
+    markerArea.addEventListener('render', event => {
+      document.getElementById('annoimg').src = event.dataUrl;
+    });
+    
+    // finally, call the show() method and marker.js UI opens
+    markerArea.show();
+
     customElements.define('nac-anno', AnnoElement);
