@@ -76,10 +76,10 @@ class CarouselElement extends LitElement {
               })}
             </div>
             <button class="carousel-control carousel-control-prev" @click="${this.handlePrev}">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              &lt;
             </button>
             <button class="carousel-control carousel-control-next" @click="${this.handleNext}">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              &gt;
             </button>
           </div>
         `;
