@@ -13,8 +13,7 @@ export class MyElement extends LitElement {
             properties: {
                 input: {
                     type: 'string',
-                    title: 'Object',
-                    description: 'Test'
+                    title: 'Input',
                 },
                 output: {
                     type: 'string',
@@ -52,6 +51,8 @@ export class MyElement extends LitElement {
     constructor() {
         super();
         this.output = this.input;
+        this.onChange()
+        this.requestUpdate();
     }
 
     render() {
