@@ -26,31 +26,27 @@ class AnnoElement extends LitElement {
             }
         };
     }
+    
     constructor() {
         super();
         this.image = '';
-    }
-
-    firstUpdated() {
+      }
+    
+      firstUpdated() {
         super.firstUpdated();
         const imgElement = this.shadowRoot.querySelector('img');
-        this.markerCore = new markerjs2.MarkerCore(imgElement, {});
-        this.markerCore.on('done', (dataUrl) => {
+        this.markerArea = new markerjs2.MarkerArea(imgElement, {});
+        this.markerArea.on('done', (dataUrl) => {
           imgElement.src = dataUrl;
         });
       }
     
-      
-      
       render() {
-        if (!this.image) {
-          return html`<p>No image found</p>`;
-        }
         return html`
-        <div id="marker-container"></div>
-        <img src="${this.image}" @click="${() => this.markerCore.showMarkerDialog()}" />
-      `;
+          <div id="marker-container"></div>
+          <img src="${this.image}" @click="${() => this.markerArea.showMarkerDialog()}" />
+        `;
       }
-}
-
-customElements.define('nac-anno', AnnoElement);
+    }
+    
+    customElements.define('nac-anno', AnnoElement);
