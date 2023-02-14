@@ -64,11 +64,14 @@ class CarouselElement extends LitElement {
           <div class="carousel">
             <div class="carousel-inner">
               ${this.imageList.map((image, i) => {
+                const isActive = i === this.index;
+                const isPrev = i === (this.index === 0 ? this.imageList.length - 1 : this.index - 1);
+                const isNext = i === (this.index === this.imageList.length - 1 ? 0 : this.index + 1);
                 return html`
                   <div
                     id="item-${i}"
-                    class="carousel-item ${i === this.index ? 'active' : ''}"
-                    style="transform: translateX(${i === this.index ? '0' : i < this.index ? '100%' : '-100%'}); transition: transform 0.5s ease-in-out;"
+                    class="carousel-item ${isActive ? 'active' : ''} ${isPrev || isNext ? 'visible' : ''}"
+                    style="transform: translateX(${isActive ? '0' : isPrev ? '-100%' : '100%'}); transition: transform 0.5s ease-in-out;"
                   >
                     <img src="${image}" alt="">
                   </div>
