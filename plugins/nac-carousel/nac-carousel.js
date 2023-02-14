@@ -71,7 +71,7 @@ class CarouselElement extends LitElement {
                   <div
                     id="item-${i}"
                     class="carousel-item ${isActive ? 'active' : ''} ${isPrev || isNext ? 'visible' : ''}"
-                    style="transform: translateX(${isActive ? '0' : isPrev ? '-100%' : '100%'}); transition: transform 0.5s ease-in-out;"
+                    style="transform: translateX(${isActive ? '0' : isPrev ? '-100%' : '100%'});"
                   >
                     <img src="${image}" alt="">
                   </div>
