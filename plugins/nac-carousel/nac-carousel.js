@@ -90,7 +90,7 @@ class CarouselElement extends LitElement {
                     class="carousel-dot ${i === this.index ? 'active' : ''}"
                     @click="${() => { this.index = i; }}"
                   >
-                    <span class="visually-hidden">Go to slide ${i + 1}</span>
+                    <span class="visually-hidden"></span>
                   </button>
                 `;
               })}
