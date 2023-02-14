@@ -34,11 +34,12 @@ class AnnoElement extends LitElement {
     firstUpdated() {
         super.firstUpdated();
         const imgElement = this.shadowRoot.querySelector('img');
-        this.markerArea = new markerjs2.MarkerArea(imgElement);
-        this.markerArea.addEventListener('render', event => {
-          imgElement.src = event.dataUrl;
+        this.markerCore = new markerjs2.MarkerCore(imgElement, {});
+        this.markerCore.on('done', (dataUrl) => {
+          imgElement.src = dataUrl;
         });
       }
+    
       
       
       render() {
@@ -47,7 +48,7 @@ class AnnoElement extends LitElement {
         }
         return html`
         <div id="marker-container"></div>
-        <img src="${this.image}" @click="${() => this.markerArea.show()}" />
+        <img src="${this.image}" @click="${() => this.markerCore.showMarkerDialog()}" />
       `;
       }
 }
