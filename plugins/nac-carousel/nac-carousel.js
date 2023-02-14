@@ -60,6 +60,8 @@ class CarouselElement extends LitElement {
         this.imageList = this.images.split(';').filter(image => image.trim() !== '');
     
         return html`
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://jsdenintex.github.io/plugins/nac-carousel/nac-carousel.css" rel="stylesheet">
           <div class="carousel">
             <div class="carousel-inner">
               ${this.imageList.map((image, i) => {
@@ -75,10 +77,10 @@ class CarouselElement extends LitElement {
               })}
             </div>
             <button class="carousel-control carousel-control-prev" @click="${this.handlePrev}">
-              &lt;
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             </button>
             <button class="carousel-control carousel-control-next" @click="${this.handleNext}">
-              &gt;
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
             </button>
           </div>
         `;
