@@ -25,67 +25,65 @@ class CarouselElement extends LitElement {
           }
         };
       }
-    constructor() {
+      constructor() {
         super();
         this.images = '';
         this.index = 0;
-    }
-
-    handleNext() {
+      }
+    
+      handleNext() {
         this.index = this.index === this.imageList.length - 1 ? 0 : this.index + 1;
         this.requestUpdate();
-    }
-
-    handlePrev() {
+      }
+    
+      handlePrev() {
         this.index = this.index === 0 ? this.imageList.length - 1 : this.index - 1;
         this.requestUpdate();
-    }
-
-    render() {
+      }
+    
+      updated() {
+        const prevIndex = this.index === 0 ? this.imageList.length - 1 : this.index - 1;
+        const nextIndex = this.index === this.imageList.length - 1 ? 0 : this.index + 1;
+        const prevItem = this.shadowRoot.querySelector(`#item-${prevIndex}`);
+        const activeItem = this.shadowRoot.querySelector(`#item-${this.index}`);
+        const nextItem = this.shadowRoot.querySelector(`#item-${nextIndex}`);
+        prevItem.style.transform = 'translateX(-100%)';
+        activeItem.style.transform = 'translateX(0)';
+        nextItem.style.transform = 'translateX(100%)';
+      }
+    
+      render() {
         if (!this.images) {
-            return html`
-            <p>No images found</p>
-            `;
+          return html`<p>No images found</p>`;
         }
-        
-        this.imageList = this.images.split(';').filter(image => image.trim() !== '');;
-
+    
+        this.imageList = this.images.split(';').filter(image => image.trim() !== '');
+    
         return html`
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous" type="module" defer mode="open"></script>
-        <style>
-            .carousel-item {
-                -webkit-transition: opacity 0.6s ease-in-out;
-                -moz-transition: opacity 0.6s ease-in-out;
-                -o-transition: opacity 0.6s ease-in-out;
-                transition: opacity 0.6s ease-in-out;
-            }
-            img {
-                object-fit: contain;
-            }
-        </style>
-
-            <div id="carouselControls" class="carousel carousel-dark slide" data-bs-ride="true">
+        <link href="https://jsdenintex.github.io/plugins/nac-carousel/nac-carousel.css" rel="stylesheet">
+          <div class="carousel">
             <div class="carousel-inner">
-                ${this.imageList.map((image, i) => {
+              ${this.imageList.map((image, i) => {
                 return html`
-                    <div class="carousel-item w-100 ${i === this.index ? 'active' : ''}" style="transform: translateX(${i === this.index ? '0' : '100%'});">
-                        <img src="${image}" class="d-block w-auto" width="800" height="500" preserveAspectRatio="xMidYMid slice" focusable="false" alt="">
-                    </div>
-                    `;
-            })}
+                  <div
+                    id="item-${i}"
+                    class="carousel-item ${i === this.index ? 'active' : ''}"
+                    style="transform: translateX(${i === this.index ? '0' : i < this.index ? '-100%' : '100%'});"
+                  >
+                    <img src="${image}" alt="">
+                  </div>
+                `;
+              })}
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselControls" data-bs-slide="prev" @click="${this.handlePrev}>
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
+            <button class="carousel-control carousel-control-prev" @click="${this.handlePrev}">
+              &lt;
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselControls" data-bs-slide="next" @click="${this.handleNext}">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
+            <button class="carousel-control carousel-control-next" @click="${this.handleNext}">
+              &gt;
             </button>
-        </div>
+          </div>
         `;
+      }
     }
-}
-
-customElements.define('nac-carousel', CarouselElement);
+    
+    customElements.define('nac-carousel', CarouselElement);
