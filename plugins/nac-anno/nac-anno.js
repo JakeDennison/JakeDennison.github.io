@@ -34,7 +34,7 @@ class AnnoElement extends LitElement {
     firstUpdated() {
         super.firstUpdated();
         const markerContainer = this.shadowRoot.querySelector('#marker-container');
-        this.marker = new Marker(markerContainer);
+        this.marker = new markerjs2(markerContainer);
       }
       
       render() {
