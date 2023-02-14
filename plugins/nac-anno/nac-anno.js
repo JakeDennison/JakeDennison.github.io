@@ -42,8 +42,8 @@ class AnnoElement extends LitElement {
             return html`<p>No image found</p>`;
         }
         return html`
-            <div id="marker-container"></div>;
-            <img src="${this.image}" onclick="${() => this.marker.annotate()}" />;
+            <div id="marker-container"></div>
+            <img src="${this.image}" onclick="${() => this.marker.annotate()}" />
         `;
     }
 }
