@@ -24,6 +24,17 @@ class AnnoElement extends LitElement {
     };
   }
 
+  static get styles() {
+    return css`
+      .__markerjs2_.__markerjs2__0_ {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    `;
+  }
+
   constructor() {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png';
