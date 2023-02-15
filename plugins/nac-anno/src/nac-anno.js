@@ -56,7 +56,7 @@ class AnnoElement extends LitElement {
     }
     return html`
       <div class="image-container">
-        <img id="personimg" src="${this.src}" @click="${this.showMarkerArea}"/>
+        <img id="personimg" src="${this.src}" @click="${this.showMarkerArea}"></img>
         <div id="marker-container" class="markerjs2-container"></div>
       </div>
     `;

@@ -7,7 +7,7 @@
       }
     `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png",this.showMarkerArea=this.showMarkerArea.bind(this)}showMarkerArea(t){const e=t.target,i=this.shadowRoot.getElementById("marker-container"),s=new Kt(e,{container:i});s.addEventListener("render",(t=>{e=t.dataUrl})),s.show()}render(){return this.src?I`
       <div class="image-container">
-        <img id="personimg" src="${this.src}" @click="${this.showMarkerArea}"/>
+        <img id="personimg" src="${this.src}" @click="${this.showMarkerArea}"></img>
         <div id="marker-container" class="markerjs2-container"></div>
       </div>
     `:I`<p>No image found</p>`}})})();
