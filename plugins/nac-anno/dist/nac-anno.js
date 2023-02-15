@@ -6,7 +6,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
       }
-    `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png",this.showMarkerArea=this.showMarkerArea.bind(this)}showMarkerArea(t){const e=t.target,i=this.shadowRoot.getElementById("marker-container"),s=new Kt(e,{container:i});s.on("done",(t=>e.src=t)),s.show()}render(){return this.src?I`
+    `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png",this.showMarkerArea=this.showMarkerArea.bind(this)}showMarkerArea(t){const e=t.target,i=this.shadowRoot.getElementById("marker-container"),s=new Kt(e,{container:i});s.addEventListener("done",(t=>{e.src=t.dataUrl})),s.show()}render(){return this.src?I`
           <img id="personimg" src="${this.src}" @click="${this.showMarkerArea}"/>
           <div id="marker-container"></div>
         `:I`<p>No image found</p>`}})})();

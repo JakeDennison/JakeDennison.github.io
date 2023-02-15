@@ -45,7 +45,9 @@ class AnnoElement extends LitElement {
     const target = event.target;
     const markerContainer = this.shadowRoot.getElementById('marker-container');
     const markerArea = new markerjs2.MarkerArea(target, { container: markerContainer });
-    markerArea.on('done', (dataUrl) => (target.src = dataUrl));
+    markerArea.addEventListener('done', (event) => {
+      target.src = event.dataUrl;
+    });
     markerArea.show();
   }
 
