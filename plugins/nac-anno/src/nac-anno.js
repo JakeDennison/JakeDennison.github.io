@@ -1,4 +1,4 @@
-import { html, LitElement } from 'lit';
+import { html, LitElement, css } from 'lit';
 import * as markerjs2 from 'markerjs2';
 
 class AnnoElement extends LitElement {
