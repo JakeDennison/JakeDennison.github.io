@@ -28,9 +28,13 @@ class AnnoElement extends LitElement {
     return css`
       .markerjs2-container {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        top: 0;
+        left: 0;
+      }
+      .image-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
       }
     `;
   }
@@ -53,9 +57,11 @@ class AnnoElement extends LitElement {
       return html`<p>No image found</p>`;
     }
     return html`
-          <img id="personimg" src="${this.src}" @click="${this.showMarkerArea}"/>
-          <div id="marker-container"></div>
-        `;
+      <div class="image-container">
+        <img id="personimg" src="${this.src}" @click="${this.showMarkerArea}"/>
+        <div id="marker-container" class="markerjs2-container"></div>
+      </div>
+    `;
   }
 }
 
