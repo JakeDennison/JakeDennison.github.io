@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: './src/nac-anno.js',
-  mode: 'development',
+  mode: 'production',
   output: {
     filename: 'nac-anno.js',
     path: path.resolve(__dirname, 'dist'),
