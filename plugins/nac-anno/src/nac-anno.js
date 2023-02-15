@@ -26,11 +26,6 @@ class AnnoElement extends LitElement {
 
   static get styles() {
     return css`
-      .markerjs2-container {
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
       .image-container {
         position: relative;
         width: 100%;
@@ -49,6 +44,22 @@ class AnnoElement extends LitElement {
     const target = event.target;
     const markerContainer = this.shadowRoot.getElementById('marker-container');
     const markerArea = new markerjs2.MarkerArea(target, { container: markerContainer });
+    markerArea.show();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    const markerContainer = this.shadowRoot.getElementById('marker-container');
+
+    // Create a new markerjs2 container inside the shadow DOM
+    const newMarkerContainer = document.createElement('div');
+    newMarkerContainer.classList.add('markerjs2-container');
+    markerContainer.parentElement.replaceChild(newMarkerContainer, markerContainer);
+
+    // Create the marker area with the new container
+    const img = this.shadowRoot.getElementById('personimg');
+    const markerArea = new markerjs2.MarkerArea(img, { container: newMarkerContainer });
     markerArea.show();
   }
 
