@@ -25,7 +25,7 @@ class AnnoElement extends LitElement {
 
   constructor() {
     super();
-    this.src = 'img/person.png';
+    this.src = 'https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png';
     this.markerArea = '';
   }
 
