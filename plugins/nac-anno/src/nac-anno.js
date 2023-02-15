@@ -33,7 +33,7 @@ class AnnoElement extends LitElement {
     const markerArea = new markerjs2.MarkerArea(target);
     console.log('markerArea:', markerArea);
     console.log('markerArea.on:', markerArea.on);
-    markerArea.on('done', (event) => {
+    markerArea.addEventListener('done', (event) => {
       console.log('dataUrl:', event.dataUrl);
       this.src = event.dataUrl;
     });
