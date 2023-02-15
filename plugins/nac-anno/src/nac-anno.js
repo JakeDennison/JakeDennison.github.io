@@ -30,6 +30,7 @@ class AnnoElement extends LitElement {
   constructor() {
     super();
     this.image = '';
+    this.markerArea = '';
   }
 
   firstUpdated() {
