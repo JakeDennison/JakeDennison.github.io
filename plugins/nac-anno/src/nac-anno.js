@@ -7,7 +7,7 @@ class AnnoElement extends LitElement {
     return {
       controlName: 'nac-anno',
       fallbackDisableSubmit: false,
-      description: 'Display images in a carousel',
+      description: 'Display image for annotation',
       iconUrl: "image",
       groupName: 'Visual Data',
       version: '1.3',
@@ -26,7 +26,7 @@ class AnnoElement extends LitElement {
 
   static get styles() {
     return css`
-      .__markerjs2_.__markerjs2__0_ {
+      .markerjs2-container {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -43,8 +43,9 @@ class AnnoElement extends LitElement {
 
   showMarkerArea(event) {
     const target = event.target;
-    const markerArea = new markerjs2.MarkerArea(target);
-    markerArea.addEventListener('render', (event) => (target.src = event.dataUrl));
+    const markerContainer = this.shadowRoot.getElementById('marker-container');
+    const markerArea = new markerjs2.MarkerArea(target, { container: markerContainer });
+    markerArea.on('done', (dataUrl) => (target.src = dataUrl));
     markerArea.show();
   }
 
@@ -54,6 +55,7 @@ class AnnoElement extends LitElement {
     }
     return html`
           <img id="personimg" src="${this.src}" @click="${this.showMarkerArea}"/>
+          <div id="marker-container"></div>
         `;
   }
 }
