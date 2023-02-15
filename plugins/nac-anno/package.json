@@ -4,7 +4,8 @@
   "description": "NAC Image Annotation",
   "main": "nac-anno.js",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack && npm run copy-image",
+    "copy-image": "cp src/img/person.png dist/img"
   },
   "repository": {
     "type": "git",
