@@ -1,5 +1,4 @@
 import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
-import * as markerjs2 from 'https://unpkg.com/markerjs2/markerjs2.js';
 
 class AnnoElement extends LitElement {
     static getMetaConfig() {
@@ -37,6 +36,7 @@ class AnnoElement extends LitElement {
             return html`<p>No image found</p>`;
           }
         return html`
+        
           <style>
             :host {
               display: block;
@@ -49,9 +49,4 @@ class AnnoElement extends LitElement {
     
     customElements.define('nac-anno', AnnoElement);
 
-    let markerArea = new markerjs2.MarkerArea(document.getElementById('annoimg'));
-    markerArea.addEventListener('render', event => {
-      document.getElementById('annoimg').src = event.dataUrl;
-    });
     
-    markerArea.show();
