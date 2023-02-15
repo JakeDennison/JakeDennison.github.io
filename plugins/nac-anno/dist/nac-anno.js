@@ -5,7 +5,7 @@
         width: 100%;
         height: 100%;
       }
-    `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png",this.showMarkerArea=this.showMarkerArea.bind(this)}showMarkerArea(t){const e=t.target,i=this.shadowRoot.getElementById("marker-container");new Kt(e,{container:i}).show()}connectedCallback(){super.connectedCallback();const t=this.shadowRoot.getElementById("marker-container"),e=document.createElement("div");e.classList.add("markerjs2-container"),t.parentElement.replaceChild(e,t);const i=this.shadowRoot.getElementById("personimg");new Kt(i,{container:e}).show()}render(){return this.src?I`
+    `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png",this.showMarkerArea=this.showMarkerArea.bind(this)}showMarkerArea(t){const e=t.target,i=this.shadowRoot.getElementById("marker-container"),s=new Kt(e,{container:i});s.addEventListener("render",(t=>{e=t.dataUrl})),s.show()}render(){return this.src?I`
       <div class="image-container">
         <img id="personimg" src="${this.src}" @click="${this.showMarkerArea}"/>
         <div id="marker-container" class="markerjs2-container"></div>
