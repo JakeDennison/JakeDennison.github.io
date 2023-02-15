@@ -11,12 +11,8 @@ class AnnoElement extends LitElement {
       iconUrl: "image",
       groupName: 'Visual Data',
       version: '1.3',
+      src: {type: String},
       properties: {
-        image: {
-          type: 'string',
-          title: 'Image',
-          description: 'Please enter the URL you want to annotate'
-        },
       },
       standardProperties: {
         fieldLabel: true,
@@ -29,31 +25,24 @@ class AnnoElement extends LitElement {
 
   constructor() {
     super();
-    this.image = '';
+    this.src = 'img/person.png';
     this.markerArea = '';
   }
 
-  firstUpdated() {
-    super.firstUpdated();
-    const imgElement = this.shadowRoot.querySelector('img');
-    this.markerArea = new markerjs2.MarkerArea(imgElement, {});
-    this.markerArea.on('done', (dataUrl) => {
-      imgElement.src = dataUrl;
+  showMarkerArea(target) {
+    const markerArea = new markerjs2.MarkerArea(target);
+    markerArea.on('done', (dataUrl) => {
+      this.src = dataUrl;
     });
+    markerArea.show();
   }
 
   render() {
-    if (!this.image) {
+    if (!this.src) {
       return html`<p>No image found</p>`;
     }
     return html`
-        
-          <style>
-            :host {
-              display: block;
-            }
-          </style>
-          <img src="${this.image}" @click="${() => this.markerArea.showMarkerArea()}" />
+          <img src="${this.src}" style="max-width: 600px;" @click="${(e) => this.showMarkerArea(e.target)}" />
         `;
   }
 }
