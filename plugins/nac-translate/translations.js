@@ -6,7 +6,8 @@ export const translations ={
         "uploadbtn": "Select files",
         "y": "Yes",
         "n": "No",
-        "todayBtn": "Today"
+        "todayBtn": "Today",
+        "locale": "en"
     },
     "German": {
         "signhere": "Klicken Sie hier; um zu unterschreiben",
@@ -15,7 +16,8 @@ export const translations ={
         "uploadbtn": "Dateien auswählen",
         "y": "Ja",
         "n": "Nein",
-        "todayBtn": "Heute"
+        "todayBtn": "Heute",
+        "locale": "de"
     },
     "French": {
         "signhere": "Sélectionnez pour signer",
@@ -24,7 +26,8 @@ export const translations ={
         "uploadbtn": "Sélectionnez des fichiers",
         "y": "Oui",
         "n": "Non",
-        "todayBtn": "Aujourd'hui"
+        "todayBtn": "Aujourd'hui",
+        "locale": "fr"
     },
     "Spanish": {
         "signhere": "Haga clic aquí para firmar",
@@ -33,7 +36,8 @@ export const translations ={
         "uploadbtn": "Seleccionar archivos",
         "y": "Sí",
         "n": "No",
-        "todayBtn": "Hoy"
+        "todayBtn": "Hoy",
+        "locale": "es"
     },
     "Dutch": {
         "signhere": "Klik hier om te ondertekenen",
@@ -42,6 +46,7 @@ export const translations ={
         "uploadbtn": "Selecteer bestanden",
         "y": "Ja",
         "n": "Nee",
-        "todayBtn": "Vandaag"
+        "todayBtn": "Vandaag",
+        "locale": "nl"
     }
 }

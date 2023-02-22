@@ -1,5 +1,6 @@
 import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 import {translations} from 'https://jsdenintex.github.io/plugins/nac-translate/translations.js';
+import {targets} from 'https://jsdenintex.github.io/plugins/nac-translate/targets.js';
 
 
 export class TranslateMod extends LitElement {
@@ -14,6 +15,7 @@ export class TranslateMod extends LitElement {
       version: '1.3',
       properties: {
       },
+      events: ["ntx-value-change"],
       standardProperties: {
         fieldLabel: true,
         readOnly: true,
@@ -24,35 +26,19 @@ export class TranslateMod extends LitElement {
 
   static properties = {
     propLang: {type: String},
+    locale: {type: String},
     signhere: {type: String},
     enteradd: {type: String},
     draghere: {type: String},
     uploadbtn: {type: String},
     y: {type: String},
     n: {type: String},
-    signTar: {type: String},
-    addTar: {type: String},
-    dragTar: {type: String},
-    uploadTar: {type: String},
     todayBtn: {type: String}
   }
   
   constructor() {
     super();
     this.propLang = 'English';
-    this.signhere = 'Select to sign';
-    this.enteradd = 'Enter an address';
-    this.draghere = 'Drag files here or';
-    this.uploadbtn = 'Select files';
-    this.y = 'Yes';
-    this.n = 'No';
-    this.signTar = 'h5.d-print-none.ng-star-inserted';
-    this.addTar = 'nx-address-input';
-    this.dragTar = '.drag-file-label';
-    this.uploadTar = '.nx-upload-button';
-    this.toggleOnTar = '.nx-checkbox-toggle-on';
-    this.toggleOffTar = '.nx-checkbox-toggle-off';
-    this.todayBtnTar = 'flatpickr-action-todayBtn'
   }
 
   render() {
@@ -91,6 +77,7 @@ export class TranslateMod extends LitElement {
 
   _handleLanguageChange(event) {
     this.propLang = event.target.value;
+      this.locale = translations[this.propLang].locale;
       this.signhere = translations[this.propLang].signhere;
       this.enteradd = translations[this.propLang].enteradd;
       this.draghere = translations[this.propLang].draghere;
@@ -98,13 +85,27 @@ export class TranslateMod extends LitElement {
       this.y = translations[this.propLang].y;
       this.n = translations[this.propLang].n;
       this.todayBtn = translations[this.propLang].todayBtn;
-    this.TranslateInnerHTML(this.signTar,this.signhere);
-    this.TranslatePlaceholder(this.addTar,this.enteradd);
-    this.TranslateInnerHTML(this.dragTar,this.draghere);
-    this.TranslateBtn(this.uploadTar,this.uploadbtn);
-    this.TranslateInnerHTML(this.toggleOnTar,this.y);
-    this.TranslateInnerHTML(this.toggleOffTar,this.n);
-    this.TranslateBtn(this.todayBtnTar,this.todayBtn);
+    this.setLocale()
+    this.TranslateInnerHTML(targets.signhere,this.signhere);
+    this.TranslatePlaceholder(targets.enteradd,this.enteradd);
+    this.TranslateInnerHTML(targets.draghere,this.draghere);
+    this.TranslateBtn(targets.uploadbtn,this.uploadbtn);
+    this.TranslateInnerHTML(targets.toggleOn,this.y);
+    this.TranslateInnerHTML(targets.toggleOff,this.n);
+    this.TranslateBtn(targets.todayBtn,this.todayBtn);
+
+    const valueChangeEvent = new CustomEvent('ntx-value-change', {
+      bubbles: true,
+      cancelable: false,
+      composed: true,
+      detail: this.propLang,
+    });
+    this.dispatchEvent(valueChangeEvent);
+  }
+
+  setLocale(){
+    document.documentElement.lang = this.locale;
+    console.log(this.locale);
   }
 
   TranslateInnerHTML(targetClass,translation){
@@ -130,5 +131,4 @@ export class TranslateMod extends LitElement {
 
 }
 
-const elementName = 'translate-mod';
 customElements.define('translate-mod', TranslateMod);
