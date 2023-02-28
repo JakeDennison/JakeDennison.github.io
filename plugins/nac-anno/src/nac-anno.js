@@ -42,7 +42,7 @@ class AnnoElement extends LitElement {
 
   showMarkerArea(event) {
     const target = event.target;
-    const markerContainer = this.shadowRoot.getElementById('marker-container');
+    const markerContainer = this.shadowRoot.querySelector('.marker-container');
     const markerArea = new markerjs2.MarkerArea(target, { container: markerContainer });
     markerArea.addEventListener('render', event => {
       target = event.dataUrl;
@@ -57,7 +57,7 @@ class AnnoElement extends LitElement {
     return html`
       <div class="image-container">
         <img id="personimg" src="${this.src}" @click="${this.showMarkerArea}"></img>
-        <div id="marker-container" class="markerjs2-container"></div>
+        <div class="marker-container"></div>
       </div>
     `;
   }
