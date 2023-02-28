@@ -30,46 +30,32 @@ class AnnoElement extends LitElement {
     this.showMarkerArea = this.showMarkerArea.bind(this);
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.showMarkerArea();
-  }
-
   showMarkerArea(target) {
-    const markerArea = new markerjs2.MarkerArea(this.shadowRoot.querySelector('#annoContainer'));
+    const markerArea = new markerjs2.MarkerArea(target);
   
-    // set options
+    // add all marker types
     markerArea.availableMarkerTypes = markerArea.ALL_MARKER_TYPES;
+  
+    // enable redo, notes, zoom, and clear buttons (hidden by default)
     markerArea.uiStyleSettings.redoButtonVisible = true;
     markerArea.uiStyleSettings.notesButtonVisible = true;
     markerArea.uiStyleSettings.zoomButtonVisible = true;
     markerArea.uiStyleSettings.clearButtonVisible = true;
   
-    // add event listener
-    markerArea.addEventListener('render', event => {
-      this.annotatedSrc = event.dataUrl;
-      this.requestUpdate();
-    });
-
+    markerArea.addEventListener(
+      "render",
+      (event) => (target.src = event.dataUrl)
+    );
     markerArea.show();
   }
 
-  static get styles() {
-    return css`
-      #annoContainer {
-        max-width: 100%;
-        height: auto;
-        cursor: pointer;
-        background-size: contain;
-        background-repeat: no-repeat;
-      }
-    `;
-  }
-
   render() {
+    if (!this.src) {
+      return html`<p>No image found</p>`;
+    }
     return html`
-      <div>
-        <div id="annoContainer" style="background-image: url(${this.src})"></div>
+      <div id="app">
+        <img id="annoImage" src="${this.src}" @click="${this.showMarkerArea}" crossorigin="anonymous" />
       </div>
     `;
   }
