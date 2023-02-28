@@ -12,7 +12,6 @@ class AnnoElement extends LitElement {
       groupName: 'Visual Data',
       version: '1.4',
       src: {type: String},
-      annotatedSrc: { type: String },
       image: {type: String},
       properties: {
       },
@@ -28,7 +27,6 @@ class AnnoElement extends LitElement {
   constructor() {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png';
-    this.annotatedSrc = '';
     this.showMarkerArea = this.showMarkerArea.bind(this);
   }
 
@@ -71,7 +69,7 @@ class AnnoElement extends LitElement {
   render() {
     return html`
       <div>
-        <div id="annoContainer" style="background-image: url(${this.annotatedSrc})"></div>
+        <div id="annoContainer" style="background-image: url(${this.src})"></div>
       </div>
     `;
   }
