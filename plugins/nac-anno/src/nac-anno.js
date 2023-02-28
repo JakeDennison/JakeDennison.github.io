@@ -12,6 +12,7 @@ class AnnoElement extends LitElement {
       groupName: 'Visual Data',
       version: '1.4',
       src: {type: String},
+      annotatedSrc: { type: String },
       image: {type: String},
       properties: {
       },
@@ -27,35 +28,46 @@ class AnnoElement extends LitElement {
   constructor() {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png';
+    this.annotatedSrc = '';
     this.showMarkerArea = this.showMarkerArea.bind(this);
   }
 
   showMarkerArea(target) {
-    const markerArea = new markerjs2.MarkerArea(target);
+    const markerArea = new markerjs2.MarkerArea(this.shadowRoot.querySelector('#annoImage'));
   
-    // add all marker types
+    // set options
     markerArea.availableMarkerTypes = markerArea.ALL_MARKER_TYPES;
-  
-    // enable redo, notes, zoom, and clear buttons (hidden by default)
     markerArea.uiStyleSettings.redoButtonVisible = true;
     markerArea.uiStyleSettings.notesButtonVisible = true;
     markerArea.uiStyleSettings.zoomButtonVisible = true;
     markerArea.uiStyleSettings.clearButtonVisible = true;
   
-    markerArea.addEventListener(
-      "render",
-      (event) => (target.src = event.dataUrl)
-    );
+    // add event listener
+    markerArea.addEventListener('render', event => {
+      this.annotatedSrc = event.dataUrl;
+    });
     markerArea.show();
   }
 
   render() {
-    if (!this.src) {
-      return html`<p>No image found</p>`;
-    }
     return html`
-      <div id="app">
+      <style>
+        #annoImage {
+          max-width: 100%;
+          height: auto;
+          cursor: pointer;
+        }
+
+        #annotatedImage {
+          max-width: 100%;
+          height: auto;
+          background-size: contain;
+          background-repeat: no-repeat;
+        }
+      </style>
+      <div>
         <img id="annoImage" src="${this.src}" @click="${this.showMarkerArea}" crossorigin="anonymous" />
+        ${this.annotatedSrc ? html`<div id="annotatedImage" style="background-image: url(${this.annotatedSrc})"></div>` : ''}
       </div>
     `;
   }
