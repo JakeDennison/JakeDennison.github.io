@@ -31,14 +31,14 @@ class AnnoElement extends LitElement {
     this.annotatedSrc = '';
     this.showMarkerArea = this.showMarkerArea.bind(this);
   }
-  
+
   connectedCallback() {
     super.connectedCallback();
     this.showMarkerArea();
   }
 
   showMarkerArea(target) {
-    const markerArea = new markerjs2.MarkerArea(this.shadowRoot.querySelector('#annoImage'));
+    const markerArea = new markerjs2.MarkerArea(this.shadowRoot.querySelector('#annoContainer'));
   
     // set options
     markerArea.availableMarkerTypes = markerArea.ALL_MARKER_TYPES;
@@ -50,29 +50,28 @@ class AnnoElement extends LitElement {
     // add event listener
     markerArea.addEventListener('render', event => {
       this.annotatedSrc = event.dataUrl;
+      this.requestUpdate();
     });
+
     markerArea.show();
+  }
+
+  static get styles() {
+    return css`
+      #annoContainer {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+    `;
   }
 
   render() {
     return html`
-      <style>
-        #annoImage {
-          max-width: 100%;
-          height: auto;
-          cursor: pointer;
-        }
-
-        #annotatedImage {
-          max-width: 100%;
-          height: auto;
-          background-size: contain;
-          background-repeat: no-repeat;
-        }
-      </style>
       <div>
-        <img id="annoImage" src="${this.src}" crossorigin="anonymous" />
-        ${this.annotatedSrc ? html`<div id="annotatedImage" style="background-image: url(${this.annotatedSrc})"></div>` : ''}
+        <div id="annoContainer" style="background-image: url(${this.annotatedSrc})"></div>
       </div>
     `;
   }
