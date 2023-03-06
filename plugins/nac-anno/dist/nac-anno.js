@@ -10,4 +10,4 @@
       <div class="image-container">
         <img src="${this.src}" @load=${t=>this.handleImageLoad(t.target)}/>
       </div>
-    `:I`<p>No image found</p>`}handleImageLoad(t){console.log("Image loaded!");const e=new Kt(t);e.availableMarkerTypes=["FrameMarker"],e.addEventListener("render",(t=>target.src=t.dataUrl)),e.addEventListener("markeradded",(t=>{const e=t.detail.marker;"FrameMarker"===e.type&&this.createNewFrameMarker(e)})),e.addEventListener("beforeclose",(t=>{confirm("Do you want to discard changes?")||t.preventDefault()}))}createNewFrameMarker(t){console.log("New FrameMarker created!",t)}})})();
+    `:I`<p>No image found</p>`}handleImageLoad(t){console.log("Image loaded!"),console.log(t);const e=new Kt(t);e.availableMarkerTypes=["FrameMarker"],e.addEventListener("render",(t=>target.src=t.dataUrl)),e.addEventListener("markeradded",(t=>{const e=t.detail.marker;"FrameMarker"===e.type&&this.createNewFrameMarker(e)})),e.addEventListener("beforeclose",(t=>{confirm("Do you want to discard changes?")||t.preventDefault()}))}createNewFrameMarker(t){console.log("New FrameMarker created!",t)}})})();
