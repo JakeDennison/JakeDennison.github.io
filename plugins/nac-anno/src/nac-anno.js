@@ -59,14 +59,25 @@ class AnnoElement extends LitElement {
       "render",
       (event) => (target.src = event.dataUrl)
     );
-
-    // make sure clicking close wasn't an accident
+    markerArea.addEventListener("markeradded", (event) => {
+      const marker = event.detail.marker;
+      if (marker.type === "FrameMarker") {
+        this.createNewFrameMarker(marker);
+      }
+    });
     markerArea.addEventListener("beforeclose", (event) => {
       if (!confirm("Do you want to discard changes?")) {
         event.preventDefault();
       }
     });
   }
+
+  createNewFrameMarker(marker) {
+    console.log("New FrameMarker created!", marker);
+    // Do something with the new FrameMarker, such as add it to an array
+  }
+
+  
 }
 
 customElements.define('nac-anno', AnnoElement);
