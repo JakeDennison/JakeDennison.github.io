@@ -43,35 +43,34 @@ class AnnoElement extends LitElement {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png';
     this.markerAreaCreated = false;
-    this.showMarkerArea = this.showMarkerArea.bind(this);
+    this.markerArea = null;
   }
 
-  showMarkerArea(event) {
-    if (!this.markerAreaCreated) {
-      const target = event.target;
-      const markerContainer = this.shadowRoot.getElementById('marker-container');
-      const markerArea = new markerjs2.MarkerArea(target, { container: markerContainer });
-      markerArea.show();
+  connectedCallback() {
+    super.connectedCallback();
+    const img = this.shadowRoot.getElementById('personimg');
+
+    // Create a new markerjs2 container inside the shadow DOM
+    const newMarkerContainer = document.createElement('div');
+    newMarkerContainer.classList.add('markerjs2-container');
+    img.parentElement.appendChild(newMarkerContainer);
+
+    // Create the marker area with the new container
+    this.markerArea = new markerjs2.MarkerArea(img, { container: newMarkerContainer });
+    this.markerArea.on('added', () => {
+      this.markerArea.show();
       this.markerAreaCreated = true;
-    }
+    });
   }
 
-  firstUpdated() {
-    super.firstUpdated();
+  disconnectedCallback() {
+    super.disconnectedCallback();
 
-    if (!this.markerAreaCreated) {
-      const markerContainer = this.shadowRoot.getElementById('marker-container');
-
-      // Create a new markerjs2 container inside the shadow DOM
-      const newMarkerContainer = document.createElement('div');
-      newMarkerContainer.classList.add('markerjs2-container');
-      markerContainer.parentElement.replaceChild(newMarkerContainer, markerContainer);
-
-      // Create the marker area with the new container
-      const img = this.shadowRoot.getElementById('personimg');
-      const markerArea = new markerjs2.MarkerArea(img, { container: newMarkerContainer });
-      markerArea.show();
-      this.markerAreaCreated = true;
+    // Clean up the marker area
+    if (this.markerArea) {
+      this.markerArea.remove();
+      this.markerArea = null;
+      this.markerAreaCreated = false;
     }
   }
 
@@ -81,8 +80,7 @@ class AnnoElement extends LitElement {
     }
     return html`
       <div class="image-container">
-        <img id="personimg" src="${this.src}" @click="${this.showMarkerArea}"/>
-        <div id="marker-container" class="markerjs2-container"></div>
+        <img id="personimg" src="${this.src}"/>
       </div>
     `;
   }
