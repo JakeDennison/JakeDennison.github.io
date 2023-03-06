@@ -1,4 +1,5 @@
 import { html, LitElement, css } from 'lit';
+import * as markerjs2 from 'markerjs2';
 
 class AnnoElement extends LitElement {
   static getMetaConfig() {
@@ -28,31 +29,15 @@ class AnnoElement extends LitElement {
       .image-container {
         position: relative;
       }
+      img {
+        max-width: 100%;
+      }
     `;
   }
 
   constructor() {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png';
-    this.markerAreaCreated = false;
-    this.showMarkerArea = this.showMarkerArea.bind(this);
-  }
-
-  showMarkerArea(event) {
-    if (!this.markerAreaCreated) {
-      const target = event.target;
-      const markerContainer = this.shadowRoot.getElementById('marker-container');
-
-      // Replace marker container with new div element
-      const newMarkerContainer = document.createElement('div');
-      newMarkerContainer.classList.add('markerjs2-container');
-      markerContainer.parentElement.replaceChild(newMarkerContainer, markerContainer);
-
-      // Create marker area with new container
-      const markerArea = new Markerjs2.MarkerArea(target, { container: newMarkerContainer });
-      markerArea.show();
-      this.markerAreaCreated = true;
-    }
   }
 
   render() {
@@ -61,11 +46,29 @@ class AnnoElement extends LitElement {
     }
     return html`
       <div class="image-container">
-        <img id="personimg" src="${this.src}" @click="${this.showMarkerArea}"/>
-        <div id="marker-container" class="markerjs2-container"></div>
+        <img src="${this.src}" @load=${(e) => this.handleImageLoad(e.target)}/>
       </div>
     `;
+  }
+
+  handleImageLoad(img) {
+    console.log('Image loaded!');
+    const markerArea = new markerjs2.MarkerArea(img);
+    markerArea.availableMarkerTypes = ["FrameMarker"];
+    markerArea.addEventListener(
+      "render",
+      (event) => (target.src = event.dataUrl)
+    );
+
+    // make sure clicking close wasn't an accident
+    markerArea.addEventListener("beforeclose", (event) => {
+      if (!confirm("Do you want to discard changes?")) {
+        event.preventDefault();
+      }
+    });
   }
 }
 
 customElements.define('nac-anno', AnnoElement);
+
+// start creating a new FrameMarker each time a marker is created
