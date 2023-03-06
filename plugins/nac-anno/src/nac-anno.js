@@ -31,6 +31,10 @@ class AnnoElement extends LitElement {
     this.showMarkerArea = this.showMarkerArea.bind(this);
   }
 
+  createRenderRoot() {
+    return this.attachShadow({ mode: 'open' });
+  }
+
   showMarkerArea(event) {
     if (!this.markerAreaCreated) {
       const target = event.target;
