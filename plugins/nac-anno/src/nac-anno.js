@@ -24,15 +24,26 @@ class AnnoElement extends LitElement {
     };
   }
 
+  static get styles() {
+    return css`
+      .image-container {
+        position: relative;
+      }
+      .markerjs2-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    `;
+  }
+
   constructor() {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png';
     this.markerAreaCreated = false;
     this.showMarkerArea = this.showMarkerArea.bind(this);
-  }
-
-  createRenderRoot() {
-    return this.attachShadow({ mode: 'open' });
   }
 
   showMarkerArea(event) {
@@ -45,8 +56,8 @@ class AnnoElement extends LitElement {
     }
   }
 
-  connectedCallback() {
-    super.connectedCallback();
+  firstUpdated() {
+    super.firstUpdated();
 
     if (!this.markerAreaCreated) {
       const markerContainer = this.shadowRoot.getElementById('marker-container');
