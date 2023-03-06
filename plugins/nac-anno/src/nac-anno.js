@@ -53,6 +53,7 @@ class AnnoElement extends LitElement {
 
   handleImageLoad(img) {
     console.log('Image loaded!');
+    console.log(img);
     const markerArea = new markerjs2.MarkerArea(img);
     markerArea.availableMarkerTypes = ["FrameMarker"];
     markerArea.addEventListener(
@@ -77,7 +78,7 @@ class AnnoElement extends LitElement {
     // Do something with the new FrameMarker, such as add it to an array
   }
 
-  
+
 }
 
 customElements.define('nac-anno', AnnoElement);
