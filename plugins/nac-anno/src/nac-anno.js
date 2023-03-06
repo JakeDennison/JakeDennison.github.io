@@ -37,30 +37,37 @@ class AnnoElement extends LitElement {
   constructor() {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png';
+    this.markerAreaCreated = false;
     this.showMarkerArea = this.showMarkerArea.bind(this);
   }
 
   showMarkerArea(event) {
-    const target = event.target;
-    const markerContainer = this.shadowRoot.getElementById('marker-container');
-    const markerArea = new markerjs2.MarkerArea(target, { container: markerContainer });
-    markerArea.show();
+    if (!this.markerAreaCreated) {
+      const target = event.target;
+      const markerContainer = this.shadowRoot.getElementById('marker-container');
+      const markerArea = new markerjs2.MarkerArea(target, { container: markerContainer });
+      markerArea.show();
+      this.markerAreaCreated = true;
+    }
   }
 
   connectedCallback() {
     super.connectedCallback();
 
-    const markerContainer = this.shadowRoot.getElementById('marker-container');
+    if (!this.markerAreaCreated) {
+      const markerContainer = this.shadowRoot.getElementById('marker-container');
 
-    // Create a new markerjs2 container inside the shadow DOM
-    const newMarkerContainer = document.createElement('div');
-    newMarkerContainer.classList.add('markerjs2-container');
-    markerContainer.parentElement.replaceChild(newMarkerContainer, markerContainer);
+      // Create a new markerjs2 container inside the shadow DOM
+      const newMarkerContainer = document.createElement('div');
+      newMarkerContainer.classList.add('markerjs2-container');
+      markerContainer.parentElement.replaceChild(newMarkerContainer, markerContainer);
 
-    // Create the marker area with the new container
-    const img = this.shadowRoot.getElementById('personimg');
-    const markerArea = new markerjs2.MarkerArea(img, { container: newMarkerContainer });
-    markerArea.show();
+      // Create the marker area with the new container
+      const img = this.shadowRoot.getElementById('personimg');
+      const markerArea = new markerjs2.MarkerArea(img, { container: newMarkerContainer });
+      markerArea.show();
+      this.markerAreaCreated = true;
+    }
   }
 
   render() {
