@@ -10,7 +10,7 @@ class AnnoElement extends LitElement {
       description: 'Display image for annotation',
       iconUrl: "image",
       groupName: 'Visual Data',
-      version: '1.4',
+      version: '1.3',
       src: {type: String},
       image: {type: String},
       properties: {
@@ -24,28 +24,42 @@ class AnnoElement extends LitElement {
     };
   }
 
+  static get styles() {
+    return css`
+      .image-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+    `;
+  }
+
   constructor() {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png';
     this.showMarkerArea = this.showMarkerArea.bind(this);
   }
 
-  showMarkerArea(target) {
-    const markerArea = new markerjs2.MarkerArea(target);
-  
-    // add all marker types
-    markerArea.availableMarkerTypes = markerArea.ALL_MARKER_TYPES;
-  
-    // enable redo, notes, zoom, and clear buttons (hidden by default)
-    markerArea.uiStyleSettings.redoButtonVisible = true;
-    markerArea.uiStyleSettings.notesButtonVisible = true;
-    markerArea.uiStyleSettings.zoomButtonVisible = true;
-    markerArea.uiStyleSettings.clearButtonVisible = true;
-  
-    markerArea.addEventListener(
-      "render",
-      (event) => (target.src = event.dataUrl)
-    );
+  showMarkerArea(event) {
+    const target = event.target;
+    const markerContainer = this.shadowRoot.getElementById('marker-container');
+    const markerArea = new markerjs2.MarkerArea(target, { container: markerContainer });
+    markerArea.show();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    const markerContainer = this.shadowRoot.getElementById('marker-container');
+
+    // Create a new markerjs2 container inside the shadow DOM
+    const newMarkerContainer = document.createElement('div');
+    newMarkerContainer.classList.add('markerjs2-container');
+    markerContainer.parentElement.replaceChild(newMarkerContainer, markerContainer);
+
+    // Create the marker area with the new container
+    const img = this.shadowRoot.getElementById('personimg');
+    const markerArea = new markerjs2.MarkerArea(img, { container: newMarkerContainer });
     markerArea.show();
   }
 
@@ -54,8 +68,9 @@ class AnnoElement extends LitElement {
       return html`<p>No image found</p>`;
     }
     return html`
-      <div id="app">
-        <img id="annoImage" src="${this.src}" @click="${this.showMarkerArea}" crossorigin="anonymous" />
+      <div class="image-container">
+        <img id="personimg" src="${this.src}" @click="${this.showMarkerArea}"/>
+        <div id="marker-container" class="markerjs2-container"></div>
       </div>
     `;
   }
