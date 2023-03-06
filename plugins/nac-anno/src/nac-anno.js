@@ -24,16 +24,6 @@ class AnnoElement extends LitElement {
     };
   }
 
-  static get styles() {
-    return css`
-      .image-container {
-        position: relative;
-        width: 100%;
-        height: 100%;
-      }
-    `;
-  }
-
   constructor() {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png';
@@ -46,6 +36,9 @@ class AnnoElement extends LitElement {
       const target = event.target;
       const markerContainer = this.shadowRoot.getElementById('marker-container');
       const markerArea = new markerjs2.MarkerArea(target, { container: markerContainer });
+      markerArea.addEventListener('closed', () => {
+        this.markerAreaCreated = false;
+      });
       markerArea.show();
       this.markerAreaCreated = true;
     }
@@ -65,6 +58,9 @@ class AnnoElement extends LitElement {
       // Create the marker area with the new container
       const img = this.shadowRoot.getElementById('personimg');
       const markerArea = new markerjs2.MarkerArea(img, { container: newMarkerContainer });
+      markerArea.addEventListener('closed', () => {
+        this.markerAreaCreated = false;
+      });
       markerArea.show();
       this.markerAreaCreated = true;
     }
@@ -75,10 +71,8 @@ class AnnoElement extends LitElement {
       return html`<p>No image found</p>`;
     }
     return html`
-      <div class="image-container">
         <img id="personimg" src="${this.src}" @click="${this.showMarkerArea}"/>
         <div id="marker-container" class="markerjs2-container"></div>
-      </div>
     `;
   }
 }
