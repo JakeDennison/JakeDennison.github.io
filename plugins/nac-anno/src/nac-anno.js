@@ -36,9 +36,6 @@ class AnnoElement extends LitElement {
       const target = event.target;
       const markerContainer = this.shadowRoot.getElementById('marker-container');
       const markerArea = new markerjs2.MarkerArea(target, { container: markerContainer });
-      markerArea.addEventListener('closed', () => {
-        this.markerAreaCreated = false;
-      });
       markerArea.show();
       this.markerAreaCreated = true;
     }
@@ -58,9 +55,6 @@ class AnnoElement extends LitElement {
       // Create the marker area with the new container
       const img = this.shadowRoot.getElementById('personimg');
       const markerArea = new markerjs2.MarkerArea(img, { container: newMarkerContainer });
-      markerArea.addEventListener('closed', () => {
-        this.markerAreaCreated = false;
-      });
       markerArea.show();
       this.markerAreaCreated = true;
     }
