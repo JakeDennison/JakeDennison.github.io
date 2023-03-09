@@ -64,5 +64,16 @@ export const translations ={
         "todayBtn": "اليوم",
         "locale": "ar",
         "txtdir": "rtl"
-    }
+    },
+    "he": {
+        "signhere": "Select to sign",
+        "enteradd": "Enter an address",
+        "draghere": "Drag files here or",
+        "uploadbtn": "Select files",
+        "y": "Yes",
+        "n": "No",
+        "todayBtn": "Today",
+        "locale": "en",
+        "txtdir": "rtl"
+    },
 }

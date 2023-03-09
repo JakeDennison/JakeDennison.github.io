@@ -70,8 +70,10 @@ export class TranslateMod extends LitElement {
             Nederlands
           </option>
           <option value="ar">
-            <span class="flag-icon flag-icon-nl"></span>
             العربية
+          </option>
+          <option value="he">
+          עִברִית
           </option>
         </select>
       </div>
