@@ -1,47 +1,68 @@
 export const translations ={
-    "English": {
+    "en": {
         "signhere": "Select to sign",
         "enteradd": "Enter an address",
         "draghere": "Drag files here or",
         "uploadbtn": "Select files",
         "y": "Yes",
         "n": "No",
-        "todayBtn": "Today"
+        "todayBtn": "Today",
+        "locale": "en",
+        "txtdir": "ltr"
     },
-    "German": {
+    "de": {
         "signhere": "Klicken Sie hier; um zu unterschreiben",
         "enteradd": "Gib eine Adresse ein",
         "draghere": "Ziehen Sie Dateien hierher oder",
         "uploadbtn": "Dateien auswählen",
         "y": "Ja",
         "n": "Nein",
-        "todayBtn": "Heute"
+        "todayBtn": "Heute",
+        "locale": "de",
+        "txtdir": "ltr"
     },
-    "French": {
+    "fr": {
         "signhere": "Sélectionnez pour signer",
         "enteradd": "Entrer une adresse",
         "draghere": "Faites glisser des fichiers ici ou",
         "uploadbtn": "Sélectionnez des fichiers",
         "y": "Oui",
         "n": "Non",
-        "todayBtn": "Aujourd'hui"
+        "todayBtn": "Aujourd'hui",
+        "locale": "fr",
+        "txtdir": "ltr"
     },
-    "Spanish": {
+    "es": {
         "signhere": "Haga clic aquí para firmar",
         "enteradd": "Ingrese una dirección",
         "draghere": "Arrastre archivos aquí o",
         "uploadbtn": "Seleccionar archivos",
         "y": "Sí",
         "n": "No",
-        "todayBtn": "Hoy"
+        "todayBtn": "Hoy",
+        "locale": "es",
+        "txtdir": "ltr"
     },
-    "Dutch": {
+    "nl": {
         "signhere": "Klik hier om te ondertekenen",
         "enteradd": "Voer een adres in",
         "draghere": "Sleep bestanden hierheen of",
         "uploadbtn": "Selecteer bestanden",
         "y": "Ja",
         "n": "Nee",
-        "todayBtn": "Vandaag"
+        "todayBtn": "Vandaag",
+        "locale": "nl",
+        "txtdir": "ltr"
+    },
+    "ar": {
+        "signhere": "اختر للتوقيع",
+        "enteradd": "أدخل عنوانًا",
+        "draghere": "اسحب الملفات هنا أو",
+        "uploadbtn": "حدد الملفات",
+        "y": "نعم",
+        "n": "لا",
+        "todayBtn": "اليوم",
+        "locale": "ar",
+        "txtdir": "rtl"
     }
 }
