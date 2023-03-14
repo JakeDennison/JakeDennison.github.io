@@ -373,9 +373,9 @@
       "linkText": "Rubrique d'aide sur les feuilles de style CSS personnalisées",									
       "link": "https://help.nintex.com/en-US/nwc/Default.htm#CSHID=4000"								
     },																	
-    "cssTncText": {"										
-      "message": ""En activant cette fonctionnalité, je reconnais le {link} applicable à l'utilisation d'un code CSS personnalisé (la \""fonctionnalité\"") ; je comprends que la fonctionnalité n'est pas obligatoire et que le choix d'appliquer la fonctionnalité implique l'acceptation de risques potentiels, tels que l'incompatibilité avec les mises à jour futures, l'interférence ou le conflit avec l'accessibilité des formulaires ou de la plate-forme de Nintex, et est exclu des services de support de Nintex."",
-      \""linkText\"" :  \""Terms and Conditions\""."",									
+    "cssTncText": {										
+      "message": "En activant cette fonctionnalité, je reconnais le {link} applicable à l'utilisation d'un code CSS personnalisé (la \"fonctionnalité\") ; je comprends que la fonctionnalité n'est pas obligatoire et que le choix d'appliquer la fonctionnalité implique l'acceptation de risques potentiels, tels que l'incompatibilité avec les mises à jour futures, l'interférence ou le conflit avec l'accessibilité des formulaires ou de la plate-forme de Nintex, et est exclu des services de support de Nintex.",
+      \"linkText\" :  \"Terms and Conditions\""."",									
       "linkText": "Conditions générales d'utilisation",									
       "link": "https://www.nintex.com/legal/customer-use-policy/"								
     },																	
@@ -1012,8 +1012,7 @@
     "workflowTrackerInstances": {													
       "manualStartButtonLabel": "Exécuter maintenant",									
       "manualStartModalTitle": "Exécuter le flux de travail",									
-      "manualStartModalSubtitleSPO": ""L'exécution de ce flux de travail utilisera les données de l'élément SharePoint que vous avez saisi et exécutera ensuite les actions du flux de travail telles qu'elles ont été conçues. 
-Pour plus d'informations, voir la rubrique d'aide <a href=\""https://help.nintex.com/en-US/nwc/Default.htm#CSHID=1318\"" target=\""_blank\"">Manual start workflow help topic</a>.\"""",									
+      "manualStartModalSubtitleSPO": "L'exécution de ce flux de travail utilisera les données de l'élément SharePoint que vous avez saisi et exécutera ensuite les actions du flux de travail telles qu'elles ont été conçues. Pour plus d'informations, voir la rubrique d'aide <a href=\"https://help.nintex.com/en-US/nwc/Default.htm#CSHID=1318\" target=\"_blank\">Manual start workflow help topic</a>.\"",									
       "manualStartModalSubtitle": "L'exécution de ce flux de travail utilisera les mêmes données et exécutera les actions du flux de travail telles qu'elles ont été conçues. For further information, see the <a href=\"https://help.nintex.com/en-US/nwc/Default.htm#CSHID=1318\" target=\"_blank\">Manual start workflow help topic</a>.",									
       "filters": {													
         "customDateFormat": "Commencé : {de} à {à}",									
