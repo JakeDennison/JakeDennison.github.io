@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "dogclubs",
+  "info": {
+    "singularName": "dogclub",
+    "pluralName": "dogclubs",
+    "displayName": "Dogclub"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Title": {
+      "type": "string"
+    }
+  }
+}

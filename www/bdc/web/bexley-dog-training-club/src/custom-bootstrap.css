@@ -1,0 +1,36 @@
+/* Custom Bootstrap Grid for 5 columns */
+@media (min-width: 576px) {
+    .col-5ths {
+      flex: 0 0 auto;
+      width: 20%;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .col-md-5ths {
+      flex: 0 0 auto;
+      width: 20%;
+    }
+  }
+  
+  @media (min-width: 992px) {
+    .col-lg-5ths {
+      flex: 0 0 auto;
+      width: 20%;
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .col-xl-5ths {
+      flex: 0 0 auto;
+      width: 20%;
+    }
+  }
+  
+  @media (min-width: 1400px) {
+    .col-xxl-5ths {
+      flex: 0 0 auto;
+      width: 20%;
+    }
+  }
+  
