@@ -66,14 +66,14 @@ export const translations ={
         "txtdir": "rtl"
     },
     "he": {
-        "signhere": "Select to sign",
-        "enteradd": "Enter an address",
-        "draghere": "Drag files here or",
-        "uploadbtn": "Select files",
-        "y": "Yes",
-        "n": "No",
-        "todayBtn": "Today",
-        "locale": "en",
+        "signhere": "בחר כדי לחתום",
+        "enteradd": "הכנס כתובת",
+        "draghere": "גרור קבצים לכאן או",
+        "uploadbtn": "בחר קבצים",
+        "y": "כן",
+        "n": "לא",
+        "todayBtn": "היום",
+        "locale": "he",
         "txtdir": "rtl"
     },
 }
