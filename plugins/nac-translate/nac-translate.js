@@ -91,7 +91,8 @@ export class TranslateMod extends LitElement {
       this.y = translations[this.locale].y;
       this.n = translations[this.locale].n;
       this.todayBtn = translations[this.locale].todayBtn;
-    this.setLocale()
+    this.setLocale();
+    this.updateCSS();
     this.TranslateInnerHTML(targets.signhere,this.signhere);
     this.TranslatePlaceholder(targets.enteradd,this.enteradd);
     this.TranslateInnerHTML(targets.draghere,this.draghere);
@@ -107,6 +108,27 @@ export class TranslateMod extends LitElement {
       detail: this.locale,
     });
     this.dispatchEvent(valueChangeEvent);
+  }
+
+  updateCSS() {
+    // check if the current txtdir is rtl
+    if (this.txtdir === 'rtl') {
+      // create a link element for the rtl.css file
+      const link = document.createElement('link');w
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = 'https://jsdenintex.github.io/src/css/nwcRTL.css';
+      link.id = 'rtl-stylesheet';
+  
+      // add the link element to the document's head
+      document.head.appendChild(link);
+    } else {
+      // remove the rtl.css file if it was added
+      const link = document.querySelector('#rtl-stylesheet');
+      if (link) {
+        link.remove();
+      }
+    }
   }
 
   setLocale(){
