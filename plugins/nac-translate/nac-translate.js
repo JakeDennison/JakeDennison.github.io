@@ -114,7 +114,7 @@ export class TranslateMod extends LitElement {
     // check if the current txtdir is rtl
     if (this.txtdir === 'rtl') {
       // create a link element for the rtl.css file
-      const link = document.createElement('link');w
+      const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.type = 'text/css';
       link.href = 'https://jsdenintex.github.io/src/css/nwcRTL.css';
