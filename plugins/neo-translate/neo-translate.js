@@ -45,7 +45,7 @@ export class TranslateMod extends LitElement {
   constructor() {
     super();
     this.locale = 'en';
-    this._translatePage();
+    this._translateOnLoad(this.locale)
   }
 
   render() {
@@ -88,18 +88,30 @@ export class TranslateMod extends LitElement {
     `;
   }
 
+  _setTranslations() {
+    this.txtdir = translations[this.locale].txtdir;
+    this.signhere = translations[this.locale].signhere;
+    this.enteradd = translations[this.locale].enteradd;
+    this.draghere = translations[this.locale].draghere;
+    this.uploadbtn = translations[this.locale].uploadbtn;
+    this.y = translations[this.locale].y;
+    this.n = translations[this.locale].n;
+    this.todayBtn = translations[this.locale].todayBtn;
+  }
+
+  _translateOnLoad(llang) {
+    this.locale = args;
+    this._setTranslations()
+    this._translatePage();
+    console.log("function called on load");
+  }
+
   _handleLanguageChange(event) {
     this.locale = event.target.value;
-      this.txtdir = translations[this.locale].txtdir;
-      this.signhere = translations[this.locale].signhere;
-      this.enteradd = translations[this.locale].enteradd;
-      this.draghere = translations[this.locale].draghere;
-      this.uploadbtn = translations[this.locale].uploadbtn;
-      this.y = translations[this.locale].y;
-      this.n = translations[this.locale].n;
-      this.todayBtn = translations[this.locale].todayBtn;
-      this._translatePage();
+    this._setTranslations()
+    this._translatePage();
   }
+
 
   _translatePage() {
     this.setLocale();
