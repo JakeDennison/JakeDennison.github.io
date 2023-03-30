@@ -106,8 +106,8 @@ export class TranslateMod extends LitElement {
     this.TranslateInnerHTML(targets.toggleOn,this.y);
     this.TranslateInnerHTML(targets.toggleOff,this.n);
     this.TranslateBtn(targets.todayBtn,this.todayBtn);
-    const event = new CustomEvent('ntx-value-change', this.locale);
-    this.dispatchEvent(event);
+    const nevent = new CustomEvent('ntx-value-change', this.locale);
+    this.dispatchEvent(nevent);
   }
 
   updateCSS() {
