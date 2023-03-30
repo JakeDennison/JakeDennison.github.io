@@ -12,8 +12,14 @@ export class TranslateMod extends LitElement {
       description: 'provide a plugin to translate the form',
       iconUrl: "multiline-text",
       groupName: 'Languages',
-      version: '1.3',
+      version: '1.9',
       properties: {
+        language: {
+          type: 'string',
+          title: 'Language',
+          description: 'Insert a Variable, to save the language',
+          isValueField: true,
+        },
       },
       events: ["ntx-value-change"],
       standardProperties: {
