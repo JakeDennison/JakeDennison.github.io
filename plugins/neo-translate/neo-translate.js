@@ -14,12 +14,14 @@ export class TranslateMod extends LitElement {
       groupName: 'Languages',
       version: '1.9',
       properties: { 
-        outcome: {
-          title: 'Language',
+        locale: {
+          title: 'Locale',
           type: 'string',
-        	description: 'Insert a Variable, to save the language selected',
+          enum: ['en', 'de', 'fr', 'es', 'nl', 'ar', 'he'],
+        	description: 'Select a default locale',
           isValueField: true
-        },        
+
+        },
       },
       events: ["ntx-value-change"],
       standardProperties: {
@@ -31,7 +33,6 @@ export class TranslateMod extends LitElement {
   }
 
   static properties = {
-    locale: {type: String},
     txtdir: {type: String},
     signhere: {type: String},
     enteradd: {type: String},
