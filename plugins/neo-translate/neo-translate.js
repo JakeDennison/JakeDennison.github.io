@@ -45,13 +45,7 @@ export class TranslateMod extends LitElement {
   constructor() {
     super();
     this.locale = 'en';
-    this.valueChangeEvent = new CustomEvent('ntx-value-change', {
-      bubbles: true,
-      cancelable: false,
-      composed: true,
-      detail: this.locale,
-    });
-    this.dispatchEvent(this.valueChangeEvent);
+    this._translatePage();
   }
 
   render() {
@@ -104,15 +98,25 @@ export class TranslateMod extends LitElement {
       this.y = translations[this.locale].y;
       this.n = translations[this.locale].n;
       this.todayBtn = translations[this.locale].todayBtn;
+      this._translatePage();
+  }
+
+  _translatePage() {
     this.setLocale();
     this.updateCSS();
-    this.TranslateInnerHTML(targets.signhere,this.signhere);
-    this.TranslatePlaceholder(targets.enteradd,this.enteradd);
-    this.TranslateInnerHTML(targets.draghere,this.draghere);
-    this.TranslateBtn(targets.uploadbtn,this.uploadbtn);
-    this.TranslateInnerHTML(targets.toggleOn,this.y);
-    this.TranslateInnerHTML(targets.toggleOff,this.n);
-    this.TranslateBtn(targets.todayBtn,this.todayBtn);
+    this.TranslateInnerHTML(targets.signhere, this.signhere);
+    this.TranslatePlaceholder(targets.enteradd, this.enteradd);
+    this.TranslateInnerHTML(targets.draghere, this.draghere);
+    this.TranslateBtn(targets.uploadbtn, this.uploadbtn);
+    this.TranslateInnerHTML(targets.toggleOn, this.y);
+    this.TranslateInnerHTML(targets.toggleOff, this.n);
+    this.TranslateBtn(targets.todayBtn, this.todayBtn);
+    this.valueChangeEvent = new CustomEvent('ntx-value-change', {
+      bubbles: true,
+      cancelable: false,
+      composed: true,
+      detail: this.locale,
+    });
     this.dispatchEvent(this.valueChangeEvent);
   }
 
