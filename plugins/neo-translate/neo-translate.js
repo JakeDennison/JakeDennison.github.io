@@ -19,8 +19,8 @@ export class TranslateMod extends LitElement {
           type: 'string',
           enum: ['en', 'de', 'fr', 'es', 'nl', 'ar', 'he'],
         	description: 'Select a default locale',
-          isValueField: true
-
+          isValueField: true,
+          defaultValue: 'en',
         },
       },
       events: ["ntx-value-change"],
@@ -45,7 +45,7 @@ export class TranslateMod extends LitElement {
   
   constructor() {
     super();
-    this.locale = 'fr';
+    this.locale = 'en';
     this._translateOnLoad()
   }
 
