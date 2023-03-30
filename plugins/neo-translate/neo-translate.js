@@ -45,7 +45,6 @@ export class TranslateMod extends LitElement {
   
   constructor() {
     super();
-    this.locale = this.defaultlocale || 'en';
     console.log(this.defaultlocale)
     this._translateOnLoad()
   }
@@ -91,14 +90,14 @@ export class TranslateMod extends LitElement {
   }
 
   _setTranslations() {
-    this.txtdir = translations[this.locale].txtdir;
-    this.signhere = translations[this.locale].signhere;
-    this.enteradd = translations[this.locale].enteradd;
-    this.draghere = translations[this.locale].draghere;
-    this.uploadbtn = translations[this.locale].uploadbtn;
-    this.y = translations[this.locale].y;
-    this.n = translations[this.locale].n;
-    this.todayBtn = translations[this.locale].todayBtn;
+    this.txtdir = translations[this.properties.locale].txtdir;
+    this.signhere = translations[this.properties.locale].signhere;
+    this.enteradd = translations[this.properties.locale].enteradd;
+    this.draghere = translations[this.properties.locale].draghere;
+    this.uploadbtn = translations[this.properties.locale].uploadbtn;
+    this.y = translations[this.properties.locale].y;
+    this.n = translations[this.properties.locale].n;
+    this.todayBtn = translations[this.properties.locale].todayBtn;
   }
 
   _translateOnLoad() {
@@ -108,7 +107,7 @@ export class TranslateMod extends LitElement {
   }
 
   _handleLanguageChange(event) {
-    this.locale = event.target.value;
+    this.properties.locale = event.target.value;
     this._setTranslations();
     this._translatePage();
   }
@@ -128,7 +127,7 @@ export class TranslateMod extends LitElement {
       bubbles: true,
       cancelable: false,
       composed: true,
-      detail: this.locale,
+      detail: this.properties.locale,
     });
     this.dispatchEvent(this.valueChangeEvent);
   }
@@ -155,7 +154,7 @@ export class TranslateMod extends LitElement {
   }
 
   setLocale(){
-    document.documentElement.lang = this.locale;
+    document.documentElement.lang = this.properties.locale;
     document.documentElement.dir = this.txtdir;
   }
 
