@@ -44,7 +44,7 @@ export class TranslateMod extends LitElement {
   
   constructor() {
     super();
-    this.locale = 'en';
+    this.locale = 'fr';
     this._translateOnLoad()
   }
 
