@@ -20,8 +20,16 @@ export class TranslateMod extends LitElement {
           enum: ['en', 'de', 'fr', 'es', 'nl', 'ar', 'he'],
         	description: 'Select a default locale',
           isValueField: true,
-          defaultValue: 'en',
+          defaultValue: 'en'
         },
+        txtdir: {type: String},
+        signhere: {type: String},
+        enteradd: {type: String},
+        draghere: {type: String},
+        uploadbtn: {type: String},
+        y: {type: String},
+        n: {type: String},
+        todayBtn: {type: String}
       },
       events: ["ntx-value-change"],
       standardProperties: {
@@ -30,17 +38,6 @@ export class TranslateMod extends LitElement {
         description: true,
       },
     };
-  }
-
-  static properties = {
-    txtdir: {type: String},
-    signhere: {type: String},
-    enteradd: {type: String},
-    draghere: {type: String},
-    uploadbtn: {type: String},
-    y: {type: String},
-    n: {type: String},
-    todayBtn: {type: String}
   }
   
   constructor() {
