@@ -45,7 +45,7 @@ export class TranslateMod extends LitElement {
   constructor() {
     super();
     this.locale = 'en';
-    this._translateOnLoad(this.locale)
+    this._translateOnLoad()
   }
 
   render() {
@@ -99,8 +99,7 @@ export class TranslateMod extends LitElement {
     this.todayBtn = translations[this.locale].todayBtn;
   }
 
-  _translateOnLoad(llang) {
-    this.locale = llang;
+  _translateOnLoad() {
     this._setTranslations()
     this._translatePage();
     console.log("function called on load");
