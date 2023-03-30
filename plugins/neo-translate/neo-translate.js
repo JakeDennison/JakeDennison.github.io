@@ -13,20 +13,20 @@ export class TranslateMod extends LitElement {
       iconUrl: "multiline-text",
       groupName: 'Languages',
       version: '1.9',
-      properties: {
+      properties: { 
         outcome: {
+          title: 'Language',
           type: 'string',
-          title: 'Language selected',
-          description: 'Insert a Variable, to save the language',
-          isValueField: true,
-        },
+        	description: 'Insert a Variable, to save the language selected',
+          isValueField: true
+        },        
       },
       events: ["ntx-value-change"],
       standardProperties: {
         fieldLabel: true,
         readOnly: true,
         description: true,
-      }
+      },
     };
   }
 
