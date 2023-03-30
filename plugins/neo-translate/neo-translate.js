@@ -100,7 +100,7 @@ export class TranslateMod extends LitElement {
   }
 
   _translateOnLoad(llang) {
-    this.locale = args;
+    this.locale = llang;
     this._setTranslations()
     this._translatePage();
     console.log("function called on load");
