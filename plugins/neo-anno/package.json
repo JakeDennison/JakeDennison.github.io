@@ -1,9 +1,9 @@
 {
-  "name": "nac-anno",
+  "name": "neo-anno",
   "version": "1.0.0",
   "description": "NAC Image Annotation",
   "files": ["dist", "index.html"],
-  "main": "nac-anno.js",
+  "main": "neo-anno.js",
   "scripts": {
     "build": "webpack && npm run copy-image",
     "copy-image": "cp src/img/person.png dist/img"

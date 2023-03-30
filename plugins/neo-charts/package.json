@@ -1,7 +1,7 @@
 {
-  "name": "nac-charts",
+  "name": "neo-charts",
   "version": "1.0.0",
-  "main": "src/nac-charts.js",
+  "main": "src/neo-charts.js",
   "scripts": {
     "build": "webpack"
   },

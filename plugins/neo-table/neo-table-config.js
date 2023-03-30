@@ -2,7 +2,7 @@ import './query-assigned-elements-214d6340.js.js';
 import { Z as ZincVersion } from './zinc-api-f0859f9f.js.js';
 
 const config = {
-  title: 'nac-table',
+  title: 'neo-table',
   fallbackDisableSubmit: false,
   description: 'Renders a table based on json data',
   iconUrl: 'rich-text',

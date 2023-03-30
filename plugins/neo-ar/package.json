@@ -1,8 +1,8 @@
 {
-  "name": "nac-ar",
+  "name": "neo-ar",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/nac-ar.js",
+  "main": "./src/neo-ar.js",
   "browser": "./src/index.html",
   "scripts": {
     "build": "webpack"

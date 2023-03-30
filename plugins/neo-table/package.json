@@ -1,8 +1,8 @@
 {
-  "name": "nac-table",
+  "name": "neo-table",
   "version": "1.0.0",
   "description": "table displayer for NAC",
-  "main": "nac-table.js",
+  "main": "neo-table.js",
   "scripts": {
     "start": "es-dev-server --app-index index.html --node-resolve --watch --open"
   },

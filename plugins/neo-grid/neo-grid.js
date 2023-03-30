@@ -5,7 +5,7 @@ export class MyGrid extends LitElement {
   static getMetaConfig() {
     // plugin contract information
     return {
-      controlName: 'nac-grid',
+      controlName: 'neo-grid',
       fallbackDisableSubmit: false,
       description: 'Display object as a grid',
       iconUrl: "group-control",
@@ -60,5 +60,5 @@ export class MyGrid extends LitElement {
   }
 }
 
-const elementName = 'nac-grid';
-customElements.define('nac-grid', MyGrid);
+const elementName = 'neo-grid';
+customElements.define('neo-grid', MyGrid);

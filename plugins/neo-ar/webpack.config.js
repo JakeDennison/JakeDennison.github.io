@@ -1,10 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/nac-ar.js',
+  entry: './src/neo-ar.js',
   mode: 'production',
   output: {
-    filename: 'nac-ar.js',
+    filename: 'neo-ar.js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {

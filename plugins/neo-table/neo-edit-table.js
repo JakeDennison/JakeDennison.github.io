@@ -3,7 +3,7 @@ import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/d
 export class MyTable extends LitElement {
   static async getMetaConfig() {
     return {
-      title: 'nac-table',
+      title: 'neo-table',
       fallbackDisableSubmit: false,
       version: '1.3',
     };
@@ -11,7 +11,7 @@ export class MyTable extends LitElement {
   
   async loadData() {
     try {
-      const response = await fetch('https://jsdenintex.github.io/plugins/nac-table/data.json');
+      const response = await fetch('https://jsdenintex.github.io/plugins/neo-table/data.json');
       this.data = await response.json();
       this.data.forEach(row => {
         row.edit = false;
@@ -43,7 +43,7 @@ export class MyTable extends LitElement {
 
   async saveRow(row) {
     try {
-      const response = await fetch('https://jsdenintex.github.io/plugins/nac-table/data.json', {
+      const response = await fetch('https://jsdenintex.github.io/plugins/neo-table/data.json', {
         method: 'PUT',
         body: JSON.stringify(row),
         headers: {
@@ -90,5 +90,5 @@ export class MyTable extends LitElement {
     `);
   }
 }
-const elementName = 'nac-table';
-customElements.define('nac-table', MyTable);
+const elementName = 'neo-table';
+customElements.define('neo-table', MyTable);

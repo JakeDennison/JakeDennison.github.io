@@ -4,7 +4,7 @@ export class MyElement extends LitElement {
     static getMetaConfig() {
         // plugin contract information
         return {
-            controlName: 'nac-output',
+            controlName: 'neo-output',
             fallbackDisableSubmit: false,
             description: 'Example of data input and output',
             iconUrl: "multiline-text",
@@ -74,5 +74,5 @@ export class MyElement extends LitElement {
     }
 }
 
-const elementName = 'nac-output';
-customElements.define('nac-output', MyElement);
+const elementName = 'neo-output';
+customElements.define('neo-output', MyElement);

@@ -4,7 +4,7 @@ class CarouselElement extends LitElement {
     static getMetaConfig() {
         // plugin contract information
         return {
-          controlName: 'nac-carousel',
+          controlName: 'neo-carousel',
           fallbackDisableSubmit: false,
           description: 'Display images in a carousel',
           iconUrl: "image",
@@ -72,7 +72,7 @@ class CarouselElement extends LitElement {
         this.imageList = this.images.split(';').filter(image => image.trim() !== '');
       
         return html`
-          <link href="https://jsdenintex.github.io/plugins/nac-carousel/nac-carousel.css" rel="stylesheet">
+          <link href="https://jsdenintex.github.io/plugins/neo-carousel/neo-carousel.css" rel="stylesheet">
           <div class="carousel">
             <div class="carousel-inner">
               ${this.imageList.map((image, i) => {
@@ -98,4 +98,4 @@ class CarouselElement extends LitElement {
     }
   }
     
-customElements.define('nac-carousel', CarouselElement);
+customElements.define('neo-carousel', CarouselElement);

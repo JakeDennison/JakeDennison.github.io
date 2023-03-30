@@ -1,6 +1,6 @@
 import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
-import {translations} from 'https://jsdenintex.github.io/plugins/nac-translate/translations.js';
-import {targets} from 'https://jsdenintex.github.io/plugins/nac-translate/targets.js';
+import {translations} from 'https://jsdenintex.github.io/plugins/neo-translate/translations.js';
+import {targets} from 'https://jsdenintex.github.io/plugins/neo-translate/targets.js';
 
 
 export class TranslateMod extends LitElement {

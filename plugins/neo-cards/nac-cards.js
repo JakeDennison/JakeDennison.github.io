@@ -9,7 +9,7 @@ export default class NacCards extends LitElement {
 
     static getMetaConfig() {
         return {
-            controlName: 'nac-cards',
+            controlName: 'neo-cards',
             fallbackDisableSubmit: false,
             description: 'Example of a visual card',
             groupName: 'Visual Data',
@@ -77,7 +77,7 @@ export default class NacCards extends LitElement {
         this.darkMode = false;
         this.centerText = false;
         this.cardsData = [];
-        fetch('https://jsdenintex.github.io/plugins/nac-cards/cards.json')
+        fetch('https://jsdenintex.github.io/plugins/neo-cards/cards.json')
             .then(response => response.json())
             .then(data => {
                 this.cardsData = data;
@@ -85,5 +85,5 @@ export default class NacCards extends LitElement {
     }
 }
 
-const elementName = 'nac-cards';
+const elementName = 'neo-cards';
 customElements.define(elementName, NacCards);

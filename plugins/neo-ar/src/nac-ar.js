@@ -6,7 +6,7 @@ class AnnoElement extends LitElement {
   static getMetaConfig() {
     // plugin contract information
     return {
-      controlName: 'nac-ar',
+      controlName: 'neo-ar',
       fallbackDisableSubmit: false,
       description: 'Display AR images',
       iconUrl: "image",
@@ -91,4 +91,4 @@ class AnnoElement extends LitElement {
   }
 }
 
-customElements.define('nac-ar', AnnoElement);
+customElements.define('neo-ar', AnnoElement);

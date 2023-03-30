@@ -5,7 +5,7 @@ class AnnoElement extends LitElement {
   static getMetaConfig() {
     // plugin contract information
     return {
-      controlName: 'nac-anno',
+      controlName: 'neo-anno',
       fallbackDisableSubmit: false,
       description: 'Display image for annotation',
       iconUrl: "image",
@@ -37,7 +37,7 @@ class AnnoElement extends LitElement {
 
   constructor() {
     super();
-    this.src = 'https://jsdenintex.github.io/plugins/nac-anno/dist/img/person.png';
+    this.src = 'https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png';
   }
 
   render() {
@@ -81,6 +81,6 @@ class AnnoElement extends LitElement {
 
 }
 
-customElements.define('nac-anno', AnnoElement);
+customElements.define('neo-anno', AnnoElement);
 
 // start creating a new FrameMarker each time a marker is created
