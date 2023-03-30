@@ -57,30 +57,30 @@ export class TranslateMod extends LitElement {
     <div class="container-fluid">
       <div class="row">
         <select class="form-select m-0 col-md-3 col-sm-12" aria-label="English" id="language-select" @change="${this._handleLanguageChange}">
-          <option value="en" selected="${this.properties.locale === 'en'}">
+          <option value="en" ?selected="${this.properties.locale === 'en'}">
             <span class="flag-icon flag-icon-us"></span>
             English
           </option>
-          <option value="de" selected="${this.properties.locale === 'de'}">
+          <option value="de" ?selected="${this.properties.locale === 'de'}">
             <span class="flag-icon flag-icon-de"></span>
             Deutsch
           </option>
-          <option value="fr" selected="${this.properties.locale === 'fr'}">
+          <option value="fr" ?selected="${this.properties.locale === 'fr'}">
             <span class="flag-icon flag-icon-fr"></span>
             Français
           </option>
-          <option value="es" selected="${this.properties.locale === 'es'}">
+          <option value="es" ?selected="${this.properties.locale === 'es'}">
             <span class="flag-icon flag-icon-es"></span>
             Español
           </option>
-          <option value="nl" selected="${this.properties.locale === 'nl'}">
+          <option value="nl" ?selected="${this.properties.locale === 'nl'}">
             <span class="flag-icon flag-icon-nl"></span>
             Nederlands
           </option>
-          <option value="ar" selected="${this.properties.locale === 'ar'}">
+          <option value="ar" ?selected="${this.properties.locale === 'ar'}">
             العربية
           </option>
-          <option value="he" selected="${this.properties.locale === 'he'}">
+          <option value="he" ?selected="${this.properties.locale === 'he'}">
             עִברִית
           </option>
         </select>
