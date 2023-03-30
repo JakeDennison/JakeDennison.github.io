@@ -14,9 +14,9 @@ export class TranslateMod extends LitElement {
       groupName: 'Languages',
       version: '1.9',
       properties: {
-        language: {
+        outcome: {
           type: 'string',
-          title: 'Language',
+          title: 'Language selected',
           description: 'Insert a Variable, to save the language',
           isValueField: true,
         },
