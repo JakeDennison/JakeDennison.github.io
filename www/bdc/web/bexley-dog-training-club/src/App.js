@@ -38,7 +38,7 @@ function App() {
       ),
     },
     {
-      name: "Bronze Award Class",
+      name: "Bronze dog Award Class",
       availability: "Fully booked",
       image: "/images/bronze.png",
       timeslot: "7:30pm - 8:00pm",
