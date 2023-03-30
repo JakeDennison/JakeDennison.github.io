@@ -112,6 +112,7 @@ export class TranslateMod extends LitElement {
       composed: true,
       detail: this.locale,
     });
+    this.dispatchEvent(valueChangeEvent);
   }
 
   updateCSS() {
