@@ -14,7 +14,7 @@ export class TranslateMod extends LitElement {
       groupName: 'Languages',
       version: '1.9',
       properties: { 
-        locale: {
+        defaultlocale: {
           title: 'Locale',
           type: 'string',
           enum: ['en', 'de', 'fr', 'es', 'nl', 'ar', 'he'],
@@ -33,6 +33,7 @@ export class TranslateMod extends LitElement {
   }
 
   static properties = {
+    locale: {type: String},
     txtdir: {type: String},
     signhere: {type: String},
     enteradd: {type: String},
@@ -46,6 +47,7 @@ export class TranslateMod extends LitElement {
   constructor() {
     super();
     this.locale = 'en';
+    console.log(this.defaultlocale)
     this._translateOnLoad()
   }
 
