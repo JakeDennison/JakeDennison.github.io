@@ -1,5 +1,6 @@
 export const translations ={
     "en": {
+        "label": "English",
         "signhere": "Select to sign",
         "enteradd": "Enter an address",
         "draghere": "Drag files here or",
@@ -11,6 +12,7 @@ export const translations ={
         "txtdir": "ltr"
     },
     "de": {
+        "label": "Deutsch",
         "signhere": "Klicken Sie hier; um zu unterschreiben",
         "enteradd": "Gib eine Adresse ein",
         "draghere": "Ziehen Sie Dateien hierher oder",
@@ -22,6 +24,7 @@ export const translations ={
         "txtdir": "ltr"
     },
     "fr": {
+        "label": "Français",
         "signhere": "Sélectionnez pour signer",
         "enteradd": "Entrer une adresse",
         "draghere": "Faites glisser des fichiers ici ou",
@@ -33,6 +36,7 @@ export const translations ={
         "txtdir": "ltr"
     },
     "es": {
+        "label": "Español",
         "signhere": "Haga clic aquí para firmar",
         "enteradd": "Ingrese una dirección",
         "draghere": "Arrastre archivos aquí o",
@@ -44,6 +48,7 @@ export const translations ={
         "txtdir": "ltr"
     },
     "nl": {
+        "label": "Nederlands",
         "signhere": "Klik hier om te ondertekenen",
         "enteradd": "Voer een adres in",
         "draghere": "Sleep bestanden hierheen of",
@@ -55,6 +60,7 @@ export const translations ={
         "txtdir": "ltr"
     },
     "ar": {
+        "label": "العربية",
         "signhere": "اختر للتوقيع",
         "enteradd": "أدخل عنوانًا",
         "draghere": "اسحب الملفات هنا أو",
@@ -66,6 +72,7 @@ export const translations ={
         "txtdir": "rtl"
     },
     "he": {
+        "label": "עִברִית",
         "signhere": "בחר כדי לחתום",
         "enteradd": "הכנס כתובת",
         "draghere": "גרור קבצים לכאן או",

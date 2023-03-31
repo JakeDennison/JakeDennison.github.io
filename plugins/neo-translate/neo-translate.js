@@ -17,8 +17,10 @@ export class TranslateMod extends LitElement {
         locale: {
           title: 'Locale',
           type: 'string',
+          enum: Object.keys(translations),
         	description: 'used for storing language value',
           isValueField: true,
+          defaultValue: true,
         },
         txtdir: {type: String},
         signhere: {type: String},
@@ -44,55 +46,42 @@ export class TranslateMod extends LitElement {
   }
 
   render() {
+    const languageOptions = Object.keys(translations).map(locale => {
+      const languageName = translations[locale].label;
+      return html`<option value="${locale}" ?selected="${this.locale === locale}">${languageName}</option>`;
+    });
+  
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
       <div class="container-fluid">
         <div class="row">
           <select class="form-select m-0 col-md-3 col-sm-12" aria-label="Language" id="language-select" @change="${this._handleLanguageChange}">
-            <option value="en">
-              English
-            </option>
-            <option value="de">
-              Deutsch
-            </option>
-            <option value="fr">
-              Français
-            </option>
-            <option value="es">
-              Español
-            </option>
-            <option value="nl">
-              Nederlands
-            </option>
-            <option value="ar">
-              العربية
-            </option>
-            <option value="he">
-              עִברִית
-            </option>
+            ${languageOptions}
           </select>
         </div>
       </div>
       <script>
         document.addEventListener('DOMContentLoaded', () => {
           const select = document.querySelector('#language-select');
-          select.value = 'en';
-          console.log('autoload is working')
+          select.value = '${this.locale}';
+          console.log("manual call worked")
         });
       </script>
     `;
   }
+  
 
   _setTranslations() {
-    this.txtdir = translations[this.locale].txtdir;
-    this.signhere = translations[this.locale].signhere;
-    this.enteradd = translations[this.locale].enteradd;
-    this.draghere = translations[this.locale].draghere;
-    this.uploadbtn = translations[this.locale].uploadbtn;
-    this.y = translations[this.locale].y;
-    this.n = translations[this.locale].n;
-    this.todayBtn = translations[this.locale].todayBtn;
+    const localeTranslations = translations[this.locale] || {};
+    this.txtdir = localeTranslations.txtdir || '';
+    this.signhere = localeTranslations.signhere || '';
+    this.enteradd = localeTranslations.enteradd || '';
+    this.draghere = localeTranslations.draghere || '';
+    this.uploadbtn = localeTranslations.uploadbtn || '';
+    this.y = localeTranslations.y || '';
+    this.n = localeTranslations.n || '';
+    this.todayBtn = localeTranslations.todayBtn || '';
   }
 
   _translateOnLoad() {
