@@ -17,10 +17,10 @@ export class TranslateMod extends LitElement {
         locale: {
           title: 'Locale',
           type: 'string',
-          enum: ['en', 'de', 'fr', 'es', 'nl', 'ar', 'he'],
+          enum: Object.keys(translations),
           description: 'used for storing language value',
           isValueField: true,
-          defaultValue: true,
+          defaultValue: 'en',
         },
         txtdir: {type: String},
         signhere: {type: String},
