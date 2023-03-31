@@ -13,12 +13,12 @@ export class TranslateMod extends LitElement {
       iconUrl: "multiline-text",
       groupName: 'Languages',
       version: '1.9',
-      properties: { 
+      properties: {
         locale: {
           title: 'Locale',
           type: 'string',
           enum: Object.keys(translations),
-        	description: 'used for storing language value',
+          description: 'used for storing language value',
           isValueField: true,
           defaultValue: true,
         },
@@ -65,6 +65,11 @@ export class TranslateMod extends LitElement {
     `;
   }
   
+  connectedCallback() {
+    super.connectedCallback();
+    console.log('Connected to DOM');
+  }
+
   firstUpdated() {
     const select = this.shadowRoot.querySelector('#language-select');
     select.value = this.locale;
@@ -93,7 +98,6 @@ export class TranslateMod extends LitElement {
     this._setTranslations();
     this._translatePage();
   }
-
 
   _translatePage() {
     this.setLocale();
