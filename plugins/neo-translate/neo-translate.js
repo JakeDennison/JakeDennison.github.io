@@ -46,35 +46,41 @@ export class TranslateMod extends LitElement {
 
   render() {
     return html`
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <div class="container-fluid">
-      <div class="row">
-        <select class="form-select m-0 col-md-3 col-sm-12" aria-label="English" id="language-select" @change="${this._handleLanguageChange}">
-          <option value="en" ?selected="${this.locale === 'en'}">
-            English
-          </option>
-          <option value="de" ?selected="${this.locale === 'de'}">
-            Deutsch
-          </option>
-          <option value="fr" ?selected="${this.locale === 'fr'}">
-            Français
-          </option>
-          <option value="es" ?selected="${this.locale === 'es'}">
-            Español
-          </option>
-          <option value="nl" ?selected="${this.locale === 'nl'}">
-            Nederlands
-          </option>
-          <option value="ar" ?selected="${this.locale === 'ar'}">
-            العربية
-          </option>
-          <option value="he" ?selected="${this.locale === 'he'}">
-            עִברִית
-          </option>
-        </select>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+      <div class="container-fluid">
+        <div class="row">
+          <select class="form-select m-0 col-md-3 col-sm-12" aria-label="Language" id="language-select" @change="${this._handleLanguageChange}">
+            <option value="en">
+              English
+            </option>
+            <option value="de">
+              Deutsch
+            </option>
+            <option value="fr">
+              Français
+            </option>
+            <option value="es">
+              Español
+            </option>
+            <option value="nl">
+              Nederlands
+            </option>
+            <option value="ar">
+              العربية
+            </option>
+            <option value="he">
+              עִברִית
+            </option>
+          </select>
+        </div>
       </div>
-    </div>
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const select = document.querySelector('#language-select');
+          select.value = 'en';
+        });
+      </script>
     `;
   }
 
