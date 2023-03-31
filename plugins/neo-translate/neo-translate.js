@@ -43,21 +43,21 @@ export class TranslateMod extends LitElement {
   constructor() {
     super();
     this.locale = "en"
+    this._setTranslations();
   }
 
   render() {
-    const languageOptions = Object.keys(translations).map(locale => {
-      const languageName = translations[locale].label;
-      return html`<option value="${locale}" ?selected="${this.locale === locale}">${languageName}</option>`;
-    });
-  
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
       <div class="container-fluid">
         <div class="row">
           <select class="form-select m-0 col-md-3 col-sm-12" aria-label="Language" id="language-select" @change="${this._handleLanguageChange}">
-            ${languageOptions}
+            ${Object.keys(translations).map(locale => html`
+              <option value="${locale}" ?selected="${this.properties.locale === locale}">
+                ${translations[locale].label}
+              </option>
+            `)}
           </select>
         </div>
       </div>
@@ -67,7 +67,6 @@ export class TranslateMod extends LitElement {
   firstUpdated() {
     const select = this.shadowRoot.querySelector('#language-select');
     select.value = this.locale;
-    console.log("first updated is calling")
   }
 
   _setTranslations() {
