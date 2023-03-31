@@ -41,7 +41,6 @@ export class TranslateMod extends LitElement {
   constructor() {
     super();
     this.locale = "en"
-    this._translateOnLoad()
   }
 
   render() {
@@ -79,6 +78,7 @@ export class TranslateMod extends LitElement {
         document.addEventListener('DOMContentLoaded', () => {
           const select = document.querySelector('#language-select');
           select.value = 'en';
+          console.log('autoload is working')
         });
       </script>
     `;
