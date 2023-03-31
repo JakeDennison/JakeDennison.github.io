@@ -17,7 +17,7 @@ export class TranslateMod extends LitElement {
         locale: {
           title: 'Locale',
           type: 'string',
-          enum: Object.keys(translations),
+          enum: ['en', 'de', 'fr', 'es', 'nl', 'ar', 'he'],
           description: 'used for storing language value',
           isValueField: true,
           defaultValue: true,
