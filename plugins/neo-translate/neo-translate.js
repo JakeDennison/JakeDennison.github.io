@@ -40,7 +40,7 @@ export class TranslateMod extends LitElement {
   
   constructor() {
     super();
-    this.properties.locale = "en"
+    this.locale = "en"
     this._translateOnLoad()
   }
 
@@ -51,25 +51,25 @@ export class TranslateMod extends LitElement {
     <div class="container-fluid">
       <div class="row">
         <select class="form-select m-0 col-md-3 col-sm-12" aria-label="English" id="language-select" @change="${this._handleLanguageChange}">
-          <option value="en" ?selected="${this.properties.locale === 'en'}">
+          <option value="en" ?selected="${this.locale === 'en'}">
             English
           </option>
-          <option value="de" ?selected="${this.properties.locale === 'de'}">
+          <option value="de" ?selected="${this.locale === 'de'}">
             Deutsch
           </option>
-          <option value="fr" ?selected="${this.properties.locale === 'fr'}">
+          <option value="fr" ?selected="${this.locale === 'fr'}">
             Français
           </option>
-          <option value="es" ?selected="${this.properties.locale === 'es'}">
+          <option value="es" ?selected="${this.locale === 'es'}">
             Español
           </option>
-          <option value="nl" ?selected="${this.properties.locale === 'nl'}">
+          <option value="nl" ?selected="${this.locale === 'nl'}">
             Nederlands
           </option>
-          <option value="ar" ?selected="${this.properties.locale === 'ar'}">
+          <option value="ar" ?selected="${this.locale === 'ar'}">
             العربية
           </option>
-          <option value="he" ?selected="${this.properties.locale === 'he'}">
+          <option value="he" ?selected="${this.locale === 'he'}">
             עִברִית
           </option>
         </select>
@@ -79,14 +79,14 @@ export class TranslateMod extends LitElement {
   }
 
   _setTranslations() {
-    this.txtdir = translations[this.properties.locale].txtdir;
-    this.signhere = translations[this.properties.locale].signhere;
-    this.enteradd = translations[this.properties.locale].enteradd;
-    this.draghere = translations[this.properties.locale].draghere;
-    this.uploadbtn = translations[this.properties.locale].uploadbtn;
-    this.y = translations[this.properties.locale].y;
-    this.n = translations[this.properties.locale].n;
-    this.todayBtn = translations[this.properties.locale].todayBtn;
+    this.txtdir = translations[this.locale].txtdir;
+    this.signhere = translations[this.locale].signhere;
+    this.enteradd = translations[this.locale].enteradd;
+    this.draghere = translations[this.locale].draghere;
+    this.uploadbtn = translations[this.locale].uploadbtn;
+    this.y = translations[this.locale].y;
+    this.n = translations[this.locale].n;
+    this.todayBtn = translations[this.locale].todayBtn;
   }
 
   _translateOnLoad() {
@@ -96,7 +96,7 @@ export class TranslateMod extends LitElement {
   }
 
   _handleLanguageChange(event) {
-    this.properties.locale = event.target.value;
+    this.locale = event.target.value;
     this._setTranslations();
     this._translatePage();
   }
@@ -116,7 +116,7 @@ export class TranslateMod extends LitElement {
       bubbles: true,
       cancelable: false,
       composed: true,
-      detail: this.properties.locale,
+      detail: this.locale,
     });
     this.dispatchEvent(this.valueChangeEvent);
   }
@@ -143,7 +143,7 @@ export class TranslateMod extends LitElement {
   }
 
   setLocale(){
-    document.documentElement.lang = this.properties.locale;
+    document.documentElement.lang = this.locale;
     document.documentElement.dir = this.txtdir;
   }
 
