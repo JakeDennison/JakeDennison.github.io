@@ -67,6 +67,7 @@ export class TranslateMod extends LitElement {
   firstUpdated() {
     const select = this.shadowRoot.querySelector('#language-select');
     select.value = this.locale;
+    console.log("first updated is calling")
   }
 
   _setTranslations() {
