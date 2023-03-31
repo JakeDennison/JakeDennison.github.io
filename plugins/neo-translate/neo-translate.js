@@ -47,15 +47,16 @@ export class TranslateMod extends LitElement {
   }
 
   render() {
+    const { locale } = this.properties;
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
       <div class="container-fluid">
         <div class="row">
           <select class="form-select m-0 col-md-3 col-sm-12" aria-label="Language" id="language-select" @change="${this._handleLanguageChange}">
-            ${Object.keys(translations).map(locale => html`
-              <option value="${locale}" ?selected="${this.properties.locale === locale}">
-                ${translations[locale].label}
+            ${Object.keys(translations).map(loc => html`
+              <option value="${loc}" ?selected="${locale === loc}">
+                ${translations[loc].label}
               </option>
             `)}
           </select>
