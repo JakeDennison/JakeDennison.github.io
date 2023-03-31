@@ -61,16 +61,13 @@ export class TranslateMod extends LitElement {
           </select>
         </div>
       </div>
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const select = document.querySelector('#language-select');
-          select.value = '${this.locale}';
-          console.log("manual call worked")
-        });
-      </script>
     `;
   }
   
+  firstUpdated() {
+    const select = this.shadowRoot.querySelector('#language-select');
+    select.value = this.locale;
+  }
 
   _setTranslations() {
     const localeTranslations = translations[this.locale] || {};
