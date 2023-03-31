@@ -68,11 +68,18 @@ export class TranslateMod extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     console.log('Connected to DOM');
+    const select = this.shadowRoot.querySelector('#language-select');
+    select.value = this.locale;
+    this.locale = "en"
   }
 
   firstUpdated() {
     const select = this.shadowRoot.querySelector('#language-select');
     select.value = this.locale;
+    console.log('First updated is calling');
+    this.locale = "en"
+    this._setTranslations();
+    this._translatePage();
   }
 
   _setTranslations() {
