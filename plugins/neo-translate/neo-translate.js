@@ -65,14 +65,6 @@ export class TranslateMod extends LitElement {
     `;
   }
   
-  connectedCallback() {
-    super.connectedCallback();
-    console.log('Connected to DOM');
-    const select = this.shadowRoot.querySelector('#language-select');
-    select.value = this.locale;
-    this.locale = "en"
-  }
-
   firstUpdated() {
     const select = this.shadowRoot.querySelector('#language-select');
     select.value = this.locale;
@@ -92,12 +84,6 @@ export class TranslateMod extends LitElement {
     this.y = localeTranslations.y || '';
     this.n = localeTranslations.n || '';
     this.todayBtn = localeTranslations.todayBtn || '';
-  }
-
-  _translateOnLoad() {
-    this._setTranslations();
-    this._translatePage();
-    console.log("function called on load");
   }
 
   _handleLanguageChange(event) {
