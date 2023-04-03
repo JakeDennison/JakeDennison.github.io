@@ -1,6 +1,7 @@
 neo-ar plugin//3d object viewer.
 
 version 1.0
+Plugin uses three.js 
 
 Properties
 
