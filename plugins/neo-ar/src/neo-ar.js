@@ -29,7 +29,7 @@ class AnnoElement extends LitElement {
 
   static get styles() {
     return css`
-      :host {
+      canvas {
         display: block;
         width: 100%;
         height: 100%;
@@ -43,6 +43,9 @@ class AnnoElement extends LitElement {
     this.src = 'https://jsdenintex.github.io/plugins/neo-ar/dist/assets/valve.gltf';
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    this.light = new THREE.DirectionalLight(0xffffff, 1);
+    this.light.position.set(0, 1, 1);
+    this.scene.add(this.light);
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setClearColor(0xffffff, 1);
     this.renderer.setSize(600, 600);
@@ -106,6 +109,7 @@ class AnnoElement extends LitElement {
       this.model.rotation.y += delta * 1;
     }
     this.renderer.render(this.scene, this.camera);
+    this.light.position.copy(this.camera.position);
   }
 
   updateSize() {
