@@ -70,26 +70,26 @@ class ARElement extends LitElement {
 
   initScene() {
     const renderer = new WebGLRenderer({ antialias: true });
-    renderer.setSize(600, 600);
+    renderer.setSize(this.clientWidth, this.clientHeight); // set initial size to match container
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.domElement.style.width = '100%';
     this.container.appendChild(renderer.domElement);
-
-    const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 0, 10); // Adjust the camera position
   
-    const controls = new OrbitControls(camera, renderer.domElement); // Add OrbitControls
+    const camera = new PerspectiveCamera(75, this.clientWidth / this.clientHeight, 0.1, 1000);
+    camera.position.set(0, 0, 10);
   
+    const controls = new OrbitControls(camera, renderer.domElement);
+    
     const scene = new Scene();
-    scene.background = new Color(0xf1f1f1);
+    scene.background = new Color(0xffffff);
   
     const ambientLight = new AmbientLight(0xffffff, 0.75);
     scene.add(ambientLight);
-
+  
     const directionalLight = new DirectionalLight(0xffffff, 0.75);
     directionalLight.position.set(1, 1, 1);
     scene.add(directionalLight);
-
+  
     const loader = new GLTFLoader();
     loader.load(this.src, (gltf) => {
       scene.add(gltf.scene);
@@ -98,12 +98,21 @@ class ARElement extends LitElement {
       console.error('An error occurred:', error);
       this.error = 'Failed to load the model';
     });
-
+  
+    const resize = () => {
+      const { clientWidth, clientHeight } = this;
+      camera.aspect = clientWidth / clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(clientWidth, clientHeight);
+    };
+  
+    window.addEventListener('resize', resize);
+    
     const animate = () => {
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
     };
-
+  
     animate();
   }
 
