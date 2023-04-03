@@ -40,7 +40,7 @@ class AnnoElement extends LitElement {
 
   constructor() {
     super();
-    this.src = 'https://jsdenintex.github.io/plugins/neo-ar/assets/valve.gltf';
+    this.src = 'https://jsdenintex.github.io/plugins/neo-ar/dist/assets/valve.gltf';
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(45, this.clientWidth / this.clientHeight, 0.1, 100);
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -119,7 +119,6 @@ class AnnoElement extends LitElement {
       <div>
         <slot></slot>
         ${licenseLink}
-        "Valve 01" (https://skfb.ly/6WPTL) by liebherr996litronic is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
       </div>
     `;
   }
