@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html, css } from 'lit-element';
 import { WebGLRenderer, PerspectiveCamera, Scene, Color, AmbientLight, DirectionalLight } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -21,6 +21,21 @@ class ARElement extends LitElement {
       }
     };
   }
+
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
+  
+      .container {
+        width: 100%;
+        height: 600px;
+        position: relative;
+      }
+    `;
+  }
+  
 
   static get properties() {
     return {
@@ -49,23 +64,22 @@ class ARElement extends LitElement {
 
   initScene() {
     const renderer = new WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(this.container.clientWidth, 600);
     renderer.setPixelRatio(window.devicePixelRatio);
     this.container.appendChild(renderer.domElement);
-  
+
     const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 0, 10); // Adjust the camera position
   
     const controls = new OrbitControls(camera, renderer.domElement); // Add OrbitControls
   
     const scene = new Scene();
-    scene.background = new Color(0x000000);
+    scene.background = new Color(0xf1f1f1);
   
-
-    const ambientLight = new AmbientLight(0xffffff, 0.5);
+    const ambientLight = new AmbientLight(0xffffff, 0.75);
     scene.add(ambientLight);
 
-    const directionalLight = new DirectionalLight(0xffffff, 0.5);
+    const directionalLight = new DirectionalLight(0xffffff, 0.75);
     directionalLight.position.set(1, 1, 1);
     scene.add(directionalLight);
 
@@ -101,7 +115,7 @@ class ARElement extends LitElement {
       return html`<p>${this.error}</p>`;
     }
     return html`
-      <div>
+      <div class="container">
         ${this.container}
         <slot></slot>
       </div>
