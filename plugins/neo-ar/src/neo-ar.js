@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit-element';
-import { WebGLRenderer, PerspectiveCamera, Scene, Color, AmbientLight, DirectionalLight, GLTFLoader } from 'three';
+import { WebGLRenderer, PerspectiveCamera, Scene, Color, AmbientLight, DirectionalLight } from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 class ARElement extends LitElement {
   static getMetaConfig() {
