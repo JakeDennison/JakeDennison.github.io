@@ -70,9 +70,13 @@ class ARElement extends LitElement {
 
   initScene() {
     const renderer = new WebGLRenderer({ antialias: true });
-    renderer.setSize(this.container.clientWidth, 600);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    this.container.appendChild(renderer.domElement);
+
+    setTimeout(() => {
+      const modelContainer = this.shadowRoot.getElementById('model-container');
+      renderer.setSize(modelContainer.clientWidth, 600);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      this.container.appendChild(renderer.domElement);
+    }, 0);
 
     const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 0, 10); // Adjust the camera position
@@ -121,11 +125,11 @@ class ARElement extends LitElement {
       return html`<p>${this.error}</p>`;
     }
     return html`
-      <div class="container">
+      <div class="container" id="model-container">
         ${this.container}
         <slot></slot>
       </div>
-    `;
+  `;
   }
 }
 
