@@ -104,7 +104,21 @@ class AnnoElement extends LitElement {
   }
 
   render() {
-    return html``;
+    if (!this.src) {
+      return html`<p>No model source provided</p>`;
+    }
+  
+    // check if a license file exists
+    const licenseUrl = this.src.replace('.gltf', '-license.txt');
+    const licenseLink = html`<a href=${licenseUrl} target="_blank">License</a>`;
+  
+    return html`
+      <div>
+        <slot></slot>
+        ${licenseLink}
+        "Valve 01" (https://skfb.ly/6WPTL) by liebherr996litronic is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+      </div>
+    `;
   }
 }
 
