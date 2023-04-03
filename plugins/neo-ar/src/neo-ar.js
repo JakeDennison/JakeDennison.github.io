@@ -70,6 +70,9 @@ class ARElement extends LitElement {
 
   initScene() {
     const renderer = new WebGLRenderer({ antialias: true });
+    renderer.setSize(600, 600);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    this.container.appendChild(renderer.domElement);
 
     const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 0, 10); // Adjust the camera position
