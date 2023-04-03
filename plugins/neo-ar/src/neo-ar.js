@@ -2,25 +2,10 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { html, LitElement, css } from 'lit';
 
-class AnnoElement extends LitElement {
-  static getMetaConfig() {
-    // plugin contract information
+class ModelViewer extends LitElement {
+  static get properties() {
     return {
-      controlName: 'neo-ar',
-      fallbackDisableSubmit: false,
-      description: 'Display AR images',
-      iconUrl: "image",
-      groupName: 'Visual Data',
-      version: '1.0',
-      src: {type: String},
-      properties: {
-      },
-      standardProperties: {
-        fieldLabel: true,
-        readOnly: true,
-        required: true,
-        description: true,
-      }
+      src: { type: String }
     };
   }
 
@@ -28,19 +13,23 @@ class AnnoElement extends LitElement {
     return css`
       :host {
         display: block;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
       }
     `;
   }
 
   constructor() {
     super();
-    this.src = 'assets/2CylinderEngine.glb';
+    this.src = '';
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    this.renderer = new THREE.WebGLRenderer({ alpha: true });
-    this.renderer.setClearColor(0x000000, 0);
-    this.renderer.setSize(600, 600);
+    this.camera = new THREE.PerspectiveCamera(45, this.clientWidth / this.clientHeight, 0.1, 100);
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer.setClearColor(0xffffff, 1);
+    this.renderer.setSize(this.clientWidth, this.clientHeight);
     this.clock = new THREE.Clock();
+    this.model = null;
   }
 
   connectedCallback() {
@@ -50,7 +39,23 @@ class AnnoElement extends LitElement {
     this.animate();
   }
 
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.scene.remove(this.model);
+    this.model.traverse(child => {
+      if (child.isMesh) {
+        child.geometry.dispose();
+        child.material.dispose();
+      }
+    });
+    this.model = null;
+  }
+
   loadModel() {
+    if (!this.src) {
+      console.error('No model source provided');
+      return;
+    }
     const loader = new GLTFLoader();
     loader.load(
       this.src,
@@ -84,11 +89,8 @@ class AnnoElement extends LitElement {
   }
 
   render() {
-    if (!this.src) {
-      return html`<p>No image found</p>`;
-    }
     return html``;
   }
 }
 
-customElements.define('neo-ar', AnnoElement);
+customElements.define('model-viewer', ModelViewer);
