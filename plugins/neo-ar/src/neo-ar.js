@@ -70,7 +70,7 @@ class ARElement extends LitElement {
 
   initScene() {
     const renderer = new WebGLRenderer({ antialias: true });
-    renderer.setSize(600, 600);
+    renderer.setSize(this.container.clientWidth, 600);
     renderer.setPixelRatio(window.devicePixelRatio);
     this.container.appendChild(renderer.domElement);
 
