@@ -38,7 +38,6 @@ class ARElement extends LitElement {
       .container {
         width: 100%;
         height: 600px;
-        position: relative;
       }
     `;
   }
