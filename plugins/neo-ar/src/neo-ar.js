@@ -2,10 +2,25 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { html, LitElement, css } from 'lit';
 
-class ModelViewer extends LitElement {
-  static get properties() {
+class AnnoElement extends LitElement {
+  static getMetaConfig() {
+    // plugin contract information
     return {
-      src: { type: String }
+      controlName: 'neo-ar',
+      fallbackDisableSubmit: false,
+      description: 'Display AR images',
+      iconUrl: "image",
+      groupName: 'Visual Data',
+      version: '1.0',
+      src: {type: String},
+      properties: {
+      },
+      standardProperties: {
+        fieldLabel: true,
+        readOnly: true,
+        required: true,
+        description: true,
+      }
     };
   }
 
@@ -93,4 +108,4 @@ class ModelViewer extends LitElement {
   }
 }
 
-customElements.define('model-viewer', ModelViewer);
+customElements.define('neo-ar', AnnoElement);
