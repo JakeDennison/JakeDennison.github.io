@@ -60,7 +60,9 @@ class ARElement extends LitElement {
   firstUpdated() {
     super.firstUpdated();
     this.initScene();
+    window.dispatchEvent(new Event('resize'));
   }
+  
 
   disconnectedCallback() {
     super.disconnectedCallback();
