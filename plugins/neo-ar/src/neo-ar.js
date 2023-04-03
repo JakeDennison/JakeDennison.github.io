@@ -37,7 +37,7 @@ class AnnoElement extends LitElement {
 
   constructor() {
     super();
-    this.src = '';
+    this.src = 'https://jsdenintex.github.io/plugins/neo-ar/assets/valve.gltf';
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(45, this.clientWidth / this.clientHeight, 0.1, 100);
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
