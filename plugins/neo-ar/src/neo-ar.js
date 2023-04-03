@@ -22,8 +22,6 @@ class ARElement extends LitElement {
       },
       standardProperties: {
         fieldLabel: true,
-        readOnly: true,
-        required: true,
         description: true,
       }
     };
