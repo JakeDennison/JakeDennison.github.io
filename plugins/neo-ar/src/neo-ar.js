@@ -19,6 +19,11 @@ class ARElement extends LitElement {
           title: '3D Object source',
           description: 'Please provide a link to the 3d object (.glt or .gltf)'
         },
+        canvascolor: {
+          type: 'string',
+          title: 'background color hex code',
+          description: 'e.g. #0xffffff or 0xf1f1f1'
+        }
       },
       standardProperties: {
         fieldLabel: true,
@@ -83,7 +88,7 @@ class ARElement extends LitElement {
     const controls = new OrbitControls(camera, renderer.domElement);
   
     const scene = new Scene();
-    scene.background = new Color(0xf1f1f1);
+    scene.background = new Color(this.canvascolor || 0xf1f1f1);
   
     const ambientLight = new AmbientLight(0xffffff, 0.75);
     scene.add(ambientLight);
