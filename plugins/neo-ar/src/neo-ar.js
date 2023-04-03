@@ -12,8 +12,10 @@ class AnnoElement extends LitElement {
       iconUrl: "image",
       groupName: 'Visual Data',
       version: '1.0',
-      src: {type: String},
-      properties: {
+      src: {
+        type: 'string',
+        title: '3D File',
+        description: 'please use a .gltf or .glt file'
       },
       standardProperties: {
         fieldLabel: true,
