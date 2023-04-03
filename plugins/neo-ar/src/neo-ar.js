@@ -1,6 +1,5 @@
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { html, LitElement, css } from 'lit';
+import { LitElement, html } from 'lit-element';
+import * as Cesium from 'cesium/Cesium';
 
 class AnnoElement extends LitElement {
   static getMetaConfig() {
@@ -27,51 +26,53 @@ class AnnoElement extends LitElement {
     };
   }
 
-  static get styles() {
-    return css`
-      canvas {
-        display: block;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-      }
-    `;
-  }
-
   constructor() {
     super();
-    this.src = 'https://jsdenintex.github.io/plugins/neo-ar/dist/assets/valve.gltf';
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.renderer.setClearColor(0xffffff, 1);
-    this.renderer.setSize(600, 600);
-    this.clock = new THREE.Clock();
+    this.src = '';
+    this.viewer = null;
     this.model = null;
-    this.light = null;
+    this.ready = false;
     this.updateSize = this.updateSize.bind(this);
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.shadowRoot.appendChild(this.renderer.domElement);
+    this.viewer = new Cesium.Viewer(this.shadowRoot, {
+      shouldAnimate: true,
+      animation: false,
+      timeline: false,
+      fullscreenButton: false,
+      geocoder: false,
+      homeButton: false,
+      sceneModePicker: false,
+      navigationHelpButton: false,
+      baseLayerPicker: false
+    });
+    this.viewer.scene.globe.show = false;
+    this.viewer.camera.setView({
+      destination: new Cesium.Cartesian3.fromDegrees(0, 0, 2000),
+      orientation: {
+        heading: 0,
+        pitch: -Cesium.Math.PI_OVER_TWO,
+        roll: 0
+      }
+    });
     this.loadModel();
-    this.animate();
+    this.updateSize();
     window.addEventListener('resize', this.updateSize);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     window.removeEventListener('resize', this.updateSize);
-    this.scene.remove(this.model);
-    this.model.traverse(child => {
-      if (child.isMesh) {
-        child.geometry.dispose();
-        child.material.dispose();
-      }
-    });
-    this.model = null;
-    this.scene.remove(this.light);
+    if (this.model) {
+      this.viewer.entities.remove(this.model);
+      this.model = null;
+    }
+    if (this.viewer) {
+      this.viewer.destroy();
+      this.viewer = null;
+    }
   }
 
   loadModel() {
@@ -79,72 +80,41 @@ class AnnoElement extends LitElement {
       console.error('No model source provided');
       return;
     }
-    const loader = new GLTFLoader();
-    loader.load(
-      this.src,
-      gltf => {
-        this.model = gltf.scene;
-        this.model.scale.set(1, 1, 1);
-        this.model.position.set(0, 0, 0);
-        const material = new THREE.MeshStandardMaterial({
-          color: 0xffffff,
-          roughness: 0.5,
-          metalness: 0.5
-        });
-        this.model.traverse(child => {
-          if (child.isMesh) {
-            child.material = material;
-          }
-        });
-        this.scene.add(this.model);
-        this.camera.position.set(0, 0, 2);
-        this.camera.lookAt(this.scene.position);
-        this.light = new THREE.DirectionalLight(0xffffff, 1);
-        this.light.position.set(0, 1, 1);
-        this.scene.add(this.light);
-      },
-      () => {},
-      error => {
-        console.error(`Error loading model from ${this.src}:`, error);
-        this.dispatchEvent(
-          new CustomEvent('error', {
-            detail: {
-              message: `Error loading model from ${this.src}: ${error.message}`,
-            },
-          })
-        );
-      }
-    );
-  }
-
-  animate() {
-    requestAnimationFrame(() => this.animate());
-    const delta = this.clock.getDelta();
-    if (this.model) {
-      this.model.rotation.y += delta * 1;
-    }
-    this.renderer.render(this.scene, this.camera);
-    if (this.light) {
-      this.light.position.copy(this.camera.position);
-    }
+    const tileset = this.viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
+      url: this.src,
+      maximumNumberOfLoadedTiles: 1000
+    }));
+    tileset.readyPromise.then(() => {
+      this.ready = true;
+    }).catch(error => {
+      console.error(`Error loading model from ${this.src}:`, error);
+      this.dispatchEvent(
+        new CustomEvent('error', {
+          detail: {
+            message: `Error loading model from ${this.src}: ${error.message}`,
+          },
+        })
+      );
+    });
+    this.model = tileset;
   }
 
   updateSize() {
     const { width, height } = this.getBoundingClientRect();
-    this.renderer.setSize(width, height);
-    this.camera.aspect = width / height;
-    this.camera.updateProjectionMatrix();
+    this.viewer.canvas.width = width;
+    this.viewer.canvas.height = height;
   }
 
   render() {
     if (!this.src) {
       return html`<p>No model source provided</p>`;
     }
-  
+    if (!this.ready) {
+      return html`<p>Loading model...</p>`;
+    }
     // check if a license file exists
     const licenseUrl = this.src.replace('.gltf', '-license.txt');
     const licenseLink = html`<a href=${licenseUrl} target="_blank">License</a>`;
-  
     return html`
       <div>
         <slot></slot>
