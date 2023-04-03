@@ -53,6 +53,10 @@ class ARElement extends LitElement {
       console.error('An error occurred:', error);
       this.error = 'Failed to load the model';
     });
+    
+    loader.onError = (error) => {
+      console.error('An error occurred while loading the model:', error);
+    };
 
     const animate = () => {
       requestAnimationFrame(animate);
