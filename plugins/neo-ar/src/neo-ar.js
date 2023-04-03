@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'lit';
 import { WebGLRenderer, PerspectiveCamera, Scene, Color, AmbientLight, DirectionalLight } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -13,6 +13,13 @@ class ARElement extends LitElement {
       iconUrl: "image",
       groupName: 'Visual Data',
       version: '1.0',
+      properties: {
+        src: {
+          type: 'string',
+          title: '3D Object source',
+          description: 'Please provide a link to the 3d object (.glt or .gltf)'
+        },
+      },
       standardProperties: {
         fieldLabel: true,
         readOnly: true,
@@ -39,7 +46,6 @@ class ARElement extends LitElement {
 
   static get properties() {
     return {
-      src: { type: String },
       modelLoaded: { type: Boolean },
       error: { type: String },
       container: { type: Object },
@@ -48,7 +54,7 @@ class ARElement extends LitElement {
 
   constructor() {
     super();
-    this.src = 'https://jsdenintex.github.io/plugins/neo-ar/dist/assets/valve.gltf';
+    this.src = '';
     this.container = document.createElement('div');
   }
 
@@ -64,7 +70,7 @@ class ARElement extends LitElement {
 
   initScene() {
     const renderer = new WebGLRenderer({ antialias: true });
-    renderer.setSize(this.container.clientWidth, 600);
+    renderer.setSize(600, 600);
     renderer.setPixelRatio(window.devicePixelRatio);
     this.container.appendChild(renderer.domElement);
 
