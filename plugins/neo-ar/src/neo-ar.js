@@ -72,6 +72,7 @@ class ARElement extends LitElement {
     const renderer = new WebGLRenderer({ antialias: true });
     renderer.setSize(600, 600);
     renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.domElement.style.width = '100%';
     this.container.appendChild(renderer.domElement);
 
     const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -106,13 +107,6 @@ class ARElement extends LitElement {
     animate();
   }
 
-  firstUpdated() {
-    const modelContainer = this.shadowRoot.getElementById('model-container');
-    this.renderer.setSize(modelContainer.clientWidth, 600);
-    this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.container.appendChild(this.renderer.domElement);
-  }
-  
   disposeScene() {
     // Dispose of the Three.js resources here when the component is disconnected from the DOM
   }
