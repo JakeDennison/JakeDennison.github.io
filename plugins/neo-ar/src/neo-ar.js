@@ -78,6 +78,7 @@ class ARElement extends LitElement {
   
     const camera = new PerspectiveCamera(75, this.clientWidth / 600, 0.1, 1000);
     camera.position.set(0, 0, 10);
+    camera.rotation.x = -Math.PI / 6; // set camera pitch to look down slightly
   
     const controls = new OrbitControls(camera, renderer.domElement);
   
@@ -117,7 +118,6 @@ class ARElement extends LitElement {
     animate();
   }
   
-
   disposeScene() {
     // Dispose of the Three.js resources here when the component is disconnected from the DOM
   }
