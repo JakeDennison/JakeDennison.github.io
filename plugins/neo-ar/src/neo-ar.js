@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit-element';
+import { html, LitElement, css } from 'lit';
 import { WebGLRenderer, PerspectiveCamera, Scene, Color, AmbientLight, DirectionalLight, GLTFLoader } from 'three';
 
 class ARElement extends LitElement {
