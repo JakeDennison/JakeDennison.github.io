@@ -1,3 +1,7 @@
+neo-ar plugin//3d object viewer.
+
+version 1.0
+
 Properties
 
 The neo-ar plugin provides the following properties:
