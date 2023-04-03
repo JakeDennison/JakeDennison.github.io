@@ -103,18 +103,16 @@ class ARElement extends LitElement {
     animate();
   }
 
-
   updated() {
-    if (!this.rendererAdded) {
+    if (!this.rendererAdded && this.renderer) {
       const modelContainer = this.shadowRoot.getElementById('model-container');
-      const renderer = this.renderer;
-      renderer.setSize(modelContainer.clientWidth, 600);
-      renderer.setPixelRatio(window.devicePixelRatio);
-      this.container.appendChild(renderer.domElement);
+      this.renderer.setSize(modelContainer.clientWidth, 600);
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+      this.container.appendChild(this.renderer.domElement);
       this.rendererAdded = true;
     }
   }
-
+  
   disposeScene() {
     // Dispose of the Three.js resources here when the component is disconnected from the DOM
   }
