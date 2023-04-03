@@ -1,128 +1,88 @@
 import { LitElement, html } from 'lit-element';
-import * as BABYLON from "@babylonjs/core/Legacy/legacy";
+import { WebGLRenderer, PerspectiveCamera, Scene, Color, AmbientLight, DirectionalLight, GLTFLoader } from 'three';
 
-class AnnoElement extends LitElement {
-  static getMetaConfig() {
-    // plugin contract information
-    return {
-      controlName: 'neo-ar',
-      fallbackDisableSubmit: false,
-      description: 'Display AR images',
-      iconUrl: "image",
-      groupName: 'Visual Data',
-      version: '1.0',
-      standardProperties: {
-        fieldLabel: true,
-        readOnly: true,
-        required: true,
-        description: true,
-      }
-    };
-  }
-
+class ARElement extends LitElement {
   static get properties() {
     return {
-      src: { type: String }
+      modelLoaded: { type: Boolean },
+      error: { type: String },
+      container: { type: Object },
     };
   }
 
   constructor() {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/neo-ar/dist/assets/valve.gltf';
-    this.canvas = null;
-    this.engine = null;
-    this.scene = null;
-    this.model = null;
-    this.ready = false;
-    this.updateSize = this.updateSize.bind(this);
+    this.container = document.createElement('div');
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.canvas = document.createElement('canvas');
-    this.shadowRoot.appendChild(this.canvas);
-    this.engine = new BABYLON.Engine(this.canvas, true);
-    this.scene = new BABYLON.Scene(this.engine);
-    this.scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
-    this.scene.createDefaultCameraOrLight(true, true, true);
-    this.loadModel();
-    this.updateSize();
-    window.addEventListener('resize', this.updateSize);
-    this.engine.runRenderLoop(() => {
-      if (this.model) {
-        this.model.rotation.y += 0.01;
-      }
-      this.scene.render();
-    });
+    this.initScene();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener('resize', this.updateSize);
-    if (this.model) {
-      this.model.dispose();
-      this.model = null;
-    }
-    if (this.scene) {
-      this.scene.dispose();
-      this.scene = null;
-    }
-    if (this.engine) {
-      this.engine.stopRenderLoop();
-      this.engine.dispose();
-      this.engine = null;
-    }
+    this.disposeScene();
   }
 
-  loadModel() {
-    if (!this.src) {
-      console.error('No model source provided');
-      return;
-    }
-    const loader = new BABYLON.AssetsManager(this.scene);
-    const task = loader.addMeshTask('model', '', './', this.src);
-    task.onSuccess = task => {
-      this.model = task.loadedMeshes[0];
-      this.model.scaling = new BABYLON.Vector3(0.1, 0.1, 0.1);
-      this.model.position = new BABYLON.Vector3(0, 0, -1);
-      this.ready = true;
+  initScene() {
+    const renderer = new WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    this.container.appendChild(renderer.domElement);
+
+    const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
+
+    const scene = new Scene();
+    scene.background = new Color(0x000000);
+
+    const ambientLight = new AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    const directionalLight = new DirectionalLight(0xffffff, 0.5);
+    directionalLight.position.set(1, 1, 1);
+    scene.add(directionalLight);
+
+    const loader = new GLTFLoader();
+    loader.load(this.src, (gltf) => {
+      scene.add(gltf.scene);
+      this.modelLoaded = true;
+    }, undefined, (error) => {
+      console.error('An error occurred:', error);
+      this.error = 'Failed to load the model';
+    });
+
+    const animate = () => {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
     };
-    task.onError = (task, message, exception) => {
-      console.error(`Error loading model from ${this.src}:`, message, exception);
-      this.dispatchEvent(
-        new CustomEvent('error', {
-          detail: {
-            message: `Error loading model from ${this.src}: ${message}`,
-          },
-        })
-      );
-    };
-    loader.load();
+
+    animate();
   }
 
-  updateSize() {
-    const { width, height } = this.getBoundingClientRect();
-    this.canvas.width = width;
-    this.canvas.height = height;
+  disposeScene() {
+    // Dispose of the Three.js resources here when the component is disconnected from the DOM
   }
 
   render() {
     if (!this.src) {
       return html`<p>No model source provided</p>`;
     }
-    if (!this.ready) {
+    if (!this.modelLoaded) {
       return html`<p>Loading model...</p>`;
     }
-    // check if a license file exists
-    const licenseUrl = this.src.replace('.gltf', '-license.txt');
-    const licenseLink = html`<a href=${licenseUrl} target="_blank">License</a>`;
+    if (this.error) {
+      return html`<p>${this.error}</p>`;
+    }
     return html`
       <div>
+        ${this.container}
         <slot></slot>
-        ${licenseLink}
       </div>
     `;
   }
 }
 
-customElements.define('neo-ar', AnnoElement);
+customElements.define('neo-ar', ARElement);
