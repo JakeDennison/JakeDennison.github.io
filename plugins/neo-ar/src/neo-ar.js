@@ -1,9 +1,28 @@
-import { html, LitElement, css } from 'lit';
+import { LitElement, html } from 'lit-element';
 import { WebGLRenderer, PerspectiveCamera, Scene, Color, AmbientLight, DirectionalLight, GLTFLoader } from 'three';
 
 class ARElement extends LitElement {
+  static getMetaConfig() {
+    // plugin contract information
+    return {
+      controlName: 'neo-ar',
+      fallbackDisableSubmit: false,
+      description: 'Display AR images',
+      iconUrl: "image",
+      groupName: 'Visual Data',
+      version: '1.0',
+      standardProperties: {
+        fieldLabel: true,
+        readOnly: true,
+        required: true,
+        description: true,
+      }
+    };
+  }
+
   static get properties() {
     return {
+      src: { type: String },
       modelLoaded: { type: Boolean },
       error: { type: String },
       container: { type: Object },
@@ -53,10 +72,6 @@ class ARElement extends LitElement {
       console.error('An error occurred:', error);
       this.error = 'Failed to load the model';
     });
-    
-    loader.onError = (error) => {
-      console.error('An error occurred while loading the model:', error);
-    };
 
     const animate = () => {
       requestAnimationFrame(animate);
