@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit-element';
 import { WebGLRenderer, PerspectiveCamera, Scene, Color, AmbientLight, DirectionalLight } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 class ARElement extends LitElement {
   static getMetaConfig() {
@@ -51,12 +52,15 @@ class ARElement extends LitElement {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     this.container.appendChild(renderer.domElement);
-
+  
     const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
-
+    camera.position.set(0, 0, 10); // Adjust the camera position
+  
+    const controls = new OrbitControls(camera, renderer.domElement); // Add OrbitControls
+  
     const scene = new Scene();
     scene.background = new Color(0x000000);
+  
 
     const ambientLight = new AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
