@@ -42,12 +42,13 @@ class AnnoElement extends LitElement {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/neo-ar/dist/assets/valve.gltf';
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, this.clientWidth / this.clientHeight, 0.1, 100);
+    this.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setClearColor(0xffffff, 1);
-    this.renderer.setSize(this.clientWidth, this.clientHeight);
+    this.renderer.setSize(600, 600);
     this.clock = new THREE.Clock();
     this.model = null;
+    this.updateSize = this.updateSize.bind(this);
   }
 
   connectedCallback() {
@@ -55,10 +56,12 @@ class AnnoElement extends LitElement {
     this.shadowRoot.appendChild(this.renderer.domElement);
     this.loadModel();
     this.animate();
+    window.addEventListener('resize', this.updateSize);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    window.removeEventListener('resize', this.updateSize);
     this.scene.remove(this.model);
     this.model.traverse(child => {
       if (child.isMesh) {
@@ -68,7 +71,6 @@ class AnnoElement extends LitElement {
     });
     this.model = null;
   }
-
   loadModel() {
     if (!this.src) {
       console.error('No model source provided');
@@ -104,6 +106,13 @@ class AnnoElement extends LitElement {
       this.model.rotation.y += delta * 1;
     }
     this.renderer.render(this.scene, this.camera);
+  }
+
+  updateSize() {
+    const { width, height } = this.getBoundingClientRect();
+    this.renderer.setSize(width, height);
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
   }
 
   render() {
