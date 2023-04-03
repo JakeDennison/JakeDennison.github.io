@@ -43,14 +43,12 @@ class AnnoElement extends LitElement {
     this.src = 'https://jsdenintex.github.io/plugins/neo-ar/dist/assets/valve.gltf';
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    this.light = new THREE.DirectionalLight(0xffffff, 1);
-    this.light.position.set(0, 1, 1);
-    this.scene.add(this.light);
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setClearColor(0xffffff, 1);
     this.renderer.setSize(600, 600);
     this.clock = new THREE.Clock();
     this.model = null;
+    this.light = null;
     this.updateSize = this.updateSize.bind(this);
   }
 
@@ -73,7 +71,9 @@ class AnnoElement extends LitElement {
       }
     });
     this.model = null;
+    this.scene.remove(this.light);
   }
+
   loadModel() {
     if (!this.src) {
       console.error('No model source provided');
@@ -84,9 +84,24 @@ class AnnoElement extends LitElement {
       this.src,
       gltf => {
         this.model = gltf.scene;
-        this.model.scale.set(0.1, 0.1, 0.1);
-        this.model.position.set(0, 0, -1);
+        this.model.scale.set(1, 1, 1);
+        this.model.position.set(0, 0, 0);
+        const material = new THREE.MeshStandardMaterial({
+          color: 0xffffff,
+          roughness: 0.5,
+          metalness: 0.5
+        });
+        this.model.traverse(child => {
+          if (child.isMesh) {
+            child.material = material;
+          }
+        });
         this.scene.add(this.model);
+        this.camera.position.set(0, 0, 2);
+        this.camera.lookAt(this.scene.position);
+        this.light = new THREE.DirectionalLight(0xffffff, 1);
+        this.light.position.set(0, 1, 1);
+        this.scene.add(this.light);
       },
       () => {},
       error => {
@@ -109,7 +124,9 @@ class AnnoElement extends LitElement {
       this.model.rotation.y += delta * 1;
     }
     this.renderer.render(this.scene, this.camera);
-    this.light.position.copy(this.camera.position);
+    if (this.light) {
+      this.light.position.copy(this.camera.position);
+    }
   }
 
   updateSize() {
