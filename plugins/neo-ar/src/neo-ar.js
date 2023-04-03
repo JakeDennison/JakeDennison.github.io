@@ -1,5 +1,4 @@
 import { LitElement, html } from 'lit-element';
-import * as Cesium from 'cesium/Cesium';
 
 class AnnoElement extends LitElement {
   static getMetaConfig() {
@@ -37,29 +36,34 @@ class AnnoElement extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.viewer = new Cesium.Viewer(this.shadowRoot, {
-      shouldAnimate: true,
-      animation: false,
-      timeline: false,
-      fullscreenButton: false,
-      geocoder: false,
-      homeButton: false,
-      sceneModePicker: false,
-      navigationHelpButton: false,
-      baseLayerPicker: false
-    });
-    this.viewer.scene.globe.show = false;
-    this.viewer.camera.setView({
-      destination: new Cesium.Cartesian3.fromDegrees(0, 0, 2000),
-      orientation: {
-        heading: 0,
-        pitch: -Cesium.Math.PI_OVER_TWO,
-        roll: 0
-      }
-    });
-    this.loadModel();
-    this.updateSize();
-    window.addEventListener('resize', this.updateSize);
+    const script = document.createElement('script');
+    script.setAttribute('src', 'https://cesium.com/downloads/cesiumjs/releases/1.78/Build/Cesium/Cesium.js');
+    script.onload = () => {
+      this.viewer = new Cesium.Viewer(this.shadowRoot, {
+        shouldAnimate: true,
+        animation: false,
+        timeline: false,
+        fullscreenButton: false,
+        geocoder: false,
+        homeButton: false,
+        sceneModePicker: false,
+        navigationHelpButton: false,
+        baseLayerPicker: false
+      });
+      this.viewer.scene.globe.show = false;
+      this.viewer.camera.setView({
+        destination: new Cesium.Cartesian3.fromDegrees(0, 0, 2000),
+        orientation: {
+          heading: 0,
+          pitch: -Cesium.Math.PI_OVER_TWO,
+          roll: 0
+        }
+      });
+      this.loadModel();
+      this.updateSize();
+      window.addEventListener('resize', this.updateSize);
+    };
+    document.body.appendChild(script);
   }
 
   disconnectedCallback() {
