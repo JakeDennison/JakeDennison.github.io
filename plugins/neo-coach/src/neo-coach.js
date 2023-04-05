@@ -51,11 +51,11 @@ class coachelement extends LitElement {
     super();
     this.formtime = 0;
     console.log(this.formtime)
-    this.reminderinterval = 5; // default to 5 minutes
+    this.reminderinterval = 0.1; // default to 5 minutes
     console.log(this.reminderinterval)
     this.remindermessage = 'You have been working on this form for a while. Would you like to take a break?';
     console.log(this.remindermessage)
-    this.timelimit = 10; // default to 10 minutes
+    this.timelimit = 0.5; // default to 10 minutes
     console.log(this.timelimit)
     this.timesup = 'Time is up! Please refresh the page to start again.'; 
     console.log(this.timesup)
