@@ -61,13 +61,18 @@ class coachelement extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-
+  
     // start the timer when the element is added to the page
     this.timerId = setInterval(() => {
-      this.formtime += 1;
-      this.requestUpdate('formtime', null);
+      if (this.formtime < this.timelimit * 60) { // check if time limit has been reached
+        this.formtime += 1;
+      } else {
+        clearInterval(this.timerId); // stop the timer
+        this.showTimesUp();
+      }
     }, 1000); // 1 second interval
   }
+  
 
   disconnectedCallback() {
     super.disconnectedCallback();
