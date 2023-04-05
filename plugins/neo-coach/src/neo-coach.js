@@ -65,6 +65,7 @@ class coachelement extends LitElement {
     // start the timer when the element is added to the page
     this.timerId = setInterval(() => {
       this.formtime += 1;
+      this.requestUpdate('formtime', null);
     }, 1000); // 1 second interval
   }
 
@@ -108,7 +109,6 @@ class coachelement extends LitElement {
       <slot></slot>
     `;
   }
-  
 }
 
 customElements.define('neo-coach', coachelement);
