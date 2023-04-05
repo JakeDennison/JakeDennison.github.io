@@ -49,10 +49,6 @@ class coachelement extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    console.log('formtime:', this.formtime);
-    console.log('reminderinterval:', this.reminderinterval);
-    console.log('timelimit:', this.timelimit);
-    console.log('timesup:', this.timesup);
     // start the timer when the element is added to the page
     this.timerId = setInterval(() => {
       console.log('Timer tick');
