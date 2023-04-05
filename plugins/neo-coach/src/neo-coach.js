@@ -47,21 +47,26 @@ class coachelement extends LitElement {
     };
   }
 
+  static get hasChanged() {
+    return {
+      formtime: true,
+    };
+  }
+
+  get clockDisplay() {
+    const minutes = Math.floor(this.formtime / 60);
+    const seconds = this.formtime % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+
   connectedCallback() {
     super.connectedCallback();
+
     // start the timer when the element is added to the page
     this.timerId = setInterval(() => {
-      console.log('Timer tick');
       this.formtime += 1;
-      if (this.formtime === this.reminderinterval) {
-        this.showReminder();
-      }
-      if (this.formtime === this.timelimit) {
-        this.showTimesUp();
-      }
-    }, 60000); // 1 minute interval
+    }, 1000); // 1 second interval
   }
-  
 
   disconnectedCallback() {
     super.disconnectedCallback();
@@ -98,13 +103,8 @@ class coachelement extends LitElement {
   }
 
   render() {
-    // convert formtime to hours and minutes
-    const hours = Math.floor(this.formtime / 60);
-    const minutes = this.formtime % 60;
-    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-  
     return html`
-      <p>Time spent filling form: ${formattedTime}</p>
+      <p>Time spent filling form: ${this.clockDisplay}</p>
       <slot></slot>
     `;
   }
