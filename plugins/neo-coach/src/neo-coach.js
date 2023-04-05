@@ -49,13 +49,13 @@ class coachelement extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-  
+    console.log('formtime:', this.formtime);
+    console.log('reminderinterval:', this.reminderinterval);
+    console.log('timelimit:', this.timelimit);
+    console.log('timesup:', this.timesup);
     // start the timer when the element is added to the page
     this.timerId = setInterval(() => {
-      console.log('formtime:', this.formtime);
-      console.log('reminderinterval:', this.reminderinterval);
-      console.log('timelimit:', this.timelimit);
-      console.log('timesup:', this.timesup);
+      console.log('Timer tick');
       this.formtime += 1;
       if (this.formtime === this.reminderinterval) {
         this.showReminder();
@@ -65,6 +65,7 @@ class coachelement extends LitElement {
       }
     }, 60000); // 1 minute interval
   }
+  
 
   disconnectedCallback() {
     super.disconnectedCallback();
