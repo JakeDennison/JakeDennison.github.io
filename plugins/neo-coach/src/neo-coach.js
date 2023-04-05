@@ -47,25 +47,15 @@ class coachelement extends LitElement {
     };
   }
 
-  constructor() {
-    super();
-    this.formtime = 0;
-    console.log(this.formtime)
-    this.reminderinterval = 0.1; // default to 5 minutes
-    console.log(this.reminderinterval)
-    this.remindermessage = 'You have been working on this form for a while. Would you like to take a break?';
-    console.log(this.remindermessage)
-    this.timelimit = 0.5; // default to 10 minutes
-    console.log(this.timelimit)
-    this.timesup = 'Time is up! Please refresh the page to start again.'; 
-    console.log(this.timesup)
-  }
-
   connectedCallback() {
     super.connectedCallback();
-
+  
     // start the timer when the element is added to the page
     this.timerId = setInterval(() => {
+      console.log('formtime:', this.formtime);
+      console.log('reminderinterval:', this.reminderinterval);
+      console.log('timelimit:', this.timelimit);
+      console.log('timesup:', this.timesup);
       this.formtime += 1;
       if (this.formtime === this.reminderinterval) {
         this.showReminder();
@@ -111,11 +101,17 @@ class coachelement extends LitElement {
   }
 
   render() {
+    // convert formtime to hours and minutes
+    const hours = Math.floor(this.formtime / 60);
+    const minutes = this.formtime % 60;
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  
     return html`
-      <p>Time spent filling form: ${this.formtime} minutes</p>
+      <p>Time spent filling form: ${formattedTime}</p>
       <slot></slot>
     `;
   }
+  
 }
 
 customElements.define('neo-coach', coachelement);
