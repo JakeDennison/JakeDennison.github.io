@@ -20,7 +20,7 @@ class coachelement extends LitElement {
         },
         reminderinterval: {
           type: 'number',
-          title: 'Reminder interval (mins)',
+          title: 'Reminder interval',
           description: 'Please provide the number of minutes you want the pop-up reminder to happen'
         },
         remindermessage: {
@@ -30,7 +30,7 @@ class coachelement extends LitElement {
         },
         timelimit: {
           type: 'number',
-          title: 'Time limit (mins)',
+          title: 'Time limit',
           description: 'Time limit in minutes you want for filling the form'
         }, 
         timesup: {
