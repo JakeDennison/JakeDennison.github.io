@@ -12,7 +12,7 @@ class coachelement extends LitElement {
       version: '1.0',
       properties: {
         formtime: {
-          title: 'Number of minutes until reminder',
+          title: 'Time used',
           description: 'Output for minutes spent filling the form',
           type: 'number',
           defaultValue: 0,
@@ -50,10 +50,15 @@ class coachelement extends LitElement {
   constructor() {
     super();
     this.formtime = 0;
+    console.log(this.formtime)
     this.reminderinterval = 5; // default to 5 minutes
+    console.log(this.reminderinterval)
     this.remindermessage = 'You have been working on this form for a while. Would you like to take a break?';
+    console.log(this.remindermessage)
     this.timelimit = 10; // default to 10 minutes
+    console.log(this.timelimit)
     this.timesup = 'Time is up! Please refresh the page to start again.'; 
+    console.log(this.timesup)
   }
 
   connectedCallback() {
