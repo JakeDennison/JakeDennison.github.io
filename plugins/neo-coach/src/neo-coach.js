@@ -59,9 +59,16 @@ class coachelement extends LitElement {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
 
+
+
   connectedCallback() {
     super.connectedCallback();
   
+    // Exit the method if the designer is in the URL
+    if (window.location.href.includes('designer')) {
+      return;
+    }
+
     // start the timer when the element is added to the page
     this.timerId = setInterval(() => {
       if (this.formtime < this.timelimit * 60) { // check if time limit has been reached
@@ -73,6 +80,14 @@ class coachelement extends LitElement {
     }, 1000); // 1 second interval
   }
   
+  constructor() {
+    super();
+    this.formtime = 0;
+    this.reminderinterval = 0.2; // default to 5 minutes
+    this.remindermessage = 'You have been working on this form for a while. Would you like to take a break?';
+    this.timelimit = 0.5; // default to 10 minutes
+    this.timesup = 'Time is up! Please refresh the page to start again.'; 
+  }
 
   disconnectedCallback() {
     super.disconnectedCallback();
