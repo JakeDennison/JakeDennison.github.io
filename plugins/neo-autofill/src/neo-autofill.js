@@ -7,7 +7,7 @@ class autofillement extends LitElement {
       controlName: 'neo-autofill',
       fallbackDisableSubmit: false,
       description: 'Add autofill capability to Nintex data lookup control',
-      iconUrl: "image",
+      iconUrl: "data-lookup",
       groupName: 'Admin tools',
       version: '1.0',
       standardProperties: {
