@@ -45,16 +45,16 @@ export class MyTable extends LitElement {
     const data = JSON.parse(this.dataobject.replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
     const rows = data.map(row => html`
       <tr>
-        ${Object.values(row).map(cell => html`<td>${cell}</td>`)}
+        ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
       </tr>
     `);
   
-    const headers = Object.keys(data[0]).map(header => html`<th>${header}</th>`); // add class to th elements
+    const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`); // add class to th elements
   
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="table-responsive-md overflow-auto">
-      <table class="table table-striped" style="width: 838px;">>
+      <table class="table table-striped">
         <thead>
           <tr>
             ${headers}
