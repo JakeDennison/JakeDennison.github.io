@@ -41,7 +41,7 @@ export class MyTable extends LitElement {
       `;
     }
   
-    const unicodeRegex = /\\u\{?([0-9A-Fa-f]+)\}?/g;
+    const unicodeRegex = /_x([0-9A-F]{4})_/g;
     const data = JSON.parse(this.dataobject.replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
     const rows = data.map(row => html`
       <tr>
