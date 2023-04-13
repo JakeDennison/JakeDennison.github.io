@@ -49,16 +49,12 @@ export class MyTable extends LitElement {
       </tr>
     `);
   
-    const headers = Object.keys(data[0]).map(header => html`<th class="column-min-width">${header}</th>`); // add class to th elements
+    const headers = Object.keys(data[0]).map(header => html`<th>${header}</th>`); // add class to th elements
   
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-      <style>
-        .column-min-width {
-          min-width: =50px!important;
-        }
-      </style>
+      <div class="table-responsive">
       <table class="table table-striped">
         <thead>
           <tr>
@@ -69,6 +65,7 @@ export class MyTable extends LitElement {
           ${rows}
         </tbody>
       </table>
+    </div>
     `;
   }
 }
