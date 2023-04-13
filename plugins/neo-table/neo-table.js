@@ -54,7 +54,7 @@ export class MyTable extends LitElement {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-      <div class="table-responsive overflow-auto">
+      <div class="table-responsive-md overflow-auto">
       <table class="table table-striped">
         <thead>
           <tr>
@@ -69,6 +69,3 @@ export class MyTable extends LitElement {
     `;
   }
 }
-
-const elementName = 'neo-table';
-customElements.define('neo-table', MyTable);
