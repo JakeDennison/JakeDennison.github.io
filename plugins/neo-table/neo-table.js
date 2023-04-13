@@ -49,24 +49,36 @@ export class MyTable extends LitElement {
       </tr>
     `);
   
-    const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`); // add class to th elements
+    const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
+  
+    const containerStyles = {
+      'border': '2px solid red',
+      'overflow': 'auto',
+    };
   
     return html`
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <div class="table-responsive-md overflow-auto">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            ${headers}
-          </tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
-    </div>
+      <style>
+        @media (min-width: 576px) {
+          .table-container {
+            ${styleMap(containerStyles)};
+          }
+        }
+      </style>
+  
+      <div class="table-responsive-md overflow-auto table-container">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              ${headers}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      </div>
     `;
-  }
+  }  
 }
 
 customElements.define('neo-table', MyTable);
