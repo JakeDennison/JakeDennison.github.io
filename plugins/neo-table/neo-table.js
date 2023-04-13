@@ -54,7 +54,7 @@ export class MyTable extends LitElement {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="table-responsive-md overflow-auto">
-      <table class="table table-striped">
+      <table class="table table-striped" style="width: 838px;">>
         <thead>
           <tr>
             ${headers}
