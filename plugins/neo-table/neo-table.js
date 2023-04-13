@@ -1,4 +1,4 @@
-import {html, LitElement} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
+import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 
 export class MyTable extends LitElement {
   static getMetaConfig() {
@@ -53,7 +53,6 @@ export class MyTable extends LitElement {
   
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
       <div class="table-responsive-md overflow-auto">
       <table class="table table-striped">
         <thead>
@@ -69,3 +68,7 @@ export class MyTable extends LitElement {
     `;
   }
 }
+
+const elementName = 'neo-table';
+customElements.define('neo-table', MyTable);
+
