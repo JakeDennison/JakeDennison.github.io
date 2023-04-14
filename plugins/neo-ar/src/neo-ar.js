@@ -91,9 +91,9 @@ class ARElement extends LitElement {
     scene.add(directionalLight);
   
     const loader = new GLTFLoader();
-    const dracoLoader = new DRACOLoader(); // create a DRACOLoader instance
-    dracoLoader.setDecoderPath('/draco/'); // set the path to the Draco decoder files
-    loader.setDRACOLoader(dracoLoader); // pass the DRACOLoader instance to the GLTFLoader
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('/draco/js/');
+    loader.setDRACOLoader(dracoLoader);
     loader.load(this.src, (gltf) => {
       scene.add(gltf.scene);
       this.modelLoaded = true;
@@ -118,6 +118,7 @@ class ARElement extends LitElement {
   
     animate();
   }
+  
   
   disposeScene() {
     // Dispose of the Three.js resources here when the component is disconnected from the DOM
