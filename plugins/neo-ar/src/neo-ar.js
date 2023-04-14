@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { WebGLRenderer, PerspectiveCamera, Scene, Color, AmbientLight, DirectionalLight } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 class ARElement extends LitElement {
   static getMetaConfig() {
@@ -40,7 +41,6 @@ class ARElement extends LitElement {
     `;
   }
   
-
   static get properties() {
     return {
       modelLoaded: { type: Boolean },
@@ -91,6 +91,9 @@ class ARElement extends LitElement {
     scene.add(directionalLight);
   
     const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader(); // create a DRACOLoader instance
+    dracoLoader.setDecoderPath('/draco/'); // set the path to the Draco decoder files
+    loader.setDRACOLoader(dracoLoader); // pass the DRACOLoader instance to the GLTFLoader
     loader.load(this.src, (gltf) => {
       scene.add(gltf.scene);
       this.modelLoaded = true;
