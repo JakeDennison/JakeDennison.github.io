@@ -75,7 +75,7 @@ class ARElement extends LitElement {
     this.container.appendChild(renderer.domElement);
   
     const camera = new PerspectiveCamera(75, this.clientWidth / 600, 0.1, 1000);
-    camera.position.set(0, 0, 10);
+    camera.position.set(0, 0, 5);
     camera.rotation.x = -Math.PI / 6; // set camera pitch to look down slightly
   
     const controls = new OrbitControls(camera, renderer.domElement);
