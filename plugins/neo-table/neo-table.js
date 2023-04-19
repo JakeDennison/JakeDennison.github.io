@@ -63,7 +63,7 @@ export class MyTable extends LitElement {
           let fieldValue = field.textContent;
   
           // Convert Unicode escape sequences if present
-          const unicodeRegex = /_x([0-9A-F]{4})_/g;
+          const unicodeRegex = /_x([\dA-F]{4})_/gi;
           fieldValue = fieldValue.replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
   
           row[fieldName] = fieldValue;
@@ -104,7 +104,7 @@ export class MyTable extends LitElement {
         </table>
       </div>
     `;
-  }
+  }  
 }
 
 customElements.define('neo-table', MyTable);
