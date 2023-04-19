@@ -41,6 +41,7 @@ export class MyTable extends LitElement {
       // Try to parse dataobject as JSON
       data = JSON.parse(this.dataobject);
     } catch (e) {
+      console.log("XML detected")
       // If parsing as JSON fails, assume it's XML
       const parser = new DOMParser();
       const xmlDocument = parser.parseFromString(this.dataobject, 'text/xml');
