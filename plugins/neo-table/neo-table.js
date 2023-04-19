@@ -36,12 +36,13 @@ export class MyTable extends LitElement {
 
   render() {
     let data;
-
+    console.log(this.dataobject)
     try {
       // Try to parse dataobject as JSON
       data = JSON.parse(this.dataobject);
     } catch (e) {
       // If parsing as JSON fails, assume it's XML
+      console.log('XML detected')
       const parser = new DOMParser();
       const xmlDocument = parser.parseFromString(this.dataobject, 'text/xml');
       const items = xmlDocument.getElementsByTagName('Item');
