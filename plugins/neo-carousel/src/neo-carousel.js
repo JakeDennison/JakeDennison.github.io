@@ -26,76 +26,45 @@ class CarouselElement extends LitElement {
     };
   }
 
+  static get styles() {
+    return [];
+  }
+
   constructor() {
     super();
     this.images = '';
-    this.index = 0;
   }
 
-  handleNext() {
-    if (this.index === this.imageList.length - 1) {
-      this.index = 0;
-    } else {
-      this.index++;
+  render() {
+    if (!this.images) {
+      return html`<p>No images found</p>`;
     }
-    this.requestUpdate();
-  }
 
-  handlePrev() {
-    if (this.index === 0) {
-      this.index = this.imageList.length - 1;
-    } else {
-      this.index--;
-    }
-    this.requestUpdate();
-  }
+    this.imageList = this.images.split(';').filter(image => image.trim() !== '');
 
-  updated() {
-    const prevIndex = this.index === 0 ? this.imageList.length - 1 : this.index - 1;
-    const nextIndex = this.index === this.imageList.length - 1 ? 0 : this.index + 1;
-    const activeItem = this.shadowRoot.querySelector(`#item-${this.index}`);
-    const prevItem = this.shadowRoot.querySelector(`#item-${prevIndex}`);
-    const nextItem = this.shadowRoot.querySelector(`#item-${nextIndex}`);
-    activeItem.style.transform = 'translateX(0)';
-    if (prevItem) {
-      prevItem.style.transform = 'translateX(-100%)';
-    }
-    nextItem.style.transform = 'translateX(100%)';
-  }
-    
-    render() {
-      if (!this.images) {
-        return html`<p>No images found</p>`;
-      }
-
-      this.imageList = this.images.split(';').filter(image => image.trim() !== '');
-      return html`
-        <link href="https://jsdenintex.github.io/plugins/neo-carousel/dist/css/neo-carousel.css" rel="stylesheet">
-        <div class="carousel">
-          <div class="carousel-inner">
-            ${this.imageList.map((image, i) => {
-              const isActive = i === this.index;
-              const isPrev = i === (this.index === 0 ? this.imageList.length - 1 : this.index - 1);
-              const isNext = i === (this.index === this.imageList.length - 1 ? 0 : this.index + 1);
-              return html`
-                <div
-                  id="item-${i}"
-                  class="carousel-item ${isActive ? 'active' : ''} ${isPrev || isNext ? 'visible' : ''}"
-                  style="transform: ${isActive ? 'translateX(0)' : (isPrev ? 'translateX(-100%)' : 'translateX(100%)')};"
-                >
-                  <img src="${image}" alt="">
-                </div>
-              `;
-            })}
-          </div>
-          <button class="carousel-control carousel-control-prev" @click="${this.handlePrev}">
-          </button>
-          <button class="carousel-control carousel-control-next" @click="${this.handleNext}">
-          </button>
+    return html`
+      <link rel="stylesheet" href="https://jsdenintex.github.io/plugins/neo-carousel/dist/css/neo-carousel.scss">
+      <div class="carousel">
+        <input type="radio" name="slide" id="slide1" checked>
+        ${this.imageList.map((image, index) => {
+          return html`
+            <input type="radio" name="slide" id="slide${index+2}">
+            <div class="carousel__slide">
+              <img src="${image}" alt="">
+            </div>
+          `;
+        })}
+        <div class="carousel__controls">
+          ${this.imageList.map((image, index) => {
+            return html`
+              <label for="slide${index+1}"></label>
+            `;
+          })}
         </div>
-      `;
-    }
-
+      </div>
+    `;
   }
-    
+
+}
+
 customElements.define('neo-carousel', CarouselElement);
