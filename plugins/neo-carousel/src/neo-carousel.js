@@ -31,77 +31,23 @@ class CarouselElement extends LitElement {
   constructor() {
     super();
     this.images = '';
-    this.index = 0;
   }
-
-  handleNext() {
-    if (this.index === this.imageList.length - 1) {
-      // Set index to 0 and wait for transition
-      this.index = 0;
-      setTimeout(() => this.requestUpdate(), 50);
-    } else {
-      this.index++;
-      this.requestUpdate();
-    }
-  }
-
-  handlePrev() {
-    if (this.index === 0) {
-      // Set index to last image and wait for transition
-      this.index = this.imageList.length - 1;
-      setTimeout(() => this.requestUpdate(), 50);
-    } else {
-      this.index--;
-      this.requestUpdate();
-    }
-  }
-
-  updated() {
-    const width = this.clientWidth;
-    const prevIndex = this.index === 0 ? this.imageList.length - 1 : this.index - 1;
-    const nextIndex = this.index === this.imageList.length - 1 ? 0 : this.index + 1;
-    const prevItem = this.shadowRoot.querySelector(`#item-${prevIndex}`);
-    const activeItem = this.shadowRoot.querySelector(`#item-${this.index}`);
-    const nextItem = this.shadowRoot.querySelector(`#item-${nextIndex}`);
-    prevItem.style.transform = `translateX(-${width}px)`;
-    activeItem.style.transform = `translateX(0)`;
-    nextItem.style.transform = `translateX(${width}px)`;
-  }
-  
 
   render() {
     if (!this.images) {
       return html`<p>No images found</p>`;
     }
   
-    this.imageList = this.images.split(';').filter(image => image.trim() !== '');
+    const imageUrls = this.images.split(';');
   
     return html`
       <div class="carousel">
-        <!-- Encapsulate HTML inside the shadow DOM -->
-        <div class="carousel-inner">
-          ${this.imageList.map((image, i) => {
-            const isActive = i === this.index;
-            const isPrev = i === (this.index === 0 ? this.imageList.length - 1 : this.index - 1);
-            const isNext = i === (this.index === this.imageList.length - 1 ? 0 : this.index + 1);
-            return html`
-              <div
-                id="item-${i}"
-                class="carousel-item ${isActive ? 'active' : ''} ${isPrev || isNext ? 'visible' : ''}"
-              >
-                <img src="${image}" alt="">
-              </div>
-            `;
-          })}
-        </div>
-        <button class="carousel-control carousel-control-prev" @click="${this.handlePrev}">
-        </button>
-        <button class="carousel-control carousel-control-next" @click="${this.handleNext}">
-        </button>
+        ${imageUrls.map(url => html`
+          <img src="${url}" />
+        `)}
       </div>
     `;
   }
 }
 
-//version 1
 customElements.define('neo-carousel', CarouselElement);
