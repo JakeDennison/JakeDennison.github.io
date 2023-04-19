@@ -41,8 +41,9 @@ export class MyTable extends LitElement {
       // Try to parse dataobject as JSON
       data = JSON.parse(this.dataobject);
       // Convert Unicode escape sequences if present
-      const unicodeRegex = /\\u([\dA-F]{4})/gi;
-      data = JSON.parse(JSON.stringify(data).replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
+      data = JSON.parse(this.dataobject.replace(/([\u007f-\uffff])/g, function(chr) {
+        return "\\u" + ("0000" + chr.charCodeAt(0).toString(16)).substr(-4);
+      }));      
     } catch (e) {
       // If parsing as JSON fails, assume it's XML
       console.log("XML detected");
