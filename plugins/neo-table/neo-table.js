@@ -36,7 +36,7 @@ export class MyTable extends LitElement {
 
   render() {
     let data;
-
+    console.log(this.dataobject)
     try {
       // Try to parse dataobject as JSON
       data = JSON.parse(this.dataobject);
@@ -45,6 +45,7 @@ export class MyTable extends LitElement {
       data = JSON.parse(JSON.stringify(data).replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
     } catch (e) {
       // If parsing as JSON fails, assume it's XML
+      console.log("XML detected")
       const parser = new DOMParser();
       const xmlDocument = parser.parseFromString(this.dataobject, 'text/xml');
       const items = xmlDocument.getElementsByTagName('Item');
@@ -69,6 +70,8 @@ export class MyTable extends LitElement {
 
         data.push(row);
       }
+
+      console.log('XML converted to JSON:', data);
     }
 
     if (!data || data.length === 0) {
