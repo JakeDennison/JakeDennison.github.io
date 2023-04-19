@@ -75,9 +75,6 @@ class CarouselElement extends LitElement {
     this.imageList = this.images.split(';').filter(image => image.trim() !== '');
   
     return html`
-      <link rel="stylesheet" href="https://jsdenintex.github.io/plugins/neo-carousel/dist/bootstrap/css/bootstrap.min.css">
-      <link rel="stylesheet" href="https://jsdenintex.github.io/plugins/neo-carousel/dist/css/neo-carousel.css">
-      <script src="https://jsdenintex.github.io/plugins/neo-carousel/dist/bootstrap/js/bootstrap.bundle.min.js"></script> 
       <div class="carousel">
         <!-- Encapsulate HTML inside the shadow DOM -->
         <div class="carousel-inner">
