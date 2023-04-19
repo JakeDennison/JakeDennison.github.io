@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import 'bootstrap/js/dist/carousel.js';
 import './css/carousel.css';
 import './css/neo-carousel.css';
 
