@@ -1,4 +1,7 @@
-import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
+import { LitElement, html, css } from 'lit';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './neo-carousel.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 class CarouselElement extends LitElement {
     static getMetaConfig() {
@@ -72,7 +75,6 @@ class CarouselElement extends LitElement {
         this.imageList = this.images.split(';').filter(image => image.trim() !== '');
       
         return html`
-          <link href="https://jsdenintex.github.io/plugins/neo-carousel/neo-carousel.css" rel="stylesheet">
           <div class="carousel">
             <div class="carousel-inner">
               ${this.imageList.map((image, i) => {

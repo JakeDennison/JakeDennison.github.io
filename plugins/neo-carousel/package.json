@@ -1,0 +1,32 @@
+{
+  "name": "neo-carousel",
+  "version": "1.0.0",
+  "description": "Carousel image viewer for Nintex automation cloud",
+  "main": "/src/neo-carousel.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JSDenintex/JSDenintex.github.io.git"
+  },
+  "author": "Jake Dennison",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/JSDenintex/JSDenintex.github.io/issues"
+  },
+  "homepage": "https://github.com/JSDenintex/JSDenintex.github.io#readme",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^9.1.2",
+    "bootstrap": "^5.2.3",
+    "lit": "^2.7.2",
+    "webpack": "^5.79.0",
+    "webpack-cli": "^5.0.1"
+  },
+  "devDependencies": {
+    "css-loader": "^6.7.3",
+    "style-loader": "^3.3.2"
+  }
+}
