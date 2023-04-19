@@ -39,21 +39,23 @@ class CarouselElement extends LitElement {
     if (!this.images) {
       return html`<p>No images found</p>`;
     }
-
+  
     this.imageList = this.images.split(';').filter(image => image.trim() !== '');
-
+  
     return html`
       <link rel="stylesheet" href="https://jsdenintex.github.io/plugins/neo-carousel/dist/css/neo-carousel.scss">
       <div class="carousel">
-        <input type="radio" name="slide" id="slide1" checked>
-        ${this.imageList.map((image, index) => {
-          return html`
-            <input type="radio" name="slide" id="slide${index+2}">
-            <div class="carousel__slide">
-              <img src="${image}" alt="">
-            </div>
-          `;
-        })}
+        <div class="carousel__slides">
+          <input type="radio" name="slide" id="slide1" checked value="1">
+          ${this.imageList.map((image, index) => {
+            return html`
+              <input type="radio" name="slide" id="slide${index+2}" value="${index+2}">
+              <div class="carousel__slide">
+                <img src="${image}" alt="">
+              </div>
+            `;
+          })}
+        </div>
         <div class="carousel__controls">
           ${this.imageList.map((image, index) => {
             return html`
