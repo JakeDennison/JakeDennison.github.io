@@ -35,39 +35,64 @@ export class MyTable extends LitElement {
   }
 
   render() {
-    if (!this.dataobject) {
+    let data;
+
+    try {
+      // Try to parse dataobject as JSON
+      data = JSON.parse(this.dataobject);
+    } catch (e) {
+      // If parsing as JSON fails, assume it's XML
+      const parser = new DOMParser();
+      const xmlDocument = parser.parseFromString(this.dataobject, 'text/xml');
+      const items = xmlDocument.getElementsByTagName('Item');
+      data = [];
+
+      for (let i = 0; i < items.length; i++) {
+        const row = {};
+        const item = items[i];
+        const fields = item.children;
+
+        for (let j = 0; j < fields.length; j++) {
+          const field = fields[j];
+          const fieldName = field.nodeName;
+          const fieldValue = field.textContent;
+          row[fieldName] = fieldValue;
+        }
+
+        data.push(row);
+      }
+    }
+
+    if (!data || data.length === 0) {
       return html`
-        <p>No Data Loaded</p>
+        <p>No Data Found</p>
       `;
     }
-  
-    const unicodeRegex = /_x([0-9A-F]{4})_/g;
-    const data = JSON.parse(this.dataobject.replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
+
     const rows = data.map(row => html`
       <tr>
         ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
       </tr>
     `);
-  
-    const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`); // add class to th elements
-  
+
+    const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
+
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="table-responsive-md overflow-auto">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            ${headers}
-          </tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
-    </div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              ${headers}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      </div>
     `;
   }
 }
 
 customElements.define('neo-table', MyTable);
-
