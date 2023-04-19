@@ -36,7 +36,7 @@ export class MyTable extends LitElement {
 
   render() {
     let data;
-
+    console.log(data)
     try {
       // Try to parse dataobject as JSON
       data = JSON.parse(this.dataobject);
