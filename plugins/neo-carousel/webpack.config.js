@@ -1,4 +1,5 @@
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: './src/neo-carousel.js',
@@ -20,4 +21,12 @@ module.exports = {
       }
     ],
   },
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'node_modules/bootstrap/dist/css/bootstrap.min.css', to: 'bootstrap/css' },
+        { from: 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js', to: 'bootstrap/js' },
+      ],
+    }),
+  ],
 };
