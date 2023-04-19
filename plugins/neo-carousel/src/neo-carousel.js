@@ -57,15 +57,17 @@ class CarouselElement extends LitElement {
   }
 
   updated() {
+    const width = this.clientWidth;
     const prevIndex = this.index === 0 ? this.imageList.length - 1 : this.index - 1;
     const nextIndex = this.index === this.imageList.length - 1 ? 0 : this.index + 1;
     const prevItem = this.shadowRoot.querySelector(`#item-${prevIndex}`);
     const activeItem = this.shadowRoot.querySelector(`#item-${this.index}`);
     const nextItem = this.shadowRoot.querySelector(`#item-${nextIndex}`);
-    prevItem.style.transform = 'translateX(-100%)';
-    activeItem.style.transform = 'translateX(0)';
-    nextItem.style.transform = 'translateX(100%)';
+    prevItem.style.transform = `translateX(-${width}px)`;
+    activeItem.style.transform = `translateX(0)`;
+    nextItem.style.transform = `translateX(${width}px)`;
   }
+  
 
   render() {
     if (!this.images) {
