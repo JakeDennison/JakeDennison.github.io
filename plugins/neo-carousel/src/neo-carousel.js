@@ -1,4 +1,6 @@
 import { LitElement, html, css } from 'lit';
+import './carousel.css';
+import './neo-carousel.css';
 
 class CarouselElement extends LitElement {
   static getMetaConfig() {
