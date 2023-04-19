@@ -36,12 +36,11 @@ export class MyTable extends LitElement {
 
   render() {
     let data;
-    console.log(data)
+
     try {
       // Try to parse dataobject as JSON
       data = JSON.parse(this.dataobject);
     } catch (e) {
-      console.log("XML detected")
       // If parsing as JSON fails, assume it's XML
       const parser = new DOMParser();
       const xmlDocument = parser.parseFromString(this.dataobject, 'text/xml');
@@ -56,7 +55,12 @@ export class MyTable extends LitElement {
         for (let j = 0; j < fields.length; j++) {
           const field = fields[j];
           const fieldName = field.nodeName;
-          const fieldValue = field.textContent;
+          let fieldValue = field.textContent;
+
+          // Convert Unicode escape sequences if present
+          const unicodeRegex = /_x([0-9A-F]{4})_/g;
+          fieldValue = fieldValue.replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
+
           row[fieldName] = fieldValue;
         }
 
