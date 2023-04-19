@@ -38,8 +38,6 @@ export class MyTable extends LitElement {
     let data;
     console.log(this.dataobject);
     try {
-      // Try to parse dataobject as JSON
-      data = JSON.parse(this.dataobject);
       // Convert Unicode escape sequences if present
       data = JSON.parse(this.dataobject.replace(/([\u007f-\uffff])/g, function(chr) {
         return "\\u" + ("0000" + chr.charCodeAt(0).toString(16)).substr(-4);
