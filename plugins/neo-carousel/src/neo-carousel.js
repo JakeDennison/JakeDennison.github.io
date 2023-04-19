@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
-import './carousel.css';
-import './neo-carousel.css';
+import './css/carousel.css';
+import './css/neo-carousel.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 class CarouselElement extends LitElement {
   static getMetaConfig() {
@@ -31,6 +32,12 @@ class CarouselElement extends LitElement {
   constructor() {
     super();
     this.images = '';
+  }
+
+  firstUpdated() {
+    // Initialize the carousel using the "carousel" class
+    const carousel = this.shadowRoot.querySelector('.carousel');
+    $(carousel).carousel();
   }
 
   render() {
