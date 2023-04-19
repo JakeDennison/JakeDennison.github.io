@@ -71,7 +71,7 @@ class CarouselElement extends LitElement {
       
         this.imageList = this.images.split(';').filter(image => image.trim() !== '');
         return html`
-          <link href="https://jsdenintex.github.io/plugins/neo-carousel/neo-carousel.css" rel="stylesheet">
+          <link href="https://jsdenintex.github.io/plugins/neo-carousel/dist/css/neo-carousel.css" rel="stylesheet">
           <div class="carousel">
             <div class="carousel-inner">
               ${this.imageList.map((image, i) => {
