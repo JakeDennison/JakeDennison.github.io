@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './css/carousel.css';
 import './css/neo-carousel.css';
 
@@ -73,6 +72,5 @@ class CarouselElement extends LitElement {
     `;
   }
 }
-
 
 customElements.define('neo-carousel', CarouselElement);
