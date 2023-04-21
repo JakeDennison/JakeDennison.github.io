@@ -121,9 +121,9 @@ export class MyTable extends LitElement {
       </div>
     `;
     
-    const tableString = renderToString(table);
-
-    console.log('Generated HTML string:', tableString);
+    this.HTMLoutput = renderToString(table);
+    console.log('Generated HTML string:', this.HTMLoutput);
+    _handleHTMLExport()
   
     return table;
   }    
