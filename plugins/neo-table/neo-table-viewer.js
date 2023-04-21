@@ -1,4 +1,4 @@
-import { css, html, LitElement, renderToString, styleMap } from 'https://cdn.jsdelivr.net/gh/lit/dist@2.6.1/all/lit-all.min.js';
+import { css, html, LitElement, styleMap } from 'https://cdn.skypack.dev/lit-html?dts';
 
 export class MyTable extends LitElement {
   static getMetaConfig() {
