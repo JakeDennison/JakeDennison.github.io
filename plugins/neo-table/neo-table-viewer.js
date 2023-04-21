@@ -1,4 +1,4 @@
-import {css, html, LitElement, styleMap} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
+import { css, html, LitElement, renderToString, styleMap } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 
 export class MyTable extends LitElement {
   static getMetaConfig() {
@@ -120,7 +120,7 @@ export class MyTable extends LitElement {
     </div>
   `;
 
-  this._handleHTMLExport(table.toString());
+  this._handleHTMLExport(renderToString(table));
 
   return table;
   }
