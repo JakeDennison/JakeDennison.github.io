@@ -44,12 +44,12 @@ export class MyTable extends LitElement {
   }
 
   _handleHTMLExport() {  
-    
+    const trimmedOutput = this.HTMLoutput.trim();
     this.dispatchEvent(new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: false,
       composed: true,
-      detail: this.HTMLoutput,
+      detail: trimmedOutput,
     }));
   }
 
