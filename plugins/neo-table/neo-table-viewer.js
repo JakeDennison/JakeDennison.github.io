@@ -45,14 +45,15 @@ export class MyTable extends LitElement {
 
   parseXmlDataObject() {
     let xmlString = this.dataobject.replace(/&quot;/g, '"').replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
-    // Check if XML declaration is present
-    if (!xmlString.startsWith('<?xml')) {
+  
+    // Add XML declaration if not present
+    if (xmlString.indexOf('<?xml') !== 0) {
       xmlString = `<?xml version="1.0" encoding="UTF-8"?>${xmlString}`;
     }
-    console.log(xmlString)
+  
     const parser = new DOMParser();
     const xmlDocument = parser.parseFromString(xmlString, 'text/xml');
-    const items = xmlDocument.getElementsByTagName('*');
+    const items = xmlDocument.documentElement.children;
     const data = [];
   
     for (let i = 0; i < items.length; i++) {
@@ -73,6 +74,7 @@ export class MyTable extends LitElement {
   
     return data;
   }
+  
   
   render() {
     let data;
