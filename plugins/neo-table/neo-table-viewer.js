@@ -44,7 +44,7 @@ export class MyTable extends LitElement {
   }
 
   _handleHTMLExport() {  
-    const trimmedOutput = this.HTMLoutput.trim();
+    this.HTMLoutput = renderToString(this.HTMLoutput).trim();
     this.dispatchEvent(new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: false,
