@@ -44,7 +44,7 @@ export class MyTable extends LitElement {
 
 
   parseXmlDataObject() {
-    console.log(xmlString)
+    console.log(this.dataobject)
     const xmlString = this.dataobject.replace(/&quot;/g, '"').replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
     const parser = new DOMParser();
     const xmlDocument = parser.parseFromString(xmlString, 'text/xml');
