@@ -35,58 +35,72 @@ export class MyTable extends LitElement {
     super();
   }
 
+  parseDataObject() {
+    const data = JSON.parse(this.dataobject);
+    return data;
+  }
+
+  parseXmlDataObject() {
+    const xmlString = this.dataobject.replace(/&quot;/g, '"').replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
+    const parser = new DOMParser();
+    const xmlDocument = parser.parseFromString(xmlString, 'text/xml');
+    const items = xmlDocument.documentElement.children;
+    const data = [];
+
+    for (let i = 0; i < items.length; i++) {
+      const row = {};
+      const fields = items[i].children;
+
+      for (let j = 0; j < fields.length; j++) {
+        const field = fields[j];
+        const fieldName = field.nodeName;
+        let fieldValue = field.textContent;
+
+        // Convert Unicode escape sequences if present
+        fieldValue = fieldValue.replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
+
+        row[fieldName] = fieldValue;
+      }
+
+      data.push(row);
+    }
+
+    return data;
+  }
+
   render() {
     let data;
-    const unicodeRegex = /_x([0-9A-F]{4})_/g;
-    
+
     try {
-      data = JSON.parse(this.dataobject.replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
-    }
-    catch (e) {
+      data = this.parseDataObject();
+    } catch (e) {
       // If parsing as JSON fails, assume it's XML
       console.log("XML detected");
-      const xmlString = this.dataobject.replace(/&quot;/g, '"').replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
-      const parser = new DOMParser();
-      const xmlDocument = parser.parseFromString(xmlString, 'text/xml');
-      const items = xmlDocument.getElementsByTagName('Item');
-      data = [];
-  
-      for (let i = 0; i < items.length; i++) {
-        const row = {};
-        const item = items[i];
-        const fields = item.children;
-  
-        for (let j = 0; j < fields.length; j++) {
-          const field = fields[j];
-          const fieldName = field.nodeName;
-          let fieldValue = field.textContent;
-  
-          // Convert Unicode escape sequences if present
-          fieldValue = fieldValue.replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
-  
-          row[fieldName] = fieldValue;
-        }
-  
-        data.push(row);
+      try {
+        data = this.parseXmlDataObject();
+        console.log('XML converted to JSON:', data);
+      } catch (e) {
+        console.error(e);
+        return html`
+          <p>Failed to parse dataobject</p>
+        `;
       }
-  
-      console.log('XML converted to JSON:', data);
     }
-    
+
     if (!data || data.length === 0) {
       return html`
         <p>No Data Found</p>
       `;
     }
-    
+
     const rows = data.map(row => html`
       <tr>
         ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
       </tr>
     `);
-  
+
     const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
-  
+
     const table = html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="table-responsive-md overflow-auto">
@@ -102,9 +116,9 @@ export class MyTable extends LitElement {
         </table>
       </div>
     `;
-    
+
     return table;
-  }    
+  }
 }
 
 customElements.define('neo-table-viewer', MyTable);
