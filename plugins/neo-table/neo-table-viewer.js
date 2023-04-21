@@ -44,73 +44,42 @@ export class MyTable extends LitElement {
 
 
   parseXmlDataObject() {
-    let xmlString = this.dataobject.replace(/&quot;/g, '"').replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
-  
-    // Remove XML declaration if present
-    xmlString = xmlString.replace(/<\?xml.*?\?>/, '');
-  
     const parser = new DOMParser();
-    const xmlDocument = parser.parseFromString(xmlString, 'text/xml');
-    const root = xmlDocument.documentElement;
-    let itemsElement;
+    const xmlDocument = parser.parseFromString(this.dataobject, 'text/xml');
   
-    // Find the element that contains the data items
-    for (let i = 0; i < root.children.length; i++) {
-      const child = root.children[i];
+    const traverse = (node) => {
+      const obj = {};
   
-      for (let j = 0; j < child.children.length; j++) {
-        const subChild = child.children[j];
+      for (let i = 0; i < node.childNodes.length; i++) {
+        const childNode = node.childNodes[i];
   
-        if (subChild.children.length > 0) {
-          itemsElement = subChild;
-          break;
+        if (childNode.nodeType === Node.ELEMENT_NODE) {
+          if (childNode.childNodes.length > 0) {
+            obj[childNode.nodeName] = traverse(childNode);
+          } else {
+            obj[childNode.nodeName] = childNode.textContent;
+          }
         }
       }
   
-      if (itemsElement) {
-        break;
-      }
-    }
+      return obj;
+    };
   
-    if (!itemsElement) {
-      throw new Error('No data items found');
-    }
-  
-    const items = itemsElement.children;
-    const data = [];
-  
-    for (let i = 0; i < items.length; i++) {
-      const row = {};
-  
-      for (let j = 0; j < items[i].children.length; j++) {
-        const field = items[i].children[j];
-        const fieldName = field.nodeName;
-        let fieldValue = field.textContent;
-        fieldValue = fieldValue.replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
-  
-        row[fieldName] = fieldValue;
-      }
-  
-      data.push(row);
-    }
+    const records = traverse(xmlDocument.documentElement);
+    const data = Array.isArray(records) ? records : [records];
   
     return data;
   }
   
-  
-  
-  
   render() {
     let data;
-
+  
     try {
       data = this.parseDataObject();
     } catch (e) {
       // If parsing as JSON fails, assume it's XML
-      console.log("XML detected");
       try {
         data = this.parseXmlDataObject();
-        console.log('XML converted to JSON:', data);
       } catch (e) {
         console.error(e);
         return html`
@@ -118,21 +87,20 @@ export class MyTable extends LitElement {
         `;
       }
     }
-
+  
     if (!data || data.length === 0) {
       return html`
         <p>No Data Found</p>
       `;
     }
-
-    const rows = data.map(row => html`
-      <tr>
-        ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
-      </tr>
-    `);
-
+  
     const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
-
+  
+    const rows = data.map(record => {
+      const cells = Object.values(record).map(value => html`<td class="text-nowrap">${value}</td>`);
+      return html`<tr>${cells}</tr>`;
+    });
+  
     const table = html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="table-responsive-md overflow-auto">
@@ -148,9 +116,10 @@ export class MyTable extends LitElement {
         </table>
       </div>
     `;
-
+  
     return table;
   }
+  
 }
 
 customElements.define('neo-table-viewer', MyTable);
