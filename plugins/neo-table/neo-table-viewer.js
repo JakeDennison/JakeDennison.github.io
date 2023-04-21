@@ -103,13 +103,13 @@ export class MyTable extends LitElement {
   
     try {
       data = this.parseDataObject();
-      console.log('parsed JSON data:', data);
+      console.log('parsed JSON data:', data.stringify);
     } catch (e) {
       // If parsing as JSON fails, assume it's XML
       console.log("XML detected");
       try {
         data = this.parseXmlDataObject();
-        console.log('parsed XML data:', data);
+        console.log('parsed XML data:', data.stringify);
       } catch (e) {
         console.error(e);
         return html`
