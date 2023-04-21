@@ -124,7 +124,7 @@ export class MyTable extends LitElement {
     `;
     
     this.HTMLoutput = table.outerHTML;
-    
+    console.log('Generated HTML string:', this.htmlString);
     this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: this.htmlString }));
     // Return the table element first
     return table;
