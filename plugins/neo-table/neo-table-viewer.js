@@ -1,5 +1,4 @@
-import { LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2.6.1/all/lit-all.min.js';
-import { html, renderToString } from 'https://cdn.jsdelivr.net/npm/@popeindustries/lit-html-server@6.0.0/+esm';
+import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2.6.1/all/lit-all.min.js';
 
 export class MyTable extends LitElement {
   static getMetaConfig() {
@@ -17,12 +16,6 @@ export class MyTable extends LitElement {
           title: 'Object',
           description: 'Test'
         },
-        HTMLoutput:{
-          title: 'HTML Output',
-          type: 'string',
-          description: 'Output used to store HTML for use in emails',
-          isValueField: true,
-        },
       },
       events: ["ntx-value-change"],
       standardProperties: {
@@ -36,21 +29,10 @@ export class MyTable extends LitElement {
   
   static properties = {
     dataobject: '',
-    HTMLoutput: '',
   }
 
   constructor() {
     super();
-  }
-
-  _handleHTMLExport() {  
-    this.HTMLoutput = renderToString(this.HTMLoutput).trim();
-    this.dispatchEvent(new CustomEvent('ntx-value-change', {
-      bubbles: true,
-      cancelable: false,
-      composed: true,
-      detail: trimmedOutput,
-    }));
   }
 
   render() {
@@ -121,10 +103,6 @@ export class MyTable extends LitElement {
       </div>
     `;
     
-    this.HTMLoutput = renderToString(table);
-    console.log('Generated HTML string:', this.HTMLoutput);
-    this._handleHTMLExport()
-  
     return table;
   }    
 }
