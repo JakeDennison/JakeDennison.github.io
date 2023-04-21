@@ -1,4 +1,4 @@
-import { css, html, LitElement, styleMap } from 'https://cdn.skypack.dev/lit-html?dts';
+import { css, html, LitElement, renderToString, styleMap } from 'https://unpkg.com/@polymer/lit-element@latest/lit-element.js?module';
 
 export class MyTable extends LitElement {
   static getMetaConfig() {
