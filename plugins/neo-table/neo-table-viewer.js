@@ -1,4 +1,5 @@
-import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2.6.1/all/lit-all.min.js';
+import { LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2.6.1/all/lit-all.min.js';
+import { html, renderToString } from 'https://cdn.jsdelivr.net/npm/@popeindustries/lit-html-server@6.0.0/+esm';
 
 export class MyTable extends LitElement {
   static getMetaConfig() {
@@ -49,10 +50,6 @@ export class MyTable extends LitElement {
       composed: true,
       detail: this.HTMLoutput,
     }));
-  }
-
-  get htmlString() {
-    return this.HTMLoutput;
   }
 
   render() {
@@ -123,18 +120,12 @@ export class MyTable extends LitElement {
       </div>
     `;
     
-    this.HTMLoutput = table.outerHTML;
-  
-    const tableString = JSON.stringify(table.outerHTML);
-    console.log('Generated HTML string:', tableString);
+    const tableString = renderToString(table);
 
-    // Log the generated HTML string to the console
-    console.log('Generated HTML string:', this.HTMLoutput);
+    console.log('Generated HTML string:', tableString);
   
-    // Dispatch the ntx-value-change event with the generated HTML string
-    this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: this.HTMLoutput }));
-  
-    // Return the table element first
+    this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: tableString }));
+    
     return table;
   }    
 }
