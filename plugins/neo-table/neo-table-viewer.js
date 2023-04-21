@@ -1,4 +1,4 @@
-import { css, html, LitElement, renderToString, styleMap } from 'https://unpkg.com/@polymer/lit-element@latest/lit-element.js?module';
+import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
 
 export class MyTable extends LitElement {
   static getMetaConfig() {
@@ -42,8 +42,12 @@ export class MyTable extends LitElement {
     super();
   }
 
-  _handleHTMLExport(html){
-    this.HTMLoutput = html;
+  _handleHTMLExport() {
+    const table = this.renderRoot.querySelector('table');
+    const htmlString = table ? table.outerHTML : '';
+  
+    this.HTMLoutput = htmlString;
+  
     this.dispatchEvent(new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: false,
@@ -120,10 +124,9 @@ export class MyTable extends LitElement {
     </div>
   `;
 
-  this._handleHTMLExport(renderToString(table));
-
+  // Return the table element first
   return table;
-  }
+}
 }
 
 customElements.define('neo-table-viewer', MyTable);
