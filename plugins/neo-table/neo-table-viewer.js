@@ -42,16 +42,16 @@ export class MyTable extends LitElement {
     return data;
   }
 
+
   parseXmlDataObject() {
-    const xmlString = this.dataobject
-      .replace(/&quot;/g, '"')
-      .replace(/_x([\dA-F]{4})_/gi, (match, p1) =>
-        String.fromCharCode(parseInt(p1, 16))
-      )
-      .replace(/<\?xml.*?\?>\s*/, '');
+    const xmlString = this.dataobject.replace(/&quot;/g, '"').replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
+    // Check if XML declaration is present
+    if (!xmlString.startsWith('<?xml')) {
+      xmlString = `<?xml version="1.0" encoding="UTF-8"?>${xmlString}`;
+    }
     const parser = new DOMParser();
     const xmlDocument = parser.parseFromString(xmlString, 'text/xml');
-    const items = xmlDocument.documentElement.children;
+    const items = xmlDocument.getElementsByTagName('Item');
     const data = [];
   
     for (let i = 0; i < items.length; i++) {
@@ -62,10 +62,7 @@ export class MyTable extends LitElement {
         const field = fields[j];
         const fieldName = field.nodeName;
         let fieldValue = field.textContent;
-        fieldValue = fieldValue.replace(
-          /_x([\dA-F]{4})_/gi,
-          (match, p1) => String.fromCharCode(parseInt(p1, 16))
-        );
+        fieldValue = fieldValue.replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
   
         row[fieldName] = fieldValue;
       }
