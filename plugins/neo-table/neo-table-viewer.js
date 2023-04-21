@@ -26,7 +26,7 @@ export class MyTable extends LitElement {
       },
     };
   }
-
+  
   static properties = {
     dataobject: '',
   }
@@ -42,71 +42,49 @@ export class MyTable extends LitElement {
     return data;
   }
 
+
   parseXmlDataObject() {
+    let xmlString = this.dataobject.replace(/&quot;/g, '"').replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
+
+    // Remove XML declaration if present
+    xmlString = xmlString.replace(/<\?xml.*?\?>/, '');
+
     const parser = new DOMParser();
-    const xmlDocument = parser.parseFromString(this.dataobject, 'text/xml');
+    const xmlDocument = parser.parseFromString(xmlString, 'text/xml');
+    const items = xmlDocument.documentElement.children;
+    const data = [];
 
-    const traverse = (node) => {
-      const obj = {};
+    for (let i = 0; i < items.length; i++) {
+      const row = {};
+      const fields = items[i].children;
 
-      for (let i = 0; i < node.childNodes.length; i++) {
-        const childNode = node.childNodes[i];
+      for (let j = 0; j < fields.length; j++) {
+        const field = fields[j];
+        const fieldName = field.nodeName;
+        let fieldValue = field.textContent;
+        fieldValue = fieldValue.replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
 
-        if (childNode.nodeType === Node.ELEMENT_NODE) {
-          if (childNode.childNodes.length > 0) {
-            obj[childNode.nodeName] = traverse(childNode);
-          } else {
-            obj[childNode.nodeName] = childNode.textContent;
-          }
-        }
+        row[fieldName] = fieldValue;
       }
 
-      return obj;
-    };
-
-    const records = traverse(xmlDocument.documentElement);
-    const data = Array.isArray(records) ? records : [records];
+      data.push(row);
+    }
 
     return data;
   }
 
-  renderTableSection(section) {
-    const headers = Object.keys(section[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
-
-    const rows = section.map(record => {
-      const cells = Object.values(record).map(value => {
-        if (typeof value === 'object' && value !== null) {
-          return html`<td>${this.renderTableSection([value])}</td>`;
-        } else {
-          return html`<td class="text-nowrap">${value}</td>`;
-        }
-      });
-      return html`<tr>${cells}</tr>`;
-    });
-
-    const table = html`
-      <table class="table table-bordered table-striped">
-        <thead>
-          <tr>${headers}</tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
-    `;
-
-    return table;
-  }
-
+  
   render() {
     let data;
-  
+
     try {
       data = this.parseDataObject();
     } catch (e) {
       // If parsing as JSON fails, assume it's XML
+      console.log("XML detected");
       try {
         data = this.parseXmlDataObject();
+        console.log('XML converted to JSON:', data);
       } catch (e) {
         console.error(e);
         return html`
@@ -114,37 +92,39 @@ export class MyTable extends LitElement {
         `;
       }
     }
-  
+
     if (!data || data.length === 0) {
       return html`
         <p>No Data Found</p>
       `;
     }
-  
-    const tableSections = [];
-  
-    const sectionKeys = Object.keys(data[0]);
-    sectionKeys.forEach(sectionKey => {
-      const sectionData = data.map(record => record[sectionKey]);
-      const section = {
-        title: sectionKey,
-        data: sectionData
-      };
-      tableSections.push(section);
-    });
-  
+
+    const rows = data.map(row => html`
+      <tr>
+        ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
+      </tr>
+    `);
+
+    const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
+
     const table = html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="table-responsive-md overflow-auto">
         <table class="table table-striped">
-          ${tableSections.map(section => this.renderTableSection(section))}
+          <thead>
+            <tr>
+              ${headers}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
         </table>
       </div>
     `;
-  
+
     return table;
   }
-  
 }
 
 customElements.define('neo-table-viewer', MyTable);
