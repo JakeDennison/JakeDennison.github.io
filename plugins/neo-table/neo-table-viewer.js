@@ -51,15 +51,39 @@ export class MyTable extends LitElement {
   
     const parser = new DOMParser();
     const xmlDocument = parser.parseFromString(xmlString, 'text/xml');
-    const items = xmlDocument.documentElement.children;
+    const root = xmlDocument.documentElement;
+    let itemsElement;
+  
+    // Find the element that contains the data items
+    for (let i = 0; i < root.children.length; i++) {
+      const child = root.children[i];
+  
+      for (let j = 0; j < child.children.length; j++) {
+        const subChild = child.children[j];
+  
+        if (subChild.children.length > 0) {
+          itemsElement = subChild;
+          break;
+        }
+      }
+  
+      if (itemsElement) {
+        break;
+      }
+    }
+  
+    if (!itemsElement) {
+      throw new Error('No data items found');
+    }
+  
+    const items = itemsElement.children;
     const data = [];
   
     for (let i = 0; i < items.length; i++) {
       const row = {};
-      const fields = items[i].children;
   
-      for (let j = 0; j < fields.length; j++) {
-        const field = fields[j];
+      for (let j = 0; j < items[i].children.length; j++) {
+        const field = items[i].children[j];
         const fieldName = field.nodeName;
         let fieldValue = field.textContent;
         fieldValue = fieldValue.replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
@@ -72,6 +96,7 @@ export class MyTable extends LitElement {
   
     return data;
   }
+  
   
   
   
