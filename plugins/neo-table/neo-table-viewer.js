@@ -1,4 +1,4 @@
-import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
+import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2.6.1/all/lit-all.min.js';
 
 export class MyTable extends LitElement {
   static getMetaConfig() {
@@ -58,7 +58,7 @@ export class MyTable extends LitElement {
   render() {
     let data;
     const unicodeRegex = /_x([0-9A-F]{4})_/g;
-  
+    
     try {
       data = JSON.parse(this.dataobject.replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
     }
@@ -92,13 +92,13 @@ export class MyTable extends LitElement {
   
       console.log('XML converted to JSON:', data);
     }
-      
+    
     if (!data || data.length === 0) {
       return html`
         <p>No Data Found</p>
       `;
     }
-      
+    
     const rows = data.map(row => html`
       <tr>
         ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
@@ -124,11 +124,16 @@ export class MyTable extends LitElement {
     `;
     
     this.HTMLoutput = table.outerHTML;
+  
+    // Log the generated HTML string to the console
     console.log('Generated HTML string:', this.htmlString);
+  
+    // Dispatch the ntx-value-change event with the generated HTML string
     this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: this.htmlString }));
+  
     // Return the table element first
     return table;
-  }  
+  }    
 }
 
 customElements.define('neo-table-viewer', MyTable);
