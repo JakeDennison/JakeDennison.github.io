@@ -49,6 +49,7 @@ export class MyTable extends LitElement {
     if (!xmlString.startsWith('<?xml')) {
       xmlString = `<?xml version="1.0" encoding="UTF-8"?>${xmlString}`;
     }
+    console.log(xmlString)
     const parser = new DOMParser();
     const xmlDocument = parser.parseFromString(xmlString, 'text/xml');
     const items = xmlDocument.getElementsByTagName('Item');
