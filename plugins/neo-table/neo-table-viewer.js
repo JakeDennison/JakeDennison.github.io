@@ -44,7 +44,7 @@ export class MyTable extends LitElement {
 
 
   parseXmlDataObject() {
-    const xmlString = this.dataobject.replace(/&quot;/g, '"').replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
+    let xmlString = this.dataobject.replace(/&quot;/g, '"').replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
     // Check if XML declaration is present
     if (!xmlString.startsWith('<?xml')) {
       xmlString = `<?xml version="1.0" encoding="UTF-8"?>${xmlString}`;
