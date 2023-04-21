@@ -4,7 +4,7 @@ export class MyTable extends LitElement {
   static getMetaConfig() {
     // plugin contract information
     return {
-      controlName: 'neo-table',
+      controlName: 'neo-table-viewer',
       fallbackDisableSubmit: false,
       description: 'Display object as a table',
       iconUrl: "group-control",
@@ -126,4 +126,4 @@ export class MyTable extends LitElement {
   }
 }
 
-customElements.define('neo-table', MyTable);
+customElements.define('neo-table-viewer', MyTable);
