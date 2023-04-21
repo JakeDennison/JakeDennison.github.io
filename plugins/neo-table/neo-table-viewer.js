@@ -71,9 +71,33 @@ export class MyTable extends LitElement {
     return data;
   }
   
+  renderCell(value) {
+    if (typeof value === 'object' && value !== null) {
+      const rows = Object.entries(value).map(([key, nestedValue]) => {
+        const cells = this.renderCell(nestedValue);
+        return html`<tr><td class="fw-bold">${key}</td>${cells}</tr>`;
+      });
+  
+      return html`
+        <table class="table table-bordered">
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      `;
+    } else {
+      return html`<td class="text-nowrap">${value}</td>`;
+    }
+  }
+  
+  renderRow(record) {
+    const cells = Object.values(record).map(value => this.renderCell(value));
+    return html`<tr>${cells}</tr>`;
+  }
+  
   render() {
     let data;
-  
+    
     try {
       data = this.parseDataObject();
     } catch (e) {
@@ -96,10 +120,7 @@ export class MyTable extends LitElement {
   
     const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
   
-    const rows = data.map(record => {
-      const cells = Object.values(record).map(value => html`<td class="text-nowrap">${value}</td>`);
-      return html`<tr>${cells}</tr>`;
-    });
+    const rows = data.map(record => this.renderRow(record));
   
     const table = html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -118,7 +139,7 @@ export class MyTable extends LitElement {
     `;
   
     return table;
-  }
+  }  
   
 }
 
