@@ -123,7 +123,7 @@ export class MyTable extends LitElement {
     
     this.HTMLoutput = renderToString(table);
     console.log('Generated HTML string:', this.HTMLoutput);
-    _handleHTMLExport()
+    this._handleHTMLExport()
   
     return table;
   }    
