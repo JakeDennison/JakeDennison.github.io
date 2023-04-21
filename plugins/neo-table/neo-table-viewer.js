@@ -120,7 +120,7 @@ export class MyTable extends LitElement {
     </div>
   `;
 
-  this._handleHTMLExport(table);
+  this._handleHTMLExport(table.toString());
 
   return table;
   }
