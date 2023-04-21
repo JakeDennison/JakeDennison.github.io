@@ -125,6 +125,9 @@ export class MyTable extends LitElement {
     
     this.HTMLoutput = table.outerHTML;
   
+    const tableString = JSON.stringify(table.outerHTML);
+    console.log('Generated HTML string:', tableString);
+
     // Log the generated HTML string to the console
     console.log('Generated HTML string:', this.HTMLoutput);
   
