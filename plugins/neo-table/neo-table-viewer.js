@@ -42,7 +42,6 @@ export class MyTable extends LitElement {
     return data;
   }
 
-
   parseXmlDataObject() {
     let xmlString = this.dataobject.replace(/&quot;/g, '"').replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
   
@@ -50,31 +49,54 @@ export class MyTable extends LitElement {
     if (xmlString.indexOf('<?xml') !== 0) {
       xmlString = `<?xml version="1.0" encoding="UTF-8"?>${xmlString}`;
     }
-    console.log(xmlString)
+  
     const parser = new DOMParser();
     const xmlDocument = parser.parseFromString(xmlString, 'text/xml');
-    const items = xmlDocument.documentElement.children;
-    const data = [];
   
-    for (let i = 0; i < items.length; i++) {
-      const row = {};
-      const fields = items[i].children;
+    const parseNode = (node) => {
+      const obj = {};
   
-      for (let j = 0; j < fields.length; j++) {
-        const field = fields[j];
-        const fieldName = field.nodeName;
-        let fieldValue = field.textContent;
-        fieldValue = fieldValue.replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
-  
-        row[fieldName] = fieldValue;
+      if (node.nodeType === Node.TEXT_NODE) {
+        return node.nodeValue.trim();
       }
   
-      data.push(row);
-    }
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        for (let i = 0; i < node.attributes.length; i++) {
+          const attribute = node.attributes[i];
+          obj[attribute.nodeName] = attribute.nodeValue.trim();
+        }
+  
+        for (let i = 0; i < node.childNodes.length; i++) {
+          const childNode = node.childNodes[i];
+          const childNodeName = childNode.nodeName;
+  
+          if (childNode.nodeType === Node.ELEMENT_NODE) {
+            if (obj[childNodeName] === undefined) {
+              obj[childNodeName] = [];
+            }
+  
+            obj[childNodeName].push(parseNode(childNode));
+          } else if (childNode.nodeType === Node.TEXT_NODE && childNode.nodeValue.trim() !== '') {
+            if (obj[childNodeName] === undefined) {
+              obj[childNodeName] = childNode.nodeValue.trim();
+            } else {
+              if (!Array.isArray(obj[childNodeName])) {
+                obj[childNodeName] = [obj[childNodeName]];
+              }
+  
+              obj[childNodeName].push(childNode.nodeValue.trim());
+            }
+          }
+        }
+      }
+  
+      return obj;
+    };
+  
+    const data = parseNode(xmlDocument.documentElement);
   
     return data;
   }
-  
   
   render() {
     let data;
