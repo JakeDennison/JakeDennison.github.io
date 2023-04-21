@@ -100,15 +100,16 @@ export class MyTable extends LitElement {
   
   render() {
     let data;
-
+  
     try {
       data = this.parseDataObject();
+      console.log('parsed JSON data:', data);
     } catch (e) {
       // If parsing as JSON fails, assume it's XML
       console.log("XML detected");
       try {
         data = this.parseXmlDataObject();
-        console.log('XML converted to JSON:', data);
+        console.log('parsed XML data:', data);
       } catch (e) {
         console.error(e);
         return html`
@@ -116,21 +117,23 @@ export class MyTable extends LitElement {
         `;
       }
     }
-
+  
+    console.log('render data:', data);
+  
     if (!data || data.length === 0) {
       return html`
         <p>No Data Found</p>
       `;
     }
-
+  
     const rows = data.map(row => html`
       <tr>
         ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
       </tr>
     `);
-
+  
     const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
-
+  
     const table = html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="table-responsive-md overflow-auto">
@@ -146,9 +149,9 @@ export class MyTable extends LitElement {
         </table>
       </div>
     `;
-
+  
     return table;
-  }
+  }  
 }
 
 customElements.define('neo-table-viewer', MyTable);
