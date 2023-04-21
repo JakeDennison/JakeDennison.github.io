@@ -47,6 +47,8 @@ export class MyTable extends LitElement {
     const parser = new DOMParser();
     const xmlDocument = parser.parseFromString(this.dataobject, 'text/xml');
   
+    const records = [];
+  
     const traverse = (node) => {
       const obj = {};
   
@@ -55,7 +57,10 @@ export class MyTable extends LitElement {
   
         if (childNode.nodeType === Node.ELEMENT_NODE) {
           if (childNode.childNodes.length > 0) {
-            obj[childNode.nodeName] = traverse(childNode);
+            const childObj = traverse(childNode);
+            if (Object.keys(childObj).length > 0) {
+              records.push(childObj);
+            }
           } else {
             obj[childNode.nodeName] = childNode.textContent;
           }
@@ -65,11 +70,11 @@ export class MyTable extends LitElement {
       return obj;
     };
   
-    const records = traverse(xmlDocument.documentElement);
-    const data = Array.isArray(records) ? records : [records];
+    traverse(xmlDocument.documentElement);
   
-    return data;
+    return records;
   }
+  
   
   renderCell(value) {
     if (typeof value === 'object' && value !== null) {
@@ -97,7 +102,7 @@ export class MyTable extends LitElement {
   
   render() {
     let data;
-    
+  
     try {
       data = this.parseDataObject();
     } catch (e) {
@@ -120,7 +125,16 @@ export class MyTable extends LitElement {
   
     const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
   
-    const rows = data.map(record => this.renderRow(record));
+    const rows = data.map(record => {
+      const cells = Object.values(record).map(value => {
+        if (typeof value === 'object') {
+          return this.renderCell(value);
+        } else {
+          return html`<td class="text-nowrap">${value}</td>`;
+        }
+      });
+      return html`<tr>${cells}</tr>`;
+    });
   
     const table = html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -139,7 +153,8 @@ export class MyTable extends LitElement {
     `;
   
     return table;
-  }  
+  }
+  
   
 }
 
