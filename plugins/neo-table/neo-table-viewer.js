@@ -126,10 +126,10 @@ export class MyTable extends LitElement {
     this.HTMLoutput = table.outerHTML;
   
     // Log the generated HTML string to the console
-    console.log('Generated HTML string:', this.htmlString);
+    console.log('Generated HTML string:', this.HTMLoutput);
   
     // Dispatch the ntx-value-change event with the generated HTML string
-    this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: this.htmlString }));
+    this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: this.HTMLoutput }));
   
     // Return the table element first
     return table;
