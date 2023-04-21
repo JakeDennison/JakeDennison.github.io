@@ -16,22 +16,40 @@ export class MyTable extends LitElement {
           title: 'Object',
           description: 'Test'
         },
+        HTMLoutput:{
+          title: 'HTML Output',
+          type: 'string',
+          description: 'Output used to store HTML for use in emails',
+          isValueField: true,
+        },
       },
+      events: ["ntx-value-change"],
       standardProperties: {
         fieldLabel: true,
         readOnly: true,
         required: true,
         description: true,
-      }
+      },
     };
   }
   
   static properties = {
-    dataobject: ''
+    dataobject: '',
+    HTMLoutput: '',
   }
 
   constructor() {
     super();
+  }
+
+  _handleHTMLExport(html){
+    this.HTMLoutput = html;
+    this.dispatchEvent(new CustomEvent('ntx-value-change', {
+      bubbles: true,
+      cancelable: false,
+      composed: true,
+      detail: this.HTMLoutput,
+    }));
   }
 
   render() {
@@ -78,17 +96,17 @@ export class MyTable extends LitElement {
     `;
   }
     
-    const rows = data.map(row => html`
-      <tr>
-        ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
-      </tr>
-    `);
-  
-    const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`); // add class to th elements
-  
-    return html`
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <div class="table-responsive-md overflow-auto">
+  const rows = data.map(row => html`
+  <tr>
+      ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
+    </tr>
+  `);
+
+  const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
+
+  const table = html`
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <div class="table-responsive-md overflow-auto">
       <table class="table table-striped">
         <thead>
           <tr>
@@ -100,7 +118,11 @@ export class MyTable extends LitElement {
         </tbody>
       </table>
     </div>
-    `;
+  `;
+
+  this._handleHTMLExport(table);
+
+  return table;
   }
 }
 
