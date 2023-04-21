@@ -43,15 +43,24 @@ export class MyTable extends LitElement {
     super();
   }
 
-  _handleHTMLExport() {  
-    this.dispatchEvent(new CustomEvent('ntx-value-change', {
-      bubbles: true,
-      cancelable: false,
-      composed: true,
-      detail: this.HTMLoutput,
-    }));
-  }
+  _handleHTMLExport() {
+    // Only run the function if isExportingHTML is false
+    if (this.isExportingHTML) {
+      return;
+    }
+  
+    this.isExportingHTML = true;
+    
+    const table = this.renderRoot.querySelector('table');
+    const tableString = renderToString(table);
 
+    console.log('Generated HTML string:', tableString);
+  
+    this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: tableString }));
+    
+    this.isExportingHTML = false;
+  }
+  
   render() {
     let data;
     const unicodeRegex = /_x([0-9A-F]{4})_/g;
