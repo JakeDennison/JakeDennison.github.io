@@ -52,7 +52,7 @@ export class MyTable extends LitElement {
     console.log(xmlString)
     const parser = new DOMParser();
     const xmlDocument = parser.parseFromString(xmlString, 'text/xml');
-    const items = xmlDocument.getElementsByTagName('Item');
+    const items = xmlDocument.getElementsByTagName('*');
     const data = [];
   
     for (let i = 0; i < items.length; i++) {
