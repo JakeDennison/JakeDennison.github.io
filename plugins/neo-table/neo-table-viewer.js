@@ -42,74 +42,50 @@ export class MyTable extends LitElement {
     return data;
   }
 
+
   parseXmlDataObject() {
     let xmlString = this.dataobject.replace(/&quot;/g, '"').replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
   
-    // Add XML declaration if not present
-    if (xmlString.indexOf('<?xml') !== 0) {
-      xmlString = `<?xml version="1.0" encoding="UTF-8"?>${xmlString}`;
-    }
+    // Remove XML declaration if present
+    xmlString = xmlString.replace(/<\?xml.*?\?>/, '');
   
     const parser = new DOMParser();
     const xmlDocument = parser.parseFromString(xmlString, 'text/xml');
+    const items = xmlDocument.documentElement.children;
+    const data = [];
   
-    const parseNode = (node) => {
-      const obj = {};
+    for (let i = 0; i < items.length; i++) {
+      const row = {};
+      const fields = items[i].children;
   
-      if (node.nodeType === Node.TEXT_NODE) {
-        return node.nodeValue.trim();
+      for (let j = 0; j < fields.length; j++) {
+        const field = fields[j];
+        const fieldName = field.nodeName;
+        let fieldValue = field.textContent;
+        fieldValue = fieldValue.replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
+  
+        row[fieldName] = fieldValue;
       }
   
-      if (node.nodeType === Node.ELEMENT_NODE) {
-        for (let i = 0; i < node.attributes.length; i++) {
-          const attribute = node.attributes[i];
-          obj[attribute.nodeName] = attribute.nodeValue.trim();
-        }
-  
-        for (let i = 0; i < node.childNodes.length; i++) {
-          const childNode = node.childNodes[i];
-          const childNodeName = childNode.nodeName;
-  
-          if (childNode.nodeType === Node.ELEMENT_NODE) {
-            if (obj[childNodeName] === undefined) {
-              obj[childNodeName] = [];
-            }
-  
-            obj[childNodeName].push(parseNode(childNode));
-          } else if (childNode.nodeType === Node.TEXT_NODE && childNode.nodeValue.trim() !== '') {
-            if (obj[childNodeName] === undefined) {
-              obj[childNodeName] = childNode.nodeValue.trim();
-            } else {
-              if (!Array.isArray(obj[childNodeName])) {
-                obj[childNodeName] = [obj[childNodeName]];
-              }
-  
-              obj[childNodeName].push(childNode.nodeValue.trim());
-            }
-          }
-        }
-      }
-  
-      return obj;
-    };
-  
-    const data = parseNode(xmlDocument.documentElement);
+      data.push(row);
+    }
   
     return data;
   }
   
+  
+  
   render() {
     let data;
-  
+
     try {
       data = this.parseDataObject();
-      console.log('parsed JSON data:', data.stringify);
     } catch (e) {
       // If parsing as JSON fails, assume it's XML
       console.log("XML detected");
       try {
         data = this.parseXmlDataObject();
-        console.log('parsed XML data:', data.stringify);
+        console.log('XML converted to JSON:', data);
       } catch (e) {
         console.error(e);
         return html`
@@ -117,23 +93,21 @@ export class MyTable extends LitElement {
         `;
       }
     }
-  
-    console.log('render data:', data);
-  
+
     if (!data || data.length === 0) {
       return html`
         <p>No Data Found</p>
       `;
     }
-  
+
     const rows = data.map(row => html`
       <tr>
         ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
       </tr>
     `);
-  
+
     const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
-  
+
     const table = html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="table-responsive-md overflow-auto">
@@ -149,9 +123,9 @@ export class MyTable extends LitElement {
         </table>
       </div>
     `;
-  
+
     return table;
-  }  
+  }
 }
 
 customElements.define('neo-table-viewer', MyTable);
