@@ -26,7 +26,7 @@ export class MyTable extends LitElement {
       },
     };
   }
-  
+
   static properties = {
     dataobject: '',
   }
@@ -42,64 +42,62 @@ export class MyTable extends LitElement {
     return data;
   }
 
-
   parseXmlDataObject() {
     const parser = new DOMParser();
     const xmlDocument = parser.parseFromString(this.dataobject, 'text/xml');
-  
-    const records = [];
-  
+
     const traverse = (node) => {
       const obj = {};
-  
+
       for (let i = 0; i < node.childNodes.length; i++) {
         const childNode = node.childNodes[i];
-  
+
         if (childNode.nodeType === Node.ELEMENT_NODE) {
           if (childNode.childNodes.length > 0) {
-            const childObj = traverse(childNode);
-            if (Object.keys(childObj).length > 0) {
-              records.push(childObj);
-            }
+            obj[childNode.nodeName] = traverse(childNode);
           } else {
             obj[childNode.nodeName] = childNode.textContent;
           }
         }
       }
-  
+
       return obj;
     };
-  
-    traverse(xmlDocument.documentElement);
-  
-    return records;
+
+    const records = traverse(xmlDocument.documentElement);
+    const data = Array.isArray(records) ? records : [records];
+
+    return data;
   }
-  
-  
-  renderCell(value) {
-    if (typeof value === 'object' && value !== null) {
-      const rows = Object.entries(value).map(([key, nestedValue]) => {
-        const cells = this.renderCell(nestedValue);
-        return html`<tr><td class="fw-bold">${key}</td>${cells}</tr>`;
+
+  renderTableSection(section) {
+    const headers = Object.keys(section[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
+
+    const rows = section.map(record => {
+      const cells = Object.values(record).map(value => {
+        if (typeof value === 'object' && value !== null) {
+          return html`<td>${this.renderTableSection([value])}</td>`;
+        } else {
+          return html`<td class="text-nowrap">${value}</td>`;
+        }
       });
-  
-      return html`
-        <table class="table table-bordered">
-          <tbody>
-            ${rows}
-          </tbody>
-        </table>
-      `;
-    } else {
-      return html`<td class="text-nowrap">${value}</td>`;
-    }
+      return html`<tr>${cells}</tr>`;
+    });
+
+    const table = html`
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>${headers}</tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    `;
+
+    return table;
   }
-  
-  renderRow(record) {
-    const cells = Object.values(record).map(value => this.renderCell(value));
-    return html`<tr>${cells}</tr>`;
-  }
-  
+
   render() {
     let data;
   
@@ -123,38 +121,29 @@ export class MyTable extends LitElement {
       `;
     }
   
-    const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
+    const tableSections = [];
   
-    const rows = data.map(record => {
-      const cells = Object.values(record).map(value => {
-        if (typeof value === 'object') {
-          return this.renderCell(value);
-        } else {
-          return html`<td class="text-nowrap">${value}</td>`;
-        }
-      });
-      return html`<tr>${cells}</tr>`;
+    const sectionKeys = Object.keys(data[0]);
+    sectionKeys.forEach(sectionKey => {
+      const sectionData = data.map(record => record[sectionKey]);
+      const section = {
+        title: sectionKey,
+        data: sectionData
+      };
+      tableSections.push(section);
     });
   
     const table = html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="table-responsive-md overflow-auto">
         <table class="table table-striped">
-          <thead>
-            <tr>
-              ${headers}
-            </tr>
-          </thead>
-          <tbody>
-            ${rows}
-          </tbody>
+          ${tableSections.map(section => this.renderTableSection(section))}
         </table>
       </div>
     `;
   
     return table;
   }
-  
   
 }
 
