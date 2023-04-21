@@ -36,9 +36,13 @@ export class MyTable extends LitElement {
   }
 
   parseDataObject() {
-    const data = JSON.parse(this.dataobject);
+    let data = JSON.parse(this.dataobject);
+    // Convert Unicode escape sequences if present
+    const unicodeRegex = /_x([0-9A-F]{4})_/g;
+    data = JSON.parse(JSON.stringify(data).replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
     return data;
   }
+
 
   parseXmlDataObject() {
     const xmlString = this.dataobject.replace(/&quot;/g, '"').replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
