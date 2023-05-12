@@ -47,6 +47,9 @@ class unitElement extends LitElement {
 
   constructor() {
     super();
+    this.unittype = "kg."
+    this.unitvalue = ""
+    this.decimalplaces = ""
   }
 
   onChange(e) {
@@ -62,6 +65,7 @@ class unitElement extends LitElement {
 
   render() {
     return html`
+    <link rel="stylesheet" href="https://jsdenintex.github.io/plugins/neo-unit/src/neo-unit.css">
       <div class="neo-unit-control">
         <div class="input-unit-group-append">
           <button type="button" class="neo-btn-input-icon neo-unit-btn">
