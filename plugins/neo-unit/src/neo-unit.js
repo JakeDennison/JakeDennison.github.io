@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import './neo-unit.css';
 
 class unitElement extends LitElement {
   static getMetaConfig() {
@@ -8,9 +9,16 @@ class unitElement extends LitElement {
       fallbackDisableSubmit: false,
       description: 'Control for diplaying units of measurement',
       iconUrl: "https://jsdenintex.github.io/plugins/neo-unit/dist/unit-icon.svg",
-      groupName: 'Custom fields',
+      groupName: 'Custom controls',
       version: '1.0',
       properties: {
+        unittype: {
+          title: 'Choice field',
+          type: 'string',
+          enum: ['kg.', 'ltr.', 'km'],
+          verticalLayout: true,
+          defaultValue: 'kg.',
+        },
         unitvalue: {
           type: 'number',
           title: 'Unit value',
@@ -30,14 +38,6 @@ class unitElement extends LitElement {
       },
       events: ["ntx-value-change"],
     };
-  }
-
-  static get styles() {
-    return [
-      css`
-        @import url('./neo-unit.css');
-      `,
-    ];
   }
 
   constructor() {
