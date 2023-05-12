@@ -7,8 +7,8 @@ class unitElement extends LitElement {
       controlName: 'neo-unit',
       fallbackDisableSubmit: false,
       description: 'Control for diplaying units of measurement',
-      iconUrl: "image",
-      groupName: 'Visual Data',
+      iconUrl: "https://jsdenintex.github.io/plugins/neo-unit/dist/unit-icon.svg",
+      groupName: 'Custom fields',
       version: '1.0',
       properties: {
         unitvalue: {
