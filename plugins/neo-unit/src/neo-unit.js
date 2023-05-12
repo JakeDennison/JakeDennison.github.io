@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit';
-import './neo-unit.css';
 
 class unitElement extends LitElement {
   static getMetaConfig() {
@@ -38,6 +37,12 @@ class unitElement extends LitElement {
       },
       events: ["ntx-value-change"],
     };
+  }
+
+  static get styles() {
+    return css`
+      @import url('https://jsdenintex.github.io/plugins/neo-unit/src/neo-unit.css');
+    `;
   }
 
   constructor() {
