@@ -10,13 +10,6 @@ class templateElement extends LitElement {
         background-color: grey;
         padding: 10px;
       }
-
-      .print-icon path,
-      .print-icon polygon,
-      .print-icon circle,
-      .print-icon rect {
-        fill: black;
-      }
     `;
   }
 
@@ -60,7 +53,7 @@ class templateElement extends LitElement {
       <slot></slot>
       <div class="floating-bar">
         <button @click="${this.handlePrintButtonClicked}">
-          <img class="print-icon" src="https://jsdenintex.github.io/plugins/neo-printform/dist/printing.svg" alt="Print Icon" width="20" height="20">
+          <img class="print-icon" src="https://jsdenintex.github.io/plugins/neo-printform/dist/printing-bl.svg" alt="Print Icon" width="20" height="20">
         </button>
       </div>
     `;
