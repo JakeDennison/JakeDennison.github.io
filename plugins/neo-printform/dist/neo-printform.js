@@ -7,15 +7,15 @@
         background-color: grey;
         padding: 10px;
       }
+
+      .print-icon {
+        color: inherit;
+      }
     `}handlePrintButtonClicked(){const t=document.querySelectorAll(".d-none");t.forEach((t=>{t.classList.toggle("d-print-block")})),window.print(),window.addEventListener("afterprint",(()=>{t.forEach((t=>{t.classList.toggle("d-print-block")}))}))}static getMetaConfig(){return{controlName:"neo-printform",fallbackDisableSubmit:!1,description:"Display a print button on a bar at the top of the form",iconUrl:"https://jsdenintex.github.io/plugins/neo-printform/dist/printing.svg",groupName:"Admin tools",version:"1.0",standardProperties:{fieldLabel:!0,description:!0}}}constructor(){super()}render(){return R`
-      <div id="floating-bar" class="floating-bar">
+      <slot></slot>
+      <div class="floating-bar">
         <button @click="${this.handlePrintButtonClicked}">
-          <img src="${this.iconUrl}" alt="Print Icon" width="20" height="20">
+          <img class="print-icon" src="https://jsdenintex.github.io/plugins/neo-printform/dist/printing.svg" alt="Print Icon" width="20" height="20">
         </button>
       </div>
-
-      <form>
-        <input type="text" class="d-none" value="Hidden in print media">
-        <input type="text" value="Visible in print media">
-      </form>
     `}})})();

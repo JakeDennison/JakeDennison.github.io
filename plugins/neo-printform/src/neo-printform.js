@@ -10,6 +10,10 @@ class templateElement extends LitElement {
         background-color: grey;
         padding: 10px;
       }
+
+      .print-icon {
+        color: inherit;
+      }
     `;
   }
 
@@ -50,16 +54,12 @@ class templateElement extends LitElement {
 
   render() {
     return html`
-      <div id="floating-bar" class="floating-bar">
+      <slot></slot>
+      <div class="floating-bar">
         <button @click="${this.handlePrintButtonClicked}">
-          <img src="${this.iconUrl}" alt="Print Icon" width="20" height="20">
+          <img class="print-icon" src="https://jsdenintex.github.io/plugins/neo-printform/dist/printing.svg" alt="Print Icon" width="20" height="20">
         </button>
       </div>
-
-      <form>
-        <input type="text" class="d-none" value="Hidden in print media">
-        <input type="text" value="Visible in print media">
-      </form>
     `;
   }
 }
