@@ -10,7 +10,8 @@ class templateElement extends LitElement {
         background-color: grey;
         padding: 10px;
       }
-      .print-text {
+      .print-text,
+      .print-icon {
         vertical-align: middle;
       }
     `;
@@ -51,8 +52,8 @@ class templateElement extends LitElement {
     super();
   }
 
-  connectedCallback() {
-    super.connectedCallback();
+  firstUpdated() {
+    super.firstUpdated();
     const floatingBar = this.shadowRoot.querySelector('.floating-bar');
     const nwcFormRuntimeRoot = document.getElementById('nwc-form-runtime-root');
 
