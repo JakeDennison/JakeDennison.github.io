@@ -3,6 +3,9 @@ import { LitElement, html, css } from 'lit';
 class templateElement extends LitElement {
   static get styles() {
     return css`
+      :host {
+        display: block;
+      }
       .floating-bar {
         position: sticky;
         top: 0;
@@ -77,7 +80,9 @@ class templateElement extends LitElement {
     const nwcFormRuntimeRoot = document.getElementById('nwc-form-runtime-root');
 
     if (floatingBar && nwcFormRuntimeRoot) {
+      const styles = window.getComputedStyle(floatingBar);
       nwcFormRuntimeRoot.insertAdjacentElement('beforebegin', floatingBar);
+      Object.assign(floatingBar.style, styles);
     }
   }
 
