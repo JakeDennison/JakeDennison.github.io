@@ -17,12 +17,26 @@ class templateElement extends LitElement {
     };
   }
 
+  printButtonClicked() {
+    document.querySelectorAll('.d-none').forEach(element => element.classList.remove('d-none'));
+    window.print();
+  }
   
   constructor() {
     super();
   }
 
-  render() {''
+  render() {
+    return html`
+      <div id="grey-bar" style="background-color: grey; padding: 10px;">
+        <button @click="${this.printButtonClicked}">
+          <img src="${this.iconUrl}" alt="Print Icon" width="20" height="20">
+        </button>
+      </div>
+      <div id="nx-form-container">
+        <!-- Existing content of the nx-form-container -->
+      </div>
+    `;
   }
 }
 
