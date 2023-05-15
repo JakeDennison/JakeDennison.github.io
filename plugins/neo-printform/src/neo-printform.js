@@ -14,21 +14,17 @@ class templateElement extends LitElement {
   }
 
   handlePrintButtonClicked() {
+    const elements = document.querySelectorAll('.d-none');
     const floatingBar = this.shadowRoot.querySelector('.floating-bar');
-    const elements = this.shadowRoot.querySelectorAll('.d-none');
-    
-    // Hide the floating bar
+
     floatingBar.style.display = 'none';
-  
-    // Toggle the 'd-print-block' class on elements
+
     elements.forEach((element) => {
       element.classList.toggle('d-print-block');
     });
-  
-    // Trigger print functionality
+
     window.print();
-  
-    // Restore the floating bar and elements after printing
+
     window.addEventListener('afterprint', () => {
       floatingBar.style.display = 'block';
       elements.forEach((element) => {
@@ -36,7 +32,6 @@ class templateElement extends LitElement {
       });
     });
   }
-  
 
   static getMetaConfig() {
     // plugin contract information
