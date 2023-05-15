@@ -14,6 +14,23 @@ class templateElement extends LitElement {
       .print-icon {
         vertical-align: middle;
       }
+      .btn {
+        display: inline-block;
+        font-family: Open Sans,Helvetica,Arial,sans-serif;
+        font-weight: 400;
+        color: #161718;
+        text-align: center;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        user-select: none;
+        background-color: transparent;
+        border: 1px solid transparent;
+        padding: .525rem .75rem;
+        font-size: .875rem;
+        line-height: 1;
+        border-radius: 4px;
+        transition: all .2s ease-in-out;
+    }
     `;
   }
 
@@ -66,7 +83,7 @@ class templateElement extends LitElement {
     return html`
       <slot></slot>
       <div class="floating-bar">
-        <button @click="${this.handlePrintButtonClicked}">
+        <button class='btn btn-medium ml-md-auto nx-theme-button-1 ng-star-inserted' @click="${this.handlePrintButtonClicked}">
           <img class="print-icon" src="https://jsdenintex.github.io/plugins/neo-printform/dist/printing-bl.svg" alt="Print Icon" width="20" height="20">
           <span class="print-text">Print</span>
         </button>
