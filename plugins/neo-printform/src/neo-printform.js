@@ -10,15 +10,14 @@ class templateElement extends LitElement {
         background-color: grey;
         padding: 10px;
       }
+      .print-text {
+        vertical-align: middle;
+      }
     `;
   }
 
   handlePrintButtonClicked() {
     const elements = document.querySelectorAll('.d-none');
-    const floatingBar = this.shadowRoot.querySelector('.floating-bar');
-
-    floatingBar.style.display = 'none';
-
     elements.forEach((element) => {
       element.classList.toggle('d-print-block');
     });
@@ -26,7 +25,6 @@ class templateElement extends LitElement {
     window.print();
 
     window.addEventListener('afterprint', () => {
-      floatingBar.style.display = 'block';
       elements.forEach((element) => {
         element.classList.toggle('d-print-block');
       });
@@ -59,7 +57,7 @@ class templateElement extends LitElement {
       <div class="floating-bar">
         <button @click="${this.handlePrintButtonClicked}">
           <img class="print-icon" src="https://jsdenintex.github.io/plugins/neo-printform/dist/printing-bl.svg" alt="Print Icon" width="20" height="20">
-          Print
+          <span class="print-text">Print</span>
         </button>
       </div>
     `;
