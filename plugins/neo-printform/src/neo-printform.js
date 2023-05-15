@@ -11,8 +11,11 @@ class templateElement extends LitElement {
         padding: 10px;
       }
 
-      .print-icon {
-        color: inherit;
+      .print-icon path,
+      .print-icon polygon,
+      .print-icon circle,
+      .print-icon rect {
+        fill: black;
       }
     `;
   }
