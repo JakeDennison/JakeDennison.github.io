@@ -10,21 +10,14 @@ class templateElement extends LitElement {
         background-color: grey;
         padding: 10px;
       }
-  
+
       @media print {
         .d-none {
           display: block !important;
         }
       }
-  
-      @media screen {
-        .d-none {
-          display: none !important;
-        }
-      }
     `;
   }
-  
 
   static getMetaConfig() {
     // plugin contract information

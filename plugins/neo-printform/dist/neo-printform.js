@@ -7,16 +7,10 @@
         background-color: grey;
         padding: 10px;
       }
-  
+
       @media print {
         .d-none {
           display: block !important;
-        }
-      }
-  
-      @media screen {
-        .d-none {
-          display: none !important;
         }
       }
     `}static getMetaConfig(){return{controlName:"neo-printform",fallbackDisableSubmit:!1,description:"Display a print button on a bar at the top of the form",iconUrl:"https://jsdenintex.github.io/plugins/neo-printform/dist/printing.svg",groupName:"Admin tools",version:"1.0",standardProperties:{fieldLabel:!0,description:!0}}}handlePrintButtonClicked(){window.print()}constructor(){super()}render(){return k`
