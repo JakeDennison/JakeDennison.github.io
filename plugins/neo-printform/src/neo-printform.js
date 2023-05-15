@@ -1,22 +1,6 @@
 import { LitElement, html, css } from 'lit';
 
 class templateElement extends LitElement {
-  static getMetaConfig() {
-    // plugin contract information
-    return {
-      controlName: 'neo-printform',
-      fallbackDisableSubmit: false,
-      description: 'Display a print button on a bar at the top of the form',
-      iconUrl: "https://jsdenintex.github.io/plugins/neo-printform/dist/printing.svg",
-      groupName: 'Admin tools',
-      version: '1.0',
-      standardProperties: {
-        fieldLabel: true,
-        description: true,
-      }
-    };
-  }
-
   static get styles() {
     return css`
       .floating-bar {
@@ -29,8 +13,39 @@ class templateElement extends LitElement {
     `;
   }
 
+  static getMetaConfig() {
+    // plugin contract information
+    return {
+      controlName: 'neo-printform',
+      fallbackDisableSubmit: false,
+      description: 'Display a print button on a bar at the top of the form',
+      iconUrl: 'https://jsdenintex.github.io/plugins/neo-printform/dist/printing.svg',
+      groupName: 'Admin tools',
+      version: '1.0',
+      standardProperties: {
+        fieldLabel: true,
+        description: true,
+      }
+    };
+  }
+
   constructor() {
     super();
+    this.handleAfterPrint = this.handleAfterPrint.bind(this);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener('afterprint', this.handleAfterPrint);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('afterprint', this.handleAfterPrint);
+  }
+
+  handleAfterPrint() {
+    document.querySelectorAll('.d-none').forEach(element => element.classList.remove('d-none'));
   }
 
   render() {
@@ -47,10 +62,8 @@ class templateElement extends LitElement {
   }
 
   printButtonClicked() {
-    document.querySelectorAll('.d-none').forEach(element => element.classList.remove('d-none'));
     window.print();
   }
-  
 }
 
 customElements.define('neo-printform', templateElement);
