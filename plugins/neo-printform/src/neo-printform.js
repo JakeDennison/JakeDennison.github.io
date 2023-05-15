@@ -51,6 +51,16 @@ class templateElement extends LitElement {
     super();
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    const floatingBar = this.shadowRoot.querySelector('.floating-bar');
+    const nwcFormRuntimeRoot = document.getElementById('nwc-form-runtime-root');
+
+    if (floatingBar && nwcFormRuntimeRoot) {
+      nwcFormRuntimeRoot.insertAdjacentElement('beforebegin', floatingBar);
+    }
+  }
+
   render() {
     return html`
       <slot></slot>
