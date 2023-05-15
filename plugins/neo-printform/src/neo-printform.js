@@ -6,17 +6,10 @@ class templateElement extends LitElement {
     return {
       controlName: 'neo-printform',
       fallbackDisableSubmit: false,
-      description: '',
-      iconUrl: "",
-      groupName: 'Visual Data',
+      description: 'Display a print button on a bar at the top of the form',
+      iconUrl: "https://jsdenintex.github.io/plugins/neo-printform/dist/printing.svg",
+      groupName: 'Admin tools',
       version: '1.0',
-      properties: {
-        src: {
-          type: 'string',
-          title: '3D Object source',
-          description: 'Please provide a link to the 3d object (.glt or .gltf)'
-        },
-      },
       standardProperties: {
         fieldLabel: true,
         description: true,
@@ -24,17 +17,9 @@ class templateElement extends LitElement {
     };
   }
 
-  static get styles() {
-    return css`
-      :host {
-        display: block;
-      }
-    `;
-  }
   
   constructor() {
     super();
-    this.src = '';
   }
 
   render() {''
