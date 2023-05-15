@@ -13,7 +13,7 @@ class templateElement extends LitElement {
 
       @media print {
         .d-none {
-          display: initial !important;
+          display: block !important;
         }
       }
     `;
@@ -41,34 +41,12 @@ class templateElement extends LitElement {
     this.handleAfterPrint = this.handleAfterPrint.bind(this);
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    window.addEventListener('afterprint', this.handleAfterPrint);
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    window.removeEventListener('afterprint', this.handleAfterPrint);
-  }
-
-  handlePrintButtonClicked() {
-    window.print();
-  }
-
-  handleAfterPrint() {
-    const formContainer = this.shadowRoot.querySelector('#nx-form-container');
-    formContainer.classList.remove('d-none');
-  }
-
   render() {
     return html`
       <div id="floating-bar" class="floating-bar">
         <button @click="${this.handlePrintButtonClicked}">
           <img src="${this.iconUrl}" alt="Print Icon" width="20" height="20">
         </button>
-      </div>
-      <div id="nx-form-container">
-        <slot></slot>
       </div>
     `;
   }
