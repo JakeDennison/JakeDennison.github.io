@@ -10,14 +10,21 @@ class templateElement extends LitElement {
         background-color: grey;
         padding: 10px;
       }
-
+  
       @media print {
         .d-none {
-          display: block !important;
+          display: initial !important;
+        }
+      }
+  
+      @media screen {
+        .d-none {
+          display: none !important;
         }
       }
     `;
   }
+  
 
   static getMetaConfig() {
     // plugin contract information
@@ -35,10 +42,12 @@ class templateElement extends LitElement {
     };
   }
 
+  handlePrintButtonClicked() {
+    window.print();
+  }
+
   constructor() {
     super();
-    this.handlePrintButtonClicked = this.handlePrintButtonClicked.bind(this);
-    this.handleAfterPrint = this.handleAfterPrint.bind(this);
   }
 
   render() {
