@@ -52,3 +52,7 @@
     cursor: pointer;
   }
   
+ntx-simple-currency .nx-simple-currency-control .nx-zinc-control-input.input-group {
+    display: flex;
+    flex: 1;
+}

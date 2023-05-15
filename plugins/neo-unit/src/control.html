@@ -1,74 +1,89 @@
-<div class="neo-unit-control">
-    <div class="input-unit-group-append">
-        <button tabindex="-1" type="button" class="neo-btn-input-icon neo-unit-btn" readonly="false">
-            <span>kg.</span>
-        </button>
+<ntx-simple-currency>
+    <div class="nx-simple-currency-control">
+        <div class="input-group-append"><button tabindex="-1" type="button" class="nx-btn-input-icon ntx-currency-btn"
+                readonly="false" data-e2e="currency-symbol"><span
+                    id="_9085073fad0b42c6a48577f160586de8-currency">$</span></button></div>
+        <div class="nx-zinc-control-input input-group"><ntx-simple-number><input type="text" data-simple-control="true"
+                    ntxmaskablenumberinputvalueaccessor=""
+                    class="form-control nx-theme-input-1 ng-untouched ng-pristine ng-valid" inputmode="decimal"
+                    id="_9085073fad0b42c6a48577f160586de8" name="_9085073fad0b42c6a48577f160586de8" placeholder="0.00"
+                    decimalplaces="-1" aria-label="Currency 1"
+                    aria-describedby="_9085073fad0b42c6a48577f160586de8-currency " aria-required="false"
+                    aria-invalid="false" aria-placeholder="0.00" aria-readonly="false"
+                    data-e2e="_9085073fad0b42c6a48577f160586de8-input" autocomplete="on"></ntx-simple-number></div>
     </div>
-    <div class="nx-zinc-control-input input-group">
-        <ntx-simple-number>
-            <input type="text" 
-                data-simple-control="true"
-                ntxmaskablenumberinputvalueaccessor=""
-                class="form-control nx-theme-input-1 ng-untouched ng-pristine ng-valid" 
-                inputmode="decimal"
-                decimalplaces="-1"
-                >
-            </ntx-simple-number>
-        </div>
+</ntx-simple-currency>
+
+<link rel="stylesheet" href="https://jsdenintex.github.io/plugins/neo-unit/src/neo-unit.css">
+<div class="neo-unit-control">
+  <div class="input-unit-group-append">
+    <button type="button" class="neo-btn-input-icon neo-unit-btn">
+      <span>${this.unittype}</span>
+    </button>
+  </div>
+  <div class="nx-zinc-control-input input-group">
+    <ntx-simple-number>
+      <input type="text" 
+        data-simple-control="true"
+        class="form-control nx-theme-input-1 ng-untouched ng-pristine ng-valid" 
+        decimalplaces=${this.decimalplaces}
+      >
+    </ntx-simple-number>
+  </div>
 </div>
 
 <style>
-neo-unit .neo-unit-control {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
-    width: 100%;
-}
+    neo-unit .neo-unit-control {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        width: 100%;
+    }
 
-neo-unit .neo-unit-control .input-unit-group-append {
-    border-bottom-left-radius: 4px;
-    border-top-left-radius: 4px;
-    border-color: #898F94;
-    background: #FFFFFF;
-    font-size: 14px;
-}
+    neo-unit .neo-unit-control .input-unit-group-append {
+        border-bottom-left-radius: 4px;
+        border-top-left-radius: 4px;
+        border-color: #898F94;
+        background: #FFFFFF;
+        font-size: 14px;
+    }
 
-neo-unit .neo-unit-control .input-unit-group-append .neo-btn-input-icon:last-child {
-    border-bottom-left-radius: 4px;
-    border-top-left-radius: 4px;
-}
+    neo-unit .neo-unit-control .input-unit-group-append .neo-btn-input-icon:last-child {
+        ƒ border-bottom-left-radius: 4px;
+        border-top-left-radius: 4px;
+    }
 
-neo-unit .neo-unit-control .neo-unit-btn-icon {
-    color: #006BD6;
-    font-size: 20px;
-    padding-left: 7px;
-    padding-right: 7px;
-}
+    neo-unit .neo-unit-control .neo-unit-btn-icon {
+        color: #006BD6;
+        font-size: 20px;
+        padding-left: 7px;
+        padding-right: 7px;
+    }
 
-neo-unit .neo-unit-control .input-unit-group-append>.neo-unit-btn:last-child {
-    border-radius: 4px 0 0 4px;
-    cursor: default;
-    border-left: 1px solid;
-    border-right: none;
-    border-color: inherit;
-    min-width: 36px;
-    color: #006bd6;
-    font-size: 20px;
-    font-style: normal;
-    overflow: hidden;
-}
+    neo-unit .neo-unit-control .input-unit-group-append>.neo-unit-btn:last-child {
+        border-radius: 4px 0 0 4px;
+        cursor: default;
+        border-left: 1px solid;
+        border-right: none;
+        border-color: inherit;
+        min-width: 36px;
+        color: #006bd6;
+        font-size: 20px;
+        font-style: normal;
+        overflow: hidden;
+    }
 
-.neo-btn-input-icon {
-    border-left: 1px solid;
-    border-right: 1px solid;
-    border-top: 1px solid;
-    border-bottom: 1px solid;
-    border-color: inherit;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    background-color: transparent;
-    cursor: pointer;
-}
+    .neo-btn-input-icon {
+        border-left: 1px solid;
+        border-right: 1px solid;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        border-color: inherit;
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 0;
+        background-color: transparent;
+        cursor: pointer;
+    }
 </style>
