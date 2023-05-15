@@ -9,6 +9,8 @@ class templateElement extends LitElement {
         z-index: 9999;
         background-color: grey;
         padding: 10px;
+        width:100%;
+        background-color:#555;
       }
       .print-text,
       .print-icon {
