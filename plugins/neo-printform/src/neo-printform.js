@@ -81,8 +81,13 @@ class templateElement extends LitElement {
 
     if (floatingBar && nwcFormRuntimeRoot) {
       const styles = window.getComputedStyle(floatingBar);
+      const computedStyles = {};
+      for (const key of styles) {
+        computedStyles[key] = styles.getPropertyValue(key);
+      }
+
       nwcFormRuntimeRoot.insertAdjacentElement('beforebegin', floatingBar);
-      Object.assign(floatingBar.style, styles);
+      Object.assign(floatingBar.style, computedStyles);
     }
   }
 
