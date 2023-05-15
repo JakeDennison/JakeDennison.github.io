@@ -10,6 +10,12 @@ class templateElement extends LitElement {
         background-color: grey;
         padding: 10px;
       }
+
+      @media print {
+        .d-none {
+          display: initial !important;
+        }
+      }
     `;
   }
 
@@ -31,6 +37,7 @@ class templateElement extends LitElement {
 
   constructor() {
     super();
+    this.handlePrintButtonClicked = this.handlePrintButtonClicked.bind(this);
     this.handleAfterPrint = this.handleAfterPrint.bind(this);
   }
 
@@ -44,25 +51,26 @@ class templateElement extends LitElement {
     window.removeEventListener('afterprint', this.handleAfterPrint);
   }
 
+  handlePrintButtonClicked() {
+    window.print();
+  }
+
   handleAfterPrint() {
-    document.querySelectorAll('.d-none').forEach(element => element.classList.remove('d-none'));
+    const formContainer = this.shadowRoot.querySelector('#nx-form-container');
+    formContainer.classList.remove('d-none');
   }
 
   render() {
     return html`
       <div id="floating-bar" class="floating-bar">
-        <button @click="${this.printButtonClicked}">
+        <button @click="${this.handlePrintButtonClicked}">
           <img src="${this.iconUrl}" alt="Print Icon" width="20" height="20">
         </button>
       </div>
-      <ntx-form-runtime>
-        <!-- Existing content of the ntx-form-runtime -->
-      </ntx-form-runtime>
+      <div id="nx-form-container">
+        <slot></slot>
+      </div>
     `;
-  }
-
-  printButtonClicked() {
-    window.print();
   }
 }
 
