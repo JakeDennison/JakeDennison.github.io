@@ -13,7 +13,7 @@ class templateElement extends LitElement {
   
       @media print {
         .d-none {
-          display: initial !important;
+          display: block !important;
         }
       }
   
