@@ -10,13 +10,22 @@ class templateElement extends LitElement {
         background-color: grey;
         padding: 10px;
       }
-
-      @media print {
-        .d-none {
-          display: block !important;
-        }
-      }
     `;
+  }
+
+  handlePrintButtonClicked() {
+    const elements = document.querySelectorAll('.d-none');
+    elements.forEach((element) => {
+      element.classList.toggle('d-print-block');
+    });
+
+    window.print();
+
+    window.addEventListener('afterprint', () => {
+      elements.forEach((element) => {
+        element.classList.toggle('d-print-block');
+      });
+    });
   }
 
   static getMetaConfig() {
@@ -31,12 +40,8 @@ class templateElement extends LitElement {
       standardProperties: {
         fieldLabel: true,
         description: true,
-      }
+      },
     };
-  }
-
-  handlePrintButtonClicked() {
-    window.print();
   }
 
   constructor() {
@@ -50,6 +55,11 @@ class templateElement extends LitElement {
           <img src="${this.iconUrl}" alt="Print Icon" width="20" height="20">
         </button>
       </div>
+
+      <form>
+        <input type="text" class="d-none" value="Hidden in print media">
+        <input type="text" value="Visible in print media">
+      </form>
     `;
   }
 }
