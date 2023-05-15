@@ -12,6 +12,7 @@
       <div class="floating-bar">
         <button @click="${this.handlePrintButtonClicked}">
           <img class="print-icon" src="https://jsdenintex.github.io/plugins/neo-printform/dist/printing-bl.svg" alt="Print Icon" width="20" height="20">
+          Print
         </button>
       </div>
     `}})})();
