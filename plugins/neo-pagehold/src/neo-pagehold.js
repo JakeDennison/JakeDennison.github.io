@@ -1,6 +1,13 @@
 import { LitElement, html, css } from 'lit';
 
 class NeoPageHoldElement extends LitElement {
+
+  static get properties() {
+    return {
+      applyhold: { type: Boolean }
+    };
+  }
+  
   static getMetaConfig() {
     // plugin contract information
     return {
