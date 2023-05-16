@@ -20,9 +20,12 @@
         transition: all .2s ease-in-out;
         margin-left:10px;
     }
-    `}handlePrintButtonClicked(){const t=document.querySelectorAll(".d-none");t.forEach((t=>{t.classList.toggle("d-print-block")})),window.print(),window.addEventListener("afterprint",(()=>{t.forEach((t=>{t.classList.toggle("d-print-block")}))}))}constructor(){super()}render(){return/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream?R`
-      `:R`
-    <button class='print-btn' @click="${this.handlePrintButtonClicked}">
-          <!-- Print button content -->
-    </button>
+    `}handlePrintButtonClicked(){const t=document.querySelectorAll(".d-none");t.forEach((t=>{t.classList.toggle("d-print-block")})),window.print(),window.addEventListener("afterprint",(()=>{t.forEach((t=>{t.classList.toggle("d-print-block")}))}))}constructor(){super()}render(){return R`
+      <slot></slot>
+      <div class="floating-bar">
+        <button class='print-btn' @click="${this.handlePrintButtonClicked}">
+          <img class="print-icon" src="https://jsdenintex.github.io/plugins/neo-printform/dist/printing-bl.svg" alt="Print Icon" width="20" height="20">
+          <span class="print-text">Print</span>
+        </button>
+      </div>
     `}})})();

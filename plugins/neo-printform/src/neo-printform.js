@@ -63,19 +63,16 @@ class templateElement extends LitElement {
   }
 
   render() {
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    if (isIOS) {
-      return html`
-      `;
-    }
-    // Render the print button for non-iOS devices
     return html`
-    <button class='print-btn' @click="${this.handlePrintButtonClicked}">
-          <!-- Print button content -->
-    </button>
+      <slot></slot>
+      <div class="floating-bar">
+        <button class='print-btn' @click="${this.handlePrintButtonClicked}">
+          <img class="print-icon" src="https://jsdenintex.github.io/plugins/neo-printform/dist/printing-bl.svg" alt="Print Icon" width="20" height="20">
+          <span class="print-text">Print</span>
+        </button>
+      </div>
     `;
   }
-  
 }
 
 customElements.define('neo-printform', templateElement);
