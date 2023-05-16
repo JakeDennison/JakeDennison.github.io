@@ -1,8 +1,6 @@
-customElements.define('neo-pagehold', templateElement);
-
 import { LitElement, html, css } from 'lit';
 
-class templateElement extends LitElement {
+class NeoPageHoldElement extends LitElement {
   static getMetaConfig() {
     // plugin contract information
     return {
@@ -50,8 +48,6 @@ class templateElement extends LitElement {
   }
 
   updateVisibility() {
-    console.log("Rule kicked")
-    console.log(this.applyhold)
     const stepHeaders = this.shadowRoot.querySelectorAll('mat-step-header');
     const actionPanels = this.shadowRoot.querySelectorAll('div.nx-action-panel');
 
@@ -75,4 +71,4 @@ class templateElement extends LitElement {
   }
 }
 
-customElements.define('neo-pagehold', templateElement);
+customElements.define('neo-pagehold', NeoPageHoldElement);
