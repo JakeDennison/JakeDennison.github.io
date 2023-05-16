@@ -40,8 +40,8 @@ class NeoPageHoldElement extends LitElement {
   }
 
   firstUpdated() {
-    this.stepHeaders = this.shadowRoot.querySelectorAll('mat-step-header');
-    this.actionPanels = this.shadowRoot.querySelectorAll('div.nx-action-panel');
+    this.stepHeaders = document.querySelectorAll('mat-step-header');
+    this.actionPanels = document.querySelectorAll('div.nx-action-panel');
     this.updateVisibility();
     console.log("first update complete")
   }
@@ -56,20 +56,21 @@ class NeoPageHoldElement extends LitElement {
     console.log("visibility running")
     console.log(this.applyhold)
     const displayValue = this.applyhold ? 'none' : '';
-
+  
     this.stepHeaders.forEach((header) => {
       header.style.display = displayValue;
     });
-
+  
     this.actionPanels.forEach((panel) => {
       let parent = panel;
       for (let i = 0; i < 7; i++) {
         parent = parent.parentElement;
+        if(!parent) break; // avoid null parent if the hierarchy is less than 7
       }
-      parent.style.display = displayValue;
+      if(parent) parent.style.display = displayValue; // apply style only if parent is not null
     });
   }
-
+  
   render() {
     return html`
       <!-- Your desired HTML markup here -->
