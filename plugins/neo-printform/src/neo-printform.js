@@ -27,18 +27,19 @@ class templateElement extends LitElement {
     return css`
       .print-btn {
         display: inline-block;
-        font-family: Open Sans, Helvetica, Arial, sans-serif;
+        font-family: var(--ntx-form-theme-font-family, "Open Sans", "Helvetica", "Arial", sans-serif);
         font-weight: 400;
-        color: #161718;
+        background-color: var(--ntx-form-theme-color-primary, #006BD6;);
+        color: var(--ntx-form-theme-color-input-background, #fff);
         text-align: center;
         vertical-align: middle;
         -webkit-user-select: none;
         user-select: none;
         border: 1px solid;
         padding: 0.525rem 0.75rem;
-        font-size: 0.875rem;
-        line-height: 1;
-        border-radius: 4px;
+        font-size: var(--ntx-form-theme-text-input-size, 14px);
+        line-height: var(--ntx-form-control-line-height, 1.25);
+        border-radius: var(--ntx-form-theme-border-radius, 4px);
         transition: all 0.2s ease-in-out;
         margin-left: 10px;
       }
