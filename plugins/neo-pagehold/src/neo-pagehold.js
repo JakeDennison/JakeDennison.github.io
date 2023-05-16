@@ -38,28 +38,42 @@ class templateElement extends LitElement {
   }
 
   render() {
-    if (this.applyhold) {
-      // Apply hold, disable <mat-step-header> elements and 7th parent of <div> elements with class "nx-action-panel"
-      const disableElements = () => {
-        const stepHeaders = this.shadowRoot.querySelectorAll('mat-step-header');
-        stepHeaders.forEach((header) => {
-          header.disabled = true;
-        });
-
-        const actionPanels = this.shadowRoot.querySelectorAll('div.nx-action-panel');
-        actionPanels.forEach((panel) => {
-          let parent = panel;
-          for (let i = 0; i < 7; i++) {
-            parent = parent.parentElement;
-          }
-          parent.disabled = true;
-        });
-      };
-
-      // Call the disableElements function when the element is connected to the DOM
-      this.updateComplete.then(() => {
-        disableElements();
+    const hideElements = () => {
+      const stepHeaders = this.shadowRoot.querySelectorAll('mat-step-header');
+      stepHeaders.forEach((header) => {
+        header.style.display = 'none';
       });
+
+      const actionPanels = this.shadowRoot.querySelectorAll('div.nx-action-panel');
+      actionPanels.forEach((panel) => {
+        let parent = panel;
+        for (let i = 0; i < 7; i++) {
+          parent = parent.parentElement;
+        }
+        parent.style.display = 'none';
+      });
+    };
+
+    const unhideElements = () => {
+      const stepHeaders = this.shadowRoot.querySelectorAll('mat-step-header');
+      stepHeaders.forEach((header) => {
+        header.style.display = '';
+      });
+
+      const actionPanels = this.shadowRoot.querySelectorAll('div.nx-action-panel');
+      actionPanels.forEach((panel) => {
+        let parent = panel;
+        for (let i = 0; i < 7; i++) {
+          parent = parent.parentElement;
+        }
+        parent.style.display = '';
+      });
+    };
+
+    if (this.applyhold) {
+      hideElements();
+    } else {
+      unhideElements();
     }
 
     return html`
