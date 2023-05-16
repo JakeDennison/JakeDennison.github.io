@@ -26,7 +26,8 @@ class templateElement extends LitElement {
   static get styles() {
     return css`
       .print-btn {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
         font-family: Open Sans, Helvetica, Arial, sans-serif;
         font-weight: 400;
         color: #161718;
@@ -35,18 +36,28 @@ class templateElement extends LitElement {
         -webkit-user-select: none;
         user-select: none;
         border: 1px solid;
-        padding: 0.525rem 0.75rem;
+        padding: 0.4rem 0.75rem;
         font-size: 0.875rem;
         line-height: 1;
         border-radius: 4px;
         transition: all 0.2s ease-in-out;
-        margin-left: 10px;
       }
-
+  
       .print-btn.hide-on-print {
         display: none;
       }
-
+  
+      .print-icon {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 0.25rem;
+      }
+  
+      .print-text {
+        display: inline-block;
+        vertical-align: middle;
+      }
+  
       /* Print styles */
       @media print {
         .print-btn {
