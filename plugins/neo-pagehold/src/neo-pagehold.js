@@ -1,3 +1,5 @@
+customElements.define('neo-pagehold', templateElement);
+
 import { LitElement, html, css } from 'lit';
 
 class templateElement extends LitElement {
@@ -35,7 +37,10 @@ class templateElement extends LitElement {
   constructor() {
     super();
     this.applyhold = true;
-    this.updateVisibility()
+  }
+
+  firstUpdated() {
+    this.updateVisibility();
   }
 
   updated(changedProperties) {
@@ -45,6 +50,8 @@ class templateElement extends LitElement {
   }
 
   updateVisibility() {
+    console.log("Rule kicked")
+    console.log(this.applyhold)
     const stepHeaders = this.shadowRoot.querySelectorAll('mat-step-header');
     const actionPanels = this.shadowRoot.querySelectorAll('div.nx-action-panel');
 
