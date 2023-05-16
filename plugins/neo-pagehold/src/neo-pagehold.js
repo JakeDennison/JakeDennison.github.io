@@ -12,7 +12,7 @@ class templateElement extends LitElement {
       version: '1.0',
       properties: {
         applyhold: {
-          title: 'Apply hold?',
+          title: 'Apply hold',
           type: 'boolean',
           defaultValue: true,
         },
