@@ -12,7 +12,7 @@ class templateElement extends LitElement {
       version: '1.0',
       properties: {
         applyhold: {
-          title: 'Apply hold',
+          title: 'Apply hold?',
           type: 'boolean',
           defaultValue: true,
         },
@@ -35,47 +35,33 @@ class templateElement extends LitElement {
   constructor() {
     super();
     this.applyhold = true;
+    this.updateVisibility()
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('applyhold')) {
+      this.updateVisibility();
+    }
+  }
+
+  updateVisibility() {
+    const stepHeaders = this.shadowRoot.querySelectorAll('mat-step-header');
+    const actionPanels = this.shadowRoot.querySelectorAll('div.nx-action-panel');
+
+    stepHeaders.forEach((header) => {
+      header.style.display = this.applyhold ? 'none' : '';
+    });
+
+    actionPanels.forEach((panel) => {
+      let parent = panel;
+      for (let i = 0; i < 7; i++) {
+        parent = parent.parentElement;
+      }
+      parent.style.display = this.applyhold ? 'none' : '';
+    });
   }
 
   render() {
-    const hideElements = () => {
-      const stepHeaders = this.shadowRoot.querySelectorAll('mat-step-header');
-      stepHeaders.forEach((header) => {
-        header.style.display = 'none';
-      });
-
-      const actionPanels = this.shadowRoot.querySelectorAll('div.nx-action-panel');
-      actionPanels.forEach((panel) => {
-        let parent = panel;
-        for (let i = 0; i < 7; i++) {
-          parent = parent.parentElement;
-        }
-        parent.style.display = 'none';
-      });
-    };
-
-    const unhideElements = () => {
-      const stepHeaders = this.shadowRoot.querySelectorAll('mat-step-header');
-      stepHeaders.forEach((header) => {
-        header.style.display = '';
-      });
-
-      const actionPanels = this.shadowRoot.querySelectorAll('div.nx-action-panel');
-      actionPanels.forEach((panel) => {
-        let parent = panel;
-        for (let i = 0; i < 7; i++) {
-          parent = parent.parentElement;
-        }
-        parent.style.display = '';
-      });
-    };
-
-    if (this.applyhold) {
-      hideElements();
-    } else {
-      unhideElements();
-    }
-
     return html`
       <!-- Your desired HTML markup here -->
     `;
