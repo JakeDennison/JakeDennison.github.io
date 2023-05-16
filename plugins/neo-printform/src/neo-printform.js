@@ -16,6 +16,23 @@ class templateElement extends LitElement {
       iconUrl: 'https://jsdenintex.github.io/plugins/neo-printform/dist/printing.svg',
       groupName: 'Admin tools',
       version: '1.0',
+      properties: {
+        printfunction: {
+          title: 'Print function',
+          type: 'string',
+            enum: ['Print Button', 'Page break', 'Print Text'],
+          description: 'Select from the dropdown the function you want for this control.',
+          showAsRadio: true,
+          verticalLayout: true,
+          defaultValue: 'Button'
+        },
+        textAttr: {
+          title: 'Print Text',
+          description: 'Maximum 255 characters',
+          type: 'string',
+          maxLength: 255,
+        },
+      },
       standardProperties: {
         fieldLabel: true,
         description: true,
@@ -89,25 +106,52 @@ class templateElement extends LitElement {
   constructor() {
     super();
     this.showButton = true; // Initialize the button visibility to true
+    this.printfunction = "Print Button"
   }
 
   render() {
-    return html`
-      <button
-        class=${this.showButton ? 'print-btn' : 'print-btn hide-on-print'}
-        @click=${this.handlePrintButtonClicked}
-      >
-        <img
-          class="print-icon"
-          src="https://jsdenintex.github.io/plugins/neo-printform/dist/printing-bl.svg"
-          alt="Print Icon"
-          width="20"
-          height="20"
-        />
-        <span class="print-text">Print</span>
-      </button>
-    `;
+    let printContent;
+  
+    switch (this.printfunction) {
+      case 'Print Button':
+        printContent = html`
+          <button
+            class=${this.showButton ? 'print-btn' : 'print-btn hide-on-print'}
+            @click=${this.handlePrintButtonClicked}
+          >
+            <img
+              class="print-icon"
+              src="https://jsdenintex.github.io/plugins/neo-printform/dist/printing-bl.svg"
+              alt="Print Icon"
+              width="20"
+              height="20"
+            />
+            <span class="print-text">Print</span>
+          </button>
+        `;
+        break;
+  
+      case 'Page break':
+        printContent = html`
+          <div style="page-break-after: always;"></div>
+        `;
+        break;
+  
+      case 'Print Text':
+        printContent = html`
+          <div>${this.textAttr}</div>
+        `;
+        break;
+  
+      default:
+        printContent = html``;
+        break;
+    }
+  
+    return printContent;
   }
 }
 
 customElements.define('neo-printform', templateElement);
+
+
