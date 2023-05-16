@@ -7,7 +7,7 @@ class NeoPageHoldElement extends LitElement {
       applyhold: { type: Boolean }
     };
   }
-  
+
   static getMetaConfig() {
     // plugin contract information
     return {
@@ -79,7 +79,6 @@ class NeoPageHoldElement extends LitElement {
   
   render() {
     return html`
-     <p>${this.applyhold}</p>
     `;
   }
 }
