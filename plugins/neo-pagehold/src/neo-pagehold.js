@@ -34,7 +34,6 @@ class NeoPageHoldElement extends LitElement {
 
   constructor() {
     super();
-    this.applyhold = true;
     this.stepHeaders = [];
     this.actionPanels = [];
   }
