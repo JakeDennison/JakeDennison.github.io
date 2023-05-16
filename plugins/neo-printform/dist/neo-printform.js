@@ -3,20 +3,18 @@
       :host {
         display: block;
       }
-  
-      ::slotted(.floating-bar) {
+      .floating-bar {
         position: sticky;
         top: 0;
         z-index: 9999;
         background-color: grey;
         padding: 10px;
-        width: 100%;
-        background-color: #555;
+        width:100%;
+        background-color:#555;
       }
-  
-      ::slotted(.print-btn) {
+      .print-btn {
         display: inline-block;
-        font-family: Open Sans, Helvetica, Arial, sans-serif;
+        font-family: Open Sans,Helvetica,Arial,sans-serif;
         font-weight: 400;
         color: #161718;
         text-align: center;
@@ -24,23 +22,18 @@
         -webkit-user-select: none;
         user-select: none;
         border: 1px solid;
-        padding: 0.525rem 0.75rem;
-        font-size: 0.875rem;
+        padding: .525rem .75rem;
+        font-size: .875rem;
         line-height: 1;
         border-radius: 4px;
-        transition: all 0.2s ease-in-out;
-        margin-left: 10px;
-      }
-    `}handlePrintButtonClicked(){const t=document.querySelectorAll(".d-none");t.forEach((t=>{t.classList.toggle("d-print-block")})),window.print(),window.addEventListener("afterprint",(()=>{t.forEach((t=>{t.classList.toggle("d-print-block")}))}))}constructor(){super()}firstUpdated(){super.firstUpdated();const t=this.shadowRoot.querySelector(".floating-bar"),e=document.getElementById("nwc-form-runtime-root");if(t&&e){const i=window.getComputedStyle(t),s={};for(let t=0;t<i.length;t++){const e=i[t];s[e]=i.getPropertyValue(e)}e.insertAdjacentElement("beforebegin",t),Object.keys(s).forEach((e=>{t.style.setProperty(e,s[e])}))}}render(){return/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream?R``:R`
+        transition: all .2s ease-in-out;
+        margin-left:10px;
+    }
+    `}handlePrintButtonClicked(){const t=document.querySelectorAll(".d-none");t.forEach((t=>{t.classList.toggle("d-print-block")})),window.print(),window.addEventListener("afterprint",(()=>{t.forEach((t=>{t.classList.toggle("d-print-block")}))}))}constructor(){super()}firstUpdated(){super.firstUpdated();const t=this.shadowRoot.querySelector(".floating-bar"),e=document.getElementById("nwc-form-runtime-root");if(t&&e){const i=window.getComputedStyle(t),s={};for(let t=0;t<i.length;t++){const e=i[t];s[e]=i.getPropertyValue(e)}Object.keys(s).forEach((t=>{this.style.setProperty(t,s[t])})),e.insertAdjacentElement("beforebegin",t)}}render(){return/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream?R`
+      `:R`
       <slot></slot>
       <div class="floating-bar">
-        <slot name="floating-bar-content"></slot>
-        <style>
-          ::slotted(*) {
-            /* Apply styles to all slotted elements */
-          }
-        </style>
-        <button class="print-btn" @click="${this.handlePrintButtonClicked}">
+        <button class='print-btn' @click="${this.handlePrintButtonClicked}">
           <!-- Print button content -->
         </button>
       </div>

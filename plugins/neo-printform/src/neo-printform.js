@@ -23,20 +23,18 @@ class templateElement extends LitElement {
       :host {
         display: block;
       }
-  
-      ::slotted(.floating-bar) {
+      .floating-bar {
         position: sticky;
         top: 0;
         z-index: 9999;
         background-color: grey;
         padding: 10px;
-        width: 100%;
-        background-color: #555;
+        width:100%;
+        background-color:#555;
       }
-  
-      ::slotted(.print-btn) {
+      .print-btn {
         display: inline-block;
-        font-family: Open Sans, Helvetica, Arial, sans-serif;
+        font-family: Open Sans,Helvetica,Arial,sans-serif;
         font-weight: 400;
         color: #161718;
         text-align: center;
@@ -44,13 +42,13 @@ class templateElement extends LitElement {
         -webkit-user-select: none;
         user-select: none;
         border: 1px solid;
-        padding: 0.525rem 0.75rem;
-        font-size: 0.875rem;
+        padding: .525rem .75rem;
+        font-size: .875rem;
         line-height: 1;
         border-radius: 4px;
-        transition: all 0.2s ease-in-out;
-        margin-left: 10px;
-      }
+        transition: all .2s ease-in-out;
+        margin-left:10px;
+    }
     `;
   }
 
@@ -77,46 +75,41 @@ class templateElement extends LitElement {
     super.firstUpdated();
     const floatingBar = this.shadowRoot.querySelector('.floating-bar');
     const nwcFormRuntimeRoot = document.getElementById('nwc-form-runtime-root');
-
+  
     if (floatingBar && nwcFormRuntimeRoot) {
       const styles = window.getComputedStyle(floatingBar);
       const computedStyles = {};
-
+  
       for (let i = 0; i < styles.length; i++) {
         const property = styles[i];
         computedStyles[property] = styles.getPropertyValue(property);
       }
-
-      nwcFormRuntimeRoot.insertAdjacentElement('beforebegin', floatingBar);
-
+  
       Object.keys(computedStyles).forEach(property => {
-        floatingBar.style.setProperty(property, computedStyles[property]);
+        this.style.setProperty(property, computedStyles[property]);
       });
+  
+      nwcFormRuntimeRoot.insertAdjacentElement('beforebegin', floatingBar);
     }
   }
+  
 
   render() {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     if (isIOS) {
-      return html``;
+      return html`
+      `;
     }
     // Render the print button for non-iOS devices
     return html`
       <slot></slot>
       <div class="floating-bar">
-        <slot name="floating-bar-content"></slot>
-        <style>
-          ::slotted(*) {
-            /* Apply styles to all slotted elements */
-          }
-        </style>
-        <button class="print-btn" @click="${this.handlePrintButtonClicked}">
+        <button class='print-btn' @click="${this.handlePrintButtonClicked}">
           <!-- Print button content -->
         </button>
       </div>
     `;
   }
-  
   
 }
 
