@@ -23,15 +23,6 @@ class templateElement extends LitElement {
       :host {
         display: block;
       }
-      .floating-bar {
-        position: sticky;
-        top: 0;
-        z-index: 9999;
-        background-color: grey;
-        padding: 10px;
-        width:100%;
-        background-color:#555;
-      }
       .print-btn {
         display: inline-block;
         font-family: Open Sans,Helvetica,Arial,sans-serif;
@@ -71,29 +62,6 @@ class templateElement extends LitElement {
     super();
   }
 
-  firstUpdated() {
-    super.firstUpdated();
-    const floatingBar = this.shadowRoot.querySelector('.floating-bar');
-    const nwcFormRuntimeRoot = document.getElementById('nwc-form-runtime-root');
-  
-    if (floatingBar && nwcFormRuntimeRoot) {
-      const styles = window.getComputedStyle(floatingBar);
-      const computedStyles = {};
-  
-      for (let i = 0; i < styles.length; i++) {
-        const property = styles[i];
-        computedStyles[property] = styles.getPropertyValue(property);
-      }
-  
-      Object.keys(computedStyles).forEach(property => {
-        this.style.setProperty(property, computedStyles[property]);
-      });
-  
-      nwcFormRuntimeRoot.insertAdjacentElement('beforebegin', floatingBar);
-    }
-  }
-  
-
   render() {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     if (isIOS) {
@@ -102,12 +70,9 @@ class templateElement extends LitElement {
     }
     // Render the print button for non-iOS devices
     return html`
-      <slot></slot>
-      <div class="floating-bar">
-        <button class='print-btn' @click="${this.handlePrintButtonClicked}">
+    <button class='print-btn' @click="${this.handlePrintButtonClicked}">
           <!-- Print button content -->
-        </button>
-      </div>
+    </button>
     `;
   }
   
