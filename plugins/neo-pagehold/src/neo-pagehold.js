@@ -73,7 +73,7 @@ class NeoPageHoldElement extends LitElement {
   
   render() {
     return html`
-      <!-- Your desired HTML markup here -->
+     <p>${this.applyhold}</p>
     `;
   }
 }
