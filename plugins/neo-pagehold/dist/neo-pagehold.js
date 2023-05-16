@@ -3,6 +3,6 @@
       :host {
         display: block;
       }
-    `}constructor(){super(),this.applyhold=!0,this.stepHeaders=[],this.actionPanels=[]}firstUpdated(){this.stepHeaders=this.shadowRoot.querySelectorAll("mat-step-header"),this.actionPanels=this.shadowRoot.querySelectorAll("div.nx-action-panel"),this.updateVisibility()}updated(t){t.has("applyhold")&&this.updateVisibility()}updateVisibility(){const t=this.applyhold?"none":"";this.stepHeaders.forEach((e=>{e.style.display=t})),this.actionPanels.forEach((e=>{let s=e;for(let t=0;t<7;t++)s=s.parentElement;s.style.display=t}))}render(){return M`
+    `}constructor(){super(),this.applyhold=!0,this.stepHeaders=[],this.actionPanels=[]}firstUpdated(){this.stepHeaders=this.shadowRoot.querySelectorAll("mat-step-header"),this.actionPanels=this.shadowRoot.querySelectorAll("div.nx-action-panel"),this.updateVisibility(),console.log("first update complete")}updated(t){t.has("applyhold")&&this.updateVisibility()}updateVisibility(){console.log("visibility running"),console.log(this.applyhold);const t=this.applyhold?"none":"";this.stepHeaders.forEach((e=>{e.style.display=t})),this.actionPanels.forEach((e=>{let s=e;for(let t=0;t<7;t++)s=s.parentElement;s.style.display=t}))}render(){return M`
       <!-- Your desired HTML markup here -->
     `}})})();

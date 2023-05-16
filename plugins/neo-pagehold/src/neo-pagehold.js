@@ -43,6 +43,7 @@ class NeoPageHoldElement extends LitElement {
     this.stepHeaders = this.shadowRoot.querySelectorAll('mat-step-header');
     this.actionPanels = this.shadowRoot.querySelectorAll('div.nx-action-panel');
     this.updateVisibility();
+    console.log("first update complete")
   }
 
   updated(changedProperties) {
@@ -52,6 +53,8 @@ class NeoPageHoldElement extends LitElement {
   }
 
   updateVisibility() {
+    console.log("visibility running")
+    console.log(this.applyhold)
     const displayValue = this.applyhold ? 'none' : '';
 
     this.stepHeaders.forEach((header) => {
