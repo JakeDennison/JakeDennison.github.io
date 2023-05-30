@@ -53,12 +53,29 @@ export class MyTable extends LitElement {
   }
 
   parseDataObject() {
-    let data = JSON.parse(this.dataobject);
-    const unicodeRegex = /_x([0-9A-F]{4})_/g;
-    data = JSON.parse(JSON.stringify(data).replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
+    let data;
+
+    try {
+      data = JSON.parse(this.dataobject);
+      data = this.replaceUnicodeRegex(data);
+    } catch (e) {
+      console.log("XML detected");
+      try {
+        data = this.parseXmlDataObject();
+        console.log('XML converted to JSON:', data);
+      } catch (e) {
+        console.error(e);
+        data = null;
+      }
+    }
+
     return data;
   }
 
+  replaceUnicodeRegex(input) {
+    const unicodeRegex = /_x([0-9A-F]{4})_/g;
+    return JSON.parse(JSON.stringify(input).replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
+  }
 
   parseXmlDataObject() {
     let xmlString = this.dataobject.replace(/&quot;/g, '"').replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
