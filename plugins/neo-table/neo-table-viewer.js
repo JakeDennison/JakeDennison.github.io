@@ -50,13 +50,12 @@ export class MyTable extends LitElement {
   constructor() {
     super();
     this.dataobject = '';
-    this.pageItemLimit = 5;
+    this.pageItemLimit = '';
     this.currentPage = 1;
   }
 
   updated(changedProperties) {
     if (changedProperties.has('dataobject')) {
-      this.pageItemLimit = 5;
       this.currentPage = 1;
     }
   }
