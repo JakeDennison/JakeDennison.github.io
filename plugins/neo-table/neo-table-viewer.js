@@ -98,7 +98,7 @@ export class MyTable extends LitElement {
       `;
     }
   
-    let itemsPerPage = 5; // Default items per page
+    const itemsPerPage = 15; // Default items per page
     const currentPage = 1; // Set the initial current page
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -132,15 +132,17 @@ export class MyTable extends LitElement {
           </tbody>
         </table>
       </div>
-      <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          ${Array.from({ length: totalPages }, (_, i) => i + 1).map(page => html`
-            <li class="page-item ${page === currentPage ? 'active' : ''}">
-              <a class="page-link" href="#" @click="${() => this.changePage(page)}">${page}</a>
-            </li>
-          `)}
-        </ul>
-      </nav>
+      ${data.length > 15 ? html`
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            ${Array.from({ length: totalPages }, (_, i) => i + 1).map(page => html`
+              <li class="page-item ${page === currentPage ? 'active' : ''}">
+                <a class="page-link" href="#" @click="${() => this.changePage(page)}">${page}</a>
+              </li>
+            `)}
+          </ul>
+        </nav>
+      ` : ''}
       <div class="d-flex justify-content-end">
         <div class="form-inline">
           <label for="itemsPerPage">Items Per Page:</label>
@@ -155,6 +157,7 @@ export class MyTable extends LitElement {
   
     return table;
   }
+  
   
 }
 
