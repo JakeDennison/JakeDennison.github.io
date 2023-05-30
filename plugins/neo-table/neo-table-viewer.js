@@ -98,26 +98,12 @@ export class MyTable extends LitElement {
       `;
     }
   
-    let itemsPerPage = 5; // Default items per page
-    let currentPage = 1; // Set the initial current page
-    const totalPages = Math.ceil(data.length / itemsPerPage);
-  
-    const changePage = (newPage) => {
-      if (newPage > 0 && newPage <= totalPages) {
-        currentPage = newPage;
-        this.requestUpdate();
-      }
-    };
-  
-    const changeItemsPerPage = (event) => {
-      itemsPerPage = parseInt(event.target.value, 10);
-      currentPage = 1;
-      this.requestUpdate();
-    };
-  
+    const itemsPerPage = 5; // Default items per page
+    const currentPage = 1; // Set the initial current page
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const paginatedData = data.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(data.length / itemsPerPage);
   
     const rows = paginatedData.map(row => html`
       <tr>
@@ -129,11 +115,6 @@ export class MyTable extends LitElement {
   
     const table = html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <style>
-        .d-flex.justify-content-between {
-          justify-content: space-between;
-        }
-      </style>
       <div class="table-responsive-md overflow-auto">
         <table class="table table-striped">
           <thead>
@@ -146,33 +127,22 @@ export class MyTable extends LitElement {
           </tbody>
         </table>
       </div>
-      ${totalPages > 1 ? html`
-        <nav aria-label="Page navigation">
-          <ul class="pagination justify-content-between">
-            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-              <a class="page-link" href="#" @click="${() => changePage(currentPage - 1)}">Previous</a>
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          ${Array.from({ length: totalPages }, (_, i) => i + 1).map(page => html`
+            <li class="page-item ${page === currentPage ? 'active' : ''}">
+              <a class="page-link" href="#" @click="${() => this.changePage(page)}">${page}</a>
             </li>
-            <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-              <a class="page-link" href="#" @click="${() => changePage(currentPage + 1)}">Next</a>
-            </li>
-          </ul>
-        </nav>
-      ` : ''}
-      <div class="d-flex justify-content-between">
+          `)}
+        </ul>
+      </nav>
+      <div class="d-flex justify-content-end">
         <div class="form-inline">
           <label for="itemsPerPage">Items Per Page:</label>
-          <select id="itemsPerPage" class="form-control ml-2" @change="${changeItemsPerPage}">
+          <select id="itemsPerPage" class="form-control ml-2" @change="${this.changeItemsPerPage}">
             <option value="5" ?selected="${itemsPerPage === 5}">5</option>
             <option value="15" ?selected="${itemsPerPage === 15}">15</option>
             <option value="30" ?selected="${itemsPerPage === 30}">30</option>
-          </select>
-        </div>
-        <div class="form-inline">
-          <label for="currentPage">Page:</label>
-          <select id="currentPage" class="form-control ml-2" @change="${(event) => changePage(parseInt(event.target.value, 10))}">
-            ${Array.from({ length: totalPages }, (_, i) => i + 1).map(page => html`
-              <option value="${page}" ?selected="${page === currentPage}">${page}</option>
-            `)}
           </select>
         </div>
       </div>
@@ -180,6 +150,7 @@ export class MyTable extends LitElement {
   
     return table;
   }
+  
   
 }
 
