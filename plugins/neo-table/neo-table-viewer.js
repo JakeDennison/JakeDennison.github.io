@@ -159,7 +159,7 @@ export class MyTable extends LitElement {
       </div>
       <div class="row">
         ${totalPages > 1 ? html`
-          <nav class="col-10" aria-label="Page navigation">
+          <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
               <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
                 <a class="page-link" href="#" @click="${() => this.changePage(this.currentPage - 1)}">Previous</a>
@@ -175,7 +175,7 @@ export class MyTable extends LitElement {
             </ul>
           </nav>
         ` : ''}
-        <div class="col-2 d-flex justify-content-end">
+        <div class="d-flex justify-content-end">
           <div class="form-inline">
             <label for="itemsPerPage">Items Per Page:</label>
             <select id="itemsPerPage" class="form-control ml-2" @change="${this.changeItemsPerPage}">
