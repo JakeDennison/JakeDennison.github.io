@@ -152,8 +152,9 @@ export class MyTable extends LitElement {
   
     return html`
       <style>
-        .page-link {
+        .page-num-link {
           width: 100px;
+          text-align:centre;
         }
       </style>
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -181,7 +182,7 @@ export class MyTable extends LitElement {
               </li>
               ${Array.from({ length: endPage - startPage + 1 }, (_, i) => i + startPage).map(page => html`
                 <li class="page-item ${page === this.currentPage ? 'active' : ''}">
-                  <a class="page-link" href="#" @click="${() => this.changePage(page)}">${page}</a>
+                  <a class="page-link page-num-link" href="#" @click="${() => this.changePage(page)}">${page}</a>
                 </li>
               `)}
               <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
