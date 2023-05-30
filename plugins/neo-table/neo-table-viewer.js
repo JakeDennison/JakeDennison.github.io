@@ -75,7 +75,7 @@ export class MyTable extends LitElement {
   
   render() {
     let data;
-
+  
     try {
       data = this.parseDataObject();
     } catch (e) {
@@ -91,21 +91,28 @@ export class MyTable extends LitElement {
         `;
       }
     }
-
+  
     if (!data || data.length === 0) {
       return html`
         <p>No Data Found</p>
       `;
     }
-
-    const rows = data.map(row => html`
+  
+    let itemsPerPage = 5; // Default items per page
+    const currentPage = 1; // Set the initial current page
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedData = data.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+  
+    const rows = paginatedData.map(row => html`
       <tr>
         ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
       </tr>
     `);
-
+  
     const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
-
+  
     const table = html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="table-responsive-md overflow-auto">
@@ -120,10 +127,30 @@ export class MyTable extends LitElement {
           </tbody>
         </table>
       </div>
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          ${Array.from({ length: totalPages }, (_, i) => i + 1).map(page => html`
+            <li class="page-item ${page === currentPage ? 'active' : ''}">
+              <a class="page-link" href="#" @click="${() => this.changePage(page)}">${page}</a>
+            </li>
+          `)}
+        </ul>
+      </nav>
+      <div class="d-flex justify-content-center">
+        <div class="form-inline">
+          <label for="itemsPerPage">Items Per Page:</label>
+          <select id="itemsPerPage" class="form-control ml-2" @change="${this.changeItemsPerPage}">
+            <option value="15" ?selected="${itemsPerPage === 15}">15</option>
+            <option value="30" ?selected="${itemsPerPage === 30}">30</option>
+            <option value="50" ?selected="${itemsPerPage === 50}">50</option>
+          </select>
+        </div>
+      </div>
     `;
-
+  
     return table;
   }
+  
 }
 
 customElements.define('neo-table-viewer', MyTable);
