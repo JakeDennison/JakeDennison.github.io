@@ -122,26 +122,27 @@ export class MyTable extends LitElement {
 
   render() {
     const data = this.parseDataObject();
-
+  
     if (!data || data.length === 0) {
       return html`
         <p>No Data Found</p>
       `;
     }
-
+  
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     const paginatedData = data.slice(startIndex, endIndex);
     const totalPages = Math.ceil(data.length / this.itemsPerPage);
-
+    this.totalPages = totalPages; // Assign to component property
+  
     const rows = paginatedData.map(row => html`
       <tr>
         ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
       </tr>
     `);
-
+  
     const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
-
+  
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="table-responsive-md overflow-auto">
@@ -185,6 +186,7 @@ export class MyTable extends LitElement {
       </div>
     `;
   }
+  
   
 }
 
