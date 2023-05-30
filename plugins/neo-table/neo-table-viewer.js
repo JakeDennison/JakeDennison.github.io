@@ -178,7 +178,7 @@ export class MyTable extends LitElement {
         <div class="d-flex justify-content-end">
           <div class="form-inline">
             <label for="itemsPerPage">Items Per Page:</label>
-            <select id="itemsPerPage" class="form-control ml-2" @change="${this.changeItemsPerPage}">
+            <select id="itemsPerPage" class="form-control ml-2 w25" @change="${this.changeItemsPerPage}">
               <option value="5" ?selected="${this.itemsPerPage === 5}">5</option>
               <option value="15" ?selected="${this.itemsPerPage === 15}">15</option>
               <option value="30" ?selected="${this.itemsPerPage === 30}">30</option>
