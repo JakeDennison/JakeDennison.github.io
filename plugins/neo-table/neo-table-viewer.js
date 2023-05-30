@@ -16,6 +16,12 @@ export class MyTable extends LitElement {
           title: 'Object',
           description: 'Test'
         },
+        pageItemLimit: {
+          type: 'number',
+          enum: [5, 10, 15, 30, 50, 100],
+          title: 'Page Item Limit',
+          description: 'Number of items to show per page'
+        },
       },
       events: ["ntx-value-change"],
       standardProperties: {
@@ -29,7 +35,9 @@ export class MyTable extends LitElement {
   
   static properties = {
     dataobject: '',
-  }
+    pageItemLimit: { type: Number },
+    currentPage: { type: Number },
+  };
 
   static get properties() {
     return {
@@ -41,13 +49,13 @@ export class MyTable extends LitElement {
   constructor() {
     super();
     this.dataobject = '';
-    this.itemsPerPage = 5;
+    this.pageItemLimit = 5;
     this.currentPage = 1;
   }
 
   updated(changedProperties) {
     if (changedProperties.has('dataobject')) {
-      this.itemsPerPage = 5;
+      this.pageItemLimit = 5;
       this.currentPage = 1;
     }
   }
@@ -114,62 +122,31 @@ export class MyTable extends LitElement {
     }
   }
 
-  changeItemsPerPage(event) {
-    this.itemsPerPage = parseInt(event.target.value, 10);
-    this.currentPage = 1;
-    this.requestUpdate();
-  }
-
   render() {
     const data = this.parseDataObject();
-
+  
     if (!data || data.length === 0) {
       return html`
         <p>No Data Found</p>
       `;
     }
-
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
+  
+    const startIndex = (this.currentPage - 1) * this.pageItemLimit;
+    const endIndex = startIndex + this.pageItemLimit;
     const paginatedData = data.slice(startIndex, endIndex);
-    const totalPages = Math.ceil(data.length / this.itemsPerPage);
+    const totalPages = Math.ceil(data.length / this.pageItemLimit);
     this.totalPages = totalPages; // Assign to component property
-
+  
     const rows = paginatedData.map(row => html`
       <tr>
         ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
       </tr>
     `);
-
+  
     const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
-
+  
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <div class="d-flex justify-content-between mb-2">
-        <nav aria-label="Page navigation">
-          <ul class="pagination justify-content-start">
-            <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
-              <a class="page-link" href="#" @click="${() => this.changePage(this.currentPage - 1)}">Previous</a>
-            </li>
-            ${Array.from({ length: totalPages }, (_, i) => i + 1).map(page => html`
-              <li class="page-item ${page === this.currentPage ? 'active' : ''}">
-                <a class="page-link" href="#" @click="${() => this.changePage(page)}">${page}</a>
-              </li>
-            `)}
-            <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
-              <a class="page-link" href="#" @click="${() => this.changePage(this.currentPage + 1)}">Next</a>
-            </li>
-          </ul>
-        </nav>
-        <div class="form-inline">
-          <label for="itemsPerPage">Items Per Page:</label>
-          <select id="itemsPerPage" class="form-control ml-2" @change="${this.changeItemsPerPage}">
-            <option value="5" ?selected="${this.itemsPerPage === 5}">5</option>
-            <option value="15" ?selected="${this.itemsPerPage === 15}">15</option>
-            <option value="30" ?selected="${this.itemsPerPage === 30}">30</option>
-          </select>
-        </div>
-      </div>
       <div class="table-responsive-md overflow-auto">
         <table class="table table-striped">
           <thead>
@@ -181,6 +158,25 @@ export class MyTable extends LitElement {
             ${rows}
           </tbody>
         </table>
+      </div>
+      <div class="row">
+        ${totalPages > 1 ? html`
+          <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+              <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" @click="${() => this.changePage(this.currentPage - 1)}">Previous</a>
+              </li>
+              ${Array.from({ length: totalPages }, (_, i) => i + 1).map(page => html`
+                <li class="page-item ${page === this.currentPage ? 'active' : ''}">
+                  <a class="page-link" href="#" @click="${() => this.changePage(page)}">${page}</a>
+                </li>
+              `)}
+              <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
+                <a class="page-link" href="#" @click="${() => this.changePage(this.currentPage + 1)}">Next</a>
+              </li>
+            </ul>
+          </nav>
+        ` : ''}
       </div>
     `;
   }
