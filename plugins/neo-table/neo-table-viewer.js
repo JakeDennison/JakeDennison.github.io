@@ -17,8 +17,8 @@ export class MyTable extends LitElement {
           description: 'Test'
         },
         pageItemLimit: {
-          type: 'number',
-          enum: [5, 10, 15, 30, 50, 100],
+          type: 'string',
+          enum: ['5','10','15', '30', '50', '100'],
           title: 'Page Item Limit',
           description: 'Number of items to show per page'
         },
