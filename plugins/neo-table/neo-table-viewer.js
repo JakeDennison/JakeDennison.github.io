@@ -152,9 +152,13 @@ export class MyTable extends LitElement {
   
     return html`
       <style>
+        .page-txt-link {
+          width: 90px;
+          text-align:center;
+        }
         .page-num-link {
-          width: 100px;
-          text-align:centre;
+          width: 45px;
+          text-align:center;
         }
       </style>
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -175,10 +179,10 @@ export class MyTable extends LitElement {
           <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
               <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
-                <a class="page-link" href="#" @click="${() => this.changePage(1)}">First</a>
+                <a class="page-link page-txt-link" href="#" @click="${() => this.changePage(1)}">First</a>
               </li>
               <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
-                <a class="page-link" href="#" @click="${() => this.changePage(this.currentPage - 1)}">Previous</a>
+                <a class="page-link page-txt-link" href="#" @click="${() => this.changePage(this.currentPage - 1)}">Previous</a>
               </li>
               ${Array.from({ length: endPage - startPage + 1 }, (_, i) => i + startPage).map(page => html`
                 <li class="page-item ${page === this.currentPage ? 'active' : ''}">
@@ -186,10 +190,10 @@ export class MyTable extends LitElement {
                 </li>
               `)}
               <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
-                <a class="page-link" href="#" @click="${() => this.changePage(this.currentPage + 1)}">Next</a>
+                <a class="page-link page-txt-link" href="#" @click="${() => this.changePage(this.currentPage + 1)}">Next</a>
               </li>
               <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
-                <a class="page-link" href="#" @click="${() => this.changePage(totalPages)}">Last</a>
+                <a class="page-link page-txt-link" href="#" @click="${() => this.changePage(totalPages)}">Last</a>
               </li>
             </ul>
           </nav>
