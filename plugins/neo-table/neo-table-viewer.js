@@ -20,7 +20,8 @@ export class MyTable extends LitElement {
           type: 'string',
           enum: ['5','10','15', '30', '50', '100'],
           title: 'Page Item Limit',
-          description: 'Number of items to show per page'
+          description: 'Number of items to show per page',
+          defaultValue: '5',
         },
       },
       events: ["ntx-value-change"],
