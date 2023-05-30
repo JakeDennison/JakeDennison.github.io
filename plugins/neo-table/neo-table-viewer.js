@@ -31,8 +31,25 @@ export class MyTable extends LitElement {
     dataobject: '',
   }
 
+  static get properties() {
+    return {
+      itemsPerPage: { type: Number },
+      currentPage: { type: Number },
+    };
+  }
+
   constructor() {
     super();
+    this.dataobject = '';
+    this.itemsPerPage = 5;
+    this.currentPage = 1;
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('dataobject')) {
+      this.itemsPerPage = 5;
+      this.currentPage = 1;
+    }
   }
 
   parseDataObject() {
@@ -73,47 +90,40 @@ export class MyTable extends LitElement {
     return data;
   }
   
-  render() {
-    let data;
-  
-    try {
-      data = this.parseDataObject();
-    } catch (e) {
-      // If parsing as JSON fails, assume it's XML
-      console.log("XML detected");
-      try {
-        data = this.parseXmlDataObject();
-        console.log('XML converted to JSON:', data);
-      } catch (e) {
-        console.error(e);
-        return html`
-          <p>Failed to parse dataobject</p>
-        `;
-      }
+  changePage(newPage) {
+    if (newPage > 0 && newPage <= this.totalPages) {
+      this.currentPage = newPage;
     }
-  
+  }
+
+  changeItemsPerPage(event) {
+    this.itemsPerPage = parseInt(event.target.value, 10);
+    this.currentPage = 1;
+  }
+
+  render() {
+    const data = this.parseDataObject();
+
     if (!data || data.length === 0) {
       return html`
         <p>No Data Found</p>
       `;
     }
-  
-    const itemsPerPage = 5; // Default items per page
-    const currentPage = 1; // Set the initial current page
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
     const paginatedData = data.slice(startIndex, endIndex);
-    const totalPages = Math.ceil(data.length / itemsPerPage);
-  
+    const totalPages = Math.ceil(data.length / this.itemsPerPage);
+
     const rows = paginatedData.map(row => html`
       <tr>
         ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
       </tr>
     `);
-  
+
     const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
-  
-    const table = html`
+
+    return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="table-responsive-md overflow-auto">
         <table class="table table-striped">
@@ -127,30 +137,30 @@ export class MyTable extends LitElement {
           </tbody>
         </table>
       </div>
-      <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          ${Array.from({ length: totalPages }, (_, i) => i + 1).map(page => html`
-            <li class="page-item ${page === currentPage ? 'active' : ''}">
-              <a class="page-link" href="#" @click="${() => this.changePage(page)}">${page}</a>
+      ${totalPages > 1 ? html`
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
+              <a class="page-link" href="#" @click="${() => this.changePage(this.currentPage - 1)}">Previous</a>
             </li>
-          `)}
-        </ul>
-      </nav>
+            <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
+              <a class="page-link" href="#" @click="${() => this.changePage(this.currentPage + 1)}">Next</a>
+            </li>
+          </ul>
+        </nav>
+      ` : ''}
       <div class="d-flex justify-content-end">
         <div class="form-inline">
           <label for="itemsPerPage">Items Per Page:</label>
           <select id="itemsPerPage" class="form-control ml-2" @change="${this.changeItemsPerPage}">
-            <option value="5" ?selected="${itemsPerPage === 5}">5</option>
-            <option value="15" ?selected="${itemsPerPage === 15}">15</option>
-            <option value="30" ?selected="${itemsPerPage === 30}">30</option>
+            <option value="5" ?selected="${this.itemsPerPage === 5}">5</option>
+            <option value="15" ?selected="${this.itemsPerPage === 15}">15</option>
+            <option value="30" ?selected="${this.itemsPerPage === 30}">30</option>
           </select>
         </div>
       </div>
     `;
-  
-    return table;
   }
-  
   
 }
 
