@@ -98,7 +98,7 @@ export class MyTable extends LitElement {
       `;
     }
   
-    let itemsPerPage = 15; // Default items per page
+    let itemsPerPage = 5; // Default items per page
     const currentPage = 1; // Set the initial current page
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -115,6 +115,11 @@ export class MyTable extends LitElement {
   
     const table = html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <style>
+        .d-flex.justify-content-end {
+          justify-content: flex-end;
+        }
+      </style>
       <div class="table-responsive-md overflow-auto">
         <table class="table table-striped">
           <thead>
@@ -136,7 +141,7 @@ export class MyTable extends LitElement {
           `)}
         </ul>
       </nav>
-      <div class="d-flex justify-content-center">
+      <div class="d-flex justify-content-end">
         <div class="form-inline">
           <label for="itemsPerPage">Items Per Page:</label>
           <select id="itemsPerPage" class="form-control ml-2" @change="${this.changeItemsPerPage}">
