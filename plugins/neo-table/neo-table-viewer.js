@@ -124,27 +124,27 @@ export class MyTable extends LitElement {
 
   render() {
     const data = this.parseDataObject();
-  
+
     if (!data || data.length === 0) {
       return html`
         <p>No Data Found</p>
       `;
     }
-  
-    const startIndex = (this.currentPage - 1) * this.pageItemLimit;
-    const endIndex = startIndex + this.pageItemLimit;
+
+    const startIndex = (this.currentPage - 1) * parseInt(this.pageItemLimit, 10);
+    const endIndex = startIndex + parseInt(this.pageItemLimit, 10);
     const paginatedData = data.slice(startIndex, endIndex);
-    const totalPages = Math.ceil(data.length / this.pageItemLimit);
+    const totalPages = Math.ceil(data.length / parseInt(this.pageItemLimit, 10));
     this.totalPages = totalPages; // Assign to component property
-  
+
     const rows = paginatedData.map(row => html`
       <tr>
         ${Object.values(row).map(cell => html`<td class="text-nowrap">${cell}</td>`)}
       </tr>
     `);
-  
+
     const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
-  
+
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="table-responsive-md overflow-auto">
@@ -166,11 +166,11 @@ export class MyTable extends LitElement {
               <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
                 <a class="page-link" href="#" @click="${() => this.changePage(this.currentPage - 1)}">Previous</a>
               </li>
-              ${Array.from({ length: totalPages }, (_, i) => i + 1).map(page => html`
+              ${totalPages > 0 ? Array.from({ length: totalPages }, (_, i) => i + 1).map(page => html`
                 <li class="page-item ${page === this.currentPage ? 'active' : ''}">
                   <a class="page-link" href="#" @click="${() => this.changePage(page)}">${page}</a>
                 </li>
-              `)}
+              `) : ''}
               <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
                 <a class="page-link" href="#" @click="${() => this.changePage(this.currentPage + 1)}">Next</a>
               </li>
@@ -180,7 +180,7 @@ export class MyTable extends LitElement {
       </div>
     `;
   }
-  
+
 }
 
 customElements.define('neo-table-viewer', MyTable);
