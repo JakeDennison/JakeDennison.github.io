@@ -153,7 +153,7 @@ export class MyTable extends LitElement {
     return html`
       <style>
         .page-txt-link {
-          width: 90px;
+          width: 100px;
           text-align:center;
         }
         .page-num-link {
