@@ -93,12 +93,14 @@ export class MyTable extends LitElement {
   changePage(newPage) {
     if (newPage > 0 && newPage <= this.totalPages) {
       this.currentPage = newPage;
+      this.requestUpdate();
     }
   }
 
   changeItemsPerPage(event) {
     this.itemsPerPage = parseInt(event.target.value, 10);
     this.currentPage = 1;
+    this.requestUpdate();
   }
 
   render() {
@@ -143,6 +145,11 @@ export class MyTable extends LitElement {
             <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
               <a class="page-link" href="#" @click="${() => this.changePage(this.currentPage - 1)}">Previous</a>
             </li>
+            ${Array.from({ length: totalPages }, (_, i) => i + 1).map(page => html`
+              <li class="page-item ${page === this.currentPage ? 'active' : ''}">
+                <a class="page-link" href="#" @click="${() => this.changePage(page)}">${page}</a>
+              </li>
+            `)}
             <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
               <a class="page-link" href="#" @click="${() => this.changePage(this.currentPage + 1)}">Next</a>
             </li>
