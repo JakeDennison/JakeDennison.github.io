@@ -170,7 +170,7 @@ render() {
               <a class="page-link" href="#" @click="${() => this.changePage(this.currentPage - 1)}">Previous</a>
             </li>
             ${Array.from({ length: endPage - startPage + 1 }, (_, i) => i + startPage).map(page => html`
-              <li class="page-item ${page === this.currentPage ? 'active' : ''}">
+              <li style="min-width:45px" class="page-item ${page === this.currentPage ? 'active' : ''}">
                 <a class="page-link" href="#" @click="${() => this.changePage(page)}">${page}</a>
               </li>
             `)}
