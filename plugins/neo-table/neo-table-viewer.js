@@ -98,7 +98,7 @@ export class MyTable extends LitElement {
       `;
     }
   
-    let itemsPerPage = 5; // Default items per page
+    let itemsPerPage = 15; // Default items per page
     const currentPage = 1; // Set the initial current page
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
