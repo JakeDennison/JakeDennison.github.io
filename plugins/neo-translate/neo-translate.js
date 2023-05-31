@@ -39,13 +39,16 @@ export class TranslateMod extends LitElement {
       },
     };
   }
-  
+
   constructor() {
     super();
-    this.locale = "en"
-    this._setTranslations();
+    this.locale = "en";
+    const currentURL = window.location.href;
+    if (currentURL.includes('workflowcloud.com/forms')) {
+      this._setTranslations();
+    }
   }
-
+  
   render() {
     const { locale } = this;
     return html`
@@ -66,14 +69,17 @@ export class TranslateMod extends LitElement {
   }
   
   firstUpdated() {
-    const select = this.shadowRoot.querySelector('#language-select');
-    select.value = this.locale;
-    console.log('First updated is calling');
-    this._setTranslations();
-    this._translatePage();
+    const currentURL = window.location.href;
+    if (currentURL.includes('workflowcloud.com/forms')) {
+      const select = this.shadowRoot.querySelector('#language-select');
+      select.value = this.locale;
+      console.log('First updated is calling');
+      this._setTranslations();
+      this._translatePage();
+    }
   }
-
-  _setTranslations() {
+  
+    _setTranslations() {
     const localeTranslations = translations[this.locale] || {};
     this.txtdir = localeTranslations.txtdir || '';
     this.signhere = localeTranslations.signhere || '';
