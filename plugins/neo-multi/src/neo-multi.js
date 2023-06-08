@@ -67,31 +67,45 @@ class neomulti extends LitElement {
     this.isOpen = false;
     this.selectedItems = [];
     this.selectedDisplayItems = [];
-    this.defaultIDKey = 0;
+    this.defaultIDKey = this.defaultIDKey;
+    console.log(this.defaultIDKey)
   }
 
   static get styles() {
     return css`
-        :host {
-            position: relative;
-        }
-
-        .dropdown {
-            display: none;
-            position: absolute;
-            background-color: white;
-            border: 1px solid gray;
-            z-index: 1000; /* some high value */
-        }
-
-        .dropdown.open {
-            display: block;
-        }
-
-        .dropdown-item {
-            cursor: pointer;
-            padding: 5px;
-        }
+      :host {
+        position: relative;
+        width: 100%; /* set host width to 100% */
+      }
+  
+      input {
+        width: 100%; /* make the input field take up the full width */
+        padding: .375rem .75rem; /* Bootstrap-style padding */
+        border: 1px solid #ced4da; /* Bootstrap-style border */
+        border-radius: .25rem; /* Bootstrap-style border radius */
+      }
+  
+      .dropdown {
+        display: none;
+        position: absolute;
+        width: 100%; /* make the dropdown take up the full width */
+        max-height: 300px; /* set max height */
+        overflow-y: auto; /* add scroll if needed */
+        background-color: white;
+        border: 1px solid gray;
+        border-radius: .25rem; /* Bootstrap-style border radius */
+        z-index: 1000; /* some high value */
+        box-sizing: border-box; /* border-box sizing model */
+      }
+  
+      .dropdown.open {
+        display: block;
+      }
+  
+      .dropdown-item {
+        cursor: pointer;
+        padding: .375rem .75rem; /* Bootstrap-style padding */
+      }
     `;
   }
 
@@ -150,7 +164,6 @@ class neomulti extends LitElement {
   render() {
     return html`
       <div @click="${(e) => e.stopPropagation()}">
-          <label>${this.displayKey}</label>
           <input 
               @focus="${() => { this.isOpen = true; this.requestUpdate(); }}" 
               .value="${this.selectedDisplayItems.join(', ',)}"
