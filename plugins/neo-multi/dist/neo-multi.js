@@ -33,7 +33,7 @@
                   margin-right: 10px;
               }
 
-              input {
+              .selectinput {
                   width: 100%;
                   padding: .375rem .75rem;
                   font-size: 1rem;
@@ -49,7 +49,7 @@
 
     `}connectedCallback(){super.connectedCallback(),this.boundClickHandler=this.handleWindowClick.bind(this),window.addEventListener("click",this.boundClickHandler)}updated(t){if(super.updated(t),t.has("dsvdata")){let t=JSON.parse(this.dsvdata).find((t=>t[this.valueKey]===this.defaultIDKey));t&&this.selectItem(t,!1)}}disconnectedCallback(){window.removeEventListener("click",this.boundClickHandler),super.disconnectedCallback()}handleWindowClick(t){this.shadowRoot.contains(t.target)||(this.isOpen=!1,this.requestUpdate())}selectItem(t,e=!0){const i=t[this.valueKey],s=t[this.displayKey];if(this.selectedItems.includes(i)?(this.selectedItems=this.selectedItems.filter((t=>t!==i)),this.selectedDisplayItems=this.selectedDisplayItems.filter((t=>t!==s))):(this.selectedItems.push(i),this.selectedDisplayItems.push(s)),this.outputJSON=JSON.stringify(this.selectedItems),e){const t={bubbles:!0,cancelable:!1,composed:!0,detail:this.outputJSON},e=new CustomEvent("ntx-value-change",t);this.dispatchEvent(e)}}render(){return T`
       <div @click="${t=>t.stopPropagation()}">
-          <input 
+          <input class="selectinput"
               @focus="${()=>{this.isOpen=!0,this.requestUpdate()}}" 
               .value="${this.selectedDisplayItems.join(", ")}"
           >

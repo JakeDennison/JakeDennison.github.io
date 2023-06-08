@@ -106,7 +106,7 @@ class neomulti extends LitElement {
                   margin-right: 10px;
               }
 
-              input {
+              .selectinput {
                   width: 100%;
                   padding: .375rem .75rem;
                   font-size: 1rem;
@@ -178,7 +178,7 @@ class neomulti extends LitElement {
   render() {
     return html`
       <div @click="${(e) => e.stopPropagation()}">
-          <input 
+          <input class="selectinput"
               @focus="${() => { this.isOpen = true; this.requestUpdate(); }}" 
               .value="${this.selectedDisplayItems.join(', ',)}"
           >
