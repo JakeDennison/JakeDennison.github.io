@@ -11,6 +11,11 @@ class neomulti extends LitElement {
       groupName: 'Visual Data',
       version: '1.0',
       properties: {
+        dsvdata: {
+          type: 'string',
+          title: 'JSON Input',
+          description: 'Provide the data source variable as a JSON array.',
+        },
         displayKey: {
           type: 'string',
           title: 'Display Key',
@@ -114,6 +119,7 @@ class neomulti extends LitElement {
   `;
 
   static properties = {
+    dsvdata: { type: String },
     displayKey: { type: String },
     valueKey: { type: String },
     outputJSON: { type: String },
@@ -125,17 +131,15 @@ class neomulti extends LitElement {
       [this.valueKey]: option.value,
     }));
     const outputJSON = JSON.stringify(selectedOptions);
+    this.outputJSON = outputJSON;
     this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
   }
 
   parseDataObject() {
     try {
-      if (this.outputJSON) {
-        return JSON.parse(this.outputJSON);
-      }
-      return null;
+      return JSON.parse(this.dsvdata);
     } catch (error) {
-      console.error('Error parsing output JSON:', error);
+      console.error('Error parsing data source variable:', error);
       return null;
     }
   }
@@ -146,52 +150,54 @@ class neomulti extends LitElement {
     }
 
     return data.map((item) => html`
-      <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
-    `);
+    <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
+  `);
   }
 
   renderChoices(selectedItems) {
     return selectedItems.map((item) => html`
-      <span class="chosen-choice">
-        <span>${item[this.displayKey]}</span>
-        <span class="chosen-close" @click="${() => this.removeChoice(item)}">&#10005;</span>
-      </span>
-    `);
+    <span class="chosen-choice">
+      <span>${item[this.displayKey]}</span>
+      <span class="chosen-close" @click="${() => this.removeChoice(item)}">&#10005;</span>
+    </span>
+  `);
   }
 
   removeChoice(item) {
-    const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
-      return [...result, ...Array.from(select.selectedOptions).map(option => ({
-        [this.displayKey]: option.text,
-        [this.valueKey]: option.value,
-      }))];
-    }, []);
-    const index = selectedItems.findIndex(selectedItem => selectedItem[this.valueKey] === item[this.valueKey]);
-    if (index > -1) {
-      selectedItems.splice(index, 1);
-    }
-    this.updateSelectedItems(selectedItems);
+    const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select'))
+      .reduce((result, select) => {
+        return [...result, ...Array.from(select.selectedOptions).map(option => ({
+          [this.displayKey]: option.text,
+          [this.valueKey]: option.value,
+        }))];
+      }, []);
+    const outputJSON = JSON.stringify(selectedItems);
+    this.outputJSON = outputJSON;
+    this.requestUpdate();
+    this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
   }
 
-  updateSelectedItems(selectedItems) {
+  connectedCallback() {
+    super.connectedCallback();
+    const selectedItems = JSON.parse(this.outputJSON || '[]');
     const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
     selects.forEach((select) => {
       Array.from(select.options).forEach((option) => {
         option.selected = selectedItems.some(selectedItem => selectedItem[this.valueKey] === option.value);
       });
     });
-    this.requestUpdate();
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
-      return [...result, ...Array.from(select.selectedOptions).map(option => ({
-        [this.displayKey]: option.text,
-        [this.valueKey]: option.value,
-      }))];
-    }, []);
-    this.updateSelectedItems(selectedItems);
+  updated(changedProperties) {
+    if (changedProperties.has('outputJSON')) {
+      const selectedItems = JSON.parse(this.outputJSON || '[]');
+      const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
+      selects.forEach((select) => {
+        Array.from(select.options).forEach((option) => {
+          option.selected = selectedItems.some(selectedItem => selectedItem[this.valueKey] === option.value);
+        });
+      });
+    }
   }
 
   render() {
@@ -199,30 +205,25 @@ class neomulti extends LitElement {
 
     if (!data || data.length === 0) {
       return html`
-        <p>No Data Found</p>
-      `;
+      <p>No Data Found</p>
+    `;
     }
 
-    const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
-      return [...result, ...Array.from(select.selectedOptions).map(option => ({
-        [this.displayKey]: option.text,
-        [this.valueKey]: option.value,
-      }))];
-    }, []);
+    const selectedItems = JSON.parse(this.outputJSON || '[]');
 
     const dropdownOptions = this.renderDropdownOptions(data);
     const choices = this.renderChoices(selectedItems);
 
     return html`
-      <div class="chosen-container">
-        <div class="chosen-choices">
-          ${choices}
-          <select multiple @change="${this.onChange}">
-            ${dropdownOptions}
-          </select>
-        </div>
+    <div class="chosen-container">
+      <div class="chosen-choices">
+        ${choices}
+        <select multiple @change="${this.onChange}">
+          ${dropdownOptions}
+        </select>
       </div>
-    `;
+    </div>
+  `;
   }
 }
 
