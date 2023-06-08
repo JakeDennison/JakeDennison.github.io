@@ -7,7 +7,7 @@ class neomulti extends LitElement {
       controlName: 'neo-multi',
       fallbackDisableSubmit: false,
       description: 'Provide a multiple select dropdown based on a data source variable.',
-      iconUrl: 'data-lookup',
+      iconUrl: 'Lookup',
       groupName: 'Visual Data',
       version: '1.0',
       properties: {
@@ -49,11 +49,55 @@ class neomulti extends LitElement {
 
   parseDataObject() {
     try {
-      return JSON.parse(this.dsvdata);
+      if (this.dsvdata.startsWith('[') && this.dsvdata.endsWith(']')) {
+        // Parse as JSON array
+        return JSON.parse(this.dsvdata);
+      } else {
+        // Parse as comma-separated values
+        return this.dsvdata.split(',').map(item => item.trim());
+      }
     } catch (error) {
       console.error('Error parsing DSV data:', error);
       return null;
     }
+  }
+
+  renderTableHeaders(data) {
+    if (!data || data.length === 0) {
+      return html``;
+    }
+
+    const headers = Array.isArray(data) ? Object.keys(data[0]) : ['Value'];
+
+    return html`
+      <thead>
+        <tr>
+          ${headers.map(header => html`<th>${header}</th>`)}
+        </tr>
+      </thead>
+    `;
+  }
+
+  renderTableRows(data) {
+    if (!data || data.length === 0) {
+      return html``;
+    }
+
+    return html`
+      <tbody>
+        ${Array.isArray(data)
+          ? data.map(row => html`
+              <tr>
+                ${Object.values(row).map(value => html`<td>${value}</td>`)}
+              </tr>
+            `)
+          : html`
+              <tr>
+                <td>${data}</td>
+              </tr>
+            `}
+      </tbody>
+    `;
   }
 
   render() {
@@ -100,6 +144,10 @@ class neomulti extends LitElement {
           ${tokens}
         </div>
       </div>
+      <table>
+        ${this.renderTableHeaders(data)}
+        ${this.renderTableRows(data)}
+      </table>
     `;
   }
 }
