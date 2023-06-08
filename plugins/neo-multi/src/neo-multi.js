@@ -62,11 +62,16 @@ class neomulti extends LitElement {
 
   static get styles() {
     return css`
+        :host {
+            position: relative;
+        }
+
         .dropdown {
             display: none;
             position: absolute;
             background-color: white;
             border: 1px solid gray;
+            z-index: 1000; /* some high value */
         }
 
         .dropdown.open {
@@ -80,12 +85,13 @@ class neomulti extends LitElement {
     `;
 }
 
+
 render() {
     return html`
         <div>
             <label>${this.displayKey}</label>
             <input @focus="${() => this.isOpen = true}" .value="${this.selectedItems.join(', ')}">
-            <div class="dropdown ${this.isOpen ? 'open' : ''}">
+            <div class="dropdown-item" @click="${(e) => {e.stopPropagation(); this.selectItem(item);}}">
                 <!-- Assuming dsvdata is a JSON string -->
                 ${(JSON.parse(this.dsvdata) || []).map(item => html`
                     <div class="dropdown-item" @click="${() => this.selectItem(item)}">
