@@ -198,21 +198,22 @@ class neomulti extends LitElement {
     this.requestUpdate();
   
     const data = this.parseDataObject();
-    let output = [];
+    const choices = selectedItems.map((item) => {
+      const selectedItem = data.find((dataItem) => dataItem[this.valueKey] === item);
+      return selectedItem ? selectedItem[this.displayKey] : null;
+    });
   
-    if (selectedItems.length > 0) {
-      output = selectedItems.map((item) => {
-        const selectedItem = data.find((dataItem) => dataItem[this.valueKey] === item);
-        return selectedItem ? selectedItem[this.displayKey] : null;
-      });
-    }
+    const output = selectedItems.map((item) => {
+      const selectedItem = data.find((dataItem) => dataItem[this.valueKey] === item);
+      return selectedItem ? { [this.displayKey]: selectedItem[this.displayKey], [this.valueKey]: selectedItem[this.valueKey] } : null;
+    });
   
     const outputJSON = JSON.stringify(output.filter((item) => item !== null));
     this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
   
-    console.log('Selected Choices:', output);
+    console.log('Selected Choices:', choices);
   }
-
+  
   connectedCallback() {
     super.connectedCallback();
     const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
