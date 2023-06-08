@@ -1,5 +1,4 @@
-import { LitElement, html, css, eventOptions } from 'lit';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { LitElement, html, css } from 'lit';
 
 class neomulti extends LitElement {
   static getMetaConfig() {
@@ -42,49 +41,6 @@ class neomulti extends LitElement {
     };
   }
 
-  static get styles() {
-    return css`
-      :host {
-        display: block;
-      }
-
-      #container {
-        display: inline-flex;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        width: 100%;
-        position: relative;
-      }
-
-      #tokenContainer {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 4px;
-        margin-bottom: 4px;
-      }
-
-      .token {
-        display: inline-flex;
-        align-items: center;
-        padding: 4px 8px;
-        background-color: #e0e0e0;
-        border-radius: 4px;
-      }
-
-      #dropdown {
-        display: none;
-        position: absolute;
-        z-index: 1;
-        width: 100%;
-      }
-
-      #container.active #dropdown {
-        display: block;
-      }
-    `;
-  }
-
   static properties = {
     dsvdata: { type: String },
     displayKey: { type: String },
@@ -101,53 +57,19 @@ class neomulti extends LitElement {
   }
 
   render() {
-    const data = JSON.parse(this.dsvdata);
-    const selectedOptions = data.filter(item => this.outputJSON.includes(item[this.valueKey]));
-  
     return html`
-      <div id="container" class="input-group">
-        <div id="tokenContainer" class="token-container">
-          ${selectedOptions.map(item => html`<div class="token">${item[this.displayKey]}</div>`)}
+        <div>
+            <label>${this.displayKey}</label>
+            <select multiple>
+                <!-- Assuming dsvdata is a JSON string -->
+                ${(JSON.parse(this.dsvdata) || []).map(item => html`
+                    <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
+                `)}
+            </select>
         </div>
-        <input type="text" class="form-control" id="tokenInput" @keydown="${this.handleKeyDown}">
-        <select class="form-control" id="dropdown" multiple @change="${this.handleValueChange}">
-          ${data.map(item => html`<option value="${item[this.valueKey]}">${item[this.displayKey]}</option>`)}
-        </select>
-      </div>
     `;
-  }
-  
-  handleContainerClick() {
-    const container = this.shadowRoot.getElementById('container');
-    container.classList.add('active');
-  }
-  
-  handleKeyDown(event) {
-    if (event.key === 'Enter' || event.key === ',') {
-      event.preventDefault();
-      const tokenInput = this.shadowRoot.getElementById('tokenInput');
-      const value = tokenInput.value.trim();
-      if (value !== '') {
-        this.addToken(value);
-        tokenInput.value = '';
-      }
-    }
-  }
-  
-  handleValueChange(event) {
-    const selectedOptions = Array.from(event.target.selectedOptions);
-    const selectedValues = selectedOptions.map(option => option.value);
-    this.outputJSON = JSON.stringify(selectedValues);
-    this.requestUpdate();
-  }
-  
-  addToken(value) {
-    const tokenContainer = this.shadowRoot.getElementById('tokenContainer');
-    const token = document.createElement('div');
-    token.classList.add('token');
-    token.textContent = value;
-    tokenContainer.appendChild(token);
-  }
+}
+
 
 }
 
