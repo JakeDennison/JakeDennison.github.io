@@ -46,9 +46,11 @@ class neomulti extends LitElement {
     displayKey: { type: String },
     valueKey: { type: String },
     outputJSON: { type: String },
-    isOpen: { type:Boolean },
-    selectedItems: { type:Array },
+    isOpen: { type: Boolean },
+    selectedItems: { type: Object },
+    selectedDisplayItems: { type: Array },
   };
+
 
   constructor() {
     super();
@@ -58,6 +60,7 @@ class neomulti extends LitElement {
     this.outputJSON = "";
     this.isOpen = false;
     this.selectedItems = [];
+    this.selectedDisplayItems = [];
   }
 
   static get styles() {
@@ -83,38 +86,59 @@ class neomulti extends LitElement {
             padding: 5px;
         }
     `;
-}
+  }
 
-connectedCallback() {
-  super.connectedCallback();
-  this.boundClickHandler = this.handleWindowClick.bind(this);
-  window.addEventListener('click', this.boundClickHandler);
-}
+  connectedCallback() {
+    super.connectedCallback();
+    this.boundClickHandler = this.handleWindowClick.bind(this);
+    window.addEventListener('click', this.boundClickHandler);
+  }
 
-disconnectedCallback() {
-  window.removeEventListener('click', this.boundClickHandler);
-  super.disconnectedCallback();
-}
+  disconnectedCallback() {
+    window.removeEventListener('click', this.boundClickHandler);
+    super.disconnectedCallback();
+  }
 
-handleWindowClick(e) {
-  if (!this.shadowRoot.contains(e.target)) {
+  handleWindowClick(e) {
+    if (!this.shadowRoot.contains(e.target)) {
       this.isOpen = false;
       this.requestUpdate();
+    }
   }
-}
 
-render() {
-  return html`
+  selectItem(item) {
+    const value = item[this.valueKey];
+    const display = item[this.displayKey];
+    if (this.selectedItems.includes(value)) {
+      this.selectedItems = this.selectedItems.filter(i => i !== value);
+      this.selectedDisplayItems = this.selectedDisplayItems.filter(i => i !== display);
+    } else {
+      this.selectedItems.push(value);
+      this.selectedDisplayItems.push(display);
+    }
+    this.outputJSON = JSON.stringify(this.selectedItems);
+    const args = {
+      bubbles: true,
+      cancelable: false,
+      composed: true,
+      detail: this.outputJSON,
+    };
+    const event = new CustomEvent('ntx-value-change', args);
+    this.dispatchEvent(event);
+  }
+
+  render() {
+    return html`
       <div @click="${(e) => e.stopPropagation()}">
           <label>${this.displayKey}</label>
           <input 
               @focus="${() => { this.isOpen = true; this.requestUpdate(); }}" 
-              .value="${this.selectedItems.join(', ',)}"
+              .value="${this.selectedDisplayItems.join(', ',)}"
           >
           <div class="dropdown ${this.isOpen ? 'open' : ''}">
               <!-- Assuming dsvdata is a JSON string -->
               ${(JSON.parse(this.dsvdata) || []).map(item => html`
-                  <div class="dropdown-item" @click="${(e) => {e.stopPropagation(); this.selectItem(item);}}">
+                  <div class="dropdown-item" @click="${(e) => { e.stopPropagation(); this.selectItem(item); }}">
                       <input type="checkbox" .checked="${this.selectedItems.includes(item[this.valueKey])}">
                       ${item[this.displayKey]}
                   </div>
@@ -122,26 +146,7 @@ render() {
           </div>
       </div>
   `;
-}
-
-
-selectItem(item) {
-    const value = item[this.valueKey];
-    if (this.selectedItems.includes(value)) {
-        this.selectedItems = this.selectedItems.filter(i => i !== value);
-    } else {
-        this.selectedItems.push(value);
-    }
-    this.outputJSON = JSON.stringify(this.selectedItems);
-    const args = {
-        bubbles: true,
-        cancelable: false,
-        composed: true,
-        detail: this.outputJSON,
-    };
-    const event = new CustomEvent('ntx-value-change', args);
-    this.dispatchEvent(event);
-}
+  }
 
 }
 
