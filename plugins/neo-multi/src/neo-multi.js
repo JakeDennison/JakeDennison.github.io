@@ -1,4 +1,5 @@
 import { LitElement, html, css, eventOptions } from 'lit';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class neomulti extends LitElement {
   static getMetaConfig() {
@@ -55,13 +56,6 @@ class neomulti extends LitElement {
         position: relative;
       }
 
-      #inputContainer {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        flex: 1;
-      }
-
       #tokenContainer {
         display: flex;
         flex-wrap: wrap;
@@ -78,17 +72,11 @@ class neomulti extends LitElement {
         border-radius: 4px;
       }
 
-      #tokenInput {
-        flex: 1;
-        margin-right: 4px;
-        padding: 4px 8px;
-      }
-
       #dropdown {
         display: none;
-        width: 100%;
         position: absolute;
         z-index: 1;
+        width: 100%;
       }
 
       #container.active #dropdown {
@@ -117,12 +105,12 @@ class neomulti extends LitElement {
     const selectedOptions = data.filter(item => this.outputJSON.includes(item[this.valueKey]));
   
     return html`
-      <div id="container" @click="${this.handleContainerClick}">
-        <div id="tokenContainer">
+      <div id="container" class="input-group">
+        <div id="tokenContainer" class="token-container">
           ${selectedOptions.map(item => html`<div class="token">${item[this.displayKey]}</div>`)}
         </div>
-        <input type="text" id="tokenInput" @keydown="${this.handleKeyDown}">
-        <select id="dropdown" multiple @change="${this.handleValueChange}">
+        <input type="text" class="form-control" id="tokenInput" @keydown="${this.handleKeyDown}">
+        <select class="form-control" id="dropdown" multiple @change="${this.handleValueChange}">
           ${data.map(item => html`<option value="${item[this.valueKey]}">${item[this.displayKey]}</option>`)}
         </select>
       </div>
