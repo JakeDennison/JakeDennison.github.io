@@ -52,6 +52,7 @@ class neomulti extends LitElement {
         flex-wrap: wrap;
         align-items: flex-start;
         width: 100%;
+        position: relative;
       }
 
       #tokenContainer {
@@ -79,9 +80,11 @@ class neomulti extends LitElement {
       #dropdown {
         display: none;
         width: 100%;
+        position: absolute;
+        z-index: 1;
       }
 
-      #container.focus-within #dropdown {
+      #container.active #dropdown {
         display: block;
       }
     `;
@@ -107,7 +110,7 @@ class neomulti extends LitElement {
     const selectedOptions = data.filter(item => this.outputJSON.includes(item[this.valueKey]));
   
     return html`
-      <div id="container">
+      <div id="container" @click="${this.handleContainerClick}">
         <div id="tokenContainer">
           ${selectedOptions.map(item => html`<div class="token">${item[this.displayKey]}</div>`)}
         </div>
@@ -119,6 +122,10 @@ class neomulti extends LitElement {
     `;
   }
   
+  handleContainerClick() {
+    const container = this.shadowRoot.getElementById('container');
+    container.classList.add('active');
+  }
   
   handleKeyDown(event) {
     if (event.key === 'Enter' || event.key === ',') {
