@@ -7,7 +7,7 @@ class neomulti extends LitElement {
       controlName: 'neo-multi',
       fallbackDisableSubmit: false,
       description: 'Provide a multiple select dropdown based on a data source variable.',
-      iconUrl: 'Lookup',
+      iconUrl: 'data-lookup',
       groupName: 'Visual Data',
       version: '1.0',
       properties: {
@@ -45,6 +45,15 @@ class neomulti extends LitElement {
     const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
     const outputJSON = JSON.stringify(selectedOptions);
     this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
+  }
+
+  parseDataObject() {
+    try {
+      return JSON.parse(this.dsvdata);
+    } catch (error) {
+      console.error('Error parsing DSV data:', error);
+      return null;
+    }
   }
 
   render() {
