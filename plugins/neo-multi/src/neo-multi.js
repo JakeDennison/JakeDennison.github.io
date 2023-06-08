@@ -54,7 +54,7 @@ class neomulti extends LitElement {
     isOpen: { type: Boolean },
     selectedItems: { type: Object },
     selectedDisplayItems: { type: Array },
-    defaultIDKey: { type:Number }
+    defaultIDKey: { type: Number }
   };
 
 
@@ -73,39 +73,53 @@ class neomulti extends LitElement {
 
   static get styles() {
     return css`
-      :host {
-        position: relative;
-        width: 100%; /* set host width to 100% */
-      }
-  
-      input {
-        width: 100%; /* make the input field take up the full width */
-        padding: .375rem .75rem; /* Bootstrap-style padding */
-        border: 1px solid #ced4da; /* Bootstrap-style border */
-        border-radius: .25rem; /* Bootstrap-style border radius */
-      }
-  
-      .dropdown {
-        display: none;
-        position: absolute;
-        width: 100%; /* make the dropdown take up the full width */
-        max-height: 300px; /* set max height */
-        overflow-y: auto; /* add scroll if needed */
-        background-color: white;
-        border: 1px solid gray;
-        border-radius: .25rem; /* Bootstrap-style border radius */
-        z-index: 1000; /* some high value */
-        box-sizing: border-box; /* border-box sizing model */
-      }
-  
-      .dropdown.open {
-        display: block;
-      }
-  
-      .dropdown-item {
-        cursor: pointer;
-        padding: .375rem .75rem; /* Bootstrap-style padding */
-      }
+              :host {
+                  position: relative;
+                  width: 100%;
+              }
+
+              .dropdown {
+                  display: none;
+                  position: absolute;
+                  width: 100%;
+                  max-height: 300px;
+                  overflow-y: auto;
+                  background-color: white;
+                  border: 1px solid gray;
+                  border-radius: .25rem;
+                  z-index: 1000;
+                  padding: 15px;
+                  box-sizing: border-box;
+              }
+
+              .dropdown.open {
+                  display: block;
+              }
+
+              .dropdown-item {
+                  display: flex;
+                  align-items: center;
+                  padding: 5px;
+              }
+
+              .dropdown-item input[type="checkbox"] {
+                  margin-right: 10px;
+              }
+
+              input {
+                  width: 100%;
+                  padding: .375rem .75rem;
+                  font-size: 1rem;
+                  line-height: 1.5;
+                  color: #495057;
+                  background-color: #fff;
+                  background-clip: padding-box;
+                  border: 1px solid #ced4da;
+                  border-radius: .25rem;
+                  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+                  box-sizing: border-box;
+              }
+
     `;
   }
 
