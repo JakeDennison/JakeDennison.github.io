@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, eventOptions } from 'lit';
 
 class neomulti extends LitElement {
   static getMetaConfig() {
@@ -113,7 +113,7 @@ class neomulti extends LitElement {
       cursor: pointer;
     }
 
-    .chosen-container .chosen-results li.highlighted {
+    .chosen-container .chosen-results li.selected {
       background-color: #e8e8e8;
     }
   `;
@@ -127,20 +127,63 @@ class neomulti extends LitElement {
 
   constructor() {
     super();
-    this.dsvdata = "";
-    this.displayKey = "";
-    this.valueKey = "";
-    this.outputJSON = "";
+    this.dsvdata = '';
+    this.displayKey = '';
+    this.valueKey = '';
+    this.outputJSON = '';
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
+    selects.forEach((select) => {
+      select.addEventListener('change', this.onChange);
+      Array.from(select.options).forEach((option) => {
+        option.addEventListener('mousedown', this.onOptionMousedown);
+      });
+    });
+  }
+
+  disconnectedCallback() {
+    const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
+    selects.forEach((select) => {
+      select.removeEventListener('change', this.onChange);
+      Array.from(select.options).forEach((option) => {
+        option.removeEventListener('mousedown', this.onOptionMousedown);
+      });
+    });
+
+    super.disconnectedCallback();
   }
 
   onChange(e) {
-    const selectedOptions = Array.from(e.target.selectedOptions).map(option => ({
+    const selectedOptions = Array.from(e.target.selectedOptions).map((option) => ({
       displayValue: option.text,
       value: option.value,
     }));
-  
+
     const outputJSON = JSON.stringify(selectedOptions);
     this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
+  }
+
+  onOptionMousedown(event) {
+    event.preventDefault();
+
+    const option = event.target;
+    const select = option.closest('select');
+
+    option.selected = !option.selected;
+
+    const selectedOptions = Array.from(select.selectedOptions).map((selectedOption) => ({
+      displayValue: selectedOption.text,
+      value: selectedOption.value,
+    }));
+
+    const outputJSON = JSON.stringify(selectedOptions);
+    this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
+
+    this.requestUpdate();
   }
 
   parseDataObject() {
@@ -150,7 +193,7 @@ class neomulti extends LitElement {
         return JSON.parse(this.dsvdata);
       } else {
         // Parse as comma-separated values
-        return this.dsvdata.split(',').map(item => item.trim());
+        return this.dsvdata.split(',').map((item) => item.trim());
       }
     } catch (error) {
       console.error('Error parsing DSV data:', error);
@@ -163,23 +206,27 @@ class neomulti extends LitElement {
       return html``;
     }
 
-    return data.map((item) => html`
-    <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
-  `);
+    return data.map(
+      (item) => html`
+        <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
+      `
+    );
   }
 
   renderChoices(selectedItems) {
-    return selectedItems.map((item) => html`
-    <span class="chosen-choice">
-      <span>${item[this.displayKey]}</span>
-      <span class="chosen-close" @click="${() => this.removeChoice(item)}">&#10005;</span>
-    </span>
-  `);
+    return selectedItems.map(
+      (item) => html`
+        <span class="chosen-choice">
+          <span>${item[this.displayKey]}</span>
+          <span class="chosen-close" @click="${() => this.removeChoice(item)}">&#10005;</span>
+        </span>
+      `
+    );
   }
 
   removeChoice(item) {
     const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
-      return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
+      return [...result, ...Array.from(select.selectedOptions).map((option) => option.value)];
     }, []);
     const index = selectedItems.indexOf(item);
     if (index > -1) {
@@ -196,33 +243,26 @@ class neomulti extends LitElement {
       });
     });
     this.requestUpdate();
-  
+
     const data = this.parseDataObject();
     const choices = selectedItems.map((item) => {
       const selectedItem = data.find((dataItem) => dataItem[this.valueKey] === item);
       return selectedItem ? selectedItem[this.displayKey] : null;
     });
-  
+
     const selectedItemsArray = selectedItems.map((item) => {
       const selectedItem = data.find((dataItem) => dataItem[this.valueKey] === item);
-      return selectedItem ? { [this.displayKey]: selectedItem[this.displayKey], [this.valueKey]: selectedItem[this.valueKey] } : null;
+      return selectedItem
+        ? { [this.displayKey]: selectedItem[this.displayKey], [this.valueKey]: selectedItem[this.valueKey] }
+        : null;
     });
-  
+
     const outputJSON = JSON.stringify(selectedItemsArray.filter((item) => item !== null));
-    this.outputJSON = outputJSON; // Store the JSON in the outputJSON property
-  
+    this.outputJSON = outputJSON;
+
     this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
-  
+
     console.log('Selected Choices:', choices);
-  }
-  
-  
-  connectedCallback() {
-    super.connectedCallback();
-    const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
-      return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
-    }, []);
-    this.updateSelectedItems(selectedItems);
   }
 
   render() {
@@ -230,27 +270,27 @@ class neomulti extends LitElement {
 
     if (!data || data.length === 0) {
       return html`
-    <p>No Data Found</p>
-  `;
+        <p>No Data Found</p>
+      `;
     }
 
     const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
-      return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
+      return [...result, ...Array.from(select.selectedOptions).map((option) => option.value)];
     }, []);
 
     const dropdownOptions = this.renderDropdownOptions(data);
     const choices = this.renderChoices(selectedItems);
 
     return html`
-  <div class="chosen-container">
-    <div class="chosen-choices">
-      ${choices}
-      <select multiple @change="${this.onChange}">
-        ${dropdownOptions}
-      </select>
-    </div>
-  </div>
-`;
+      <div class="chosen-container">
+        <div class="chosen-choices">
+          ${choices}
+          <select multiple>
+            ${dropdownOptions}
+          </select>
+        </div>
+      </div>
+    `;
   }
 }
 

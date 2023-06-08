@@ -1,5 +1,15 @@
 [dir] .nx-theme-styles .nx-form.container-fluid.nx-theme-form {
-    border-radius:1rem
+    border:0;
+    border-radius: 1em;
+}
+
+.nx-has-error>span:last-of-type, .nx-nested-form-has-error>span:last-of-type{
+    border-radius:4px;
+    margin-top: 4px;
+}
+
+.form-group.nx-has-error .ntx-simple-select .ng-select:not(.ng-select-opened){
+    border-color:#898f94;
 }
 
 [dir] .nx-theme-styles .nx-theme-input-1,
@@ -31,6 +41,22 @@ ntx-control-loading {
 [dir] .nx-theme-styles .nx-theme-form  ntx-textbox .nx-theme-input-1,
 [dir] .nx-theme-styles .nx-theme-form ntx-repeating-section ntx-textbox .nx-theme-input-1,
 [dir] .nx-theme-styles .nx-theme-form ntx-group ntx-textbox .nx-theme-input-1,
-.nx-multi-page-heading { 
-	background-color: #EAF7FC; 
+.nx-multi-page-heading,
+[dir] .nx-theme-styles .mat-stepper-horizontal,
+.nx-theme-styles .ntx-simple-select .ng-select.nx-theme-ng-select-1 .ng-select-container,
+[dir] .nx-theme-styles .nx-theme-form .nx-theme-label-1,
+[dir] .nx-theme-styles .nx-theme-form .nx-theme-input-1,
+[dir] .nx-theme-styles .nx-theme-radio-1 .nx-radio .nx-radio-container .nx-radio-label,
+.nx-form
+ { 
+	background-color: #EAF7FC!important;
+    color: #003870!important
 }
+
+[dir] .nx-theme-styles mat-step-header[aria-selected="true"] {
+    background-color: #d6ebff;
+}
+
+[dir] .nx-theme-styles .nx-theme-page {
+    background-color: #003870;
+  }
