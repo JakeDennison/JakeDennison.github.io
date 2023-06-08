@@ -196,8 +196,18 @@ class neomulti extends LitElement {
       });
     });
     this.requestUpdate();
-    console.log('Selected Choices:', selectedItems);
+  
+    const output = selectedItems.map((item) => {
+      const selectedItem = this.parseDataObject().find((dataItem) => dataItem[this.valueKey] === item);
+      return selectedItem ? selectedItem[this.displayKey] : null;
+    });
+  
+    const outputJSON = JSON.stringify(output.filter((item) => item !== null));
+    this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
+  
+    console.log('Selected Choices:', output);
   }
+  
 
   connectedCallback() {
     super.connectedCallback();
