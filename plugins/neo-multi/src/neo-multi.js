@@ -57,7 +57,6 @@ class neomulti extends LitElement {
   }
 
   render() {
-    // Parse the JSON data from the dsvdata property
     const data = JSON.parse(this.dsvdata);
   
     // Create an array of option elements based on the displayKey property
@@ -65,18 +64,46 @@ class neomulti extends LitElement {
       <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
     `);
   
-    // Render the dropdown list control with the options
+    // Create an array of selected options to display as tokens
+    const selectedOptions = data.filter(item => this.outputJSON.includes(item[this.valueKey]));
+  
+    // Render the dropdown list control with multi-select enabled
     return html`
-      <select @change="${this.handleValueChange}">
+      <input type="text" id="tokenInput" @keydown="${this.handleKeyDown}">
+      <select id="dropdown" multiple @change="${this.handleValueChange}" style="width: 100%;">
         ${options}
       </select>
+      <div id="tokenContainer">
+        ${selectedOptions.map(item => html`<div class="token">${item[this.displayKey]}</div>`)}
+      </div>
     `;
   }
-
+  
+  handleKeyDown(event) {
+    if (event.key === 'Enter' || event.key === ',') {
+      event.preventDefault();
+      const tokenInput = this.shadowRoot.getElementById('tokenInput');
+      const value = tokenInput.value.trim();
+      if (value !== '') {
+        this.addToken(value);
+        tokenInput.value = '';
+      }
+    }
+  }
+  
   handleValueChange(event) {
-    const selectedValue = event.target.value;
-    // Dispatch the 'ntx-value-change' event with the selected value
-    this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: selectedValue }));
+    const selectedOptions = Array.from(event.target.selectedOptions);
+    const selectedValues = selectedOptions.map(option => option.value);
+    this.outputJSON = JSON.stringify(selectedValues);
+    this.requestUpdate();
+  }
+  
+  addToken(value) {
+    const tokenContainer = this.shadowRoot.getElementById('tokenContainer');
+    const token = document.createElement('div');
+    token.classList.add('token');
+    token.textContent = value;
+    tokenContainer.appendChild(token);
   }
 
 }
