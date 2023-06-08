@@ -99,10 +99,16 @@ class neomulti extends LitElement {
     super.connectedCallback();
     this.boundClickHandler = this.handleWindowClick.bind(this);
     window.addEventListener('click', this.boundClickHandler);
-    let data = JSON.parse(this.dsvdata);
-    let defaultItem = data.find(item => item[this.valueKey] === this.defaultIDKey);
-    if (defaultItem) {
-      this.selectItem(defaultItem, false);
+  }
+
+  updated(changedProperties) {
+    super.updated(changedProperties);
+    if (changedProperties.has('dsvdata')) {
+      let data = JSON.parse(this.dsvdata);
+      let defaultItem = data.find(item => item[this.valueKey] === this.defaultIDKey);
+      if (defaultItem) {
+        this.selectItem(defaultItem, false);
+      }
     }
   }
 
