@@ -118,103 +118,111 @@ class neomulti extends LitElement {
     }
   `;
 
-static properties = {
-  dsvdata: { type: String },
-  displayKey: { type: String },
-  valueKey: { type: String },
-  outputJSON: { type: String },
-};
+  static properties = {
+    dsvdata: { type: String },
+    displayKey: { type: String },
+    valueKey: { type: String },
+    outputJSON: { type: String },
+  };
 
-onChange(e) {
-  const selectedOptions = Array.from(e.target.selectedOptions).map(option => ({
-    [this.displayKey]: option.text,
-    [this.valueKey]: option.value,
-  }));
-
-  const outputJSON = JSON.stringify(selectedOptions);
-  this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
-}
-
-parseDataObject() {
-try {
-  if (this.dsvdata.startsWith('[') && this.dsvdata.endsWith(']')) {
-    // Parse as JSON array
-    return JSON.parse(this.dsvdata);
-  } else {
-    // Parse as comma-separated values
-    return this.dsvdata.split(',').map(item => item.trim());
-  }
-} catch (error) {
-  console.error('Error parsing DSV data:', error);
-  return null;
-}
-}
-
-renderDropdownOptions(data) {
-  if (!data || data.length === 0) {
-    return html``;
+  constructor() {
+    super();
+    this.dsvdata = "";
+    this.displayKey = "";
+    this.valueKey = "";
+    this.outputJSON = "";
   }
 
-  return data.map((item) => html`
+  onChange(e) {
+    const selectedOptions = Array.from(e.target.selectedOptions).map(option => ({
+      displayValue: option.text,
+      value: option.value,
+    }));
+  
+    const outputJSON = JSON.stringify(selectedOptions);
+    this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
+  }
+
+  parseDataObject() {
+    try {
+      if (this.dsvdata.startsWith('[') && this.dsvdata.endsWith(']')) {
+        // Parse as JSON array
+        return JSON.parse(this.dsvdata);
+      } else {
+        // Parse as comma-separated values
+        return this.dsvdata.split(',').map(item => item.trim());
+      }
+    } catch (error) {
+      console.error('Error parsing DSV data:', error);
+      return null;
+    }
+  }
+
+  renderDropdownOptions(data) {
+    if (!data || data.length === 0) {
+      return html``;
+    }
+
+    return data.map((item) => html`
     <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
   `);
-}
+  }
 
-renderChoices(selectedItems) {
-  return selectedItems.map((item) => html`
+  renderChoices(selectedItems) {
+    return selectedItems.map((item) => html`
     <span class="chosen-choice">
       <span>${item[this.displayKey]}</span>
       <span class="chosen-close" @click="${() => this.removeChoice(item)}">&#10005;</span>
     </span>
   `);
-}
+  }
 
-removeChoice(item) {
-const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
-  return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
-}, []);
-const index = selectedItems.indexOf(item);
-if (index > -1) {
-  selectedItems.splice(index, 1);
-}
-this.updateSelectedItems(selectedItems);
-}
+  removeChoice(item) {
+    const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
+      return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
+    }, []);
+    const index = selectedItems.indexOf(item);
+    if (index > -1) {
+      selectedItems.splice(index, 1);
+    }
+    this.updateSelectedItems(selectedItems);
+  }
 
-updateSelectedItems(selectedItems) {
-const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
-selects.forEach((select) => {
-  Array.from(select.options).forEach((option) => {
-    option.selected = selectedItems.includes(option.value);
-  });
-});
-this.requestUpdate();
-}
+  updateSelectedItems(selectedItems) {
+    const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
+    selects.forEach((select) => {
+      Array.from(select.options).forEach((option) => {
+        option.selected = selectedItems.includes(option.value);
+      });
+    });
+    this.requestUpdate();
+  }
 
-connectedCallback() {
-super.connectedCallback();
-const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
-  return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
-}, []);
-this.updateSelectedItems(selectedItems);
-}
+  connectedCallback() {
+    super.connectedCallback();
+    const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
+      return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
+    }, []);
+    this.updateSelectedItems(selectedItems);
+  }
 
-render() {
-const data = this.parseDataObject();
+  render() {
+    const data = this.parseDataObject();
 
-if (!data || data.length === 0) {
-  return html`
+    if (!data || data.length === 0) {
+      return html`
     <p>No Data Found</p>
   `;
-}
+    }
 
-const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
-  return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
-}, []);
+    const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
+      return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
+    }, []);
 
-const dropdownOptions = this.renderDropdownOptions(data);
-const choices = this.renderChoices(selectedItems);
+    const dropdownOptions = this.renderDropdownOptions(data);
+    const choices = this.renderChoices(selectedItems);
 
-return html`
+    return html`
   <div class="chosen-container">
     <div class="chosen-choices">
       ${choices}
@@ -224,7 +232,7 @@ return html`
     </div>
   </div>
 `;
-}
+  }
 }
 
 customElements.define('neo-multi', neomulti);
