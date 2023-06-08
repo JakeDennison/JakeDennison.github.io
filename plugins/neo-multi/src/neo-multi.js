@@ -75,11 +75,11 @@ class neomulti extends LitElement {
     return css`
       :host {
         position: relative;
-        display: block; /* make the host element a block element */
+        width: 100%; /* set host width to 100% */
       }
   
       input {
-        width: 100%; /* make the input field take up the full width of the host */
+        width: 100%; /* make the input field take up the full width */
         padding: .375rem .75rem; /* Bootstrap-style padding */
         border: 1px solid #ced4da; /* Bootstrap-style border */
         border-radius: .25rem; /* Bootstrap-style border radius */
@@ -88,7 +88,7 @@ class neomulti extends LitElement {
       .dropdown {
         display: none;
         position: absolute;
-        width: 100%; /* make the dropdown take up the full width of the host */
+        width: 100%; /* make the dropdown take up the full width */
         max-height: 300px; /* set max height */
         overflow-y: auto; /* add scroll if needed */
         background-color: white;
@@ -103,14 +103,11 @@ class neomulti extends LitElement {
       }
   
       .dropdown-item {
-          cursor: pointer;
-          padding: .375rem .75rem; /* Bootstrap-style padding */
-          display: flex; /* make this a flex container */
+        cursor: pointer;
+        padding: .375rem .75rem; /* Bootstrap-style padding */
       }
-
     `;
   }
-  
 
   connectedCallback() {
     super.connectedCallback();
