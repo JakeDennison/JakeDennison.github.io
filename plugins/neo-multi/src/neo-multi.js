@@ -31,13 +31,79 @@ class neomulti extends LitElement {
   }
 
   static styles = css`
-    .token {
+    .chosen-container {
+      position: relative;
       display: inline-block;
-      padding: 4px 8px;
-      margin: 4px;
+      width: 100%;
+    }
+
+    .chosen-container .chosen-choices {
       background-color: #f2f2f2;
       border-radius: 4px;
+      cursor: text;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 4px 8px;
+      min-height: 32px;
+    }
+
+    .chosen-container .chosen-choices .chosen-choice {
+      display: inline-block;
+      padding: 2px 4px;
+      margin: 2px;
+      background-color: #dddddd;
+      border-radius: 3px;
+    }
+
+    .chosen-container .chosen-choices .chosen-choice span {
+      margin-right: 4px;
+    }
+
+    .chosen-container .chosen-choices .chosen-choice .chosen-close {
       cursor: pointer;
+    }
+
+    .chosen-container .chosen-single {
+      display: block;
+      background-color: #ffffff;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+      padding: 4px 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .chosen-container .chosen-single span {
+      margin-right: 4px;
+    }
+
+    .chosen-container .chosen-drop {
+      position: absolute;
+      z-index: 9999;
+      background-color: #ffffff;
+      border: 1px solid #cccccc;
+      border-top: none;
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .chosen-container .chosen-results {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .chosen-container .chosen-results li {
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+
+    .chosen-container .chosen-results li.highlighted {
+      background-color: #e8e8e8;
     }
   `;
 
@@ -62,42 +128,52 @@ class neomulti extends LitElement {
     }
   }
 
-  renderTableHeaders(data) {
+  renderDropdownOptions(data) {
     if (!data || data.length === 0) {
       return html``;
     }
 
-    const headers = Array.isArray(data) ? Object.keys(data[0]) : ['Value'];
-
-    return html`
-      <thead>
-        <tr>
-          ${headers.map(header => html`<th>${header}</th>`)}
-        </tr>
-      </thead>
-    `;
+    return data.map((item) => html`
+      <option value="${item}">${item}</option>
+    `);
   }
 
-  renderTableRows(data) {
-    if (!data || data.length === 0) {
-      return html``;
-    }
+  renderChoices(selectedItems) {
+    return selectedItems.map((item) => html`
+      <span class="chosen-choice">
+        <span>${item}</span>
+        <span class="chosen-close" @click="${() => this.removeChoice(item)}">&#10005;</span>
+      </span>
+    `);
+  }
 
-    return html`
-      <tbody>
-        ${Array.isArray(data)
-          ? data.map(row => html`
-              <tr>
-                ${Object.values(row).map(value => html`<td>${value}</td>`)}
-              </tr>
-            `)
-          : html`
-              <tr>
-                <td>${data}</td>
-              </tr>
-            `}
-      </tbody>
-    `;
+  removeChoice(item) {
+    const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
+      return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
+    }, []);
+    const index = selectedItems.indexOf(item);
+    if (index > -1) {
+      selectedItems.splice(index, 1);
+    }
+    this.updateSelectedItems(selectedItems);
+  }
+
+  updateSelectedItems(selectedItems) {
+    const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
+    selects.forEach((select) => {
+      Array.from(select.options).forEach((option) => {
+        option.selected = selectedItems.includes(option.value);
+      });
+    });
+    this.requestUpdate();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
+      return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
+    }, []);
+    this.updateSelectedItems(selectedItems);
   }
 
   render() {
@@ -109,45 +185,22 @@ class neomulti extends LitElement {
       `;
     }
 
-    const selectedItems = new Set(); // Track the selected items
+    const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
+      return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
+    }, []);
 
-    const handleOptionClick = (event) => {
-      const selectedItem = event.target.value;
-      if (selectedItems.has(selectedItem)) {
-        selectedItems.delete(selectedItem);
-      } else {
-        selectedItems.add(selectedItem);
-      }
-      this.requestUpdate();
-    };
-
-    const handleTokenClick = (event) => {
-      const selectedItem = event.target.dataset.item;
-      selectedItems.delete(selectedItem);
-      this.requestUpdate();
-    };
-
-    const dropdownOptions = data.map((item) => html`
-      <option value="${item}" @click="${handleOptionClick}" ?selected="${selectedItems.has(item)}">${item}</option>
-    `);
-
-    const tokens = [...selectedItems].map((item) => html`
-      <span class="token" @click="${handleTokenClick}" data-item="${item}">${item}</span>
-    `);
+    const dropdownOptions = this.renderDropdownOptions(data);
+    const choices = this.renderChoices(selectedItems);
 
     return html`
-      <div>
-        <select multiple @change="${this.onChange}">
-          ${dropdownOptions}
-        </select>
-        <div>
-          ${tokens}
+      <div class="chosen-container">
+        <div class="chosen-choices">
+          ${choices}
+          <select multiple @change="${this.onChange}">
+            ${dropdownOptions}
+          </select>
         </div>
       </div>
-      <table>
-        ${this.renderTableHeaders(data)}
-        ${this.renderTableRows(data)}
-      </table>
     `;
   }
 }
