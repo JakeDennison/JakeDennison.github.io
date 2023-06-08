@@ -32,6 +32,11 @@ class neomulti extends LitElement {
           description: 'Provide the data source variable output as a string using a convert to string function variable',
           isValueField: true,
         },
+        defaultIDKey: {
+          type: 'integer',
+          title: 'Default value ID',
+          description: 'Provide the ID value of the item you want to select as default, this will only work if ID is a value key choice in the JSON',
+        },
       },
       events: ['ntx-value-change'],
       standardProperties: {
@@ -49,6 +54,7 @@ class neomulti extends LitElement {
     isOpen: { type: Boolean },
     selectedItems: { type: Object },
     selectedDisplayItems: { type: Array },
+    defaultIDKey: { type:Number }
   };
 
 
@@ -61,6 +67,7 @@ class neomulti extends LitElement {
     this.isOpen = false;
     this.selectedItems = [];
     this.selectedDisplayItems = [];
+    this.defaultIDKey = 0;
   }
 
   static get styles() {
@@ -92,6 +99,11 @@ class neomulti extends LitElement {
     super.connectedCallback();
     this.boundClickHandler = this.handleWindowClick.bind(this);
     window.addEventListener('click', this.boundClickHandler);
+    let data = JSON.parse(this.dsvdata);
+    let defaultItem = data.find(item => item[this.valueKey] === this.defaultIDKey);
+    if (defaultItem) {
+      this.selectItem(defaultItem, false);
+    }
   }
 
   disconnectedCallback() {
@@ -106,7 +118,7 @@ class neomulti extends LitElement {
     }
   }
 
-  selectItem(item) {
+  selectItem(item, emitEvent = true) {
     const value = item[this.valueKey];
     const display = item[this.displayKey];
     if (this.selectedItems.includes(value)) {
@@ -117,14 +129,16 @@ class neomulti extends LitElement {
       this.selectedDisplayItems.push(display);
     }
     this.outputJSON = JSON.stringify(this.selectedItems);
-    const args = {
-      bubbles: true,
-      cancelable: false,
-      composed: true,
-      detail: this.outputJSON,
-    };
-    const event = new CustomEvent('ntx-value-change', args);
-    this.dispatchEvent(event);
+    if (emitEvent) {
+      const args = {
+        bubbles: true,
+        cancelable: false,
+        composed: true,
+        detail: this.outputJSON,
+      };
+      const event = new CustomEvent('ntx-value-change', args);
+      this.dispatchEvent(event);
+    }
   }
 
   render() {
