@@ -85,15 +85,31 @@ class neomulti extends LitElement {
     `;
 }
 
+connectedCallback() {
+  super.connectedCallback();
+  this.boundClickHandler = this.handleWindowClick.bind(this);
+  window.addEventListener('click', this.boundClickHandler);
+}
+
+disconnectedCallback() {
+  window.removeEventListener('click', this.boundClickHandler);
+  super.disconnectedCallback();
+}
+
+handleWindowClick(e) {
+  if (!this.shadowRoot.contains(e.target)) {
+      this.isOpen = false;
+      this.requestUpdate();
+  }
+}
 
 render() {
   return html`
-      <div>
+      <div @click="${(e) => e.stopPropagation()}">
           <label>${this.displayKey}</label>
           <input 
               @focus="${() => { this.isOpen = true; this.requestUpdate(); }}" 
-              @blur="${() => { this.isOpen = false; this.requestUpdate(); }}" 
-              .value="${this.selectedItems.join(', ')}"
+              .value="${this.selectedItems.join(', ',)}"
           >
           <div class="dropdown ${this.isOpen ? 'open' : ''}">
               <!-- Assuming dsvdata is a JSON string -->
