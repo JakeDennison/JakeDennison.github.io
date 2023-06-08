@@ -25,6 +25,7 @@ class neomulti extends LitElement {
           type: 'string',
           title: 'Output JSON',
           description: 'Provide the data source variable output as a string using a convert to string function variable',
+          isValueField: true,
         },
       },
       events: ['ntx-value-change'],
@@ -129,7 +130,10 @@ class neomulti extends LitElement {
 
   parseDataObject() {
     try {
-      return JSON.parse(this.outputJSON);
+      if (this.outputJSON) {
+        return JSON.parse(this.outputJSON);
+      }
+      return null;
     } catch (error) {
       console.error('Error parsing output JSON:', error);
       return null;
