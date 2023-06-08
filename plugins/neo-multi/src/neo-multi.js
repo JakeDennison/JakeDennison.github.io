@@ -118,67 +118,80 @@ class neomulti extends LitElement {
     }
   `;
 
-  static properties = {
-    dsvdata: { type: String },
-    displayKey: { type: String },
-    valueKey: { type: String },
-    outputJSON: { type: String },
-  };
+static properties = {
+  dsvdata: { type: String },
+  displayKey: { type: String },
+  valueKey: { type: String },
+  outputJSON: { type: String },
+};
 
-  onChange(e) {
-    const selectedOptions = Array.from(e.target.selectedOptions).map(option => ({
-      [this.displayKey]: option.text,
-      [this.valueKey]: option.value,
-    }));
-    const outputJSON = JSON.stringify(selectedOptions);
-    this.outputJSON = outputJSON;
-    this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
+onChange(e) {
+  const selectedOptions = Array.from(e.target.selectedOptions).map(option => ({
+    [this.displayKey]: option.text,
+    [this.valueKey]: option.value,
+  }));
+  const outputJSON = JSON.stringify(selectedOptions);
+  this.outputJSON = outputJSON;
+  this.requestUpdate();
+  this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
+}
+
+
+parseDataObject() {
+  try {
+    return JSON.parse(this.dsvdata);
+  } catch (error) {
+    console.error('Error parsing data source variable:', error);
+    return null;
+  }
+}
+
+renderDropdownOptions(data) {
+  if (!data || data.length === 0) {
+    return html``;
   }
 
-  parseDataObject() {
-    try {
-      return JSON.parse(this.dsvdata);
-    } catch (error) {
-      console.error('Error parsing data source variable:', error);
-      return null;
-    }
-  }
-
-  renderDropdownOptions(data) {
-    if (!data || data.length === 0) {
-      return html``;
-    }
-
-    return data.map((item) => html`
+  return data.map((item) => html`
     <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
   `);
-  }
+}
 
-  renderChoices(selectedItems) {
-    return selectedItems.map((item) => html`
+renderChoices(selectedItems) {
+  return selectedItems.map((item) => html`
     <span class="chosen-choice">
       <span>${item[this.displayKey]}</span>
       <span class="chosen-close" @click="${() => this.removeChoice(item)}">&#10005;</span>
     </span>
   `);
-  }
+}
 
-  removeChoice(item) {
-    const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select'))
-      .reduce((result, select) => {
-        return [...result, ...Array.from(select.selectedOptions).map(option => ({
-          [this.displayKey]: option.text,
-          [this.valueKey]: option.value,
-        }))];
-      }, []);
-    const outputJSON = JSON.stringify(selectedItems);
-    this.outputJSON = outputJSON;
-    this.requestUpdate();
-    this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
-  }
+removeChoice(item) {
+  const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select'))
+    .reduce((result, select) => {
+      return [...result, ...Array.from(select.selectedOptions).map(option => ({
+        [this.displayKey]: option.text,
+        [this.valueKey]: option.value,
+      }))];
+    }, []);
+  const outputJSON = JSON.stringify(selectedItems);
+  this.outputJSON = outputJSON;
+  this.requestUpdate();
+  this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
+}
 
-  connectedCallback() {
-    super.connectedCallback();
+connectedCallback() {
+  super.connectedCallback();
+  const selectedItems = JSON.parse(this.outputJSON || '[]');
+  const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
+  selects.forEach((select) => {
+    Array.from(select.options).forEach((option) => {
+      option.selected = selectedItems.some(selectedItem => selectedItem[this.valueKey] === option.value);
+    });
+  });
+}
+
+updated(changedProperties) {
+  if (changedProperties.has('outputJSON')) {
     const selectedItems = JSON.parse(this.outputJSON || '[]');
     const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
     selects.forEach((select) => {
@@ -187,34 +200,23 @@ class neomulti extends LitElement {
       });
     });
   }
+}
 
-  updated(changedProperties) {
-    if (changedProperties.has('outputJSON')) {
-      const selectedItems = JSON.parse(this.outputJSON || '[]');
-      const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
-      selects.forEach((select) => {
-        Array.from(select.options).forEach((option) => {
-          option.selected = selectedItems.some(selectedItem => selectedItem[this.valueKey] === option.value);
-        });
-      });
-    }
-  }
+render() {
+  const data = this.parseDataObject();
 
-  render() {
-    const data = this.parseDataObject();
-
-    if (!data || data.length === 0) {
-      return html`
+  if (!data || data.length === 0) {
+    return html`
       <p>No Data Found</p>
     `;
-    }
+  }
 
-    const selectedItems = JSON.parse(this.outputJSON || '[]');
+  const selectedItems = JSON.parse(this.outputJSON || '[]');
 
-    const dropdownOptions = this.renderDropdownOptions(data);
-    const choices = this.renderChoices(selectedItems);
+  const dropdownOptions = this.renderDropdownOptions(data);
+  const choices = this.renderChoices(selectedItems);
 
-    return html`
+  return html`
     <div class="chosen-container">
       <div class="chosen-choices">
         ${choices}
@@ -224,7 +226,7 @@ class neomulti extends LitElement {
       </div>
     </div>
   `;
-  }
+}
 }
 
 customElements.define('neo-multi', neomulti);
