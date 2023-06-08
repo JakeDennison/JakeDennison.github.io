@@ -11,10 +11,15 @@ class neomulti extends LitElement {
       groupName: 'Visual Data',
       version: '1.0',
       properties: {
-        dsvdata: {
+        displayKey: {
           type: 'string',
-          title: 'DSV Output string',
-          description: 'Provide the data source variable output as a string using a convert to string function variable'
+          title: 'Display Key',
+          description: 'Specify the key of the object to be displayed in the dropdown.',
+        },
+        valueKey: {
+          type: 'string',
+          title: 'Value Key',
+          description: 'Specify the key of the object to be used as the value in the output JSON.',
         },
         outputJSON: {
           type: 'string',
@@ -107,23 +112,26 @@ class neomulti extends LitElement {
     }
   `;
 
+  static properties = {
+    displayKey: { type: String },
+    valueKey: { type: String },
+    outputJSON: { type: String },
+  };
+
   onChange(e) {
-    const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
+    const selectedOptions = Array.from(e.target.selectedOptions).map(option => ({
+      [this.displayKey]: option.text,
+      [this.valueKey]: option.value,
+    }));
     const outputJSON = JSON.stringify(selectedOptions);
     this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
   }
 
   parseDataObject() {
     try {
-      if (this.dsvdata.startsWith('[') && this.dsvdata.endsWith(']')) {
-        // Parse as JSON array
-        return JSON.parse(this.dsvdata);
-      } else {
-        // Parse as comma-separated values
-        return this.dsvdata.split(',').map(item => item.trim());
-      }
+      return JSON.parse(this.outputJSON);
     } catch (error) {
-      console.error('Error parsing DSV data:', error);
+      console.error('Error parsing output JSON:', error);
       return null;
     }
   }
@@ -134,14 +142,14 @@ class neomulti extends LitElement {
     }
 
     return data.map((item) => html`
-      <option value="${item}">${item}</option>
+      <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
     `);
   }
 
   renderChoices(selectedItems) {
     return selectedItems.map((item) => html`
       <span class="chosen-choice">
-        <span>${item}</span>
+        <span>${item[this.displayKey]}</span>
         <span class="chosen-close" @click="${() => this.removeChoice(item)}">&#10005;</span>
       </span>
     `);
@@ -149,9 +157,12 @@ class neomulti extends LitElement {
 
   removeChoice(item) {
     const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
-      return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
+      return [...result, ...Array.from(select.selectedOptions).map(option => ({
+        [this.displayKey]: option.text,
+        [this.valueKey]: option.value,
+      }))];
     }, []);
-    const index = selectedItems.indexOf(item);
+    const index = selectedItems.findIndex(selectedItem => selectedItem[this.valueKey] === item[this.valueKey]);
     if (index > -1) {
       selectedItems.splice(index, 1);
     }
@@ -162,7 +173,7 @@ class neomulti extends LitElement {
     const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
     selects.forEach((select) => {
       Array.from(select.options).forEach((option) => {
-        option.selected = selectedItems.includes(option.value);
+        option.selected = selectedItems.some(selectedItem => selectedItem[this.valueKey] === option.value);
       });
     });
     this.requestUpdate();
@@ -171,7 +182,10 @@ class neomulti extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
-      return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
+      return [...result, ...Array.from(select.selectedOptions).map(option => ({
+        [this.displayKey]: option.text,
+        [this.valueKey]: option.value,
+      }))];
     }, []);
     this.updateSelectedItems(selectedItems);
   }
@@ -186,7 +200,10 @@ class neomulti extends LitElement {
     }
 
     const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
-      return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
+      return [...result, ...Array.from(select.selectedOptions).map(option => ({
+        [this.displayKey]: option.text,
+        [this.valueKey]: option.value,
+      }))];
     }, []);
 
     const dropdownOptions = this.renderDropdownOptions(data);
