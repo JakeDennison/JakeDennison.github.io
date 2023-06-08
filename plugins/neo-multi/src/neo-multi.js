@@ -200,7 +200,7 @@ class neomulti extends LitElement {
     const data = this.parseDataObject();
     const output = selectedItems.map((item) => {
       const selectedItem = data.find((dataItem) => dataItem[this.valueKey] === item);
-      return selectedItem ? { [this.displayKey]: selectedItem[this.displayKey], [this.valueKey]: selectedItem[this.valueKey] } : null;
+      return selectedItem ? selectedItem[this.displayKey] : null;
     });
   
     const outputJSON = JSON.stringify(output.filter((item) => item !== null));
@@ -208,6 +208,7 @@ class neomulti extends LitElement {
   
     console.log('Selected Choices:', output);
   }
+  
   
   connectedCallback() {
     super.connectedCallback();
