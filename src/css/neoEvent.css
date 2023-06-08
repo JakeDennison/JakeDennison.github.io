@@ -1,0 +1,27 @@
+[dir] .nx-theme-styles .nx-form.container-fluid.nx-theme-form {
+    border-radius:1rem
+}
+
+[dir] .nx-theme-styles .nx-theme-input-1,
+ntx-simple-currency .nx-simple-currency-control ntx-simple-number input.form-control:last-child,
+[dir] .nx-theme-styles ntx-currency .nx-simple-currency-control .input-group-append .nx-btn-input-icon:last-child,
+[dir] .nx-theme-styles ntx-datetime .nx-theme-datepicker-1 .input-group .input-group-append .nx-btn-input-icon:last-child,
+[dir] .nx-theme-styles .nx-theme-ng-select-1.ng-select:not(.ng-select-opened),
+.nx-theme-styles ntx-geolocation .input-group .nx-theme-input-1.form-control:not(:only-child),
+[dir] .nx-theme-styles ntx-geolocation .input-group .nx-theme-input-1.input-group-append .nx-btn-input-icon:last-child,
+[dir] .nx-theme-styles .nx-barcode-control.input-group .nx-theme-input-1.input-group-append .nx-btn-input-icon:last-child,
+.input-group-append>.nx-btn-input-icon:last-child,
+.ntx-simple-select .ng-select .ng-select-container,
+.ntx-simple-select .ng-select {
+    border-radius: 0px;
+}
+
+input.form-control, select.form-control, textarea.form-control,
+ntx-simple-currency .nx-simple-currency-control .input-group-append>.ntx-currency-btn:last-child,
+.ntx-simple-select .ng-select,
+.nx-btn-input-icon,
+ntx-control-loading {
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+}
