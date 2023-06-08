@@ -46,6 +46,8 @@ class neomulti extends LitElement {
     displayKey: { type: String },
     valueKey: { type: String },
     outputJSON: { type: String },
+    isOpen: { type:Boolean },
+    selectedItems: { type:Array },
   };
 
   constructor() {
@@ -54,25 +56,56 @@ class neomulti extends LitElement {
     this.displayKey = "";
     this.valueKey = "";
     this.outputJSON = "";
+    this.isOpen = false;
+    this.selectedItems = [];
   }
 
-  render() {
+  static get styles() {
+    return css`
+        .dropdown {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid gray;
+        }
+
+        .dropdown.open {
+            display: block;
+        }
+
+        .dropdown-item {
+            cursor: pointer;
+            padding: 5px;
+        }
+    `;
+}
+
+render() {
     return html`
         <div>
             <label>${this.displayKey}</label>
-            <select multiple @blur="${this.handleSelect}">
+            <input @focus="${() => this.isOpen = true}" .value="${this.selectedItems.join(', ')}">
+            <div class="dropdown ${this.isOpen ? 'open' : ''}">
                 <!-- Assuming dsvdata is a JSON string -->
                 ${(JSON.parse(this.dsvdata) || []).map(item => html`
-                    <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
+                    <div class="dropdown-item" @click="${() => this.selectItem(item)}">
+                        <input type="checkbox" .checked="${this.selectedItems.includes(item[this.valueKey])}">
+                        ${item[this.displayKey]}
+                    </div>
                 `)}
-            </select>
+            </div>
         </div>
     `;
 }
 
-handleSelect(e) {
-    let selectedValues = Array.from(e.target.selectedOptions).map(option => option.value);
-    this.outputJSON = JSON.stringify(selectedValues);
+selectItem(item) {
+    const value = item[this.valueKey];
+    if (this.selectedItems.includes(value)) {
+        this.selectedItems = this.selectedItems.filter(i => i !== value);
+    } else {
+        this.selectedItems.push(value);
+    }
+    this.outputJSON = JSON.stringify(this.selectedItems);
     const args = {
         bubbles: true,
         cancelable: false,
@@ -82,7 +115,6 @@ handleSelect(e) {
     const event = new CustomEvent('ntx-value-change', args);
     this.dispatchEvent(event);
 }
-
 
 }
 
