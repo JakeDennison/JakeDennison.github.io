@@ -196,6 +196,7 @@ class neomulti extends LitElement {
       });
     });
     this.requestUpdate();
+    console.log('Selected Choices:', selectedItems);
   }
 
   connectedCallback() {
