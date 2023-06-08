@@ -139,75 +139,31 @@ onChange(e) {
   this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
 }
 
-
-
-parseDataObject() {
-  try {
-    return JSON.parse(this.dsvdata);
-  } catch (error) {
-    console.error('Error parsing data source variable:', error);
-    return null;
-  }
-}
-
-renderDropdownOptions(data) {
-  if (!data || data.length === 0) {
-    return html``;
-  }
-
-  return data.map((item) => html`
-    <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
-  `);
-}
-
-renderChoices(selectedItems) {
-  return selectedItems.map((item) => html`
-    <span class="chosen-choice">
-      <span>${item[this.displayKey]}</span>
-      <span class="chosen-close" @click="${() => this.removeChoice(item)}">&#10005;</span>
-    </span>
-  `);
-}
-
-removeChoice(item) {
-  const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select'))
-    .reduce((result, select) => {
-      return [...result, ...Array.from(select.selectedOptions).map(option => ({
-        [this.displayKey]: option.text,
-        [this.valueKey]: option.value,
-      }))];
-    }, []);
-  const outputJSON = JSON.stringify(selectedItems);
-  this.outputJSON = outputJSON;
-  this.requestUpdate();
-  this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
-}
-
-connectedCallback() {
-  super.connectedCallback();
-  const selectedItems = JSON.parse(this.outputJSON || '[]');
+updateSelectedItems(selectedItems) {
   const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
   selects.forEach((select) => {
     Array.from(select.options).forEach((option) => {
       option.selected = selectedItems.some(selectedItem => selectedItem[this.valueKey] === option.value);
     });
   });
+  this.requestUpdate();
+}
+
+connectedCallback() {
+  super.connectedCallback();
+  const selectedItems = JSON.parse(this.outputJSON || '[]');
+  this.updateSelectedItems(selectedItems);
 }
 
 updated(changedProperties) {
   if (changedProperties.has('outputJSON')) {
     const selectedItems = JSON.parse(this.outputJSON || '[]');
-    const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
-    selects.forEach((select) => {
-      Array.from(select.options).forEach((option) => {
-        option.selected = selectedItems.some(selectedItem => selectedItem[this.valueKey] === option.value);
-      });
-    });
+    this.updateSelectedItems(selectedItems);
   }
 }
 
 render() {
-  const data = this.parseDataObject();
+  const data = JSON.parse(this.dsvdata || '[]');
 
   if (!data || data.length === 0) {
     return html`
@@ -217,8 +173,16 @@ render() {
 
   const selectedItems = JSON.parse(this.outputJSON || '[]');
 
-  const dropdownOptions = this.renderDropdownOptions(data);
-  const choices = this.renderChoices(selectedItems);
+  const dropdownOptions = data.map((item) => html`
+    <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
+  `);
+
+  const choices = selectedItems.map((item) => html`
+    <span class="chosen-choice">
+      <span>${item[this.displayKey]}</span>
+      <span class="chosen-close" @click="${() => this.removeChoice(item)}">&#10005;</span>
+    </span>
+  `);
 
   return html`
     <div class="chosen-container">
