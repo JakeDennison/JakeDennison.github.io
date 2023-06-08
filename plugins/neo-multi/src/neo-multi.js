@@ -87,22 +87,27 @@ class neomulti extends LitElement {
 
 
 render() {
-    return html`
-        <div>
-            <label>${this.displayKey}</label>
-            <input @focus="${() => this.isOpen = true}" .value="${this.selectedItems.join(', ')}">
-            <div class="dropdown-item" @click="${(e) => {e.stopPropagation(); this.selectItem(item);}}">
-                <!-- Assuming dsvdata is a JSON string -->
-                ${(JSON.parse(this.dsvdata) || []).map(item => html`
-                    <div class="dropdown-item" @click="${() => this.selectItem(item)}">
-                        <input type="checkbox" .checked="${this.selectedItems.includes(item[this.valueKey])}">
-                        ${item[this.displayKey]}
-                    </div>
-                `)}
-            </div>
-        </div>
-    `;
+  return html`
+      <div>
+          <label>${this.displayKey}</label>
+          <input 
+              @focus="${() => { this.isOpen = true; this.requestUpdate(); }}" 
+              @blur="${() => { this.isOpen = false; this.requestUpdate(); }}" 
+              .value="${this.selectedItems.join(', ')}"
+          >
+          <div class="dropdown ${this.isOpen ? 'open' : ''}">
+              <!-- Assuming dsvdata is a JSON string -->
+              ${(JSON.parse(this.dsvdata) || []).map(item => html`
+                  <div class="dropdown-item" @click="${(e) => {e.stopPropagation(); this.selectItem(item);}}">
+                      <input type="checkbox" .checked="${this.selectedItems.includes(item[this.valueKey])}">
+                      ${item[this.displayKey]}
+                  </div>
+              `)}
+          </div>
+      </div>
+  `;
 }
+
 
 selectItem(item) {
     const value = item[this.valueKey];
