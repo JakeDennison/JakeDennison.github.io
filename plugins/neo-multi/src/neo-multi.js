@@ -55,6 +55,13 @@ class neomulti extends LitElement {
         position: relative;
       }
 
+      #inputContainer {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        flex: 1;
+      }
+
       #tokenContainer {
         display: flex;
         flex-wrap: wrap;
