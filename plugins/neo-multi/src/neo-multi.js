@@ -126,18 +126,16 @@ static properties = {
 };
 
 onChange(e) {
-  const selectedOptions = Array.from(e.target.options)
-    .filter(option => option.selected)
-    .map(option => ({
-      [this.displayKey]: option.text,
-      [this.valueKey]: option.value,
-    }));
+  const selectedOptions = Array.from(e.target.selectedOptions).map(option => ({
+    [this.displayKey]: option.text,
+    [this.valueKey]: option.value,
+  }));
 
   const outputJSON = JSON.stringify(selectedOptions);
   this.outputJSON = outputJSON;
-  this.requestUpdate();
   this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
 }
+
 
 updateSelectedItems(selectedItems) {
   const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
