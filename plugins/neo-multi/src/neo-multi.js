@@ -132,66 +132,98 @@ onChange(e) {
   }));
 
   const outputJSON = JSON.stringify(selectedOptions);
-  this.outputJSON = outputJSON;
   this.dispatchEvent(new CustomEvent('ntx-value-change', { detail: outputJSON }));
 }
 
-
-updateSelectedItems(selectedItems) {
-  const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
-  selects.forEach((select) => {
-    Array.from(select.options).forEach((option) => {
-      option.selected = selectedItems.some(selectedItem => selectedItem[this.valueKey] === option.value);
-    });
-  });
-  this.requestUpdate();
-}
-
-connectedCallback() {
-  super.connectedCallback();
-  const selectedItems = JSON.parse(this.outputJSON || '[]');
-  this.updateSelectedItems(selectedItems);
-}
-
-updated(changedProperties) {
-  if (changedProperties.has('outputJSON')) {
-    const selectedItems = JSON.parse(this.outputJSON || '[]');
-    this.updateSelectedItems(selectedItems);
+parseDataObject() {
+try {
+  if (this.dsvdata.startsWith('[') && this.dsvdata.endsWith(']')) {
+    // Parse as JSON array
+    return JSON.parse(this.dsvdata);
+  } else {
+    // Parse as comma-separated values
+    return this.dsvdata.split(',').map(item => item.trim());
   }
+} catch (error) {
+  console.error('Error parsing DSV data:', error);
+  return null;
+}
 }
 
-render() {
-  const data = JSON.parse(this.dsvdata || '[]');
-
+renderDropdownOptions(data) {
   if (!data || data.length === 0) {
-    return html`
-      <p>No Data Found</p>
-    `;
+    return html``;
   }
 
-  const selectedItems = JSON.parse(this.outputJSON || '[]');
-
-  const dropdownOptions = data.map((item) => html`
+  return data.map((item) => html`
     <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
   `);
+}
 
-  const choices = selectedItems.map((item) => html`
+renderChoices(selectedItems) {
+  return selectedItems.map((item) => html`
     <span class="chosen-choice">
       <span>${item[this.displayKey]}</span>
       <span class="chosen-close" @click="${() => this.removeChoice(item)}">&#10005;</span>
     </span>
   `);
+}
 
+removeChoice(item) {
+const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
+  return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
+}, []);
+const index = selectedItems.indexOf(item);
+if (index > -1) {
+  selectedItems.splice(index, 1);
+}
+this.updateSelectedItems(selectedItems);
+}
+
+updateSelectedItems(selectedItems) {
+const selects = Array.from(this.shadowRoot.querySelectorAll('select'));
+selects.forEach((select) => {
+  Array.from(select.options).forEach((option) => {
+    option.selected = selectedItems.includes(option.value);
+  });
+});
+this.requestUpdate();
+}
+
+connectedCallback() {
+super.connectedCallback();
+const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
+  return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
+}, []);
+this.updateSelectedItems(selectedItems);
+}
+
+render() {
+const data = this.parseDataObject();
+
+if (!data || data.length === 0) {
   return html`
-    <div class="chosen-container">
-      <div class="chosen-choices">
-        ${choices}
-        <select multiple @change="${this.onChange}">
-          ${dropdownOptions}
-        </select>
-      </div>
-    </div>
+    <p>No Data Found</p>
   `;
+}
+
+const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
+  return [...result, ...Array.from(select.selectedOptions).map(option => option.value)];
+}, []);
+
+const dropdownOptions = this.renderDropdownOptions(data);
+const choices = this.renderChoices(selectedItems);
+
+return html`
+  <div class="chosen-container">
+    <div class="chosen-choices">
+      ${choices}
+      <select multiple @change="${this.onChange}">
+        ${dropdownOptions}
+      </select>
+    </div>
+  </div>
+`;
 }
 }
 
