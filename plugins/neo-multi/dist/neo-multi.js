@@ -74,7 +74,7 @@
     .chosen-container .chosen-results li.highlighted {
       background-color: #e8e8e8;
     }
-  `;static properties={dsvdata:{type:String},displayKey:{type:String},valueKey:{type:String},outputJSON:{type:String}};onChange(t){const e=Array.from(t.target.selectedOptions).map((t=>({[this.displayKey]:t.text,[this.valueKey]:t.value}))),s=JSON.stringify(e);this.outputJSON=s,this.requestUpdate(),this.dispatchEvent(new CustomEvent("ntx-value-change",{detail:s}))}parseDataObject(){try{return JSON.parse(this.dsvdata)}catch(t){return console.error("Error parsing data source variable:",t),null}}renderDropdownOptions(t){return t&&0!==t.length?t.map((t=>R`
+  `;static properties={dsvdata:{type:String},displayKey:{type:String},valueKey:{type:String},outputJSON:{type:String}};onChange(t){const e=Array.from(t.target.options).filter((t=>t.selected)).map((t=>({[this.displayKey]:t.text,[this.valueKey]:t.value}))),s=JSON.stringify(e);this.outputJSON=s,this.requestUpdate(),this.dispatchEvent(new CustomEvent("ntx-value-change",{detail:s}))}parseDataObject(){try{return JSON.parse(this.dsvdata)}catch(t){return console.error("Error parsing data source variable:",t),null}}renderDropdownOptions(t){return t&&0!==t.length?t.map((t=>R`
     <option value="${t[this.valueKey]}">${t[this.displayKey]}</option>
   `)):R``}renderChoices(t){return t.map((t=>R`
     <span class="chosen-choice">
