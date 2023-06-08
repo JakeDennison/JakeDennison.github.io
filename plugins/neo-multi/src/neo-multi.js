@@ -197,9 +197,10 @@ class neomulti extends LitElement {
     });
     this.requestUpdate();
   
+    const data = this.parseDataObject();
     const output = selectedItems.map((item) => {
-      const selectedItem = this.parseDataObject().find((dataItem) => dataItem[this.valueKey] === item);
-      return selectedItem ? selectedItem[this.displayKey] : null;
+      const selectedItem = data.find((dataItem) => dataItem[this.valueKey] === item);
+      return selectedItem ? { [this.displayKey]: selectedItem[this.displayKey], [this.valueKey]: selectedItem[this.valueKey] } : null;
     });
   
     const outputJSON = JSON.stringify(output.filter((item) => item !== null));
@@ -208,7 +209,6 @@ class neomulti extends LitElement {
     console.log('Selected Choices:', output);
   }
   
-
   connectedCallback() {
     super.connectedCallback();
     const selectedItems = Array.from(this.shadowRoot.querySelectorAll('select')).reduce((result, select) => {
