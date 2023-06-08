@@ -25,3 +25,12 @@ ntx-control-loading {
     border-left: 0px;
     border-right: 0px;
 }
+
+[dir] .nx-theme-styles .nx-theme-form,
+[dir] .nx-theme-styles .nx-theme-form .nx-theme-input-1,
+[dir] .nx-theme-styles .nx-theme-form  ntx-textbox .nx-theme-input-1,
+[dir] .nx-theme-styles .nx-theme-form ntx-repeating-section ntx-textbox .nx-theme-input-1,
+[dir] .nx-theme-styles .nx-theme-form ntx-group ntx-textbox .nx-theme-input-1,
+.nx-multi-page-heading { 
+	background-color: #EAF7FC; 
+}
