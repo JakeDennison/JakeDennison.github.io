@@ -60,7 +60,7 @@ class neomulti extends LitElement {
     return html`
         <div>
             <label>${this.displayKey}</label>
-            <select multiple>
+            <select multiple @blur="${this.handleSelect}">
                 <!-- Assuming dsvdata is a JSON string -->
                 ${(JSON.parse(this.dsvdata) || []).map(item => html`
                     <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
@@ -68,6 +68,19 @@ class neomulti extends LitElement {
             </select>
         </div>
     `;
+}
+
+handleSelect(e) {
+    let selectedValues = Array.from(e.target.selectedOptions).map(option => option.value);
+    this.outputJSON = JSON.stringify(selectedValues);
+    const args = {
+        bubbles: true,
+        cancelable: false,
+        composed: true,
+        detail: this.outputJSON,
+    };
+    const event = new CustomEvent('ntx-value-change', args);
+    this.dispatchEvent(event);
 }
 
 
