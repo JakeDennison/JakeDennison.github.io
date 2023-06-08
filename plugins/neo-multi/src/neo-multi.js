@@ -41,6 +41,52 @@ class neomulti extends LitElement {
     };
   }
 
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
+
+      #container {
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        width: 100%;
+      }
+
+      #tokenContainer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 4px;
+      }
+
+      .token {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 8px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+      }
+
+      #tokenInput {
+        flex: 1;
+        margin-right: 4px;
+        padding: 4px 8px;
+      }
+
+      #dropdown {
+        display: none;
+        width: 100%;
+      }
+
+      #container.focus-within #dropdown {
+        display: block;
+      }
+    `;
+  }
+
   static properties = {
     dsvdata: { type: String },
     displayKey: { type: String },
@@ -58,26 +104,21 @@ class neomulti extends LitElement {
 
   render() {
     const data = JSON.parse(this.dsvdata);
-  
-    // Create an array of option elements based on the displayKey property
-    const options = data.map(item => html`
-      <option value="${item[this.valueKey]}">${item[this.displayKey]}</option>
-    `);
-  
-    // Create an array of selected options to display as tokens
     const selectedOptions = data.filter(item => this.outputJSON.includes(item[this.valueKey]));
   
-    // Render the dropdown list control with multi-select enabled
     return html`
-      <input type="text" id="tokenInput" @keydown="${this.handleKeyDown}">
-      <select id="dropdown" multiple @change="${this.handleValueChange}" style="width: 100%;">
-        ${options}
-      </select>
-      <div id="tokenContainer">
-        ${selectedOptions.map(item => html`<div class="token">${item[this.displayKey]}</div>`)}
+      <div id="container">
+        <div id="tokenContainer">
+          ${selectedOptions.map(item => html`<div class="token">${item[this.displayKey]}</div>`)}
+        </div>
+        <input type="text" id="tokenInput" @keydown="${this.handleKeyDown}">
+        <select id="dropdown" multiple @change="${this.handleValueChange}">
+          ${data.map(item => html`<option value="${item[this.valueKey]}">${item[this.displayKey]}</option>`)}
+        </select>
       </div>
     `;
   }
+  
   
   handleKeyDown(event) {
     if (event.key === 'Enter' || event.key === ',') {
