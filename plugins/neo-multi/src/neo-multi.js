@@ -233,10 +233,10 @@ render() {
   return html`
     <div @click="${(e) => e.stopPropagation()}">
         <div class="selectinput" 
-             @click="${() => { this.isOpen = !this.isOpen; this.requestUpdate(); }}">
+             @click="${(e) => { if (e.target === this.shadowRoot.querySelector('.selectinput')) { this.isOpen = !this.isOpen; this.requestUpdate(); }}}">
             ${this.selectedDisplayItems.map(item => html`
                 <span class="token">${item}
-                    <span class="remove-token" @click="${(e) => { e.stopPropagation(); this.removeToken(item); }}">x</span>
+                    <span class="remove-token" @click="${(e) => { e.stopPropagation(); this.removeToken(item); this.isOpen = false; this.requestUpdate(); }}">x</span>
                 </span>
             `)}
         </div>
@@ -251,7 +251,6 @@ render() {
     </div>
   `;
 }
-
 
 }
 
