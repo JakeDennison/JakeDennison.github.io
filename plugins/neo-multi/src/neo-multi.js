@@ -93,9 +93,9 @@ class neomulti extends LitElement {
             width: 100%;
             max-height: 300px;
             overflow-y: auto;
-            background-color: white;
-            border: 1px solid gray;
-            border-radius: .25rem;
+            background-color: calc(var(--ntx-form-theme-color-field-and-modal,#fff));
+            border: 1px solid calc(var(--ntx-form-theme-color-border,#ced4da));
+            border-radius: calc(var(--ntx-form-theme-border-radius,.25rem));
             z-index: 1000;
             padding: 5px;
             box-sizing: border-box;
@@ -114,29 +114,30 @@ class neomulti extends LitElement {
         .dropdown-item input[type="checkbox"] {
             margin-right: 10px;
         }
-
+        calc(var(,;));
         .selectinput {
             width: 100%;
             padding: 0 0.375rem;
             padding-bottom: 5px;
             font-size: calc(var(--ntx-form-theme-text-input-size, 14px));
             line-height: 1.5;
-            color: #495057;
-            background-color: #fff;
+            color: calc(var(--ntx-form-theme-color-text-input,#495057));
+            background-color: calc(var(--ntx-form-theme-color-field-and-modal,#fff));
             background-clip: padding-box;
-            border: 1px solid #ced4da;
-            border-radius: .25rem;
+            border: 1px solid calc(var(--ntx-form-theme-color-border,#ced4da));
+            border-radius: calc(var(--ntx-form-theme-border-radius,.25rem));
             transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
             box-sizing: border-box;
-            min-height:40px;
+            min-height: calc(var(--ntx-form-theme-control-height,40px));
         }
         .token {
             display: inline-block;
             padding: 0px 10px;
             margin-top: 5px;
-            border: 1px solid rgb(206, 212, 218);
+            color: calc(var(--ntx-form-theme-color-form-background,#333));
+            border: 1px solid calc(var(--ntx-form-theme-color-primary,rgb(206, 212, 218)));
             border-radius: 0.25rem;
-            background-color: rgb(233, 236, 239);
+            background-color: calc(var(--ntx-form-theme-color-primary,rgb(233, 236, 239)));
         }
 
         .remove-token {
