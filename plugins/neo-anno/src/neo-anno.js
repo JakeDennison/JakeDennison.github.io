@@ -1,5 +1,5 @@
 import { html, LitElement, css } from 'lit';
-import * as markerjs2 from 'markerjs2';
+import { FrameMarker, MarkerArea } from 'markerjs2';
 
 class AnnoElement extends LitElement {
   static getMetaConfig() {
@@ -54,44 +54,39 @@ class AnnoElement extends LitElement {
   }
 
   firstUpdated() {
-    this.shadowRoot.querySelector('#annotateButton').addEventListener('click', () => this.setupMarker());
+    this.shadowRoot.getElementById('annotateButton').addEventListener('click', () => this.setupMarker());
   }
 
   setupMarker() {
-    let img = new Image();
-    img.crossOrigin = "Anonymous";
-    img.src = this.src;
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0);
-      const markerArea = new markerjs2.MarkerArea(canvas);
-      markerArea.addEventListener('render', (dataUrl) => {
-        this.image = dataUrl;
-        this.requestUpdate();
-      });
-      markerArea.settings.displayMode = 'popup';
-      markerArea.settings.defaultMarkerTypeName = 'FrameMarker';
-      markerArea.show();
-    }
+    const img = this.shadowRoot.querySelector('img');
+    const markerArea = new MarkerArea(img);
+    
+    markerArea.addEventListener('render', (dataUrl) => {
+      this.image = dataUrl;
+      this.requestUpdate();
+    });
+    
+    markerArea.settings.displayMode = 'popup';
+    markerArea.settings.defaultMarkerTypeName = 'FrameMarker';
+    markerArea.show();
   }
-
-
+  
   render() {
     if (!this.src) {
       return html`<p>No image found</p>`;
     }
+    
     const imgSrc = this.image ? this.image : this.src;
+    
     return html`
       <div class="image-container">
         <img src="${imgSrc}"/>
       </div>
-      <button id="annotateButton">Annotate Image</button>
+      <button id="annotateButton">Annotate</button>
     `;
   }
-}
+  
 
+}
 
 customElements.define('neo-anno', AnnoElement);
