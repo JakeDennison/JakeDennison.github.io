@@ -12,13 +12,13 @@ class AnnoElement extends LitElement {
       groupName: 'Visual Data',
       version: '1.3',
       properties: {
-        dsvdata: {
-          type: 'src',
+        src: {
+          type: 'string',
           title: 'Source of image',
           description: '',
         },
-        displayKey: {
-          type: 'image',
+        image: {
+          type: 'string',
           title: 'Output Image',
           description: '',
           isValueField: true,
