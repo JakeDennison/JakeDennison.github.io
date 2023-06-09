@@ -57,29 +57,35 @@ class AnnoElement extends LitElement {
     this.shadowRoot.getElementById('annotateButton').addEventListener('click', () => this.setupMarker());
   }
 
-  render() {
-    if (!this.src) {
-      return html`<p>No image found</p>`;
-    }
-    return html`
-      <div class="image-container">
-        <img src="${this.src}"/>
-      </div>
-      <button id="annotateButton">Annotate</button>
-    `;
-  }
-
   setupMarker() {
-    const markerArea = new MarkerArea(this.shadowRoot.querySelector('img'));
-
-    markerArea.addRenderEventListener((dataUrl) => {
+    const img = this.shadowRoot.querySelector('img');
+    const markerArea = new MarkerArea(img);
+    
+    markerArea.addEventListener('render', (dataUrl) => {
       this.image = dataUrl;
+      this.requestUpdate();
     });
-
+    
     markerArea.settings.displayMode = 'popup';
     markerArea.settings.defaultMarkerTypeName = 'FrameMarker';
     markerArea.show();
   }
+  
+  render() {
+    if (!this.src) {
+      return html`<p>No image found</p>`;
+    }
+    
+    const imgSrc = this.image ? this.image : this.src;
+    
+    return html`
+      <div class="image-container">
+        <img src="${imgSrc}"/>
+      </div>
+      <button id="annotateButton">Annotate</button>
+    `;
+  }
+  
 
 }
 
