@@ -168,13 +168,13 @@ class neomulti extends LitElement {
       defaultValues.forEach(defaultValue => {
         let defaultItem = data.find(item => item[this.defaultIDKey] == defaultValue);
         if (defaultItem) {
-          this.selectItem(defaultItem);
+          this.selectItem(defaultItem, false);
         }
       });
+      // As we have updated selected items, request an update to make sure changes are reflected in the UI.
+      this.requestUpdate();
     }
   }
-  
-  
   
   disconnectedCallback() {
     window.removeEventListener('click', this.boundClickHandler);
@@ -199,12 +199,9 @@ class neomulti extends LitElement {
     this.selectItem(item, false);
   }
 
-  selectItem(e, item) {
-    e.preventDefault();
-  
+  selectItem(item, emitEvent = true) {
     const value = item[this.valueKey];
     const display = item[this.displayKey];
-  
     if (this.selectedItems.includes(value)) {
       this.selectedItems = this.selectedItems.filter(i => i !== value);
       this.selectedDisplayItems = this.selectedDisplayItems.filter(i => i !== display);
@@ -217,14 +214,16 @@ class neomulti extends LitElement {
       return { [this.valueKey]: item };
     }));
   
-    const args = {
-      bubbles: true,
-      cancelable: false,
-      composed: true,
-      detail: this.outputJSON,
-    };
-    const event = new CustomEvent('ntx-value-change', args);
-    this.dispatchEvent(event);
+    if (emitEvent) {
+      const args = {
+        bubbles: true,
+        cancelable: false,
+        composed: true,
+        detail: this.outputJSON,
+      };
+      const event = new CustomEvent('ntx-value-change', args);
+      this.dispatchEvent(event);
+    }
   
     this.requestUpdate();
   }
