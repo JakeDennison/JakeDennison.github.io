@@ -33,9 +33,14 @@ class neomulti extends LitElement {
           isValueField: true,
         },
         defaultIDKey: {
-          type: 'integer',
-          title: 'Default value ID',
-          description: 'Provide the ID value of the item you want to select as default, this will only work if ID is a value key choice in the JSON',
+          type: 'string',
+          title: 'Default ID Key',
+          description: 'Provide the JSON key containing the default value ID (e.g. ID or RecordID)',
+        },
+        defaultIDValue: {
+          type: 'string',
+          title: 'Default value unique identifier',
+          description: 'Provide the ID value of the item you want to select as default',
         },
       },
       events: ['ntx-value-change'],
@@ -54,7 +59,8 @@ class neomulti extends LitElement {
     isOpen: { type: Boolean },
     selectedItems: { type: Object },
     selectedDisplayItems: { type: Array },
-    defaultIDKey: { type: Number }
+    defaultIDKey: { type: String },
+    defaultIDValue: { type: String },
   };
 
 
@@ -67,8 +73,10 @@ class neomulti extends LitElement {
     this.isOpen = false;
     this.selectedItems = [];
     this.selectedDisplayItems = [];
-    this.defaultIDKey = this.defaultIDKey;
+    this.defaultIDKey = ""
+    this.defaultIDValue = ""
     console.log(this.defaultIDKey)
+    console.log(this.defaultIDValue)
   }
 
   static get styles() {
@@ -133,12 +141,18 @@ class neomulti extends LitElement {
     super.updated(changedProperties);
     if (changedProperties.has('dsvdata')) {
       let data = JSON.parse(this.dsvdata);
-      let defaultItem = data.find(item => item[this.valueKey] === this.defaultIDKey);
+      let defaultKey = Number(this.defaultIDKey);
+      if (!Number.isNaN(defaultKey) && Number.isInteger(defaultKey)) {
+        this.defaultIDKey = defaultKey;
+      }
+  
+      let defaultItem = data.find(item => item[this.valueKey] == this.defaultIDKey);
       if (defaultItem) {
         this.selectItem(defaultItem, false);
       }
     }
   }
+  
 
   disconnectedCallback() {
     window.removeEventListener('click', this.boundClickHandler);
