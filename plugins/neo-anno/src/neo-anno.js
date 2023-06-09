@@ -94,10 +94,16 @@ class AnnoElement extends LitElement {
   createNewFrameMarker(marker) {
     console.log("New FrameMarker created!", marker);
     // Add the new FrameMarker to the array
-    this.frameMarkers.push(marker);
+    if (Array.isArray(this.frameMarkers)) {
+      this.frameMarkers.push(marker);
+    } else {
+      // Initialize the array if it doesn't exist
+      this.frameMarkers = [marker];
+    }
     // Log the updated array
     console.log("Current FrameMarkers:", this.frameMarkers);
   }
+  
 
 
 }
