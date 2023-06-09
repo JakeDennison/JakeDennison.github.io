@@ -42,7 +42,7 @@ class neomulti extends LitElement {
         defaultIDValue: {
           type: 'string',
           title: 'Default value unique identifiers',
-          description: 'You can use the UIDs of the items you want to select by semi-colon separating them e.g. 2;4;6',
+          description: 'You can use the UIDs of the items you want to select by semi-colon separating them e.g. 2;4',
         },
       },
       standardProperties: {
@@ -271,7 +271,6 @@ render() {
     </div>
   `;
 }
-
 }
 
 customElements.define('neo-multi', neomulti);
