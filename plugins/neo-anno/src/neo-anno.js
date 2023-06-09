@@ -68,7 +68,7 @@ class AnnoElement extends LitElement {
       canvas.height = img.height;
       const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0);
-      const markerArea = new markerjs2.MarkerArea(canvas);
+      const markerArea = new MarkerArea(canvas); // Remove markerjs2.
       
       markerArea.addEventListener('render', (dataUrl) => {
         this.image = dataUrl;
@@ -80,6 +80,7 @@ class AnnoElement extends LitElement {
       markerArea.show();
     }
   }
+
 
   render() {
     if (!this.src) {
