@@ -18,7 +18,7 @@ class AnnoElement extends LitElement {
         },
         image: {
           type: 'string',
-          title: 'Output Image as base 64',
+          title: 'Output Image as base 64 value',
           description: 'Base64 of output image',
           isValueField: true,
         },
