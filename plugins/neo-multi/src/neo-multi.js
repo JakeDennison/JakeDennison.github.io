@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import Choices from 'choices.js';
 
 class neomulti extends LitElement {
   static getMetaConfig() {
@@ -177,7 +178,7 @@ class neomulti extends LitElement {
   }
   
   disconnectedCallback() {
-    window.removeEventListener('click', this.boundClickHandler);
+    this.choices.destroy();
     super.disconnectedCallback();
   }
 
@@ -248,25 +249,25 @@ class neomulti extends LitElement {
     this.dispatchEvent(event);
 }
 
+firstUpdated() {
+  // Create an instance of Choices on the select element
+  this.choices = new Choices(this.shadowRoot.querySelector('.my-select'), {
+    removeItemButton: true,  // To make it multi-select
+    itemSelectText: '',      // Text for the option to add items
+  });
+}
+
 render() {
   return html`
     <div @click="${(e) => e.stopPropagation()}">
-        <div class="selectinput"
-            @click="${(e) => { if (e.target === this.shadowRoot.querySelector('.selectinput')) { this.isOpen = !this.isOpen; this.requestUpdate(); }}}">
-            ${this.selectedDisplayItems.map(item => html`
-                <span class="token">${item}
-                    <span class="remove-token" data-ignore="true" @click="${(e) => { e.stopPropagation(); this.removeToken(item); this.isOpen = false; this.requestUpdate(); }}">x</span>
-                </span>
-            `)}
-        </div>
-        <div class="dropdown ${this.isOpen ? 'open' : ''}">
-            ${(JSON.parse(this.dsvdata) || []).map(item => html`
-                <div class="dropdown-item" @click="${(e) => { e.stopPropagation(); this.selectItem(item); }}">
-                    <input type="checkbox" data-ignore="true" .checked="${this.selectedItems.includes(item[this.valueKey])}" @change="${(e) => this.handleCheckboxChange(e, item)}">
-                    ${item[this.displayKey]}
-                </div>
-            `)}
-        </div>
+      <select class="my-select" multiple>
+        ${(JSON.parse(this.dsvdata) || []).map(item => html`
+          <option value="${item[this.valueKey]}" 
+                  ?selected="${this.selectedItems.includes(item[this.valueKey])}">
+            ${item[this.displayKey]}
+          </option>
+        `)}
+      </select>
     </div>
   `;
 }
