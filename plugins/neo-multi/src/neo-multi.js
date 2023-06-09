@@ -31,6 +31,7 @@ class neomulti extends LitElement {
           title: 'Output JSON',
           description: 'Provide the data source variable output as a string using a convert to string function variable',
           isValueField: true,
+          returnAsValue: true,
         },
         defaultIDKey: {
           type: 'string',
