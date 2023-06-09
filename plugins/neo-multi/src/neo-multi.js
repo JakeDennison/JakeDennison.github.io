@@ -188,12 +188,18 @@ class neomulti extends LitElement {
     }
   }
 
-  selectItem(item, emitEvent = true) {
+  selectItem(e, item) {
+    if (e.target.type === 'checkbox') {
+      return;
+    }
+  
     const value = item[this.valueKey];
     const display = item[this.displayKey];
+  
     if (this.selectedItems.includes(value)) {
       this.selectedItems = this.selectedItems.filter(i => i !== value);
       this.selectedDisplayItems = this.selectedDisplayItems.filter(i => i !== display);
+      this.isOpen = false;
     } else {
       this.selectedItems.push(value);
       this.selectedDisplayItems.push(display);
@@ -203,17 +209,18 @@ class neomulti extends LitElement {
       return { [this.valueKey]: item };
     }));
   
-    if (emitEvent) {
-      const args = {
-        bubbles: true,
-        cancelable: false,
-        composed: true,
-        detail: this.outputJSON,
-      };
-      const event = new CustomEvent('ntx-value-change', args);
-      this.dispatchEvent(event);
-    }
+    const args = {
+      bubbles: true,
+      cancelable: false,
+      composed: true,
+      detail: this.outputJSON,
+    };
+    const event = new CustomEvent('ntx-value-change', args);
+    this.dispatchEvent(event);
+  
+    this.requestUpdate();
   }
+  
   
   removeToken(item) {
     const index = this.selectedDisplayItems.indexOf(item);
@@ -247,7 +254,7 @@ render() {
         </div>
         <div class="dropdown ${this.isOpen ? 'open' : ''}">
             ${(JSON.parse(this.dsvdata) || []).map(item => html`
-                <div class="dropdown-item" @click="${(e) => { e.stopPropagation(); this.selectItem(item); }}">
+                <div class="dropdown-item" @click="${(e) => { e.stopPropagation(); this.selectItem(e, item); }}">
                     <input type="checkbox" .checked="${this.selectedItems.includes(item[this.valueKey])}">
                     ${item[this.displayKey]}
                 </div>
