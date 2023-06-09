@@ -82,68 +82,69 @@ class neomulti extends LitElement {
 
   static get styles() {
     return css`
-        :host {
-            position: relative;
-            width: 100%;
-        }
-
-        .dropdown {
-            display: none;
-            position: absolute;
-            width: 100%;
-            max-height: 300px;
-            overflow-y: auto;
-            background-color: calc(var(--ntx-form-theme-color-field-and-modal,#fff));
-            border: 1px solid calc(var(--ntx-form-theme-color-border,#ced4da));
-            border-radius: calc(var(--ntx-form-theme-border-radius,.25rem));
-            z-index: 1000;
-            padding: 5px;
-            box-sizing: border-box;
-        }
-
-        .dropdown.open {
-            display: block;
-        }
-
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            padding: 5px;
-        }
-
-        .dropdown-item input[type="checkbox"] {
-            margin-right: 10px;
-        }
-        calc(var(,;));
-        .selectinput {
-            width: 100%;
-            padding: 0 0.375rem;
-            padding-bottom: 5px;
-            font-size: calc(var(--ntx-form-theme-text-input-size, 14px));
-            line-height: 1.5;
-            color: calc(var(--ntx-form-theme-color-text-input,#495057));
-            background-color: calc(var(--ntx-form-theme-color-field-and-modal,#fff));
-            background-clip: padding-box;
-            border: 1px solid calc(var(--ntx-form-theme-color-border,#ced4da));
-            border-radius: calc(var(--ntx-form-theme-border-radius,.25rem));
-            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-            box-sizing: border-box;
-            min-height: calc(var(--ntx-form-theme-control-height,40px));
-        }
-        .token {
-            display: inline-block;
-            padding: 0px 10px;
-            margin-top: 5px;
-            color: calc(var(--ntx-form-theme-color-form-background,#333));
-            border: 1px solid calc(var(--ntx-form-theme-color-primary,rgb(206, 212, 218)));
-            border-radius: 0.25rem;
-            background-color: calc(var(--ntx-form-theme-color-primary,rgb(233, 236, 239)));
-        }
-
-        .remove-token {
-            margin-left: 5px;
-            cursor: pointer;
-        }
+      :host {
+        position: relative;
+        width: 100%;
+      }
+  
+      .dropdown {
+        display: none;
+        position: absolute;
+        width: 100%;
+        max-height: 300px;
+        overflow-y: auto;
+        background-color: var(--ntx-form-theme-color-field-and-modal, #fff);
+        border: 1px solid var(--ntx-form-theme-color-border, #ced4da);
+        border-radius: var(--ntx-form-theme-border-radius, .25rem);
+        z-index: 1000;
+        padding: 5px;
+        box-sizing: border-box;
+      }
+  
+      .dropdown.open {
+        display: block;
+      }
+  
+      .dropdown-item {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+      }
+  
+      .dropdown-item input[type="checkbox"] {
+        margin-right: 10px;
+      }
+  
+      .selectinput {
+        width: 100%;
+        padding: 0 0.375rem;
+        padding-bottom: 5px;
+        font-size: var(--ntx-form-theme-text-input-size, 14px);
+        line-height: 1.5;
+        color: var(--ntx-form-theme-color-text-input, #495057);
+        background-color: var(--ntx-form-theme-color-field-and-modal, #fff);
+        background-clip: padding-box;
+        border: 1px solid var(--ntx-form-theme-color-border, #ced4da);
+        border-radius: var(--ntx-form-theme-border-radius, .25rem);
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        box-sizing: border-box;
+        min-height: var(--ntx-form-theme-control-height, 40px);
+      }
+  
+      .token {
+        display: inline-block;
+        padding: 0px 10px;
+        margin-top: 5px;
+        color: var(--ntx-form-theme-color-form-background, #333);
+        border: 1px solid var(--ntx-form-theme-color-primary, rgb(206, 212, 218));
+        border-radius: 0.25rem;
+        background-color: var(--ntx-form-theme-color-primary, rgb(233, 236, 239));
+      }
+  
+      .remove-token {
+        margin-left: 5px;
+        cursor: pointer;
+      }
     `;
   }
 
