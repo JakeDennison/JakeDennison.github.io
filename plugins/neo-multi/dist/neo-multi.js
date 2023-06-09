@@ -64,20 +64,20 @@
         margin-left: 5px;
         cursor: pointer;
       }
-    `}connectedCallback(){super.connectedCallback(),this.boundClickHandler=this.handleWindowClick.bind(this),window.addEventListener("click",this.boundClickHandler)}updated(t){if(super.updated(t),t.has("dsvdata")){let t=JSON.parse(this.dsvdata);this.defaultIDValue.split(";").map((t=>{let e=Number(t);return!isNaN(e)&&Number.isInteger(e)?e:t})).forEach((e=>{let i=t.find((t=>t[this.defaultIDKey]==e));i&&this.selectItem(i)}))}}disconnectedCallback(){window.removeEventListener("click",this.boundClickHandler),super.disconnectedCallback()}handleWindowClick(t){this.shadowRoot.contains(t.target)||(this.isOpen=!1,this.requestUpdate())}selectItem(t,e){t.preventDefault();const i=e[this.valueKey],s=e[this.displayKey];this.selectedItems.includes(i)?(this.selectedItems=this.selectedItems.filter((t=>t!==i)),this.selectedDisplayItems=this.selectedDisplayItems.filter((t=>t!==s))):(this.selectedItems.push(i),this.selectedDisplayItems.push(s)),this.outputJSON=JSON.stringify(this.selectedItems.map((t=>({[this.valueKey]:t}))));const o={bubbles:!0,cancelable:!1,composed:!0,detail:this.outputJSON},n=new CustomEvent("ntx-value-change",o);this.dispatchEvent(n),this.requestUpdate()}removeToken(t){const e=this.selectedDisplayItems.indexOf(t);e>-1&&(this.selectedDisplayItems.splice(e,1),this.selectedItems.splice(e,1)),this.outputJSON=JSON.stringify(this.selectedItems.map((t=>({[this.valueKey]:t}))));const i={bubbles:!0,cancelable:!1,composed:!0,detail:this.outputJSON},s=new CustomEvent("ntx-value-change",i);this.dispatchEvent(s)}render(){return H`
+    `}connectedCallback(){super.connectedCallback(),this.boundClickHandler=this.handleWindowClick.bind(this),window.addEventListener("click",this.boundClickHandler)}updated(t){if(super.updated(t),t.has("dsvdata")){let t=JSON.parse(this.dsvdata);this.defaultIDValue.split(";").map((t=>{let e=Number(t);return!isNaN(e)&&Number.isInteger(e)?e:t})).forEach((e=>{let i=t.find((t=>t[this.defaultIDKey]==e));i&&this.selectItem(i)}))}}disconnectedCallback(){window.removeEventListener("click",this.boundClickHandler),super.disconnectedCallback()}handleWindowClick(t){let e=t.target;for(;null!==e;){if("true"===e.getAttribute("data-ignore"))return;e=e.parentElement}this.isOpen=!1,this.requestUpdate()}handleCheckboxChange(t,e){t.stopPropagation(),this.selectItem(e,!1)}selectItem(t,e){t.preventDefault();const i=e[this.valueKey],s=e[this.displayKey];this.selectedItems.includes(i)?(this.selectedItems=this.selectedItems.filter((t=>t!==i)),this.selectedDisplayItems=this.selectedDisplayItems.filter((t=>t!==s))):(this.selectedItems.push(i),this.selectedDisplayItems.push(s)),this.outputJSON=JSON.stringify(this.selectedItems.map((t=>({[this.valueKey]:t}))));const o={bubbles:!0,cancelable:!1,composed:!0,detail:this.outputJSON},n=new CustomEvent("ntx-value-change",o);this.dispatchEvent(n),this.requestUpdate()}removeToken(t){const e=this.selectedDisplayItems.indexOf(t);e>-1&&(this.selectedDisplayItems.splice(e,1),this.selectedItems.splice(e,1)),this.outputJSON=JSON.stringify(this.selectedItems.map((t=>({[this.valueKey]:t}))));const i={bubbles:!0,cancelable:!1,composed:!0,detail:this.outputJSON},s=new CustomEvent("ntx-value-change",i);this.dispatchEvent(s)}render(){return H`
     <div @click="${t=>t.stopPropagation()}">
-        <div class="selectinput" 
-             @click="${t=>{t.target===this.shadowRoot.querySelector(".selectinput")&&(this.isOpen=!this.isOpen,this.requestUpdate())}}">
+        <div class="selectinput"
+            @click="${t=>{t.target===this.shadowRoot.querySelector(".selectinput")&&(this.isOpen=!this.isOpen,this.requestUpdate())}}">
             ${this.selectedDisplayItems.map((t=>H`
                 <span class="token">${t}
-                    <span class="remove-token" @click="${e=>{e.stopPropagation(),this.removeToken(t),this.isOpen=!1,this.requestUpdate()}}">x</span>
+                    <span class="remove-token" data-ignore="true" @click="${e=>{e.stopPropagation(),this.removeToken(t),this.isOpen=!1,this.requestUpdate()}}">x</span>
                 </span>
             `))}
         </div>
         <div class="dropdown ${this.isOpen?"open":""}">
             ${(JSON.parse(this.dsvdata)||[]).map((t=>H`
-                <div class="dropdown-item" @click="${e=>{e.stopPropagation(),this.selectItem(e,t)}}">
-                    <input type="checkbox" .checked="${this.selectedItems.includes(t[this.valueKey])}" @change="${e=>{e.stopPropagation(),this.selectItem(e,t)}}">
+                <div class="dropdown-item" @click="${e=>{e.stopPropagation(),this.selectItem(t)}}">
+                    <input type="checkbox" data-ignore="true" .checked="${this.selectedItems.includes(t[this.valueKey])}" @change="${e=>this.handleCheckboxChange(e,t)}">
                     ${t[this.displayKey]}
                 </div>
             `))}

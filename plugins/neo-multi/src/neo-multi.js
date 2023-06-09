@@ -182,10 +182,21 @@ class neomulti extends LitElement {
   }
 
   handleWindowClick(e) {
-    if (!this.shadowRoot.contains(e.target)) {
-      this.isOpen = false;
-      this.requestUpdate();
+    let target = e.target;
+    while (target !== null) {
+      if (target.getAttribute('data-ignore') === 'true') {
+        return;
+      }
+      target = target.parentElement;
     }
+  
+    this.isOpen = false;
+    this.requestUpdate();
+  }
+  
+  handleCheckboxChange(e, item) {
+    e.stopPropagation();
+    this.selectItem(item, false);
   }
 
   selectItem(e, item) {
@@ -240,18 +251,18 @@ class neomulti extends LitElement {
 render() {
   return html`
     <div @click="${(e) => e.stopPropagation()}">
-        <div class="selectinput" 
-             @click="${(e) => { if (e.target === this.shadowRoot.querySelector('.selectinput')) { this.isOpen = !this.isOpen; this.requestUpdate(); }}}">
+        <div class="selectinput"
+            @click="${(e) => { if (e.target === this.shadowRoot.querySelector('.selectinput')) { this.isOpen = !this.isOpen; this.requestUpdate(); }}}">
             ${this.selectedDisplayItems.map(item => html`
                 <span class="token">${item}
-                    <span class="remove-token" @click="${(e) => { e.stopPropagation(); this.removeToken(item); this.isOpen = false; this.requestUpdate(); }}">x</span>
+                    <span class="remove-token" data-ignore="true" @click="${(e) => { e.stopPropagation(); this.removeToken(item); this.isOpen = false; this.requestUpdate(); }}">x</span>
                 </span>
             `)}
         </div>
         <div class="dropdown ${this.isOpen ? 'open' : ''}">
             ${(JSON.parse(this.dsvdata) || []).map(item => html`
-                <div class="dropdown-item" @click="${(e) => { e.stopPropagation(); this.selectItem(e, item); }}">
-                    <input type="checkbox" .checked="${this.selectedItems.includes(item[this.valueKey])}" @change="${(e) => { e.stopPropagation(); this.selectItem(e, item); }}">
+                <div class="dropdown-item" @click="${(e) => { e.stopPropagation(); this.selectItem(item); }}">
+                    <input type="checkbox" data-ignore="true" .checked="${this.selectedItems.includes(item[this.valueKey])}" @change="${(e) => this.handleCheckboxChange(e, item)}">
                     ${item[this.displayKey]}
                 </div>
             `)}
@@ -259,7 +270,6 @@ render() {
     </div>
   `;
 }
-
 
 }
 
