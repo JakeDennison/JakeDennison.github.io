@@ -236,16 +236,16 @@ class neomulti extends LitElement {
 
 render() {
   return html`
-    <div>
+    <div @click="${(e) => e.stopPropagation()}">
         <div class="selectinput" 
              @click="${(e) => { if (e.target === this.shadowRoot.querySelector('.selectinput')) { this.isOpen = !this.isOpen; this.requestUpdate(); }}}">
             ${this.selectedDisplayItems.map(item => html`
                 <span class="token">${item}
-                    <span class="remove-token" @click="${() => { this.removeToken(item); this.isOpen = false; this.requestUpdate(); }}">x</span>
+                    <span class="remove-token" @click="${(e) => { e.stopPropagation(); this.removeToken(item); this.isOpen = false; this.requestUpdate(); }}">x</span>
                 </span>
             `)}
         </div>
-        <div class="dropdown ${this.isOpen ? 'open' : ''}" style="display: ${this.isOpen ? 'block' : 'none'};">
+        <div class="dropdown ${this.isOpen ? 'open' : ''}">
             ${(JSON.parse(this.dsvdata) || []).map(item => html`
                 <div class="dropdown-item" @click="${(e) => { e.stopPropagation(); this.selectItem(item); }}">
                     <input type="checkbox" .checked="${this.selectedItems.includes(item[this.valueKey])}">
@@ -256,6 +256,7 @@ render() {
     </div>
   `;
 }
+
 
 }
 
