@@ -44,7 +44,6 @@ class neomulti extends LitElement {
           description: 'You can use the UIDs of the items you want to select by semi-colon separating them e.g. 2;4;6',
         },
       },
-      events: ['ntx-value-change'],
       standardProperties: {
         fieldLabel: true,
         description: true,
