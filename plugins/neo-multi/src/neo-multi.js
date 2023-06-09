@@ -245,9 +245,9 @@ render() {
                 </span>
             `)}
         </div>
-        <div class="dropdown" style="display: ${this.isOpen ? 'block' : 'none'};">
+        <div class="dropdown ${this.isOpen ? 'open' : ''}" style="display: ${this.isOpen ? 'block' : 'none'};">
             ${(JSON.parse(this.dsvdata) || []).map(item => html`
-                <div class="dropdown-item" @click="${() => { this.selectItem(item); }}">
+                <div class="dropdown-item" @click="${(e) => { e.stopPropagation(); this.selectItem(item); }}">
                     <input type="checkbox" .checked="${this.selectedItems.includes(item[this.valueKey])}">
                     ${item[this.displayKey]}
                 </div>

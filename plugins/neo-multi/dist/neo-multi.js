@@ -74,9 +74,9 @@
                 </span>
             `))}
         </div>
-        <div class="dropdown" style="display: ${this.isOpen?"block":"none"};">
+        <div class="dropdown ${this.isOpen?"open":""}" style="display: ${this.isOpen?"block":"none"};">
             ${(JSON.parse(this.dsvdata)||[]).map((t=>H`
-                <div class="dropdown-item" @click="${()=>{this.selectItem(t)}}">
+                <div class="dropdown-item" @click="${e=>{e.stopPropagation(),this.selectItem(t)}}">
                     <input type="checkbox" .checked="${this.selectedItems.includes(t[this.valueKey])}">
                     ${t[this.displayKey]}
                 </div>
