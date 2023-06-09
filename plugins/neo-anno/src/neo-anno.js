@@ -11,9 +11,18 @@ class AnnoElement extends LitElement {
       iconUrl: "image",
       groupName: 'Visual Data',
       version: '1.3',
-      src: {type: String},
-      image: {type: String},
       properties: {
+        dsvdata: {
+          type: 'src',
+          title: 'Source of image',
+          description: '',
+        },
+        displayKey: {
+          type: 'image',
+          title: 'Output Image',
+          description: '',
+          isValueField: true,
+        },
       },
       standardProperties: {
         fieldLabel: true,
@@ -23,6 +32,11 @@ class AnnoElement extends LitElement {
       }
     };
   }
+
+  static properties = {
+    src: { type: String },
+    image: { type: String },
+  };
 
   static get styles() {
     return css`
@@ -38,6 +52,7 @@ class AnnoElement extends LitElement {
   constructor() {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png';
+    this.image = ""
   }
 
   render() {
