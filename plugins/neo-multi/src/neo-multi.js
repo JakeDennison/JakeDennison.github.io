@@ -73,52 +73,79 @@ class neomulti extends LitElement {
 
   static get styles() {
     return css`
-              :host {
-                  position: relative;
-                  width: 100%;
-              }
+      :host {
+          position: relative;
+          width: 100%;
+      }
 
-              .dropdown {
-                  display: none;
-                  position: absolute;
-                  width: 100%;
-                  max-height: 300px;
-                  overflow-y: auto;
-                  background-color: white;
-                  border: 1px solid gray;
-                  border-radius: .25rem;
-                  z-index: 1000;
-                  padding: 15px;
-                  box-sizing: border-box;
-              }
+      .dropdown {
+          display: none;
+          position: absolute;
+          width: 100%;
+          max-height: 300px;
+          overflow-y: auto;
+          background-color: white;
+          border: 1px solid gray;
+          border-radius: .25rem;
+          z-index: 1000;
+          padding: 15px;
+          box-sizing: border-box;
+      }
 
-              .dropdown.open {
-                  display: block;
-              }
+      .dropdown.open {
+          display: block;
+      }
 
-              .dropdown-item {
-                  display: flex;
-                  align-items: center;
-                  padding: 5px;
-              }
+      .dropdown-item {
+          display: flex;
+          align-items: center;
+          padding: 5px;
+      }
 
-              .dropdown-item input[type="checkbox"] {
-                  margin-right: 10px;
-              }
+      .dropdown-item input[type="checkbox"] {
+          margin-right: 10px;
+      }
 
-              .selectinput {
-                  width: 100%;
-                  padding: .375rem .75rem;
-                  font-size: 1rem;
-                  line-height: 1.5;
-                  color: #495057;
-                  background-color: #fff;
-                  background-clip: padding-box;
-                  border: 1px solid #ced4da;
-                  border-radius: .25rem;
-                  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-                  box-sizing: border-box;
-              }
+      .selectinput {
+          width: 100%;
+          padding: .375rem .75rem;
+          font-size: 1rem;
+          line-height: 1.5;
+          color: #495057;
+          background-color: #fff;
+          background-clip: padding-box;
+          border: 1px solid #ced4da;
+          border-radius: .25rem;
+          transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+          box-sizing: border-box;
+      }
+
+      .token-container {
+      padding: .375rem .75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #495057;
+      background-color: #fff;
+      background-clip: padding-box;
+      border: 1px solid #ced4da;
+      border-radius: .25rem;
+      transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+      box-sizing: border-box;
+    }
+
+    .token {
+      display: inline-block;
+      padding: 2px 5px;
+      margin: 2px;
+      background-color: #ced4da;
+      border-radius: 5px;
+    }
+
+    .token-remove {
+      margin-left: 5px;
+      background: none;
+      border: none;
+    }
 
     `;
   }
@@ -152,6 +179,12 @@ class neomulti extends LitElement {
     }
   }
 
+  deselectItem(value, display) {
+    this.selectedItems = this.selectedItems.filter(i => i !== value);
+    this.selectedDisplayItems = this.selectedDisplayItems.filter(i => i !== display);
+    this.outputJSON = JSON.stringify(this.selectedItems);
+  }
+
   selectItem(item, emitEvent = true) {
     const value = item[this.valueKey];
     const display = item[this.displayKey];
@@ -178,10 +211,14 @@ class neomulti extends LitElement {
   render() {
     return html`
       <div @click="${(e) => e.stopPropagation()}">
-          <input class="selectinput"
-              @focus="${() => { this.isOpen = true; this.requestUpdate(); }}" 
-              .value="${this.selectedDisplayItems.join(', ',)}"
-          >
+          <div class="token-container" @focus="${() => { this.isOpen = true; this.requestUpdate(); }}">
+            ${this.selectedDisplayItems.map((item, index) => html`
+              <span class="token">
+                ${item}
+                <button class="token-remove" @click="${(e) => { e.stopPropagation(); this.deselectItem(this.selectedItems[index], item); }}">x</button>
+              </span>
+            `)}
+          </div>
           <div class="dropdown ${this.isOpen ? 'open' : ''}">
               <!-- Assuming dsvdata is a JSON string -->
               ${(JSON.parse(this.dsvdata) || []).map(item => html`
@@ -192,7 +229,7 @@ class neomulti extends LitElement {
               `)}
           </div>
       </div>
-  `;
+    `;
   }
 
 }
