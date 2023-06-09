@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import Choices from 'choices.js';
+import 'choices.js/public/assets/styles/choices.css';
 
 class neomulti extends LitElement {
   static getMetaConfig() {
