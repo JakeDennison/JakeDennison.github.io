@@ -181,7 +181,11 @@ class neomulti extends LitElement {
       this.selectedItems.push(value);
       this.selectedDisplayItems.push(display);
     }
-    this.outputJSON = JSON.stringify(this.selectedItems);
+  
+    this.outputJSON = JSON.stringify(this.selectedItems.map(item => {
+      return { [this.valueKey]: item };
+    }));
+  
     if (emitEvent) {
       const args = {
         bubbles: true,
@@ -193,6 +197,7 @@ class neomulti extends LitElement {
       this.dispatchEvent(event);
     }
   }
+  
 
   render() {
     return html`
