@@ -141,6 +141,7 @@ class neomulti extends LitElement {
     super.updated(changedProperties);
     if (changedProperties.has('dsvdata')) {
       let data = JSON.parse(this.dsvdata);
+  
       let defaultValues = this.defaultIDValue.split(";").map(value => {
         let numericValue = Number(value);
         return !isNaN(numericValue) && Number.isInteger(numericValue) ? numericValue : value;
@@ -149,11 +150,12 @@ class neomulti extends LitElement {
       defaultValues.forEach(defaultValue => {
         let defaultItem = data.find(item => item[this.defaultIDKey] == defaultValue);
         if (defaultItem) {
-          this.selectItem(defaultItem, false);
+          this.selectItem(defaultItem);
         }
       });
     }
   }
+  
   
   
   disconnectedCallback() {
