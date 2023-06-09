@@ -184,7 +184,7 @@ class neomulti extends LitElement {
   handleWindowClick(e) {
     let target = e.target;
     while (target !== null) {
-      if (target.getAttribute('data-ignore') === 'true' || target === this.shadowRoot.querySelector('.dropdown')) {
+      if (target.getAttribute('data-ignore') === 'true') {
         return;
       }
       target = target.parentElement;
@@ -196,7 +196,6 @@ class neomulti extends LitElement {
   
   handleCheckboxChange(e, item) {
     e.stopPropagation();
-    e.preventDefault();
     this.selectItem(item, false);
   }
 
