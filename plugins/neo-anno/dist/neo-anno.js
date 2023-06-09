@@ -6,7 +6,7 @@
       img {
         max-width: 100%;
       }
-    `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png",this.image="",this.frameMarkers=[]}render(){return this.src?I`
+    `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png",this.frameMarkers=[],this.createNewFrameMarker=this.createNewFrameMarker.bind(this)}render(){return this.src?I`
       <div class="image-container">
         <img src="${this.src}" @load=${t=>this.handleImageLoad(t.target)}/>
       </div>

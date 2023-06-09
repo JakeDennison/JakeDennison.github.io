@@ -52,9 +52,11 @@ class AnnoElement extends LitElement {
   constructor() {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png';
-    this.image = ""
     this.frameMarkers = [];
+    // Bind the context
+    this.createNewFrameMarker = this.createNewFrameMarker.bind(this);
   }
+  
 
   render() {
     if (!this.src) {
