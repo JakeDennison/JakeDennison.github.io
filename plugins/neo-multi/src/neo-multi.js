@@ -62,6 +62,7 @@ class neomulti extends LitElement {
     selectedDisplayItems: { type: Array },
     defaultIDKey: { type: String },
     defaultIDValue: { type: String },
+    removeToken: { type: Function },
   };
 
 
@@ -128,7 +129,19 @@ class neomulti extends LitElement {
             transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
             box-sizing: border-box;
         }
+        .token {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            background-color: #e9ecef;
+        }
 
+        .remove-token {
+            margin-left: 5px;
+            cursor: pointer;
+        }
     `;
   }
 
@@ -198,16 +211,37 @@ class neomulti extends LitElement {
     }
   }
   
+  removeToken(item) {
+    const index = this.selectedDisplayItems.indexOf(item);
+    if (index > -1) {
+        this.selectedDisplayItems.splice(index, 1);
+        this.selectedItems.splice(index, 1);
+    }
+    this.outputJSON = JSON.stringify(this.selectedItems.map(item => {
+        return { [this.valueKey]: item };
+    }));
+    const args = {
+        bubbles: true,
+        cancelable: false,
+        composed: true,
+        detail: this.outputJSON,
+    };
+    const event = new CustomEvent('ntx-value-change', args);
+    this.dispatchEvent(event);
+}
 
   render() {
     return html`
       <div @click="${(e) => e.stopPropagation()}">
-          <input class="selectinput"
-              @focus="${() => { this.isOpen = true; this.requestUpdate(); }}" 
-              .value="${this.selectedDisplayItems.join(', ',)}"
-          >
+          <div class="selectinput"
+              @focus="${() => { this.isOpen = true; this.requestUpdate(); }}">
+              ${this.selectedDisplayItems.map(item => html`
+                  <span class="token">${item}
+                      <span class="remove-token" @click="${(e) => { e.stopPropagation(); this.removeToken(item); }}">x</span>
+                  </span>
+              `)}
+          </div>
           <div class="dropdown ${this.isOpen ? 'open' : ''}">
-              <!-- Assuming dsvdata is a JSON string -->
               ${(JSON.parse(this.dsvdata) || []).map(item => html`
                   <div class="dropdown-item" @click="${(e) => { e.stopPropagation(); this.selectItem(item); }}">
                       <input type="checkbox" .checked="${this.selectedItems.includes(item[this.valueKey])}">
@@ -216,8 +250,8 @@ class neomulti extends LitElement {
               `)}
           </div>
       </div>
-  `;
-  }
+    `;
+}
 
 }
 
