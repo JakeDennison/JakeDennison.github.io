@@ -53,6 +53,7 @@ class AnnoElement extends LitElement {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png';
     this.image = ""
+    this.frameMarkers = [];
   }
 
   render() {
@@ -90,7 +91,10 @@ class AnnoElement extends LitElement {
 
   createNewFrameMarker(marker) {
     console.log("New FrameMarker created!", marker);
-    // Do something with the new FrameMarker, such as add it to an array
+    // Add the new FrameMarker to the array
+    this.frameMarkers.push(marker);
+    // Log the updated array
+    console.log("Current FrameMarkers:", this.frameMarkers);
   }
 
 
