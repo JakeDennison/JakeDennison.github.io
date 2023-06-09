@@ -132,7 +132,6 @@ class neomulti extends LitElement {
         .token {
             display: inline-block;
             padding: 0px 10px;
-            margin: 0 5px;
             border: 1px solid rgb(206, 212, 218);
             border-radius: 0.25rem;
             background-color: rgb(233, 236, 239);
@@ -230,28 +229,29 @@ class neomulti extends LitElement {
     this.dispatchEvent(event);
 }
 
-  render() {
-    return html`
-      <div @click="${(e) => e.stopPropagation()}">
-          <div class="selectinput"
-              @focus="${() => { this.isOpen = true; this.requestUpdate(); }}">
-              ${this.selectedDisplayItems.map(item => html`
-                  <span class="token">${item}
-                      <span class="remove-token" @click="${(e) => { e.stopPropagation(); this.removeToken(item); }}">x</span>
-                  </span>
-              `)}
-          </div>
-          <div class="dropdown ${this.isOpen ? 'open' : ''}">
-              ${(JSON.parse(this.dsvdata) || []).map(item => html`
-                  <div class="dropdown-item" @click="${(e) => { e.stopPropagation(); this.selectItem(item); }}">
-                      <input type="checkbox" .checked="${this.selectedItems.includes(item[this.valueKey])}">
-                      ${item[this.displayKey]}
-                  </div>
-              `)}
-          </div>
-      </div>
-    `;
+render() {
+  return html`
+    <div @click="${(e) => e.stopPropagation()}">
+        <div class="selectinput" 
+             @click="${() => { this.isOpen = !this.isOpen; this.requestUpdate(); }}">
+            ${this.selectedDisplayItems.map(item => html`
+                <span class="token">${item}
+                    <span class="remove-token" @click="${(e) => { e.stopPropagation(); this.removeToken(item); }}">x</span>
+                </span>
+            `)}
+        </div>
+        <div class="dropdown ${this.isOpen ? 'open' : ''}">
+            ${(JSON.parse(this.dsvdata) || []).map(item => html`
+                <div class="dropdown-item" @click="${(e) => { e.stopPropagation(); this.selectItem(item); }}">
+                    <input type="checkbox" .checked="${this.selectedItems.includes(item[this.valueKey])}">
+                    ${item[this.displayKey]}
+                </div>
+            `)}
+        </div>
+    </div>
+  `;
 }
+
 
 }
 
