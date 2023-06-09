@@ -54,30 +54,38 @@ class AnnoElement extends LitElement {
   }
 
   firstUpdated() {
-    this.shadowRoot.getElementById('annotateButton').addEventListener('click', () => this.setupMarker());
+    this.shadowRoot.querySelector('#annotateButton').addEventListener('click', () => this.setupMarker());
   }
 
   setupMarker() {
-    const img = this.shadowRoot.querySelector('img');
-    const markerArea = new MarkerArea(img);
-    
-    markerArea.addEventListener('render', (dataUrl) => {
-      this.image = dataUrl;
-      this.requestUpdate();
-    });
-    
-    markerArea.settings.displayMode = 'popup';
-    markerArea.settings.defaultMarkerTypeName = 'FrameMarker';
-    markerArea.show();
+    let img = new Image();
+    img.crossOrigin = "Anonymous"; // Requests CORS permission
+    img.src = this.src;
+    img.onload = () => {
+      // Now you can use the image as source for your canvas, the canvas won't be tainted
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      const markerArea = new markerjs2.MarkerArea(canvas);
+      
+      markerArea.addEventListener('render', (dataUrl) => {
+        this.image = dataUrl;
+        this.requestUpdate();
+      });
+      
+      markerArea.settings.displayMode = 'popup';
+      markerArea.settings.defaultMarkerTypeName = 'FrameMarker';
+      markerArea.show();
+    }
   }
-  
+
   render() {
     if (!this.src) {
       return html`<p>No image found</p>`;
     }
-    
     const imgSrc = this.image ? this.image : this.src;
-    
     return html`
       <div class="image-container">
         <img src="${imgSrc}"/>
@@ -85,8 +93,7 @@ class AnnoElement extends LitElement {
       <button id="annotateButton">Annotate</button>
     `;
   }
-  
-
 }
+
 
 customElements.define('neo-anno', AnnoElement);
