@@ -7,7 +7,7 @@ class neomulti extends LitElement {
       controlName: 'neo-multi',
       fallbackDisableSubmit: false,
       description: 'Provide a multiple select dropdown based on a data source variable.',
-      iconUrl: 'Lookup',
+      iconUrl: 'data-lookup',
       groupName: 'Visual Data',
       version: '1.0',
       properties: {
@@ -73,8 +73,6 @@ class neomulti extends LitElement {
     this.isOpen = false;
     this.selectedItems = [];
     this.selectedDisplayItems = [];
-    this.defaultIDKey = ""
-    this.defaultIDValue = ""
     console.log(this.defaultIDKey)
     console.log(this.defaultIDValue)
   }
@@ -141,19 +139,18 @@ class neomulti extends LitElement {
     super.updated(changedProperties);
     if (changedProperties.has('dsvdata')) {
       let data = JSON.parse(this.dsvdata);
-      let defaultKey = Number(this.defaultIDKey);
-      if (!Number.isNaN(defaultKey) && Number.isInteger(defaultKey)) {
-        this.defaultIDKey = defaultKey;
+      let defaultValue = Number(this.defaultIDValue);
+      if (!Number.isNaN(defaultValue) && Number.isInteger(defaultValue)) {
+        this.defaultIDValue = defaultValue;
       }
   
-      let defaultItem = data.find(item => item[this.valueKey] == this.defaultIDKey);
+      let defaultItem = data.find(item => item[this.defaultIDKey] == this.defaultIDValue);
       if (defaultItem) {
         this.selectItem(defaultItem, false);
       }
     }
   }
   
-
   disconnectedCallback() {
     window.removeEventListener('click', this.boundClickHandler);
     super.disconnectedCallback();
