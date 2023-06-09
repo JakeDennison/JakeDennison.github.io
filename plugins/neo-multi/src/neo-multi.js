@@ -133,6 +133,7 @@ class neomulti extends LitElement {
   
       .token {
         display: inline-block;
+        line-height: 1.9;
         padding: 0px 10px;
         margin-top: 5px;
         color: var(--ntx-form-theme-color-form-background, #333);
@@ -235,18 +236,18 @@ class neomulti extends LitElement {
 
 render() {
   return html`
-    <div @click="${(e) => e.stopPropagation()}">
+    <div>
         <div class="selectinput" 
              @click="${(e) => { if (e.target === this.shadowRoot.querySelector('.selectinput')) { this.isOpen = !this.isOpen; this.requestUpdate(); }}}">
             ${this.selectedDisplayItems.map(item => html`
                 <span class="token">${item}
-                    <span class="remove-token" @click="${(e) => { e.stopPropagation(); this.removeToken(item); this.isOpen = false; this.requestUpdate(); }}">x</span>
+                    <span class="remove-token" @click="${() => { this.removeToken(item); this.isOpen = false; this.requestUpdate(); }}">x</span>
                 </span>
             `)}
         </div>
-        <div class="dropdown ${this.isOpen ? 'open' : ''}">
+        <div class="dropdown" style="display: ${this.isOpen ? 'block' : 'none'};">
             ${(JSON.parse(this.dsvdata) || []).map(item => html`
-                <div class="dropdown-item" @click="${(e) => { e.stopPropagation(); this.selectItem(item); }}">
+                <div class="dropdown-item" @click="${() => { this.selectItem(item); }}">
                     <input type="checkbox" .checked="${this.selectedItems.includes(item[this.valueKey])}">
                     ${item[this.displayKey]}
                 </div>
@@ -255,6 +256,7 @@ render() {
     </div>
   `;
 }
+
 }
 
 customElements.define('neo-multi', neomulti);
