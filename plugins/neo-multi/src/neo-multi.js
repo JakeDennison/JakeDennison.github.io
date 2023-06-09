@@ -117,7 +117,7 @@ class neomulti extends LitElement {
 
         .selectinput {
             width: 100%;
-            padding: .375rem .75rem;
+            padding: .375rem;
             font-size: 1rem;
             line-height: 1.5;
             color: #495057;
@@ -130,11 +130,11 @@ class neomulti extends LitElement {
         }
         .token {
             display: inline-block;
-            padding: 5px 10px;
-            margin: 5px;
-            border: 1px solid #ced4da;
-            border-radius: .25rem;
-            background-color: #e9ecef;
+            padding: 0px 10px;
+            margin: 0 5px;
+            border: 1px solid rgb(206, 212, 218);
+            border-radius: 0.25rem;
+            background-color: rgb(233, 236, 239);
         }
 
         .remove-token {
