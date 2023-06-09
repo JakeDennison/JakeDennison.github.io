@@ -39,8 +39,8 @@ class neomulti extends LitElement {
         },
         defaultIDValue: {
           type: 'string',
-          title: 'Default value unique identifier',
-          description: 'Provide the ID value of the item you want to select as default',
+          title: 'Default value unique identifiers',
+          description: 'You can use the UIDs of the items you want to select by semi-colon separating them e.g. 2;4;6',
         },
       },
       events: ['ntx-value-change'],
@@ -73,6 +73,8 @@ class neomulti extends LitElement {
     this.isOpen = false;
     this.selectedItems = [];
     this.selectedDisplayItems = [];
+    this.defaultIDKey = ""
+    this.defaultIDValue = ""
     console.log(this.defaultIDKey)
     console.log(this.defaultIDValue)
   }
@@ -139,17 +141,20 @@ class neomulti extends LitElement {
     super.updated(changedProperties);
     if (changedProperties.has('dsvdata')) {
       let data = JSON.parse(this.dsvdata);
-      let defaultValue = Number(this.defaultIDValue);
-      if (!Number.isNaN(defaultValue) && Number.isInteger(defaultValue)) {
-        this.defaultIDValue = defaultValue;
-      }
+      let defaultValues = this.defaultIDValue.split(";").map(value => {
+        let numericValue = Number(value);
+        return !isNaN(numericValue) && Number.isInteger(numericValue) ? numericValue : value;
+      });
   
-      let defaultItem = data.find(item => item[this.defaultIDKey] == this.defaultIDValue);
-      if (defaultItem) {
-        this.selectItem(defaultItem, false);
-      }
+      defaultValues.forEach(defaultValue => {
+        let defaultItem = data.find(item => item[this.defaultIDKey] == defaultValue);
+        if (defaultItem) {
+          this.selectItem(defaultItem, false);
+        }
+      });
     }
   }
+  
   
   disconnectedCallback() {
     window.removeEventListener('click', this.boundClickHandler);
