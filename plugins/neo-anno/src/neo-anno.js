@@ -1,9 +1,8 @@
 import { html, LitElement, css } from 'lit';
-import * as markerjs2 from 'markerjs2';
+import { FrameMarker, MarkerArea } from 'markerjs2';
 
 class AnnoElement extends LitElement {
   static getMetaConfig() {
-    // plugin contract information
     return {
       controlName: 'neo-anno',
       fallbackDisableSubmit: false,
@@ -19,8 +18,8 @@ class AnnoElement extends LitElement {
         },
         image: {
           type: 'string',
-          title: 'Output Image',
-          description: '',
+          title: 'Output Image as base 64',
+          description: 'Base64 of output image',
           isValueField: true,
         },
       },
@@ -52,11 +51,11 @@ class AnnoElement extends LitElement {
   constructor() {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png';
-    this.frameMarkers = [];
-    // Bind the context
-    this.createNewFrameMarker = this.createNewFrameMarker.bind(this);
   }
-  
+
+  firstUpdated() {
+    this.shadowRoot.getElementById('annotateButton').addEventListener('click', () => this.setupMarker());
+  }
 
   render() {
     if (!this.src) {
@@ -64,50 +63,24 @@ class AnnoElement extends LitElement {
     }
     return html`
       <div class="image-container">
-        <img src="${this.src}" @load=${(e) => this.handleImageLoad(e.target)}/>
+        <img src="${this.src}"/>
       </div>
+      <button id="annotateButton">Annotate</button>
     `;
   }
 
-  handleImageLoad(img) {
-    console.log('Image loaded!');
-    console.log(img);
-    const markerArea = new markerjs2.MarkerArea(img);
-    markerArea.availableMarkerTypes = ["FrameMarker"];
-    markerArea.addEventListener(
-      "render",
-      (event) => (target.src = event.dataUrl)
-    );
-    markerArea.addEventListener("markeradded", (event) => {
-      const marker = event.detail.marker;
-      if (marker.type === "FrameMarker") {
-        this.createNewFrameMarker(marker);
-      }
-    });
-    markerArea.addEventListener("beforeclose", (event) => {
-      if (!confirm("Do you want to discard changes?")) {
-        event.preventDefault();
-      }
-    });
-  }
+  setupMarker() {
+    const markerArea = new MarkerArea(this.shadowRoot.querySelector('img'));
 
-  createNewFrameMarker(marker) {
-    console.log("New FrameMarker created!", marker);
-    // Add the new FrameMarker to the array
-    if (Array.isArray(this.frameMarkers)) {
-      this.frameMarkers.push(marker);
-    } else {
-      // Initialize the array if it doesn't exist
-      this.frameMarkers = [marker];
-    }
-    // Log the updated array
-    console.log("Current FrameMarkers:", this.frameMarkers);
-  }
-  
+    markerArea.addRenderEventListener((dataUrl) => {
+      this.image = dataUrl;
+    });
 
+    markerArea.settings.displayMode = 'popup';
+    markerArea.settings.defaultMarkerTypeName = 'FrameMarker';
+    markerArea.show();
+  }
 
 }
 
 customElements.define('neo-anno', AnnoElement);
-
-// start creating a new FrameMarker each time a marker is created
