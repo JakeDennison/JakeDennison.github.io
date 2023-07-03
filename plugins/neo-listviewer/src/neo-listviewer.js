@@ -66,15 +66,31 @@ class listviewElement extends LitElement {
     let data;
 
     try {
-      data = JSON.parse(this.dataobject);
-      data = this.sortAndFilterData(data);
+        data = JSON.parse(this.dataobject);
+        data = this.replaceUnicodeRegex(data);
     } catch (e) {
-      console.error('Error parsing JSON:', e);
-      data = null;
+        console.error(e);
+        data = null;
     }
 
     return data;
-  }
+}
+
+  replaceUnicodeRegex(data) {
+    if (typeof data === 'object') {
+        for (let key in data) {
+            if (typeof data[key] === 'object') {
+                data[key] = this.replaceUnicodeRegex(data[key]);
+            } else if (typeof data[key] === 'string') {
+                data[key] = data[key].replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
+            }
+        }
+    } else if (typeof data === 'string') {
+        data = data.replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
+    }
+    return data;
+}
+
 
   sortAndFilterData(data) {
     // filter data
