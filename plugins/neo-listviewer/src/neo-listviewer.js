@@ -111,11 +111,6 @@ class listviewElement extends LitElement {
     this.requestUpdate();
   }
 
-  updateSearch(query) {
-    this.searchQuery = query;
-    this.requestUpdate();
-  }
-
   changePage(newPage) {
     if (newPage > 0 && newPage <= this.totalPages) {
       this.currentPage = newPage;
@@ -174,7 +169,6 @@ class listviewElement extends LitElement {
             }
         </style>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <input type="search" @input="${(e) => this.updateSearch(e.target.value)}" placeholder="Search...">
         <div class="table-responsive-md overflow-auto">
             <table class="table table-striped">
                 <thead>
@@ -213,7 +207,8 @@ class listviewElement extends LitElement {
             ` : ''}
         </div>
     `;
-  }
+}
+
 
 }
 
