@@ -40,9 +40,7 @@ class listviewElement extends LitElement {
     dataobject: '',
     pageItemLimit: { type: Number },
     currentPage: { type: Number },
-    sortOrder: { type: String },
-    sortColumn: { type: String },
-    searchQuery: { type: String },
+    sortedDataobject: { type: String },
   };
 
   static get properties() {
@@ -57,65 +55,45 @@ class listviewElement extends LitElement {
     this.dataobject = '';
     this.pageItemLimit = 5;
     this.currentPage = 1;
-    this.sortOrder = 'asc'; // default sort order
-    this.sortColumn = null; // default sort column
-    this.searchQuery = '';
+    this.sortedDataobject = ''; // And this line
   }
 
   parseDataObject() {
     let data;
-
+  
     try {
-        data = JSON.parse(this.dataobject);
-        data = this.replaceUnicodeRegex(data);
+      data = JSON.parse(this.sortedDataobject || this.dataobject);
+      data = this.replaceUnicodeRegex(data);
     } catch (e) {
-        console.error(e);
-        data = null;
+      console.error(e);
+      data = null;
     }
-
+  
     return data;
-}
+  }
+  
 
 replaceUnicodeRegex(input) {
   const unicodeRegex = /_x([0-9A-F]{4})_/g;
   return JSON.parse(JSON.stringify(input).replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
 }
 
+sortData(column) {
+  let sortedData = this.parseDataObject(this.sortedDataobject);
 
-  sortAndFilterData(data) {
-    // filter data
-    if (this.searchQuery) {
-      data = data.filter(row =>
-        Object.values(row).some(val =>
-          val.toLowerCase().includes(this.searchQuery.toLowerCase())
-        )
-      );
+  sortedData.sort((a, b) => {
+    if (a[column] < b[column]) {
+      return this.sortDirection === 'asc' ? -1 : 1;
     }
-
-    // sort data
-    if (this.sortColumn) {
-      data.sort((a, b) => {
-        const valA = a[this.sortColumn];
-        const valB = b[this.sortColumn];
-        let result = valA < valB ? -1 : valA > valB ? 1 : 0;
-        return this.sortOrder === 'asc' ? result : -result;
-      });
+    if (a[column] > b[column]) {
+      return this.sortDirection === 'asc' ? 1 : -1;
     }
+    return 0;
+  });
 
-    return data;
-  }
-
-  updateSort(column) {
-    if (this.sortColumn === column) {
-      // toggle sort order
-      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
-    } else {
-      // switch to new column and default to ascending order
-      this.sortColumn = column;
-      this.sortOrder = 'asc';
-    }
-    this.requestUpdate();
-  }
+  this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+  this.sortedDataobject = JSON.stringify(sortedData);
+}
 
   changePage(newPage) {
     if (newPage > 0 && newPage <= this.totalPages) {
