@@ -76,19 +76,9 @@ class listviewElement extends LitElement {
     return data;
 }
 
-  replaceUnicodeRegex(data) {
-    if (typeof data === 'object') {
-        for (let key in data) {
-            if (typeof data[key] === 'object') {
-                data[key] = this.replaceUnicodeRegex(data[key]);
-            } else if (typeof data[key] === 'string') {
-                data[key] = data[key].replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
-            }
-        }
-    } else if (typeof data === 'string') {
-        data = data.replace(/_x([\dA-F]{4})_/gi, (match, p1) => String.fromCharCode(parseInt(p1, 16)));
-    }
-    return data;
+replaceUnicodeRegex(input) {
+  const unicodeRegex = /_x([0-9A-F]{4})_/g;
+  return JSON.parse(JSON.stringify(input).replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
 }
 
 
