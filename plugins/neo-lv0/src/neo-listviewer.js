@@ -38,19 +38,24 @@ class listviewElement extends LitElement {
     };
   }
 
+  static properties = {
+    dataobject: '',
+    pageItemLimit: { type: Number },
+    currentPage: { type: Number },
+    sortedDataobject: { type: String },
+  };
+
   static get properties() {
     return {
-      dataobject: { type: String },
-      pageItemLimit: { type: Number },
+      itemsPerPage: { type: Number },
       currentPage: { type: Number },
     };
-}
+  }
   
   constructor() {
     super();
     this.dataobject = '';
     this.pageItemLimit = 5;
-    this.currentPage = 0;
   }
 
   parseDataObject() {
@@ -72,20 +77,20 @@ replaceUnicodeRegex(input) {
   return JSON.parse(JSON.stringify(input).replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
 }
 
-  firstUpdated() {
-    super.firstUpdated();
-
+  // LitElement connectedCallback lifecycle method
+  connectedCallback() {
+    super.connectedCallback();
+    
+    // Parse the data object
     const tabledata = this.parseDataObject();
     if (!tabledata) {
       console.error('Invalid data object');
       return;
     }
-
-    const table = this.shadowRoot.querySelector('#table'); // Get the table div
-
-    // Initialize Tabulator after the component is updated and rendered in the DOM
-    new Tabulator(table, {
-      data: tabledata,
+    
+    // Initialize Tabulator after the component is connected to the DOM
+    new Tabulator(this, {
+      tabledata,
       layout: 'fitDataFill',
       pagination: 'local',
       paginationSize: this.pageItemLimit,
@@ -96,10 +101,9 @@ replaceUnicodeRegex(input) {
     });
   }
 
-render() {
-  return html`<div id="table"></div>`; // Create a div with an id for Tabulator to target
+  render() {
+    return html`<div></div>`;
+  }
 }
-}
-
 
 customElements.define('neo-listviewer', listviewElement);
