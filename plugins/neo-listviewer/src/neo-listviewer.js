@@ -169,12 +169,14 @@ handleResetClick() {
 
 render() {
   return html`
+  <div style="margin-bottom:5px">
     <select id="filter-field">
       ${this.keys.map(key => html`<option value="${key}">${key}</option>`)}
     </select>
     <input id="filter-value" type="text" placeholder="Filter value"/>
     <button id="filter-btn" class="fltr-btn" @click="${this.handleFilterClick}">Filter</button>
     <button id="reset-btn" class="fltr-btn" @click="${this.handleResetClick}">Reset</button>
+</div>
     <div id="table"></div>
   `;
 }
