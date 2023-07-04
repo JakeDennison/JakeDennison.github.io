@@ -87,7 +87,7 @@ async firstUpdated() {
       return;
     }
 
-    const table = this.shadowRoot.querySelector('#table'); // Get the table div
+    const table = this.shadowRoot.querySelector('#table');
     const searchEl = this.shadowRoot.querySelector('#search');
     const filterFieldEl = this.shadowRoot.querySelector('#filter-field');
     const filterValueEl = this.shadowRoot.querySelector('#filter-value');
@@ -124,7 +124,6 @@ async firstUpdated() {
       autoColumns: true,
     });
 
-    // Search event listener
     searchEl.addEventListener('input', () => {
       const searchString = searchEl.value;
       table.setFilter(searchString);
