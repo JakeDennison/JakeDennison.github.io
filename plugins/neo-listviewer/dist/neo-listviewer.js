@@ -9,6 +9,6 @@
     <input id="filter-value" type="text" placeholder="Filter value"/>
     <button id="filter-btn" @click="${this.handleFilterClick}">Filter</button>
     <button id="reset-btn" @click="${this.handleResetClick}">Reset</button>
-    <input id="search" type="text" placeholder="Search" @input="${this.handleSearchInput}"/>
+    <input style="display:none" id="search" type="text" placeholder="Search" @input="${this.handleSearchInput}"/>
     <div id="table"></div>
   `}}customElements.define("neo-listviewer",$t)})();
