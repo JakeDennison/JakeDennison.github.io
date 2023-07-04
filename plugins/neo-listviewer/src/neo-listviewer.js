@@ -87,6 +87,14 @@ replaceUnicodeRegex(input) {
 
     const table = this.shadowRoot.querySelector('#table'); // Get the table div
 
+    function constructUrl(baseUrl, endpoint) {
+      if (baseUrl.endsWith('/')) {
+        return `${baseUrl}${endpoint}`;
+      } else {
+        return `${baseUrl}/${endpoint}`;
+      }
+    }
+
     new Tabulator(table, {
       data: tabledata,
       layout: 'fitDataFill',
@@ -95,13 +103,20 @@ replaceUnicodeRegex(input) {
       paginationSizeSelector: [5, 10, 15, 30, 50, 100],
       movableColumns: true,
       height: 'auto',
+      columns: [
+        {
+          title: "Link",
+          field: "ID",  
+          formatter: (cell) => {
+            const itemId = cell.getValue();
+            const url = constructUrl(this.listURL, `viewform.aspx?id=${itemId}`);
+            return `<a href="${url}" target="_blank">Open Item</a>`;
+          }
+        },
+      ],
       autoColumns: true,
-      rowDblClick: (e, row) => {
-        const itemId = row.getData().ID; // replace 'ID' with the correct property name in your data
-        const url = `${this.listURL}viewform.aspx?id=${itemId}`;
-        window.open(url, '_blank');
-      }
     });
+    
   }
 
 render() {
