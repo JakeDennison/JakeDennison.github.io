@@ -47,14 +47,18 @@ class listviewElement extends LitElement {
       dataobject: { type: String },
       pageItemLimit: { type: Number },
       currentPage: { type: Number },
+      listURL: { type: String },
+      table: { type: Object }
     };
 }
   
   constructor() {
     super();
     this.dataobject = '';
+    this.listURL = '';
     this.pageItemLimit = 5;
     this.currentPage = 0;
+    this.table = null;
   }
 
   parseDataObject() {
@@ -71,86 +75,77 @@ class listviewElement extends LitElement {
     return tabledata;
   }
   
+  constructUrl(baseUrl, endpoint) {
+    return baseUrl.endsWith('/') ? `${baseUrl}${endpoint}` : `${baseUrl}/${endpoint}`;
+  }
+  
+
 replaceUnicodeRegex(input) {
   const unicodeRegex = /_x([0-9A-F]{4})_/g;
   return JSON.parse(JSON.stringify(input).replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
 }
 
-  firstUpdated() {
-    super.firstUpdated();
+firstUpdated() {
+  super.firstUpdated();
 
-    const tabledata = this.parseDataObject();
-    if (!tabledata) {
-      console.error('Invalid data object');
-      return;
-    }
-
-    const table = this.shadowRoot.querySelector('#table'); // Get the table div
-    const searchEl = this.shadowRoot.querySelector('#search');
-    const filterFieldEl = this.shadowRoot.querySelector('#filter-field');
-    const filterValueEl = this.shadowRoot.querySelector('#filter-value');
-    const filterBtn = this.shadowRoot.querySelector('#filter-btn');
-    const resetBtn = this.shadowRoot.querySelector('#reset-btn');
-  
-    function constructUrl(baseUrl, endpoint) {
-      if (baseUrl.endsWith('/')) {
-        return `${baseUrl}${endpoint}`;
-      } else {
-        return `${baseUrl}/${endpoint}`;
-      }
-    }
-
-    new Tabulator(table, {
-      data: tabledata,
-      layout: 'fitDataFill',
-      pagination: 'local',
-      paginationSize: this.pageItemLimit,
-      paginationSizeSelector: [5, 10, 15, 30, 50, 100],
-      movableColumns: true,
-      height: 'auto',
-      columns: [
-        {
-          title: "Link",
-          field: "ID",  
-          formatter: (cell) => {
-            const itemId = cell.getValue();
-            const url = constructUrl(this.listURL, `viewform.aspx?id=${itemId}`);
-            return `<a href="${url}" target="_blank">Open Item</a>`;
-          }
-        },
-      ],
-      autoColumns: true,
-    });
-
-    // Setup event listeners
-    searchEl.addEventListener('input', () => {
-      const searchString = searchEl.value;
-      table.searchData(searchString);
-    });
-
-    filterBtn.addEventListener('click', () => {
-      const filterField = filterFieldEl.value;
-      const filterValue = filterValueEl.value;
-      table.setFilter(filterField, "=", filterValue);
-    });
-
-    resetBtn.addEventListener('click', () => {
-      table.clearFilter();
-    });
-
+  const tabledata = this.parseDataObject();
+  if (!tabledata) {
+    console.error('Invalid data object');
+    return;
   }
 
-  render() {
+  const tableDiv = this.shadowRoot.querySelector('#table'); // Get the table div
+
+  // Keep a reference to the Tabulator instance
+  this.table = new Tabulator(tableDiv, {
+    data: tabledata,
+    layout: 'fitDataFill',
+    pagination: 'local',
+    paginationSize: this.pageItemLimit,
+    paginationSizeSelector: [5, 10, 15, 30, 50, 100],
+    movableColumns: true,
+    height: 'auto',
+    columns: [
+      {
+        title: "Link",
+        field: "ID",  
+        formatter: (cell) => {
+          const itemId = cell.getValue();
+          const url = this.constructUrl(this.listURL, `viewform.aspx?id=${itemId}`);
+          return `<a href="${url}" target="_blank">Open Item</a>`;
+        }
+      }      
+    ],
+    autoColumns: true,
+  });
+  
+}
+
+handleSearchInput(e) {
+  const searchString = e.target.value;
+  this.table.searchData(searchString);
+}
+
+handleFilterClick() {
+  const filterField = this.shadowRoot.querySelector('#filter-field').value;
+  const filterValue = this.shadowRoot.querySelector('#filter-value').value;
+  this.table.setFilter(filterField, "=", filterValue);
+}
+
+handleResetClick() {
+  this.table.clearFilter();
+}
+
+render() {
     return html`
-      <div id="filter-field"></div>
-      <input id="filter-value" type="text" placeholder="filter value"/>
-      <button id="filter-btn">Filter</button>
-      <button id="reset-btn">Reset</button>
-      <input id="search" type="text" placeholder="Search"/>
+      <input id="filter-field" type="text" placeholder="Filter field" />
+      <input id="filter-value" type="text" placeholder="Filter value"/>
+      <button id="filter-btn" @click="${this.handleFilterClick}">Filter</button>
+      <button id="reset-btn" @click="${this.handleResetClick}">Reset</button>
+      <input id="search" type="text" placeholder="Search" @input="${this.handleSearchInput}"/>
       <div id="table"></div>
     `;
   }
 }
-
 
 customElements.define('neo-listviewer', listviewElement);
