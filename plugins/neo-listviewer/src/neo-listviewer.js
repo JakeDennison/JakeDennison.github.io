@@ -48,7 +48,8 @@ class listviewElement extends LitElement {
       pageItemLimit: { type: Number },
       currentPage: { type: Number },
       listURL: { type: String },
-      table: { type: Object }
+      table: { type: Object },
+      keys: { type: String },
     };
 }
   
@@ -59,20 +60,23 @@ class listviewElement extends LitElement {
     this.pageItemLimit = 5;
     this.currentPage = 0;
     this.table = null;
+    this.keys = '';
   }
 
   parseDataObject() {
-    let tabledata;
+    let tabledata, keys;
   
     try {
       tabledata = JSON.parse(this.dataobject);
       tabledata = this.replaceUnicodeRegex(tabledata);
+      keys = tabledata.length > 0 ? Object.keys(tabledata[0]) : [];
     } catch (e) {
       console.error(e);
       tabledata = null;
+      keys = [];
     }
   
-    return tabledata;
+    return { data: tabledata, keys };
   }
   
   constructUrl(baseUrl, endpoint) {
@@ -88,11 +92,14 @@ replaceUnicodeRegex(input) {
 firstUpdated() {
   super.firstUpdated();
 
-  const tabledata = this.parseDataObject();
+  const { data: tabledata, keys } = this.parseDataObject();
+
   if (!tabledata) {
     console.error('Invalid data object');
     return;
   }
+
+  this.keys = keys;
 
   const tableDiv = this.shadowRoot.querySelector('#table'); // Get the table div
 
@@ -123,13 +130,16 @@ firstUpdated() {
 
 handleSearchInput(e) {
   const searchString = e.target.value;
-  this.table.searchData(searchString);
+  this.table.clearFilter(true);
+  this.keys.forEach(key => {
+    this.table.addFilter(key, "like", searchString);
+  });
 }
 
 handleFilterClick() {
   const filterField = this.shadowRoot.querySelector('#filter-field').value;
   const filterValue = this.shadowRoot.querySelector('#filter-value').value;
-  this.table.setFilter(filterField, "=", filterValue);
+  this.table.setFilter(filterField, "like", filterValue);
 }
 
 handleResetClick() {
@@ -137,15 +147,17 @@ handleResetClick() {
 }
 
 render() {
-    return html`
-      <input id="filter-field" type="text" placeholder="Filter field" />
-      <input id="filter-value" type="text" placeholder="Filter value"/>
-      <button id="filter-btn" @click="${this.handleFilterClick}">Filter</button>
-      <button id="reset-btn" @click="${this.handleResetClick}">Reset</button>
-      <input id="search" type="text" placeholder="Search" @input="${this.handleSearchInput}"/>
-      <div id="table"></div>
-    `;
-  }
+  return html`
+    <select id="filter-field">
+      ${this.keys.map(key => html`<option value="${key}">${key}</option>`)}
+    </select>
+    <input id="filter-value" type="text" placeholder="Filter value"/>
+    <button id="filter-btn" @click="${this.handleFilterClick}">Filter</button>
+    <button id="reset-btn" @click="${this.handleResetClick}">Reset</button>
+    <input id="search" type="text" placeholder="Search" @input="${this.handleSearchInput}"/>
+    <div id="table"></div>
+  `;
+}
 }
 
 customElements.define('neo-listviewer', listviewElement);
