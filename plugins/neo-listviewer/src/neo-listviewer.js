@@ -49,7 +49,7 @@ class listviewElement extends LitElement {
       currentPage: { type: Number },
       listURL: { type: String },
       table: { type: Object },
-      keys: { type: String },
+      keys: { type: Array },
     };
 }
   
@@ -60,7 +60,7 @@ class listviewElement extends LitElement {
     this.pageItemLimit = 5;
     this.currentPage = 0;
     this.table = null;
-    this.keys = '';
+    this.keys = [];
   }
 
   parseDataObject() {
