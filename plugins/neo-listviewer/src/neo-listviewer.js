@@ -59,89 +59,86 @@ class listviewElement extends LitElement {
     this.currentPage = 0;
   }
 
-  parseDataObject() {
-    let tabledata;
-  
-    try {
-      tabledata = JSON.parse(this.dataobject);
-      tabledata = this.replaceUnicodeRegex(tabledata);
-    } catch (e) {
-      console.error(e);
-      tabledata = null;
-    }
-  
-    return tabledata;
-  }
-  
-replaceUnicodeRegex(input) {
-  const unicodeRegex = /_x([0-9A-F]{4})_/g;
-  return JSON.parse(JSON.stringify(input).replace(unicodeRegex, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
+connectedCallback() {
+  super.connectedCallback();
+  this.renderTable();
 }
 
-async firstUpdated() {
-    super.firstUpdated();
+renderTable() {
+  const tabledata = this.parseDataObject();
+  if (!tabledata) return;
 
-    const tabledata = this.parseDataObject();
-    if (!tabledata) {
-      console.error('Invalid data object');
-      return;
-    }
-
-    const table = this.shadowRoot.querySelector('#table');
-    const searchEl = this.shadowRoot.querySelector('#search');
-    const filterFieldEl = this.shadowRoot.querySelector('#filter-field');
-    const filterValueEl = this.shadowRoot.querySelector('#filter-value');
-    const filterBtn = this.shadowRoot.querySelector('#filter-btn');
-    const resetBtn = this.shadowRoot.querySelector('#reset-btn');
-  
-    function constructUrl(baseUrl, endpoint) {
-      if (baseUrl.endsWith('/')) {
-        return `${baseUrl}${endpoint}`;
-      } else {
-        return `${baseUrl}/${endpoint}`;
-      }
-    }
-
-    new Tabulator(table, {
-      data: tabledata,
-      layout: 'fitDataFill',
-      pagination: 'local',
-      paginationSize: this.pageItemLimit,
-      paginationSizeSelector: [5, 10, 15, 30, 50, 100],
-      movableColumns: true,
-      height: 'auto',
-      columns: [
-        {
-          title: "Link",
-          field: "ID",  
-          formatter: (cell) => {
-            const itemId = cell.getValue();
-            const url = constructUrl(this.listURL, `viewform.aspx?id=${itemId}`);
-            return `<a href="${url}" target="_blank">Open Item</a>`;
-          }
+  const table = new Tabulator('#table', {
+    data: tabledata,
+    layout: 'fitDataFill',
+    pagination: 'local',
+    paginationSize: this.pageItemLimit,
+    paginationSizeSelector: [5, 10, 15, 30, 50, 100],
+    movableColumns: true,
+    height: 'auto',
+    columns: [
+      {
+        title: 'Link',
+        field: 'ID',
+        formatter: (cell) => {
+          const itemId = cell.getValue();
+          const url = `${this.listURL}/viewform.aspx?id=${itemId}`;
+          return html`<a href="${url}" target="_blank">Open Item</a>`;
         },
-      ],
-      autoColumns: true,
-    });
+      },
+      // Add other columns as needed
+    ],
+    autoColumns: true,
+  });
 
-    searchEl.addEventListener('input', () => {
-      const searchString = searchEl.value;
-      table.setFilter(searchString);
-    });
+  // Search input and filtering code
 
-    // Filter event listener
-    filterBtn.addEventListener('click', () => {
-      const filterField = filterFieldEl.value;
-      const filterValue = filterValueEl.value;
-      table.setFilter(filterField, '=', filterValue);
-    });
+  const searchInput = this.shadowRoot.getElementById('search');
+  const filterFieldSelect = this.shadowRoot.getElementById('filter-field');
+  const filterValueInput = this.shadowRoot.getElementById('filter-value');
+  const filterButton = this.shadowRoot.getElementById('filter-btn');
+  const resetButton = this.shadowRoot.getElementById('reset-btn');
 
-    // Reset event listener
-    resetBtn.addEventListener('click', () => {
-      table.clearFilter();
-    });
+  // Handle filter button click event
+  filterButton.addEventListener('click', () => {
+    const field = filterFieldSelect.value;
+    const type = 'like';
+    const value = filterValueInput.value;
 
+    table.setFilter(field, type, value);
+  });
+
+  // Handle reset button click event
+  resetButton.addEventListener('click', () => {
+    table.clearFilter();
+  });
+
+  // Update the table data if needed
+  // table.setData(newData);
+}
+
+parseDataObject() {
+  let tabledata;
+
+  try {
+    tabledata = JSON.parse(this.dataobject);
+    tabledata = this.replaceUnicodeRegex(tabledata);
+  } catch (e) {
+    console.error(e);
+    tabledata = null;
   }
+
+  return tabledata;
+}
+
+replaceUnicodeRegex(input) {
+  const unicodeRegex = /_x([0-9A-F]{4})_/g;
+  return JSON.parse(
+    JSON.stringify(input).replace(unicodeRegex, (match, p1) =>
+      String.fromCharCode(parseInt(p1, 16))
+    )
+  );
+}
 
   render() {
     return html`
