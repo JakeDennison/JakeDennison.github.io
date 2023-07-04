@@ -129,11 +129,14 @@ firstUpdated() {
 }
 
 handleSearchInput(e) {
-  const searchString = e.target.value;
-  this.table.clearFilter(true);
-  this.keys.forEach(key => {
-    this.table.addFilter(key, "like", searchString);
-  });
+  const searchString = e.target.value.trim(); // Trim whitespace from the search string
+  this.table.clearFilter(); // Clear all existing filters
+
+  if (searchString !== "") {
+    this.keys.forEach(key => {
+      this.table.addFilter(key, "like", searchString); // Add a filter for each key
+    });
+  }
 }
 
 handleFilterClick() {
