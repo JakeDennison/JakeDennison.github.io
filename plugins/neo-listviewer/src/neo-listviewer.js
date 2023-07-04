@@ -86,7 +86,12 @@ replaceUnicodeRegex(input) {
     }
 
     const table = this.shadowRoot.querySelector('#table'); // Get the table div
-
+    const searchEl = this.shadowRoot.querySelector('#search');
+    const filterFieldEl = this.shadowRoot.querySelector('#filter-field');
+    const filterValueEl = this.shadowRoot.querySelector('#filter-value');
+    const filterBtn = this.shadowRoot.querySelector('#filter-btn');
+    const resetBtn = this.shadowRoot.querySelector('#reset-btn');
+  
     function constructUrl(baseUrl, endpoint) {
       if (baseUrl.endsWith('/')) {
         return `${baseUrl}${endpoint}`;
@@ -116,12 +121,35 @@ replaceUnicodeRegex(input) {
       ],
       autoColumns: true,
     });
-    
+
+    // Setup event listeners
+    searchEl.addEventListener('input', () => {
+      const searchString = searchEl.value;
+      table.searchData(searchString);
+    });
+
+    filterBtn.addEventListener('click', () => {
+      const filterField = filterFieldEl.value;
+      const filterValue = filterValueEl.value;
+      table.setFilter(filterField, "=", filterValue);
+    });
+
+    resetBtn.addEventListener('click', () => {
+      table.clearFilter();
+    });
+
   }
 
-render() {
-  return html`<div id="table"></div>`; // Create a div with an id for Tabulator to target
-}
+  render() {
+    return html`
+      <div id="filter-field"></div>
+      <input id="filter-value" type="text" placeholder="filter value"/>
+      <button id="filter-btn">Filter</button>
+      <button id="reset-btn">Reset</button>
+      <input id="search" type="text" placeholder="Search"/>
+      <div id="table"></div>
+    `;
+  }
 }
 
 
