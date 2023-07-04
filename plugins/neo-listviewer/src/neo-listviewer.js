@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import {TabulatorFull as Tabulator} from 'tabulator-tables';
-import 'tabulator-tables/dist/css/tabulator.min.css'; // Import Tabulator CSS
+import tabulatorStyles from 'tabulator-tables/dist/css/tabulator.min.css';
 
 class listviewElement extends LitElement {
   static getMetaConfig() {
@@ -37,6 +37,8 @@ class listviewElement extends LitElement {
       }
     };
   }
+
+  static styles = css`${tabulatorStyles}`;
 
   static get properties() {
     return {
