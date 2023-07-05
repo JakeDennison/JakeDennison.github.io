@@ -142,20 +142,14 @@ firstUpdated() {
     movableColumns: true,
     height: 'auto',
     autoColumns: true,
+    rowDblClick: (e, row) => this.handleRowDblClick(e, row), 
   });
-
-  this.addLinkColumn();
 }
 
-addLinkColumn() {
-  this.table.addColumn({
-    title: "Link",
-    formatter: (cell) => {
-      const itemId = cell.getRow().getData().ID;
-      const url = this.constructUrl(this.listURL, `viewform.aspx?id=${itemId}`);
-      return `<a href="${url}" target="_blank">Open Item</a>`;
-    }
-  }, false);
+handleRowDblClick(e, row) {
+  const itemId = row.getData().ID;  // replace "ID" with the actual key name for the id in your data
+  const url = this.constructUrl(this.listURL, `viewform.aspx?id=${itemId}`);
+  window.open(url, "_blank");
 }
 
 handleFilterClick() {
