@@ -144,7 +144,10 @@ firstUpdated() {
     autoColumns: true,
   });
 
-  // After autoColumns, add the Link column
+  this.addLinkColumn();
+}
+
+addLinkColumn() {
   this.table.addColumn({
     title: "Link",
     formatter: (cell) => {
