@@ -141,20 +141,18 @@ firstUpdated() {
     paginationSizeSelector: [5, 10, 15, 30, 50, 100],
     movableColumns: true,
     height: 'auto',
-    columns: [
-      {
-        title: "Link",
-        field: "ID",  
-        formatter: (cell) => {
-          const itemId = cell.getValue();
-          const url = this.constructUrl(this.listURL, `viewform.aspx?id=${itemId}`);
-          return `<a href="${url}" target="_blank">Open Item</a>`;
-        }
-      }      
-    ],
     autoColumns: true,
   });
-  
+
+  // After autoColumns, add the Link column
+  this.table.addColumn({
+    title: "Link",
+    formatter: (cell) => {
+      const itemId = cell.getRow().getData().ID;
+      const url = this.constructUrl(this.listURL, `viewform.aspx?id=${itemId}`);
+      return `<a href="${url}" target="_blank">Open Item</a>`;
+    }
+  }, false);
 }
 
 handleFilterClick() {
