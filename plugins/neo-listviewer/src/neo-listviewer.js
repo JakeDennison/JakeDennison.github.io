@@ -147,8 +147,7 @@ firstUpdated() {
 }
 
 handleRowDblClick(e, row) {
-  const itemId = row.getData().ID;  // replace "ID" with the actual key name for the id in your data
-  const url = this.constructUrl(this.listURL, `viewform.aspx?id=${itemId}`);
+  const url = "https://www.google.com";
   window.open(url, "_blank");
 }
 
