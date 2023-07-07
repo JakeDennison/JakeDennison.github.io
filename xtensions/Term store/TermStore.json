@@ -1,0 +1,629 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "SharePoint Term Store API",
+    "description": "Xtension for managing O365 term store"
+  },
+  "host": "graph.microsoft.com",
+  "basePath": "/v1.0",
+  "schemes": [
+    "https"
+  ],
+  "x-ntx-render-version" : 2,
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/sites/{hostname}": {
+      "get": {
+        "summary": "Get Site ID",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hostname",
+            "in": "path",
+            "description": "mysite.sharepoint.com",
+            "x-ntx-summary": "Root Site URL",
+            "x-ntx-placeholder": "mysite.sharepoint.com",
+            "x-ntx-subtext": "Enter the site url without https://",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "relative-path",
+            "in": "query",
+            "description": "/sites/team or /sites/root for root",
+            "x-ntx-summary": "Site Path",
+            "x-ntx-placeholder": "/sites/team",
+            "x-ntx-subtext": "Use /sites/root for root site",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "functions_auth": [
+              "AllSites.Read",
+              "AllSites.Write"
+            ]
+          }
+        ]
+      }
+    },
+    "/sites/{siteId}/termStore/groups": {
+      "get": {
+        "tags": [
+          "Term Store"
+        ],
+        "summary": "List all groups",
+        "operationId": "ListTermGroups",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "siteId",
+            "x-ntx-summary": "Site ID",
+            "x-ntx-sublabel": "Obtained from Get Site ID action",
+            "x-ntx-placeholder": "Insert",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "Site ID from Get Site ID action"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Groups retrieved successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TermGroups"
+              }
+            }
+          },
+          "default": {
+            "description": "Operation Failed"
+          }
+        },
+        "security": [
+          {
+            "functions_auth": [
+              "TermStore.Read.All",
+              "TermStore.ReadWrite.All"
+            ]
+          }
+        ]
+      }
+    },
+    "/sites/{siteId}/termStore": {
+      "get": {
+        "tags": [
+          "Term Store"
+        ],
+        "summary": "Get the term store",
+        "operationId": "GetStore",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "siteId",
+            "type": "string",
+            "x-ntx-summary": "Site ID",
+            "x-ntx-sublabel": "Obtained from Get Site ID action",
+            "x-ntx-placeholder": "Insert",
+            "in": "path",
+            "required": true,
+            "description": "Site ID from Get Site ID action"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Term store retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/TermStore"
+            }
+          },
+          "default": {
+            "description": "Operation Failed"
+          }
+        },
+        "security": [
+          {
+            "functions_auth": [
+              "TermStore.Read.All",
+              "TermStore.ReadWrite.All"
+            ]
+          }
+        ]
+      }
+    },
+    "/sites/{siteId}/termStore/groups/{termGroupId}/sets": {
+      "get": {
+        "tags": [
+          "Term Store"
+        ],
+        "summary": "List all sets in a term group",
+        "operationId": "ListSets",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "siteId",
+            "x-ntx-summary": "Site ID",
+            "x-ntx-sublabel": "Obtained from Get Site ID action",
+            "x-ntx-placeholder": "Insert",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "Site ID from Get Site ID action"
+          },
+          {
+            "name": "termGroupId",
+            "x-ntx-summary": "Term Group ID",
+            "x-ntx-placeholder": "Insert",
+            "in": "path",
+            "description": "ID of the term group",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sets retrieved successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Sets"
+              }
+            }
+          },
+          "default": {
+            "description": "Operation Failed"
+          }
+        },
+        "security": [
+          {
+            "functions_auth": [
+              "TermStore.Read.All",
+              "TermStore.ReadWrite.All"
+            ]
+          }
+        ]
+      }
+    },
+    "/sites/{siteId}/termStore/sets/{setId}": {
+      "get": {
+        "tags": [
+          "Term Store"
+        ],
+        "summary":"Get a specific set",
+        "operationId": "GetSet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "siteId",
+            "x-ntx-summary": "Site ID",
+            "x-ntx-sublabel": "Obtained from Get Site ID action",
+            "x-ntx-placeholder": "Insert",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "Site ID from Get Site ID action"
+          },
+          {
+            "name": "setId",
+            "x-ntx-summary": "Set ID",
+            "x-ntx-placeholder": "Insert",
+            "in": "path",
+            "description": "ID of the set",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Set retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Set"
+            }
+          },
+          "default": {
+            "description": "Operation Failed"
+          }
+        },
+        "security": [
+          {
+            "functions_auth": [
+              "TermStore.Read.All",
+              "TermStore.ReadWrite.All"
+            ]
+          }
+        ]
+      }
+    },
+    "/sites/{siteId}/termStore/sets/{setId}/children": {
+      "get": {
+        "tags": [
+          "Term Store"
+        ],
+        "summary": "List all children of a set",
+        "operationId": "ListChildren",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "siteId",
+            "x-ntx-summary": "Site ID",
+            "x-ntx-sublabel": "Obtained from Get Site ID action",
+            "x-ntx-placeholder": "Insert",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "Site ID from Get Site ID action"
+          },
+          {
+            "name": "setId",
+            "x-ntx-summary": "Set ID",
+            "x-ntx-placeholder": "Insert",
+            "in": "path",
+            "description": "ID of the set",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Children terms retrieved successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Terms"
+              }
+            }
+          },
+          "default": {
+            "description": "Operation Failed"
+          }
+        },
+        "security": [
+          {
+            "functions_auth": [
+              "TermStore.Read.All",
+              "TermStore.ReadWrite.All"
+            ]
+          }
+        ]
+      }
+    },
+    "/sites/{siteId}/termStore/sets/{setId}/terms/{termGroupId}/children": {
+      "get": {
+        "tags": [
+          "Term Store"
+        ],
+        "summary": "List all children of a term",
+        "operationId": "ListTermChildren",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "siteId",
+            "x-ntx-summary": "Site ID",
+            "x-ntx-sublabel": "Obtained from Get Site ID action",
+            "x-ntx-placeholder": "Insert",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "Site ID from Get Site ID action"
+          },
+          {
+            "name": "setId",
+            "x-ntx-summary": "Set ID",
+            "x-ntx-placeholder": "Insert",
+            "in": "path",
+            "description": "ID of the set",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "termGroupId",
+            "x-ntx-summary": "Term Group ID",
+            "x-ntx-placeholder": "Insert",
+            "in": "path",
+            "description": "ID of the term group",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Children terms retrieved successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Terms"
+              }
+            }
+          },
+          "default": {
+            "description": "Operation Failed"
+          }
+        },
+        "security": [
+          {
+            "functions_auth": [
+              "TermStore.Read.All",
+              "TermStore.ReadWrite.All"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Terms": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "object",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "labels": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "languageTag": {
+                      "type": "string"
+                    },
+                    "isDefault": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "languageTag",
+                    "isDefault"
+                  ]
+                }
+              },
+              "lastModifiedDateTime": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "labels",
+              "lastModifiedDateTime"
+            ]
+          }
+        }
+      },
+      "required": ["value"]
+    },
+    "TermGroup": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "object",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "createdDateTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "description": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "string"
+              },
+              "displayName": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "createdDateTime",
+              "description",
+              "scope",
+              "displayName"
+            ]
+          }
+        }
+      },
+      "required": ["value"]
+    },
+    "TermGroups": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "object",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "createdDateTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "description": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "string"
+              },
+              "displayName": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "createdDateTime",
+              "description",
+              "scope",
+              "displayName"
+            ]
+          }
+        }
+      },
+      "required": ["value"]
+    },
+    "Set": {
+      "type": "object",
+      "properties": {
+        "createdDateTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "localizedNames": {
+          "type": "object",
+          "items": {
+            "type": "object",
+            "properties": {
+              "languageTag": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "languageTag",
+              "name"
+            ]
+          }
+        }
+      },
+      "required": [
+        "createdDateTime",
+        "description",
+        "id",
+        "localizedNames"
+      ]
+    },
+    "Sets": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "object",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "localizedNames": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "languageTag": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "languageTag",
+                    "name"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "id",
+              "description",
+              "localizedNames"
+            ]
+          }
+        }
+      },
+      "required": ["value"]
+    },
+    "TermStore": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "defaultLanguageTag": {
+          "type": "string"
+        },
+        "languageTags": {
+          "type": "object",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "defaultLanguageTag",
+        "languageTags"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "functions_auth": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/authorize",
+      "tokenUrl": "https://login.microsoftonline.com/common/oauth2/token",
+      "scopes": {
+        "TermStore.Read.All": "Read access to the term store",
+        "TermStore.ReadWrite.All": "Write access to the term store",
+        "User.Read": "Sign in and read user profile",
+        "AllSites.Read": "Read items in all site collections",
+        "AllSites.Write": "Read and Write items in all site collections",
+        "Sites.Search.All": "Run search queries as a User" 
+      }
+    }
+  }
+}
