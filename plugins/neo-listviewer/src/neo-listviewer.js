@@ -142,8 +142,12 @@ firstUpdated() {
     movableColumns: true,
     height: 'auto',
     autoColumns: true,
-    rowDblClick: (e, row) => this.handleRowDblClick(e, row), 
   });
+
+  this.table.setOptions({
+    rowDblClick: (e, row) => this.handleRowDblClick(e, row),
+  });
+
 }
 
 handleRowDblClick(e, row) {
