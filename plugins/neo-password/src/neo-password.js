@@ -169,12 +169,21 @@ class pwElement extends LitElement {
   
   handlePasswordInput(event) {
     this.password = event.target.value;
-    this.passVal = this.password;
+    this.passVal = this.password; // Update the passVal property
   
     const strength = this.calculatePasswordStrength(this.password);
     const strengthLevel = this.shadowRoot.querySelector('.strength-level');
     strengthLevel.style.width = `${strength}%`;
   
+    this.validateForm();
+  
+    // Changed here
+    this.requestUpdate() && this.requestUpdate().then(() => {
+      this.shadowRoot.querySelector('#password').focus();
+    });
+  }
+
+  dispatchValueChange() {
     const customEvent = new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: false,
@@ -183,11 +192,6 @@ class pwElement extends LitElement {
     });
   
     this.dispatchEvent(customEvent);
-
-    this.requestUpdate().then(() => {
-      const passwordInput = this.shadowRoot.querySelector('#password');
-      passwordInput.focus();
-  });
   }
 
   validateForm() {
@@ -210,16 +214,8 @@ class pwElement extends LitElement {
       passwordInput.setCustomValidity(error);
     } else {
       passwordInput.setCustomValidity('');
-      this.passVal = this.password;  // update the passVal property
-
-      const customEvent = new CustomEvent('ntx-value-change', {
-        bubbles: true,
-        cancelable: false,
-        composed: true,
-        detail: this.passVal,
-      });
-
-      this.dispatchEvent(customEvent);
+      this.passVal = this.password;
+      this.dispatchValueChange();
     }
   }
 
