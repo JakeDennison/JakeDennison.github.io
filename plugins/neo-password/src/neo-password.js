@@ -85,21 +85,26 @@ class pwElement extends LitElement {
   }
 
   static get styles() {
-    return css`
+    const { cssRules } = document.styleSheets[0]
+    const globalStyle = css([Object.values(cssRules).map(rule => 
+    rule.cssText).join('\n')])
+    return [
+      globalStyle,
+      css`
       :host {
         display: block;
       }
-
       .strength-bar {
-        height: 10px;
-        background-color: #e6e6e6;
-        margin-top: 5px;
-      }
+      height: 10px;
+      background-color: #e6e6e6;
+      margin-top: 5px;
+    }
 
-      .strength-level {
-        height: 100%;
-      }
-    `;
+    .strength-level {
+      height: 100%;
+    }
+      `
+    ];
   }
 
   updated(changedProperties) {
@@ -111,9 +116,7 @@ class pwElement extends LitElement {
 
   render() {
     return html`
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  
-      <label for="password">Password</label>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
       <input
         id="password"
         type="password"
