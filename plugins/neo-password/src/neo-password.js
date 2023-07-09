@@ -110,7 +110,7 @@ class pwElement extends LitElement {
   updated(changedProperties) {
     if (changedProperties.has('passMin') || changedProperties.has('passMax') || changedProperties.has('boolCaps') ||
         changedProperties.has('boolNum') || changedProperties.has('boolSC')) {
-      this.validateForm();
+      this.requestUpdate().then(() => this.validateForm());
     }
   }
 
@@ -201,13 +201,14 @@ class pwElement extends LitElement {
       ...(this.boolNum && { format: { pattern: '[0-9]', message: 'Password must contain at least one number' } }),
       ...(this.boolSC && { format: { pattern: '[!@#$%^&*]', message: 'Password must contain at least one special character' } })
     });
-
+  
     if (validationResults) {
       const error = validationResults[0];
       passwordInput.setCustomValidity(error);
     } else {
       passwordInput.setCustomValidity('');
     }
+    passwordInput.focus();
   }
 
 }
