@@ -131,10 +131,8 @@ class pwElement extends LitElement {
       <div id="passwordHelpBlock" class="form-text">
         Your password must be at least ${this.passMin} characters long and contain
         ${this.boolCaps ? 'uppercase letters, ' : ''}
-        ${this.boolCaps && this.boolNum ? 'numbers, and ' : ''}
         ${this.boolNum ? 'numbers, ' : ''}
-        ${this.boolNum && this.boolSC ? 'special characters, and ' : ''}
-        ${this.boolSC ? 'special characters' : ''}.
+        ${this.boolSC ? 'special characters, ' : ''}
       </div>
   
       ${this.passStr ? html`
