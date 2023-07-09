@@ -72,11 +72,13 @@ class pwElement extends LitElement {
     boolNum: false,
     boolSC: false,
     passStr: false,
-    passVal: ''
+    passVal: '',
+    password: {type:String},
   };
   
   constructor() {
     super();
+    this.password = "";
     this.passMin = 8;
     this.passMax = 128;
     this.boolCaps = false;
@@ -166,10 +168,10 @@ class pwElement extends LitElement {
   }
   
   handlePasswordInput(event) {
-    const password = event.target.value;
-    this.passVal = password;  // update the passVal property
+    this.password = event.target.value;
+    this.passVal = this.password;
   
-    const strength = this.calculatePasswordStrength(password);
+    const strength = this.calculatePasswordStrength(this.password);
     const strengthLevel = this.shadowRoot.querySelector('.strength-level');
     strengthLevel.style.width = `${strength}%`;
   
@@ -181,6 +183,11 @@ class pwElement extends LitElement {
     });
   
     this.dispatchEvent(customEvent);
+
+    this.requestUpdate().then(() => {
+      const passwordInput = this.shadowRoot.querySelector('#password');
+      passwordInput.focus();
+  });
   }
 
   validateForm() {
@@ -197,14 +204,23 @@ class pwElement extends LitElement {
       ...(this.boolNum && { format: { pattern: '[0-9]', message: 'Password must contain at least one number' } }),
       ...(this.boolSC && { format: { pattern: '[!@#$%^&*]', message: 'Password must contain at least one special character' } })
     });
-  
+
     if (validationResults) {
       const error = validationResults[0];
       passwordInput.setCustomValidity(error);
     } else {
       passwordInput.setCustomValidity('');
+      this.passVal = this.password;  // update the passVal property
+
+      const customEvent = new CustomEvent('ntx-value-change', {
+        bubbles: true,
+        cancelable: false,
+        composed: true,
+        detail: this.passVal,
+      });
+
+      this.dispatchEvent(customEvent);
     }
-    passwordInput.focus();
   }
 
 }
