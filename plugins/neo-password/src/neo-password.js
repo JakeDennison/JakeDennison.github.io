@@ -22,11 +22,11 @@ class pwElement extends LitElement {
         },
         passMax: {
           title: 'Maximum Password Length',
-          description: 'From 8 - 128',
+          description: 'From 8 - 255',
           type: 'integer',
           minimum: 8,
-          maximum: 128,
-          defaultValue: 8,
+          maximum: 255,
+          defaultValue: 255,
         },
         boolCaps: {
           title: 'Require capital letters',
@@ -54,6 +54,7 @@ class pwElement extends LitElement {
           type: 'string',
           maxLength: 255,
           isValueField: true,
+          staticProperties: true,
         },
       },
       events: ["ntx-value-change"],
@@ -101,10 +102,17 @@ class pwElement extends LitElement {
     `;
   }
 
+  updated(changedProperties) {
+    if (changedProperties.has('passMin') || changedProperties.has('passMax') || changedProperties.has('boolCaps') ||
+        changedProperties.has('boolNum') || changedProperties.has('boolSC')) {
+      this.validateForm();
+    }
+  }
+
   render() {
     return html`
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
+  
       <label for="password">Password</label>
       <input
         id="password"
@@ -114,8 +122,9 @@ class pwElement extends LitElement {
         maxlength="${this.passMax}"
         required
         @input="${this.handlePasswordInput}"
+        @blur="${this.validateForm}"
       />
-
+  
       <div id="passwordHelpBlock" class="form-text">
         Your password must be at least ${this.passMin} characters long and contain
         ${this.boolCaps ? 'uppercase letters, ' : ''}
@@ -124,7 +133,7 @@ class pwElement extends LitElement {
         ${this.boolNum && this.boolSC ? 'special characters, and ' : ''}
         ${this.boolSC ? 'special characters' : ''}.
       </div>
-
+  
       ${this.passStr ? html`
         <div class="strength-bar">
           <div class="strength-level" style="width: ${this.calculatePasswordStrength()}%"></div>
@@ -200,10 +209,6 @@ class pwElement extends LitElement {
     }
   }
 
-  firstUpdated() {
-    const passwordInput = this.shadowRoot.querySelector('#password');
-    passwordInput.addEventListener('input', this.validateForm.bind(this));
-  }
 }
 
 customElements.define('neo-password', pwElement);
