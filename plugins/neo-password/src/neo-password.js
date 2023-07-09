@@ -29,22 +29,22 @@ class pwElement extends LitElement {
           defaultValue: 8,
         },
         boolCaps: {
-          title: 'Require capital letters?',
+          title: 'Require capital letters',
           type: 'boolean',
           defaultValue: true,
         },
         boolNum: {
-          title: 'Require Numbers?',
+          title: 'Require Numbers',
           type: 'boolean',
           defaultValue: true,
         },
         boolSC: {
-          title: 'Require special characters?',
+          title: 'Require special characters',
           type: 'boolean',
           defaultValue: true,
         },
         passStr: {
-          title: 'Show password strength bar?',
+          title: 'Show password strength bar',
           type: 'boolean',
           defaultValue: true,
         },
