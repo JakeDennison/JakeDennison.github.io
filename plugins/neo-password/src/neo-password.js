@@ -71,7 +71,8 @@ class pwElement extends LitElement {
     boolCaps: false,
     boolNum: false,
     boolSC: false,
-    passStr: false
+    passStr: false,
+    passVal: ''
   };
   
   constructor() {
@@ -82,6 +83,7 @@ class pwElement extends LitElement {
     this.boolNum = false;
     this.boolSC = false;
     this.passStr = false;
+    this.passVal = ''; 
   }
 
   static get styles() {
@@ -105,13 +107,6 @@ class pwElement extends LitElement {
     }
       `
     ];
-  }
-
-  updated(changedProperties) {
-    if (changedProperties.has('passMin') || changedProperties.has('passMax') || changedProperties.has('boolCaps') ||
-        changedProperties.has('boolNum') || changedProperties.has('boolSC')) {
-      this.requestUpdate().then(() => this.validateForm());
-    }
   }
 
   render() {
@@ -172,8 +167,9 @@ class pwElement extends LitElement {
   
   handlePasswordInput(event) {
     const password = event.target.value;
-    const strength = this.calculatePasswordStrength(password);
+    this.passVal = password;  // update the passVal property
   
+    const strength = this.calculatePasswordStrength(password);
     const strengthLevel = this.shadowRoot.querySelector('.strength-level');
     strengthLevel.style.width = `${strength}%`;
   
@@ -181,7 +177,7 @@ class pwElement extends LitElement {
       bubbles: true,
       cancelable: false,
       composed: true,
-      detail: password,
+      detail: this.passVal,
     });
   
     this.dispatchEvent(customEvent);
