@@ -148,7 +148,7 @@ class listviewElement extends LitElement {
   
       let newItem = { ...item };
   
-      // Handle objects with the "Person" field data structure
+      // Handle objects with the "Person", "Author" or "Editor" field data structure
       for (const [key, value] of Object.entries(item)) {
         // Check if value is null or not an object
         if (!value || typeof value !== 'object') {
@@ -169,18 +169,25 @@ class listviewElement extends LitElement {
       }
   
       // Process each property of the item
-      for (const [key, value] of Object.entries(item)) {
-        // Handle location field
+      for (const [key, value] of Object.entries(newItem)) {
+        // Handle JSON-encoded fields
         if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
           try {
-            const locationObj = JSON.parse(value);
+            const jsonObj = JSON.parse(value);
+            
+            // Handle location field
             if (
-              locationObj.Address &&
-              locationObj.Address.Street &&
-              locationObj.Address.City &&
-              locationObj.Address.CountryOrRegion
+              jsonObj.Address &&
+              jsonObj.Address.Street &&
+              jsonObj.Address.City &&
+              jsonObj.Address.CountryOrRegion
             ) {
-              newItem[key] = `${locationObj.Address.Street}, ${locationObj.Address.City}, ${locationObj.Address.CountryOrRegion}`;
+              newItem[key] = `${jsonObj.Address.Street}, ${jsonObj.Address.City}, ${jsonObj.Address.CountryOrRegion}`;
+            }
+  
+            // Handle image field
+            if (jsonObj.serverUrl && jsonObj.serverRelativeUrl) {
+              newItem[key] = `<img height="42px" width="42px" src="${jsonObj.serverUrl}${jsonObj.serverRelativeUrl}" alt="Image">`;
             }
           } catch (error) {
             // Invalid JSON, leave the value as it is
@@ -204,18 +211,6 @@ class listviewElement extends LitElement {
           }
         }
   
-        // Handle image field
-        if (typeof value === 'string') {
-          try {
-            const imgObj = JSON.parse(value);
-            if (imgObj.serverUrl && imgObj.serverRelativeUrl) {
-              newItem[key] = `<img height="42px" width="42px" src="${imgObj.serverUrl}${imgObj.serverRelativeUrl}" alt="Image">`;
-            }
-          } catch (error) {
-            // Invalid JSON, leave the value as it is
-          }
-        }
-  
         // Handle hyperlink field
         if (typeof value === 'string') {
           const regex = /^https?:\/\/[^\s,]+, .+$/;
@@ -224,7 +219,7 @@ class listviewElement extends LitElement {
             newItem[key] = url; // Store only the URL part
           }
         }
-
+  
         // Handle semicolon-separated values
         if (typeof value === 'string' && value.includes(';')) {
           const choices = value.split(';').map(choice => choice.trim().replace('#', ''));
