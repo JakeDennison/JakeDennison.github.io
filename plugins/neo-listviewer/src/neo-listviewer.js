@@ -166,6 +166,8 @@ class listviewElement extends LitElement {
     // Combine the default keys with the ones specified by the property
     const ignoredKeys = defaultIgnoredKeys.concat(additionalIgnoredKeys);
 
+    let processedPersonKeys = []; // Move it outside map function
+
     this.listdata = this.listdata.map((item, index) => {
       // Check if item is null or not an object
       if (!item || typeof item !== 'object') {
@@ -173,29 +175,37 @@ class listviewElement extends LitElement {
       }
   
       let newItem = { ...item };
-
-      for (const key of ignoredKeys) {
-        delete newItem[key];
-      }
-
+  
       // Handle objects with the "Person" field data structure
       for (const [key, value] of Object.entries(item)) {
         // Check if value is null or not an object
         if (!value || typeof value !== 'object') {
           continue;
         }
-
+  
         if (Object.keys(value).includes('EMail')) {
           let parentKeyName = key.endsWith('_Email') ? key.slice(0, -6) : key;
+          if (!processedPersonKeys.includes(parentKeyName)) {
+            processedPersonKeys.push(parentKeyName); // Store this key name
+          }
+  
           const emailKey = `${parentKeyName}_Email`;
           const usernameKey = `${parentKeyName}_Username`;
           const displayNameKey = `${parentKeyName}_DisplayName`;
-
+  
           newItem[parentKeyName] = value.EMail; // Replace the parent key field with the email property
           delete newItem[emailKey]; // Remove the _Email field
           delete newItem[usernameKey]; // Remove the _Username field
           delete newItem[displayNameKey]; // Remove the _DisplayName field
         }
+      }
+  
+      // Remove keys ending with 'Id' or 'StringId' associated with a processed Person key
+      for (const processedKey of processedPersonKeys) {
+        const idKey = `${processedKey}Id`;
+        const stringIdKey = `${processedKey}StringId`;
+        delete newItem[idKey];
+        delete newItem[stringIdKey];
       }
 
       // Remove keys ending with 'Id' or 'StringId' associated with a processed Person key
