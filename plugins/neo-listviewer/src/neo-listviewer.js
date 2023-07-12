@@ -217,14 +217,6 @@ class listviewElement extends LitElement {
         }
       }
 
-      // Remove keys ending with 'Id' or 'StringId' associated with a processed Person key
-      for (const processedKey of processedPersonKeys) {
-        const idKey = `${processedKey}Id`;
-        const stringIdKey = `${processedKey}StringId`;
-        delete newItem[idKey];
-        delete newItem[stringIdKey];
-      }
-  
       // Process each property of the item
       for (const [key, value] of Object.entries(newItem)) {
         // Handle JSON-encoded fields
@@ -277,8 +269,12 @@ class listviewElement extends LitElement {
           }
         }
   
-        // Handle semicolon-separated values
-        if (typeof value === 'string' && value.includes(';')) {
+      // Handle semicolon-separated values
+        if (
+          typeof value === 'string' && 
+          value.includes(';') &&
+          !value.toLowerCase().includes('<div') // Ignore the value if it contains "<div"
+        ) {
           const choices = value.split(';').map(choice => choice.trim().replace('#', ''));
           newItem[key] = choices.map(choice => `<span class="choice-pill">${choice}</span>`).join('');
         }
