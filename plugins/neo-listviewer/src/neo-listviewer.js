@@ -84,6 +84,10 @@ class listviewElement extends LitElement {
       margin-bottom: 4px;
       font-size: 12px;
     }
+    .neo-lv-table {
+    border: var(--ntx-form-theme-border-width) var(--ntx-form-theme-border-style) var(--ntx-form-theme-color-border);
+    border-radius: var(--ntx-form-theme-border-radius);
+}
   `;
 
   static get properties() {
@@ -317,7 +321,7 @@ class listviewElement extends LitElement {
   <button id="filter-btn" class="fltr-btn" @click="${this.handleFilterClick}">Filter</button>
   <button id="reset-btn" class="fltr-btn" @click="${this.handleResetClick}">Reset</button>
 </div>
-<div id="table"></div>
+<div class="neo-lv-table" id="table"></div>
 
 `;
   }
