@@ -1,0 +1,76 @@
+const listdata = [{
+  "Person": {
+    "EMail": "jake.dennison@safalo.com",
+    "UserName": "jake.dennison_safalo.com#EXT#@NtxTE01.onmicrosoft.com",
+    "Title": "Jake Dennison"
+  },
+  "Person_Email": "jake.dennison@safalo.com",
+  "Person_Username": "jake.dennison_safalo.com#EXT#@NtxTE01.onmicrosoft.com",
+  "Person_DisplayName": "Jake Dennison",
+  "Persons_Email": "jake.dennison@safalo.com;Jake@ntxte01.com",
+  "Author": {
+    "EMail": "jake.dennison@nintex.com",
+    "UserName": "jake.dennison_nintex.com#EXT#@NtxTE01.onmicrosoft.com",
+    "Title": "Jake Dennison"
+  },
+  "Author_Email": "jake.dennison@nintex.com",
+  "Author_Username": "jake.dennison_nintex.com#EXT#@NtxTE01.onmicrosoft.com",
+  "Author_DisplayName": "Jake Dennison",
+  "Editor": {
+    "EMail": "jake.dennison@nintex.com",
+    "UserName": "jake.dennison_nintex.com#EXT#@NtxTE01.onmicrosoft.com",
+    "Title": "Jake Dennison"
+  },
+  "Editor_Email": "jake.dennison@nintex.com",
+  "Editor_Username": "jake.dennison_nintex.com#EXT#@NtxTE01.onmicrosoft.com",
+  "Editor_DisplayName": "Jake Dennison",
+  "FileSystemObjectType": 0,
+  "ServerRedirectedEmbedUri": null,
+  "ServerRedirectedEmbedUrl": "",
+  "ContentTypeId": "0x01007CD25A2BA5DD3247A0D58C75AEA820EA00985D1593116D8E4381D93D0BE9FD0137",
+  "Title": "Title example",
+  "_x003a_ocation": "{\"EntityType\":\"PostalAddress\",\"LocationSource\":\"Bing\",\"LocationUri\":\"https://www.bingapis.com/api/v6/geoentities?streetaddress=138+Fetter+Lane&locality=Fleet+Street&subregion=London®ion=England&postalcode=EC4A+1BT&country=United+Kingdom&setlang=en-us&count=1\",\"UniqueId\":\"https://www.bingapis.com/api/v6/geoentities?streetaddress=138+Fetter+Lane&locality=Fleet+Street&subregion=London®ion=England&postalcode=EC4A+1BT&country=United+Kingdom&setlang=en-us&count=1\",\"DisplayName\":\"138 Fetter Lane\",\"Address\":{\"Street\":\"138 Fetter Lane\",\"City\":\"Fleet Street\",\"State\":\"England\",\"CountryOrRegion\":\"United Kingdom\",\"PostalCode\":\"EC4A 1BT\"},\"Coordinates\":{}}",
+  "ComplianceAssetId": null,
+  "Text": "Text example",
+  "Choice": "Choice 1",
+  "Date": "2023-07-12T07:00:00Z",
+  "DateTime": "2023-07-11T07:00:00Z",
+  "Multiline": "Multiple lines of text\nthis is a new line\nand another",
+  "Richtext": "\n\nthis is my Rich text this is cool\n",
+  "Appended": "Append 2",
+  "PersonId": 87,
+  "PersonStringId": "87",
+  "PersonsId": "87;48",
+  "PersonsStringId": "87;48",
+  "Number": 123234,
+  "YesNo": true,
+  "Hyperlink": "https://www.google.com, Google link",
+  "Currency": 5645,
+  "Managed_x0020_metadata_Label": "Australian",
+  "CountryOrRegion": "United Kingdom",
+  "State": "England",
+  "City": "Fleet Street",
+  "PostalCode": "EC4A 1BT",
+  "Street": "138 Fetter Lane",
+  "GeoLoc": null,
+  "DispName": "138 Fetter Lane",
+  "img": "{\"type\":\"thumbnail\",\"fileName\":\"Profile Photo.png\",\"nativeFile\":{},\"fieldName\":\"img\",\"serverUrl\":\"https://ntxte01.sharepoint.com\",\"fieldId\":\"00c2fe3b-295e-4364-84a5-e169bc793a41\",\"serverRelativeUrl\":\"/customs/SiteAssets/Lists/6a4fcace-f799-48f1-a4ae-39935b054bca/Profile%20Photo.png\",\"id\":\"54434054-383d-4ecd-b3d5-53ab25b5ae67\"}",
+  "LookupId": 4,
+  "Choicemultiple": "Choice 3;#Choice 2",
+  "ID": 1,
+  "Modified": "2023-07-12T09:51:16Z",
+  "Created": "2023-07-12T09:50:55Z",
+  "AuthorId": 56,
+  "EditorId": 56,
+  "OData__UIVersionString": "2.0",
+  "Attachments": false,
+  "GUID": "e679cdc2-1277-4011-9c99-f9624d4bea60",
+  "FileLeafRef": "1_.000",
+  "_ColorTag": null,
+  "Managed_x0020_metadata_TermGuid": "867642de-2341-401c-ad7c-a2fbd90dac42"
+}];
+  
+  const jsonData = JSON.stringify(listdata);
+
+  export default jsonData;
+  
