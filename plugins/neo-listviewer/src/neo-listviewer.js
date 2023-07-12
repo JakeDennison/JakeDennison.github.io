@@ -85,9 +85,9 @@ class listviewElement extends LitElement {
       font-size: 12px;
     }
     .neo-lv-table {
-    border: var(--ntx-form-theme-border-width) var(--ntx-form-theme-border-style) var(--ntx-form-theme-color-border);
-    border-radius: var(--ntx-form-theme-border-radius);
-}
+      border: 1px, solid, var(--ntx-form-theme-color-border);
+      border-radius: var(--ntx-form-theme-border-radius);
+    } 
   `;
 
   static get properties() {
