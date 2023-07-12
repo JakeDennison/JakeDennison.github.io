@@ -29,6 +29,11 @@ class listviewElement extends LitElement {
           description: 'Number of items to show per page',
           defaultValue: '5',
         },
+        ignoredKeys:{
+          type: 'string',
+          title: 'Keys to ignore',
+          description: 'Insert a comma separated list of keys to ignore.'
+        }
       },
       standardProperties: {
         fieldLabel: true,
@@ -99,6 +104,7 @@ class listviewElement extends LitElement {
       headersElement: { type: String },
       table: { type: Object },
       keys: { type: Array },
+      ignoredKeys: { type: String },
     };
   }
 
@@ -111,6 +117,7 @@ class listviewElement extends LitElement {
     this.table = null;
     this.keys = [];
     this.listdata = [];
+    this.ignoredKeys = '';
   }
 
   parseDataObject() {
@@ -140,6 +147,25 @@ class listviewElement extends LitElement {
   }
 
   preprocessData() {
+    // The list of default keys to ignore
+    const defaultIgnoredKeys = [
+      'FileSystemObjectType',
+      'ServerRedirectedEmbedUri',
+      'ServerRedirectedEmbedUrl',
+      'ComplianceAssetId',
+      '_ColorTag',
+      'FileLeafRef',
+      'GUID',
+      'Attachments',
+      'OData__UIVersionString'
+    ];
+
+    // Convert the ignoredKeys property to an array, removing any whitespace
+    const additionalIgnoredKeys = this.ignoredKeys ? this.ignoredKeys.split(',').map(key => key.trim()) : [];
+
+    // Combine the default keys with the ones specified by the property
+    const ignoredKeys = defaultIgnoredKeys.concat(additionalIgnoredKeys);
+
     this.listdata = this.listdata.map((item, index) => {
       // Check if item is null or not an object
       if (!item || typeof item !== 'object') {
@@ -147,7 +173,11 @@ class listviewElement extends LitElement {
       }
   
       let newItem = { ...item };
-  
+
+      for (const key of ignoredKeys) {
+        delete newItem[key];
+      }
+
       // Handle objects with the "Person", "Author" or "Editor" field data structure
       for (const [key, value] of Object.entries(item)) {
         // Check if value is null or not an object
