@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
 import { TabulatorFull as Tabulator } from 'tabulator-tables';
-import jsonData from './list.js';
 
 class listviewElement extends LitElement {
   static getMetaConfig() {
@@ -101,7 +100,7 @@ class listviewElement extends LitElement {
 
   constructor() {
     super();
-    this.dataobject = jsonData;
+    this.dataobject = '';
     this.listURL = 'https://ntxte01.sharepoint.com/customs/Lists/StockList';
     this.pageItemLimit = 5;
     this.currentPage = 0;
