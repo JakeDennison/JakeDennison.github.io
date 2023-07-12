@@ -186,7 +186,7 @@ class listviewElement extends LitElement {
         }
 
         if (Object.keys(value).includes('EMail')) {
-          const parentKeyName = key;
+          let parentKeyName = key.endsWith('_Email') ? key.slice(0, -6) : key;
           const emailKey = `${parentKeyName}_Email`;
           const usernameKey = `${parentKeyName}_Username`;
           const displayNameKey = `${parentKeyName}_DisplayName`;
