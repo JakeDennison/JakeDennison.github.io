@@ -190,15 +190,17 @@ class listviewElement extends LitElement {
           const emailKey = `${parentKeyName}_Email`;
           const usernameKey = `${parentKeyName}_Username`;
           const displayNameKey = `${parentKeyName}_DisplayName`;
-          const idKey = `${parentKeyName}Id`;
-          const stringIdKey = `${parentKeyName}StringId`;
 
           newItem[parentKeyName] = value.EMail; // Replace the parent key field with the email property
           delete newItem[emailKey]; // Remove the _Email field
           delete newItem[usernameKey]; // Remove the _Username field
           delete newItem[displayNameKey]; // Remove the _DisplayName field
-          delete newItem[idKey]; // Remove the Id field
-          delete newItem[stringIdKey]; // Remove the StringId field
+
+          // Remove keys ending with 'Id' or 'StringId' associated with this 'Person'
+          const idKey = `${parentKeyName}Id`;
+          const stringIdKey = `${parentKeyName}StringId`;
+          delete newItem[idKey];
+          delete newItem[stringIdKey];
         }
       }
   
