@@ -195,13 +195,15 @@ class listviewElement extends LitElement {
           delete newItem[emailKey]; // Remove the _Email field
           delete newItem[usernameKey]; // Remove the _Username field
           delete newItem[displayNameKey]; // Remove the _DisplayName field
-
-          // Remove keys ending with 'Id' or 'StringId' associated with this 'Person'
-          const idKey = `${parentKeyName}Id`;
-          const stringIdKey = `${parentKeyName}StringId`;
-          delete newItem[idKey];
-          delete newItem[stringIdKey];
         }
+      }
+
+      // Remove keys ending with 'Id' or 'StringId' associated with a processed Person key
+      for (const processedKey of processedPersonKeys) {
+        const idKey = `${processedKey}Id`;
+        const stringIdKey = `${processedKey}StringId`;
+        delete newItem[idKey];
+        delete newItem[stringIdKey];
       }
   
       // Process each property of the item
