@@ -178,23 +178,27 @@ class listviewElement extends LitElement {
         delete newItem[key];
       }
 
-      // Handle objects with the "Person", "Author" or "Editor" field data structure
+      // Handle objects with the "Person" field data structure
       for (const [key, value] of Object.entries(item)) {
         // Check if value is null or not an object
         if (!value || typeof value !== 'object') {
           continue;
         }
-  
+
         if (Object.keys(value).includes('EMail')) {
           const parentKeyName = key;
           const emailKey = `${parentKeyName}_Email`;
           const usernameKey = `${parentKeyName}_Username`;
           const displayNameKey = `${parentKeyName}_DisplayName`;
-  
+          const idKey = `${parentKeyName}Id`;
+          const stringIdKey = `${parentKeyName}StringId`;
+
           newItem[parentKeyName] = value.EMail; // Replace the parent key field with the email property
           delete newItem[emailKey]; // Remove the _Email field
           delete newItem[usernameKey]; // Remove the _Username field
           delete newItem[displayNameKey]; // Remove the _DisplayName field
+          delete newItem[idKey]; // Remove the Id field
+          delete newItem[stringIdKey]; // Remove the StringId field
         }
       }
   
