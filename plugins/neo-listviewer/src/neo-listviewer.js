@@ -223,7 +223,7 @@ class listviewElement extends LitElement {
         // Handle semicolon-separated values
         if (typeof value === 'string' && value.includes(';')) {
           const choices = value.split(';').map(choice => choice.trim().replace('#', ''));
-          newItem[key] = choices.map(choice => html`<span class="choice-pill">${choice}</span>`);
+          newItem[key] = choices.map(choice => `<span class="choice-pill">${choice}</span>`).join('');
         }
       }
   
