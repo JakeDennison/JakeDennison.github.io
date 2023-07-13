@@ -33,6 +33,11 @@ class listviewElement extends LitElement {
           type: 'string',
           title: 'Keys to ignore',
           description: 'Insert a comma separated list of keys to ignore.'
+        },
+        renamedKeys:{
+          type: 'string',
+          title: 'Keys to Rename',
+          description: 'Use key-value pairs to rename columns separating by colon e.g. oldKey1:newKey1,oldKey2:newKey2'
         }
       },
       standardProperties: {
@@ -111,6 +116,7 @@ class listviewElement extends LitElement {
       table: { type: Object },
       keys: { type: Array },
       ignoredKeys: { type: String },
+      renamedKeys: { type: String },
     };
   }
 
@@ -124,6 +130,7 @@ class listviewElement extends LitElement {
     this.keys = [];
     this.listdata = [];
     this.ignoredKeys = '';
+    this.renamedKeys = '';
   }
 
   connectedCallback() {
@@ -304,6 +311,30 @@ class listviewElement extends LitElement {
   
   firstUpdated() {
     super.firstUpdated();
+
+    // Handle formatting and column renaming
+    const namedColumns = Object.keys(processedData[0]).map(key => {
+      let title = key;
+      if (this.renamedKeys) {
+        const keyValuePairArray = this.renamedKeys.split(',').map(pair => pair.trim());
+        const match = keyValuePairArray.find(pair => {
+          const [oldKey] = pair.split(':');
+          return oldKey === key;
+        });
+        if (match) {
+          const [, newKey] = match.split(':');
+          title = newKey;
+        }
+      }
+  
+      return {
+        title: title,
+        field: key,
+        formatter: (cell) => {
+          // ...
+        }
+      };
+    });
   
     const { data: tabledata, keys } = this.parseDataObject();
   
@@ -351,9 +382,12 @@ class listviewElement extends LitElement {
       paginationSizeSelector: [5, 10, 15, 30, 50, 100],
       movableColumns: true,
       height: 'auto',
-      columns: columns, // Use the dynamically generated columns definition
+      columns: [...namedColumns, ...columns.filter(column => {
+        const columnKey = column.field;
+        return !namedColumns.some(namedColumn => namedColumn.field === columnKey);
+      })],
     });
-  
+      
     this.table.on("rowDblClick", (e, row) => {
       // Double-click event handler
       const id = row.getData().ID; // Get the ID value from the double-clicked row
