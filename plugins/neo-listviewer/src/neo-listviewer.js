@@ -277,13 +277,15 @@ class listviewElement extends LitElement {
   
         // Handle date and time fields
         if (typeof value === 'string') {
-          const dateFormat = this.dateFormat || 'YYYY-MM-DD HH:mm:ss';
+          const dateFormat = this.dateFormat;
           let formattedDate = null;
 
-          // Check if the value matches the ISO format
-          if (value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/)) {
-            const date = new Date(value);
-            formattedDate = this.formatDate(date, dateFormat);
+          if (dateFormat) {
+            // Check if the value matches the ISO format
+            if (value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/)) {
+              const date = new Date(value);
+              formattedDate = this.formatDate(date, dateFormat);
+            }
           }
 
           if (formattedDate) {
