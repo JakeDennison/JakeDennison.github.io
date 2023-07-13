@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
 import { TabulatorFull as Tabulator } from 'tabulator-tables';
-import 'tabulator-tables/dist/css/tabulator_bootstrap5.min.css';
 
 class listviewElement extends LitElement {
   static getMetaConfig() {
@@ -127,6 +126,16 @@ class listviewElement extends LitElement {
     this.ignoredKeys = '';
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+  
+    const linkElem = document.createElement('link');
+    linkElem.setAttribute('rel', 'stylesheet');
+    linkElem.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/tabulator/5.5.0/css/tabulator_bootstrap5.min.css');  // replace with the actual path to CSS
+  
+    this.shadowRoot.appendChild(linkElem);
+  }
+  
   parseDataObject() {
     let tabledata, keys;
 
@@ -206,21 +215,23 @@ class listviewElement extends LitElement {
       }
 
       // Handle flat keys ending with "_Email" and delete corresponding "_Id" and "_StringId" keys
+      const emailsItem = {};
       for (const [key, value] of Object.entries(item)) {
         if (key.endsWith('_Email')) {
           let name = key.slice(0, -6); // Remove "_Email" to get the name
-          newItem[name] = value; // Replace the key field with the email value
-          delete newItem[key]; // Remove the "_Email" field
+          emailsItem[name] = value; // Replace the key field with the email value
 
           // If corresponding "_Id" and "_StringId" keys exist, delete them
           let idKey = `${name}Id`;
           let stringIdKey = `${name}StringId`;
-          if (newItem.hasOwnProperty(idKey)) {
-            delete newItem[idKey];
+          if (item.hasOwnProperty(idKey)) {
+            delete item[idKey];
           }
-          if (newItem.hasOwnProperty(stringIdKey)) {
-            delete newItem[stringIdKey];
+          if (item.hasOwnProperty(stringIdKey)) {
+            delete item[stringIdKey];
           }
+        } else {
+          emailsItem[key] = value; // Copy other properties to the new object
         }
       }
 
