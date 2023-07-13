@@ -38,6 +38,11 @@ class listviewElement extends LitElement {
           type: 'string',
           title: 'Keys to Rename',
           description: 'Use key-value pairs to rename columns separating by colon e.g. oldKey1:newKey1,oldKey2:newKey2'
+        },
+        dateFormat:{
+          type: 'string',
+          title: 'Preferred date format',
+          description: 'Enter a common data format to set the dates returned accordingly e.g. YYYY-MM-DD HH:mm:ss'
         }
       },
       standardProperties: {
@@ -117,6 +122,7 @@ class listviewElement extends LitElement {
       keys: { type: Array },
       ignoredKeys: { type: String },
       renamedKeys: { type: String },
+      dateFormat: { type: String },
     };
   }
 
@@ -131,6 +137,7 @@ class listviewElement extends LitElement {
     this.listdata = [];
     this.ignoredKeys = '';
     this.renamedKeys = '';
+    this.dateFormat = '';
   }
 
   connectedCallback() {
@@ -270,21 +277,20 @@ class listviewElement extends LitElement {
   
         // Handle date and time fields
         if (typeof value === 'string') {
-          const date = new Date(value);
-          if (!isNaN(date.getTime())) {
-            // Valid date, check if ISO formatted
-            if (value === date.toISOString()) {
-              // ISO formatted, update the value
-              if (key.toLowerCase().includes('date')) {
-                newItem[key] = date.toLocaleDateString('en-GB');
-              }
-              if (key.toLowerCase().includes('datetime')) {
-                newItem[key] = date.toLocaleString('en-GB');
-              }
-            }
+          const dateFormat = this.dateFormat || 'YYYY-MM-DD HH:mm:ss';
+          let formattedDate = null;
+
+          // Check if the value matches the ISO format
+          if (value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/)) {
+            const date = new Date(value);
+            formattedDate = this.formatDate(date, dateFormat);
+          }
+
+          if (formattedDate) {
+            newItem[key] = formattedDate;
           }
         }
-  
+
         // Handle hyperlink field
         if (typeof value === 'string') {
           const regex = /^https?:\/\/[^\s,]+, .+$/;
@@ -311,29 +317,24 @@ class listviewElement extends LitElement {
   
   firstUpdated() {
     super.firstUpdated();
-
-    // Handle formatting and column renaming
-    const namedColumns = Object.keys(processedData[0]).map(key => {
-      let title = key;
+  
+    // Preprocess the data and rename keys
+    const updatedData = this.listdata.map(item => {
+      const renamedItem = { ...item };
+  
+      // Rename the keys based on the this.renamedKeys property
       if (this.renamedKeys) {
         const keyValuePairArray = this.renamedKeys.split(',').map(pair => pair.trim());
-        const match = keyValuePairArray.find(pair => {
-          const [oldKey] = pair.split(':');
-          return oldKey === key;
+        keyValuePairArray.forEach(pair => {
+          const [oldKey, newKey] = pair.split(':');
+          if (renamedItem.hasOwnProperty(oldKey)) {
+            renamedItem[newKey] = renamedItem[oldKey];
+            delete renamedItem[oldKey];
+          }
         });
-        if (match) {
-          const [, newKey] = match.split(':');
-          title = newKey;
-        }
       }
   
-      return {
-        title: title,
-        field: key,
-        formatter: (cell) => {
-          // ...
-        }
-      };
+      return renamedItem;
     });
   
     const { data: tabledata, keys } = this.parseDataObject();
@@ -352,7 +353,7 @@ class listviewElement extends LitElement {
   
     // Replace Unicode regex
     const processedData = this.replaceUnicodeRegex(this.listdata);
-
+  
     // Handle formatting
     const columns = Object.keys(processedData[0]).map(key => {
       return {
@@ -369,7 +370,7 @@ class listviewElement extends LitElement {
         }
       };
     });
-    
+  
     const tableDiv = this.shadowRoot.querySelector('#table'); // Get the table div
     tableDiv.classList.add("neo-lv-table");
   
@@ -382,12 +383,11 @@ class listviewElement extends LitElement {
       paginationSizeSelector: [5, 10, 15, 30, 50, 100],
       movableColumns: true,
       height: 'auto',
-      columns: [...namedColumns, ...columns.filter(column => {
-        const columnKey = column.field;
-        return !namedColumns.some(namedColumn => namedColumn.field === columnKey);
-      })],
+      columns: columns,
     });
-      
+  
+    this.table.updateData(updatedData);
+  
     this.table.on("rowDblClick", (e, row) => {
       // Double-click event handler
       const id = row.getData().ID; // Get the ID value from the double-clicked row
@@ -400,7 +400,6 @@ class listviewElement extends LitElement {
       e.preventDefault(); // Prevent default row selection behavior
     });
   }
-
   
   handleFilterClick() {
     const filterField = this.shadowRoot.querySelector('#filter-field').value;
