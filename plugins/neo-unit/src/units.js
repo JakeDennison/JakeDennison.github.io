@@ -238,6 +238,10 @@ export const unitsOfMeasurement = {
     "British Thermal Unit (BTU)": {
       "unit": "British Thermal Unit",
       "symbol": "BTU"
+    },
+    "unit": {
+      "unit": "unit",
+      "symbol": "unit"
     }
   };
   
