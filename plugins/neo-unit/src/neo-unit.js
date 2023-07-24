@@ -23,12 +23,12 @@ class unitElement extends LitElement {
           title: 'Unit value',
           description: 'Decimal unit value',
           isValueField: true,
+          staticProperties: true,
         },
         decimalplaces: {
           type: 'integer',
           title: 'Decimal place',
           description: 'enter -1 for none, 1 for .0, 2 for .01 etc.',
-          isValueField: true,
         },
       },
       standardProperties: {
@@ -82,7 +82,7 @@ class unitElement extends LitElement {
 
   render() {
     return html`
-    <link rel="stylesheet" href="https://jsdenintex.github.io/plugins/neo-unit/src/neo-unit.css">
+      <link rel="stylesheet" href="https://jsdenintex.github.io/plugins/neo-unit/src/neo-unit.css">
       <div class="neo-unit-control">
         <div class="input-unit-group-append">
           <button type="button" class="neo-btn-input-icon neo-unit-btn">
@@ -95,6 +95,7 @@ class unitElement extends LitElement {
               data-simple-control="true"
               class="form-control nx-theme-input-1 ng-untouched ng-pristine ng-valid" 
               decimalplaces=${this.decimalplaces}
+              @input=${this.onChange}
             >
           </ntx-simple-number>
         </div>
