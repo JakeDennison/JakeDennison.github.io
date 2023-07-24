@@ -49,7 +49,8 @@ class unitElement extends LitElement {
   }
 
   static properties = {
-    unittype: "unit",
+    unittype: "Meter (m)",
+    unitSymbol: "m",
     unitvalue: "",
     decimalplaces: 0
   };
