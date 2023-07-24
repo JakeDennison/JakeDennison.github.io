@@ -70,15 +70,18 @@ class unitElement extends LitElement {
   }
 
   onChange(e) {
+    e.preventDefault();
+  
     const customEvent = new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: false,
       composed: true,
       detail: e.target.value,
     });
-
+  
     this.dispatchEvent(customEvent);
-}
+  }
+  
 
   render() {
     return html`
