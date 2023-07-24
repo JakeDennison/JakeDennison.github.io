@@ -135,9 +135,9 @@ class unitElement extends LitElement {
       }
 
       .neo-unit-control .ntx-simple-number {
-        width: 100%; /* Set the width of ntx-simple-number to 100% */
-        box-sizing: border-box; /* Ensure the box model includes padding and border */
-        display: flex; /* Enable flex layout for ntx-simple-number */
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
       }
 
       .neo-unit-control > div.nx-zinc-control-input > ntx-simple-number > input{
@@ -151,7 +151,7 @@ class unitElement extends LitElement {
         line-height: 1;
         padding: .4375rem .75rem;
         transition: none;
-        width: 100%; /* Set the width of the input to 100% */
+        width: 100%;
         height: auto;
         border: 1px solid #898f94;
         text-align: right;
@@ -164,6 +164,8 @@ class unitElement extends LitElement {
         border-radius: 0 4px 4px 0;
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
+        outline: none;
+        outline-offset: 0;
       }
       `
     ];

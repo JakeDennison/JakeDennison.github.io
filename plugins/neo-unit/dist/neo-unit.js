@@ -64,9 +64,9 @@
       }
 
       .neo-unit-control .ntx-simple-number {
-        width: 100%; /* Set the width of ntx-simple-number to 100% */
-        box-sizing: border-box; /* Ensure the box model includes padding and border */
-        display: flex; /* Enable flex layout for ntx-simple-number */
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
       }
 
       .neo-unit-control > div.nx-zinc-control-input > ntx-simple-number > input{
@@ -80,7 +80,7 @@
         line-height: 1;
         padding: .4375rem .75rem;
         transition: none;
-        width: 100%; /* Set the width of the input to 100% */
+        width: 100%;
         height: auto;
         border: 1px solid #898f94;
         text-align: right;
@@ -93,6 +93,8 @@
         border-radius: 0 4px 4px 0;
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
+        outline: none;
+        outline-offset: 0;
       }
       `]}onChange(t){const e=parseFloat(t.target.value),i=this.decimalplaces>=0?this.decimalplaces:0,n=isNaN(e)?"":Number(e).toFixed(i);t.target.value=n;const s=new CustomEvent("ntx-value-change",{bubbles:!0,cancelable:!1,composed:!0,detail:e});this.dispatchEvent(s)}render(){const t=this.decimalplaces>=0?this.decimalplaces:0,e=parseFloat(0).toFixed(t),i=""!==this.unitvalue?parseFloat(this.unitvalue).toFixed(t):"";return N`
       <div class="neo-unit-control">
