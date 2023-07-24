@@ -28,7 +28,7 @@ class unitElement extends LitElement {
         decimalplaces: {
           type: 'integer',
           title: 'Decimal place',
-          description: 'enter -1 for none, 1 for .0, 2 for .01 etc.',
+          description: 'enter 0 for none, 1 for .0, 2 for .01 etc.',
         },
       },
       standardProperties: {
@@ -39,11 +39,17 @@ class unitElement extends LitElement {
     };
   }
   
+  static properties = {
+    unittype: "unit",
+    unitvalue: "",
+    decimalplaces: 0
+  };
+
   constructor() {
     super();
-    this.unittype = "kg."
+    this.unittype = "unit"
     this.unitvalue = ""
-    this.decimalplaces = ""
+    this.decimalplaces = 0
   }
 
   static get styles() {
@@ -163,6 +169,9 @@ class unitElement extends LitElement {
   }
   
   render() {
+    const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
+    const placeholder = parseFloat(0).toFixed(decimalPlaces);
+
     return html`
       <div class="neo-unit-control">
         <div class="input-unit-group-append">
@@ -178,7 +187,7 @@ class unitElement extends LitElement {
               class="form-control nx-theme-input-1 ng-untouched ng-pristine ng-valid"
               inputmode="decimal"
               decimalplaces=${this.decimalplaces}
-              aria-placeholder="0.00"
+              placeholder=${placeholder}
               @blur=${this.onChange}
             >
           </ntx-simple-number>
