@@ -70,6 +70,7 @@ class unitElement extends LitElement {
           border-color: #898F94;
           background: #FFFFFF;
           font-size: 14px;
+          height: 100%;
         }
         
         .neo-unit-control .input-unit-group-append .neo-btn-input-icon:last-child {
@@ -113,12 +114,16 @@ class unitElement extends LitElement {
         
       .neo-unit-control .nx-zinc-control-input {
           flex: 1;
+          display: flex;
+          height: 100%;
+          align-items: center;
       }
 
       .neo-unit-control .ntx-simple-number {
         width: 100%; /* Set the width of ntx-simple-number to 100% */
         box-sizing: border-box; /* Ensure the box model includes padding and border */
         display: flex; /* Enable flex layout for ntx-simple-number */
+        align-items: center;
       }
 
       .neo-unit-control > div.nx-zinc-control-input > ntx-simple-number > input{
