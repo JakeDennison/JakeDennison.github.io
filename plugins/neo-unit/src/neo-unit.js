@@ -19,7 +19,7 @@ class unitElement extends LitElement {
           type: 'string',
           enum: enumChoices,
           verticalLayout: true,
-          defaultValue: enumChoices[0],
+          defaultValue: "Meter (m)",
         },
         unitvalue: {
           type: 'number',
@@ -50,8 +50,8 @@ class unitElement extends LitElement {
   }
 
   static properties = {
-    unittype: "",
-    unitSymbol: "",
+    unittype: "Meter (m)",
+    unitSymbol: "m",
     unitvalue: "",
     decimalplaces: 0
   };
