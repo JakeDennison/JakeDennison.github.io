@@ -46,6 +46,29 @@ class unitElement extends LitElement {
     this.decimalplaces = ""
   }
 
+  static get styles() {
+    const { cssRules } = document.styleSheets[0]
+    const globalStyle = css([Object.values(cssRules).map(rule => 
+    rule.cssText).join('\n')])
+    return [
+      globalStyle,
+      css`
+      :host {
+        display: block;
+      }
+      .strength-bar {
+      height: 10px;
+      background-color: #e6e6e6;
+      margin-top: 5px;
+    }
+
+    .strength-level {
+      height: 100%;
+    }
+      `
+    ];
+  }
+
   onChange(e) {
     const args = {
         bubbles: true,
