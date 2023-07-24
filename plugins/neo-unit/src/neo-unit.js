@@ -57,7 +57,7 @@ class unitElement extends LitElement {
 
   constructor() {
     super();
-    this.unittype = "unit"
+    this.unittype = "Meter (m)"
     this.unitSymbol = unitsOfMeasurement[this.unittype].symbol;
     this.unitvalue = ""
     this.decimalplaces = 0
