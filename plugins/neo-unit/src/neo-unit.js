@@ -172,21 +172,21 @@ class unitElement extends LitElement {
   onChange(e) {
     // Parse the input value as a float
     const inputValue = parseFloat(e.target.value);
-
+  
     // Calculate the displayed value with proper decimal places and rounding
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
-    const displayedValue = isNaN(inputValue) ? "" : inputValue.toFixed(decimalPlaces);
-
+    const displayedValue = isNaN(inputValue) ? "" : Number(inputValue).toFixed(decimalPlaces);
+  
     // Update the input value with the displayed value
     e.target.value = displayedValue;
-
+  
     const customEvent = new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: false,
       composed: true,
       detail: inputValue,
     });
-
+  
     this.dispatchEvent(customEvent);
   }
   
