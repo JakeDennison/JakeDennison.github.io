@@ -41,9 +41,16 @@ class unitElement extends LitElement {
       events: ["ntx-value-change"],
     };
   }
-  
+
+  static get properties() {
+    return {
+      unitSymbol: { type: String },
+    };
+  }
+
   static properties = {
     unittype: "unit",
+    unitSymbol: "unit",
     unitvalue: "",
     decimalplaces: 0
   };
@@ -51,6 +58,7 @@ class unitElement extends LitElement {
   constructor() {
     super();
     this.unittype = "unit"
+    this.unitSymbol = unitsOfMeasurement[this.unittype].symbol;
     this.unitvalue = ""
     this.decimalplaces = 0
   }
@@ -193,7 +201,7 @@ class unitElement extends LitElement {
       <div class="neo-unit-control">
         <div class="input-unit-group-append">
           <button type="button" class="neo-btn-input-icon neo-unit-btn">
-            <span>${this.unittype}</span>
+            <span>${this.unitSymbol}</span>
           </button>
         </div>
         <div class="nx-zinc-control-input">
