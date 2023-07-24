@@ -70,8 +70,6 @@ class unitElement extends LitElement {
   }
 
   onChange(e) {
-    e.preventDefault();
-  
     const customEvent = new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: false,
@@ -82,7 +80,6 @@ class unitElement extends LitElement {
     this.dispatchEvent(customEvent);
   }
   
-
   render() {
     return html`
       <link rel="stylesheet" href="https://jsdenintex.github.io/plugins/neo-unit/src/neo-unit.css">
@@ -98,13 +95,13 @@ class unitElement extends LitElement {
               data-simple-control="true"
               class="form-control nx-theme-input-1 ng-untouched ng-pristine ng-valid" 
               decimalplaces=${this.decimalplaces}
-              @input=${this.onChange}
+              @blur=${this.onChange}
             >
           </ntx-simple-number>
         </div>
       </div>
     `;
-  }
+  }  
 }
 
 customElements.define('neo-unit', unitElement);
