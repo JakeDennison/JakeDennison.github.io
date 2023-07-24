@@ -109,6 +109,7 @@
               class="form-control nx-theme-input-1 ng-untouched ng-pristine ng-valid"
               inputmode="decimal"
               decimalplaces=${this.decimalplaces}
+              aria-placeholder="0.00"
               @blur=${this.onChange}
             >
           </ntx-simple-number>
