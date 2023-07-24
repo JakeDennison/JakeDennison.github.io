@@ -51,9 +51,15 @@ class unitElement extends LitElement {
 
   constructor() {
     super();
-    this.unittype = ""
+    this.unittype = "unit"
     this.unitvalue = ""
     this.decimalplaces = 0
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('unittype')) {
+      this.unittype = this.unittype || "unit";
+    }
   }
 
   static get styles() {
