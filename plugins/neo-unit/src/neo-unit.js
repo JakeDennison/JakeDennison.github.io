@@ -3,9 +3,6 @@ import {unitsOfMeasurement} from './units'
 
 class unitElement extends LitElement {
   static getMetaConfig() {
-    // plugin contract information
-    const unitKeys = Object.keys(unitsOfMeasurement);
-    const enumChoices = unitKeys.map((key) => `${key} (${unitsOfMeasurement[key].symbol})`);
     return {
       controlName: 'neo-unit',
       fallbackDisableSubmit: false,
@@ -17,9 +14,9 @@ class unitElement extends LitElement {
         unittype: {
           title: 'Choice field',
           type: 'string',
-          enum: enumChoices,
+          enum: ['Meter (m)', 'Centimeter (cm)', 'Kilometer (km)', 'Inch (in)', 'Foot (ft)', 'Mile (mi)', 'Kilogram (kg)', 'Gram (g)', 'Pound (lb)', 'Ounce (oz)', 'Second (s)', 'Minute (min)', 'Hour (hr)', 'Day (day)', 'Liter (L)', 'Milliliter (mL)', 'Cubic Meter (m³)', 'Cubic Centimeter (cm³)', 'Cubic Inch (in³)', 'Cubic Foot (ft³)', 'Cubic Yard (yd³)', 'Fluid Ounce (fl oz)', 'Pint (pt)', 'Quart (qt)', 'Gallon (gal)', 'Celsius (°C)', 'Fahrenheit (°F)', 'Kelvin (K)', 'Square Meter (m²)', 'Square Kilometer (km²)', 'Square Centimeter (cm²)', 'Square Inch (in²)', 'Square Foot (ft²)', 'Square Yard (yd²)', 'Acre (ac)', 'Hectare (ha)', 'Metric Ton (t)', 'Short Ton (US ton)', 'Long Ton (Imperial ton)', 'Astronomical Unit (AU)', 'Bit (b)', 'Byte (B)', 'Kilobyte (KB)', 'Megabyte (MB)', 'Gigabyte (GB)', 'Terabyte (TB)', 'Joule (J)', 'Calorie (cal)', 'Kilowatt-hour (kWh)', 'Watt (W)', 'Kilowatt (kW)', 'Horsepower (hp)', 'Pascal (Pa)', 'Bar (bar)', 'Atmosphere (atm)', 'Ampere (A)', 'Volt (V)', 'Ohm (Ω)', 'Electronvolt (eV)', 'British Thermal Unit (BTU)']          ,
           verticalLayout: true,
-          defaultValue: enumChoices[0],
+          defaultValue: "Meter (m)",
         },
         unitvalue: {
           type: 'number',
