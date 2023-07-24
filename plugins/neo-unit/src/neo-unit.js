@@ -1,8 +1,11 @@
 import { LitElement, html, css } from 'lit';
+import {unitsOfMeasurement} from './units'
 
 class unitElement extends LitElement {
   static getMetaConfig() {
     // plugin contract information
+    const unitKeys = Object.keys(unitsOfMeasurement);
+    const enumChoices = unitKeys.map((key) => `${key} (${unitsOfMeasurement[key].symbol})`);
     return {
       controlName: 'neo-unit',
       fallbackDisableSubmit: false,
@@ -14,9 +17,9 @@ class unitElement extends LitElement {
         unittype: {
           title: 'Choice field',
           type: 'string',
-          enum: ['kg.', 'ltr.', 'km'],
+          enum: enumChoices,
           verticalLayout: true,
-          defaultValue: 'kg.',
+          defaultValue: enumChoices[0],
         },
         unitvalue: {
           type: 'number',
