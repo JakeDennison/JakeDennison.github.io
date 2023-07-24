@@ -63,7 +63,7 @@ class unitElement extends LitElement {
           align-items: stretch;
           width: 100%;
         }
-        
+
         .neo-unit-control .input-unit-group-append {
           border-bottom-left-radius: 4px;
           border-top-left-radius: 4px;
@@ -71,19 +71,19 @@ class unitElement extends LitElement {
           background: #FFFFFF;
           font-size: 14px;
         }
-        
+
         .neo-unit-control .input-unit-group-append .neo-btn-input-icon:last-child {
           border-bottom-left-radius: 4px;
           border-top-left-radius: 4px;
         }
-        
+
         .neo-unit-control .neo-unit-btn-icon {
           color: #006BD6;
           font-size: 20px;
           padding-left: 7px;
           padding-right: 7px;
         }
-        
+
         .neo-unit-control .input-unit-group-append > .neo-unit-btn:last-child {
           border-radius: 4px 0 0 4px;
           cursor: default;
@@ -96,7 +96,7 @@ class unitElement extends LitElement {
           font-style: normal;
           overflow: hidden;
         }
-        
+
         .neo-btn-input-icon {
           border-left: 1px solid;
           border-right: 1px solid;
@@ -109,37 +109,37 @@ class unitElement extends LitElement {
           background-color: transparent;
           cursor: pointer;
         }
-        
-      .neo-unit-control .nx-zinc-control-input .input-group {
+
+        .neo-unit-control .nx-zinc-control-input .input-group {
           display: flex;
           flex: 1;
-      }
+        }
 
-      .neo-unit-control > div.nx-zinc-control-input.input-group > ntx-simple-number > input{
-        word-break: break-word;
-        user-select: none;
-        box-sizing: border-box;
-        margin: 0;
-        appearance: none;
-        display: block;
-        font-weight: 400;
-        line-height: 1;
-        padding: .4375rem .75rem;
-        transition: none;
-        width: 100%;
-        height: auto;
-        border: 1px solid #898f94;
-        text-align: right;
-        caret-color: #161718;
-        color: #161718;
-        border-color: #898F94;
-        font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
-        background: #FFFFFF;
-        font-size: 14px;
-        border-radius: 0 4px 4px 0;
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
-      }
+        /* Updated selector for the input element inside ntx-simple-number */
+        .ntx-simple-number::part(input) {
+          word-break: break-word;
+          user-select: none;
+          box-sizing: border-box; /* Include padding and border in the width calculation */
+          margin: 0;
+          appearance: none;
+          display: block;
+          font-weight: 400;
+          line-height: 1;
+          padding: .4375rem .75rem;
+          transition: none;
+          height: auto;
+          border: 1px solid #898f94;
+          text-align: right;
+          caret-color: #161718;
+          color: #161718;
+          border-color: #898F94;
+          font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
+          background: #FFFFFF;
+          font-size: 14px;
+          border-radius: 0 4px 4px 0;
+          border-bottom-left-radius: 0;
+          border-top-left-radius: 0;
+        }
       `
     ];
   }
