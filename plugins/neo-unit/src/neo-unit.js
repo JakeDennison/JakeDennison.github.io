@@ -158,19 +158,33 @@ class unitElement extends LitElement {
   }
 
   onChange(e) {
+    // Parse the input value as a float
+    const inputValue = parseFloat(e.target.value);
+
+    // Calculate the displayed value with proper decimal places and rounding
+    const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
+    const displayedValue = isNaN(inputValue) ? "" : inputValue.toFixed(decimalPlaces);
+
+    // Update the input value with the displayed value
+    e.target.value = displayedValue;
+
     const customEvent = new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: false,
       composed: true,
-      detail: e.target.value,
+      detail: inputValue,
     });
-  
+
     this.dispatchEvent(customEvent);
   }
   
   render() {
+    // Calculate the placeholder as before
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
     const placeholder = parseFloat(0).toFixed(decimalPlaces);
+
+    // Calculate the displayed value with proper decimal places
+    const displayedValue = this.unitvalue !== "" ? parseFloat(this.unitvalue).toFixed(decimalPlaces) : "";
 
     return html`
       <div class="neo-unit-control">
@@ -188,6 +202,7 @@ class unitElement extends LitElement {
               inputmode="decimal"
               decimalplaces=${this.decimalplaces}
               placeholder=${placeholder}
+              value=${displayedValue}
               @blur=${this.onChange}
             >
           </ntx-simple-number>
