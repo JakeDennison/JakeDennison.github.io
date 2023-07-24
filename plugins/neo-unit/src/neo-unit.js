@@ -56,14 +56,63 @@ class unitElement extends LitElement {
       :host {
         display: block;
       }
-      .strength-bar {
-      height: 10px;
-      background-color: #e6e6e6;
-      margin-top: 5px;
-    }
-
-    .strength-level {
-      height: 100%;
+      .neo-unit-control {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        width: 100%;
+      }
+      
+      .neo-unit-control .input-unit-group-append {
+        border-bottom-left-radius: 4px;
+        border-top-left-radius: 4px;
+        border-color: #898F94;
+        background: #FFFFFF;
+        font-size: 14px;
+      }
+      
+      .neo-unit-control .input-unit-group-append .neo-btn-input-icon:last-child {
+        border-bottom-left-radius: 4px;
+        border-top-left-radius: 4px;
+      }
+      
+      .neo-unit-control .neo-unit-btn-icon {
+        color: #006BD6;
+        font-size: 20px;
+        padding-left: 7px;
+        padding-right: 7px;
+      }
+      
+      .neo-unit-control .input-unit-group-append > .neo-unit-btn:last-child {
+        border-radius: 4px 0 0 4px;
+        cursor: default;
+        border-left: 1px solid;
+        border-right: none;
+        border-color: inherit;
+        min-width: 36px;
+        color: #006bd6;
+        font-size: 20px;
+        font-style: normal;
+        overflow: hidden;
+      }
+      
+      .neo-btn-input-icon {
+        border-left: 1px solid;
+        border-right: 1px solid;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        border-color: inherit;
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 0;
+        background-color: transparent;
+        cursor: pointer;
+      }
+      
+    ntx-simple-currency .nx-simple-currency-control .nx-zinc-control-input.input-group {
+        display: flex;
+        flex: 1;
     }
       `
     ];
@@ -82,7 +131,6 @@ class unitElement extends LitElement {
   
   render() {
     return html`
-      <link rel="stylesheet" href="https://jsdenintex.github.io/plugins/neo-unit/src/neo-unit.css">
       <div class="neo-unit-control">
         <div class="input-unit-group-append">
           <button type="button" class="neo-btn-input-icon neo-unit-btn">
