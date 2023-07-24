@@ -5,7 +5,7 @@ class unitElement extends LitElement {
   static getMetaConfig() {
     // plugin contract information
     const unitKeys = Object.keys(unitsOfMeasurement);
-    const enumChoices = unitKeys.map((key) => `${key} (${unitsOfMeasurement[key].symbol})`);
+    const enumChoices = unitKeys.map((key) => `${key}`);
     return {
       controlName: 'neo-unit',
       fallbackDisableSubmit: false,
