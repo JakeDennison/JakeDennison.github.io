@@ -30,8 +30,9 @@ class unitElement extends LitElement {
         },
         decimalplaces: {
           type: 'integer',
-          title: 'Decimal place',
+          title: 'Decimal places',
           description: 'enter 0 for none, 1 for .0, 2 for .01 etc.',
+          defaultValue: 0,
         },
       },
       standardProperties: {
