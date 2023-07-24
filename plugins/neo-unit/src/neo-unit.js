@@ -110,12 +110,17 @@ class unitElement extends LitElement {
           cursor: pointer;
         }
         
-      .neo-unit-control .nx-zinc-control-input .input-group {
-          display: flex;
+      .neo-unit-control .nx-zinc-control-input {
           flex: 1;
       }
 
-      .neo-unit-control > div.nx-zinc-control-input.input-group > ntx-simple-number > input{
+      .neo-unit-control .ntx-simple-number {
+        width: 100%; /* Set the width of ntx-simple-number to 100% */
+        box-sizing: border-box; /* Ensure the box model includes padding and border */
+        display: flex; /* Enable flex layout for ntx-simple-number */
+      }
+
+      .neo-unit-control > div.nx-zinc-control-input > ntx-simple-number > input{
         word-break: break-word;
         user-select: none;
         box-sizing: border-box;
@@ -126,7 +131,7 @@ class unitElement extends LitElement {
         line-height: 1;
         padding: .4375rem .75rem;
         transition: none;
-        width: 100%;
+        width: 100%; /* Set the width of the input to 100% */
         height: auto;
         border: 1px solid #898f94;
         text-align: right;
@@ -163,7 +168,7 @@ class unitElement extends LitElement {
             <span>${this.unittype}</span>
           </button>
         </div>
-        <div class="nx-zinc-control-input input-group">
+        <div class="nx-zinc-control-input">
           <ntx-simple-number>
             <input type="text" 
               data-simple-control="true"
