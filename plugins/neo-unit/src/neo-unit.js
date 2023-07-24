@@ -50,15 +50,15 @@ class unitElement extends LitElement {
   }
 
   static properties = {
-    unittype: "Meter (m)",
-    unitSymbol: "m",
+    unittype: "",
+    unitSymbol: "",
     unitvalue: "",
     decimalplaces: 0
   };
 
   constructor() {
     super();
-    this.unittype = "Meter (m)"
+    this.unittype = ""
     this.unitSymbol = unitsOfMeasurement[this.unittype].symbol;
     this.unitvalue = ""
     this.decimalplaces = 0
