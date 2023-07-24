@@ -12,7 +12,7 @@
     .strength-level {
       height: 100%;
     }
-      `]}onChange(t){const e={bubbles:!0,cancelable:!1,composed:!0,detail:t.target.value},i=new CustomEvent("ntx-value-change",e);this.dispatchEvent(i)}render(){return k`
+      `]}onChange(t){const e=new CustomEvent("ntx-value-change",{bubbles:!0,cancelable:!1,composed:!0,detail:t.target.value});this.dispatchEvent(e)}render(){return k`
     <link rel="stylesheet" href="https://jsdenintex.github.io/plugins/neo-unit/src/neo-unit.css">
       <div class="neo-unit-control">
         <div class="input-unit-group-append">

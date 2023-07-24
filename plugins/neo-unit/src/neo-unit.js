@@ -70,14 +70,14 @@ class unitElement extends LitElement {
   }
 
   onChange(e) {
-    const args = {
-        bubbles: true,
-        cancelable: false,
-        composed: true,
-        detail: e.target.value,
-    };
-    const event = new CustomEvent('ntx-value-change', args);
-    this.dispatchEvent(event);
+    const customEvent = new CustomEvent('ntx-value-change', {
+      bubbles: true,
+      cancelable: false,
+      composed: true,
+      detail: e.target.value,
+    });
+
+    this.dispatchEvent(customEvent);
 }
 
   render() {
