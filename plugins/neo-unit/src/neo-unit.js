@@ -3,9 +3,11 @@ import {unitsOfMeasurement} from './units'
 
 class unitElement extends LitElement {
   static getMetaConfig() {
-    // plugin contract information
+    // get units for selection
+    const unitKeys = Object.keys(unitsOfMeasurement);
     const filteredKeys = unitKeys.filter((key) => key !== "unit");
     const enumChoices = filteredKeys.map((key) => `${key}`);
+    // plugin contract information
     return {
       controlName: 'neo-unit',
       fallbackDisableSubmit: false,
@@ -19,7 +21,7 @@ class unitElement extends LitElement {
           type: 'string',
           enum: enumChoices,
           verticalLayout: true,
-          defaultValue: "unit",
+          defaultValue: "Meter (m)",
         },
         unitvalue: {
           type: 'number',
@@ -44,7 +46,7 @@ class unitElement extends LitElement {
   }
 
   static properties = {
-    unittype: "unit",
+    unittype: "Meter (m)",
     unitvalue: "",
     decimalplaces: 0
   };
