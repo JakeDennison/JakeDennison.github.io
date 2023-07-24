@@ -31,7 +31,7 @@
           padding-right: 7px;
         }
         
-        .neo-unit-control .input-unit-group-append > .neo-unit-btn:last-child {
+        .neo-unit-control .input-unit-group-append .neo-unit-btn {
           border-radius: 4px 0 0 4px;
           cursor: default;
           border-left: 1px solid;
@@ -42,7 +42,8 @@
           font-size: 20px;
           font-style: normal;
           overflow: hidden;
-        }
+          line-height: var(--bs-body-line-height); /* Add this line to inherit line-height */
+        }     
         
         .neo-btn-input-icon {
           border-left: 1px solid;
