@@ -17,7 +17,7 @@ class unitElement extends LitElement {
       version: '1.0',
       properties: {
         unittype: {
-          title: 'Choice field',
+          title: 'Select unit of measurement',
           type: 'string',
           enum: enumChoices,
           verticalLayout: true,
@@ -35,6 +35,12 @@ class unitElement extends LitElement {
           title: 'Decimal places',
           description: 'enter 0 for none, 1 for .0, 2 for .01 etc.',
           defaultValue: 0,
+        },
+        boolRound: {
+          type: 'boolean',
+          title: 'Enable rounding',
+          description: 'Allow values to be rounded. e.g. for 2 decimal places 12.129 becomes 12.13',
+          defaultValue: false,
         },
       },
       standardProperties: {
@@ -172,34 +178,35 @@ class unitElement extends LitElement {
   }
 
   onChange(e) {
-    // Parse the input value as a float
-    const inputValue = parseFloat(e.target.value);
-  
-    // Calculate the displayed value with proper decimal places and rounding
-    const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
-    const displayedValue = isNaN(inputValue) ? "" : Number(inputValue).toFixed(decimalPlaces);
-  
-    // Update the input value with the displayed value
-    e.target.value = displayedValue;
+    //ensure value maintains decimal places
+    const inputValue = e.target.value;
+    const trimmedValue = inputValue.trim();
+    const numericValue = parseFloat(trimmedValue);
+    const displayedValue = isNaN(numericValue) ? "" : trimmedValue;
   
     const customEvent = new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: false,
       composed: true,
-      detail: inputValue,
+      detail: numericValue,
     });
   
     this.dispatchEvent(customEvent);
+    e.target.value = displayedValue;
   }
   
   render() {
     // Calculate the placeholder as before
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
     const placeholder = parseFloat(0).toFixed(decimalPlaces);
-
-    // Calculate the displayed value with proper decimal places
-    const displayedValue = this.unitvalue !== "" ? parseFloat(this.unitvalue).toFixed(decimalPlaces) : "";
-
+  
+    // Calculate the displayed value with proper decimal places and rounding if enabled
+    let displayedValue = "";
+    if (this.unitvalue !== "") {
+      const numericValue = parseFloat(this.unitvalue);
+      displayedValue = this.boolRound ? numericValue.toFixed(decimalPlaces) : this.unitvalue;
+    }
+  
     return html`
       <div class="neo-unit-control">
         <div class="input-unit-group-append">
@@ -223,7 +230,8 @@ class unitElement extends LitElement {
         </div>
       </div>
     `;
-  }  
+  }
+  
 }
 
 customElements.define('neo-unit', unitElement);
