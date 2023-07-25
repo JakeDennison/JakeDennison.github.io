@@ -194,9 +194,9 @@ class unitElement extends LitElement {
     if (!isNaN(numericValue)) {
       // Apply rounding if enabled
       if (this.boolRound) {
-        displayedValue = numericValue.toFixed(this.decimalplaces + 1); // Rounding to the nearest whole decimal place
+        displayedValue = numericValue.toLocaleString(undefined, { minimumFractionDigits: this.decimalplaces + 1, maximumFractionDigits: this.decimalplaces + 1 });
       } else {
-        displayedValue = numericValue.toFixed(this.decimalplaces);
+        displayedValue = numericValue.toLocaleString(undefined, { minimumFractionDigits: this.decimalplaces, maximumFractionDigits: this.decimalplaces });
       }
   
       // Apply fixed value behavior if enabled
@@ -215,21 +215,22 @@ class unitElement extends LitElement {
     this.dispatchEvent(customEvent);
     e.target.value = displayedValue;
   }
-  
+    
   render() {
     // Calculate the placeholder as before
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
-    const placeholder = parseFloat(0).toFixed(decimalPlaces);
+    const placeholder = (0).toLocaleString(undefined, { minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces });
   
     // Calculate the displayed value with proper decimal places, rounding, and fixed value behavior
     let displayedValue = "";
     if (this.unitvalue !== "") {
       const numericValue = parseFloat(this.unitvalue);
-      displayedValue = numericValue.toFixed(decimalPlaces);
-  
+      
       // Apply rounding if enabled
       if (this.boolRound) {
-        displayedValue = numericValue.toFixed(decimalPlaces + 1); // Rounding to the nearest whole decimal place
+        displayedValue = numericValue.toLocaleString(undefined, { minimumFractionDigits: decimalPlaces + 1, maximumFractionDigits: decimalPlaces + 1 });
+      } else {
+        displayedValue = numericValue.toLocaleString(undefined, { minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces });
       }
   
       // Apply fixed value behavior if enabled
