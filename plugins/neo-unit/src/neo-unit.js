@@ -184,11 +184,26 @@ class unitElement extends LitElement {
   }
 
   onChange(e) {
-    //ensure value maintains decimal places
+    // Ensure value maintains decimal places
     const inputValue = e.target.value;
     const trimmedValue = inputValue.trim();
     const numericValue = parseFloat(trimmedValue);
-    const displayedValue = isNaN(numericValue) ? "" : trimmedValue;
+  
+    let displayedValue = ""; // Initialize the displayedValue
+  
+    if (!isNaN(numericValue)) {
+      // Apply rounding if enabled
+      if (this.boolRound) {
+        displayedValue = numericValue.toFixed(this.decimalplaces + 1); // Rounding to the nearest whole decimal place
+      } else {
+        displayedValue = numericValue.toFixed(this.decimalplaces);
+      }
+  
+      // Apply fixed value behavior if enabled
+      if (this.boolFixed) {
+        displayedValue = displayedValue.padEnd(displayedValue.indexOf('.') + this.decimalplaces + 1, '0');
+      }
+    }
   
     const customEvent = new CustomEvent('ntx-value-change', {
       bubbles: true,
@@ -206,15 +221,20 @@ class unitElement extends LitElement {
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
     const placeholder = parseFloat(0).toFixed(decimalPlaces);
   
-    // Calculate the displayed value with proper decimal places and rounding if enabled
+    // Calculate the displayed value with proper decimal places, rounding, and fixed value behavior
     let displayedValue = "";
     if (this.unitvalue !== "") {
       const numericValue = parseFloat(this.unitvalue);
-      displayedValue = this.boolRound ? numericValue.toFixed(decimalPlaces) : this.unitvalue;
+      displayedValue = numericValue.toFixed(decimalPlaces);
+  
+      // Apply rounding if enabled
+      if (this.boolRound) {
+        displayedValue = numericValue.toFixed(decimalPlaces + 1); // Rounding to the nearest whole decimal place
+      }
   
       // Apply fixed value behavior if enabled
-      if (this.boolFixed && Number.isInteger(numericValue)) {
-        displayedValue = numericValue.toFixed(decimalPlaces);
+      if (this.boolFixed) {
+        displayedValue = displayedValue.padEnd(displayedValue.indexOf('.') + decimalPlaces + 1, '0');
       }
     }
   
