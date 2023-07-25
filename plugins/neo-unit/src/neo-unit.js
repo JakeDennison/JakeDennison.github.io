@@ -42,6 +42,12 @@ class unitElement extends LitElement {
           description: 'Allow values to be rounded. e.g. for 2 decimal places 12.129 becomes 12.13',
           defaultValue: false,
         },
+        boolFixed: {
+          type: 'boolean',
+          title: 'Ensure fixed value',
+          description: 'Ensure fixed values are output, with this enabled 10.10 will output as 10.10 instead of 10.1',
+          defaultValue: false,
+        },
       },
       standardProperties: {
         fieldLabel: true,
@@ -205,6 +211,11 @@ class unitElement extends LitElement {
     if (this.unitvalue !== "") {
       const numericValue = parseFloat(this.unitvalue);
       displayedValue = this.boolRound ? numericValue.toFixed(decimalPlaces) : this.unitvalue;
+  
+      // Apply fixed value behavior if enabled
+      if (this.boolFixed && Number.isInteger(numericValue)) {
+        displayedValue = numericValue.toFixed(decimalPlaces);
+      }
     }
   
     return html`
