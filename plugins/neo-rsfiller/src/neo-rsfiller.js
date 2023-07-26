@@ -38,12 +38,13 @@ class rsFillerElement extends LitElement {
   }
 
   static properties = {
+    RSTarget: '',
   };
-  
+
   constructor() {
     super();
+    this.RSTarget = '';
     console.log("Class is: "+this.RSTarget)
-    this.handleButtonClick = this.handleButtonClick.bind(this);
   }
 
   connectedCallback() {
@@ -60,11 +61,6 @@ class rsFillerElement extends LitElement {
         }
       }
     }
-  }
-
-  handleButtonClick() {
-    // Your code here to handle the button click
-    console.log("Button clicked");
   }
 
   render() {
