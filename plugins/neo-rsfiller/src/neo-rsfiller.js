@@ -11,7 +11,7 @@ class rsFillerElement extends LitElement {
       groupName: 'Form Tools',
       version: '1.0',
       properties: {
-        RSTarget: {
+        rstarget: {
           title: 'Target class',
           type: 'string',
           description: 'Class name used to target repeating section'
@@ -32,19 +32,16 @@ class rsFillerElement extends LitElement {
     `;
   }
 
-  static properties = {
-    RSTarget: '',
-  };
-
   constructor() {
     super();
+    this.rstarget = '';
   }
 
-  connectedCallback() {
+  firstUpdated() {
     // Find the ntx-repeating-section with the target class
     const ntxRepeatingSections = this.parentElement.querySelectorAll('ntx-repeating-section');
     for (const ntxSection of ntxRepeatingSections) {
-      if (ntxSection.classList.contains(this.RSTarget)) {
+      if (ntxSection.classList.contains(this.rstarget)) {
         // Found the correct ntx-repeating-section
         // Find the button inside it and click it
         const button = ntxSection.querySelector("button.btn-repeating-section-new-row");
@@ -57,8 +54,8 @@ class rsFillerElement extends LitElement {
   }
 
   render() {
-    console.log("Class is: " + this.RSTarget);
-    return html`<p>Class: ${this.RSTarget}</p>`;
+    console.log("Class is: " + this.rstarget);
+    return html`<p>Class: ${this.rstarget}</p>`;
   }
 }
 
