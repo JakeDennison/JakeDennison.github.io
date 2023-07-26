@@ -17,9 +17,9 @@ class rsFillerElement extends LitElement {
           description: 'JSON containing repeating section data'
         },
         RSTarget: {
-          type: 'string', // Changed 'Target class' to 'string'
-          title: 'Class used to target repeating section',
-          description: 'Class name used to target repeating section' // Updated description
+          type: 'string',
+          title: 'Target class',
+          description: 'Class name used to target repeating section'
         },
       },
       standardProperties: {
@@ -40,12 +40,11 @@ class rsFillerElement extends LitElement {
   constructor() {
     super();
     this.RSJson = '';
-    this.RSTarget = 'RSTargetClass1'; // Initialize the RSTarget property
+    this.RSTarget = ''; // Initialize the RSTarget property
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.RSTarget = 'RSTargetClass1'
 
     // If RSTarget is specified and RSJson has data, call the clickSimulation function
     if (this.RSTarget) {
@@ -54,21 +53,26 @@ class rsFillerElement extends LitElement {
   }
 
   clickSimulation() {
-    // Find the element with the specified class name (RSTarget)
-    const parentElement = this.querySelector('.' + this.RSTarget);
+    // Access the shadow DOM
+    const shadowRoot = this.shadowRoot;
 
-    if (parentElement) {
-      // Find the button element inside the parent element with class 'btn-repeating-section-new-row'
-      const button = parentElement.querySelector('button.btn-repeating-section-new-row');
+    if (shadowRoot) {
+      // Find the element with the specified class name (RSTarget) within the shadow DOM
+      const parentElement = shadowRoot.querySelector('.' + this.RSTarget);
 
-      if (button) {
-        // Simulate a click event on the button
-        button.click();
+      if (parentElement) {
+        // Find the button element inside the parent element with class 'btn-repeating-section-new-row'
+        const button = parentElement.querySelector('button.btn-repeating-section-new-row');
+
+        if (button) {
+          // Simulate a click event on the button
+          button.click();
+        } else {
+          console.log("Button not found inside the parent element with class " + this.RSTarget + ".");
+        }
       } else {
-        console.log("Button not found inside the parent element with class " + this.RSTarget + ".");
+        console.log("Parent element with class " + this.RSTarget + " not found.");
       }
-    } else {
-      console.log("Parent element with class " + this.RSTarget + " not found.");
     }
   }
 
