@@ -70,7 +70,7 @@ class rsFillerElement extends LitElement {
   }
 
   render() {
-    // You can add the template for your web component here
+    return `<p>Class: ${this.RSTarget}</p>`;
   }
 }
 
