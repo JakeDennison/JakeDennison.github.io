@@ -49,9 +49,9 @@ class rsFillerElement extends LitElement {
   }
 
   findAndClickButton() {
-    const repeatingSections = document.getElementsByClassName(this.RSTarget);
-    if (repeatingSections.length > 0) {
-      this.RSTarget = repeatingSections[0];
+    const targetDivs = document.getElementsByClassName("RSTargetClass1");
+    if (targetDivs.length > 0) {
+      this.RSTarget = targetDivs[0];
       const button = this.RSTarget.querySelector("button.btn-repeating-section-new-row");
       if (button) {
         button.click(); // Programmatically click the button
