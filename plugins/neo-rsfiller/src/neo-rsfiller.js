@@ -43,7 +43,7 @@ class rsFillerElement extends LitElement {
     this.rstarget = '';
   }
 
-  firstUpdated() {
+  async firstUpdated() {
     console.log("firstUpdated is being called");
     
     const rsDataItems = JSON.parse(this.rsdata);  // Parse the rsdata string into a JSON object
@@ -63,10 +63,28 @@ class rsFillerElement extends LitElement {
         console.log("Button:", button); 
   
         if (button) {
-          let i = 1;  // Start from 1 as there is always a default value of 1 item showing
-          while (i < rsDataCount) {  // Keep clicking until we have the same number of items as rsDataCount
-            console.log("Clicking the button");
-            button.click();
+          let i = 0;  // Start from 0 since we will fill the default section first
+          while (i < rsDataCount) {  // Keep clicking and filling until we have the same number of items as rsDataCount
+            console.log("Filling the section");
+            const inputs = Array.from(ntxSection.querySelectorAll('input'));  // Get all input elements in the section
+            const dataValues = Object.values(rsDataItems[i]);  // Get all values from the JSON object
+            
+            for (let j = 0; j < inputs.length; j++) {
+              if (inputs[j].type === 'checkbox') {  // Check if the input is a checkbox
+                inputs[j].checked = dataValues[j];  // If it is, set its checked property
+              } else {
+                inputs[j].value = dataValues[j];  // If not, set its value property
+              }
+            }
+  
+            if (i < rsDataCount - 1) {  // Only click the button if there are more items to be filled
+              console.log("Clicking the button");
+              button.click();
+  
+              // Ensure that the new section has been added before we try to fill it
+              // The actual delay needed here may vary depending on your application
+              await new Promise(resolve => setTimeout(resolve, 1000));
+            }
             i++;
           }
           break;
@@ -74,6 +92,7 @@ class rsFillerElement extends LitElement {
       }
     }
   }
+  
   
 
   render() {
