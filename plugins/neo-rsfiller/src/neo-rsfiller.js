@@ -46,40 +46,36 @@ class rsFillerElement extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.handleButtonClick = this.handleButtonClick.bind(this);
-    document.addEventListener('click', this.handleButtonClick);
+    this.addButtonProgrammatically();
   }
 
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    document.removeEventListener('click', this.handleButtonClick);
-  }
+  addButtonProgrammatically() {
+    // Find the parent repeating section with the value of this.RSTarget
+    const parentRepeatingSection = this.findParentRepeatingSection();
+    if (parentRepeatingSection) {
+      console.log('Found parent repeating section:', parentRepeatingSection);
+      console.log('this.RSTarget:', this.RSTarget);
 
-  findParentRepeatingSection(button) {
-    // Helper function to find the parent repeating section with the value of this.RSTarget
-    let parent = button.previousElementSibling;
-    while (parent) {
-      if (parent.classList.contains(this.RSTarget)) {
-        return parent;
+      // Perform the action you want when the "Add new row" button of the correct repeating section is clicked
+      // For example, programmatically click the button:
+      const addButton = parentRepeatingSection.querySelector('.btn-repeating-section-new-row');
+      if (addButton) {
+        addButton.click();
       }
-      parent = parent.previousElementSibling;
+    } else {
+      console.log('Parent repeating section with the value of this.RSTarget not found.');
+    }
+  }
+
+  findParentRepeatingSection() {
+    // Helper function to find the parent repeating section with the value of this.RSTarget
+    const repeatingSections = this.shadowRoot.querySelectorAll('ntx-repeating-section');
+    for (const section of repeatingSections) {
+      if (section.classList.contains(this.RSTarget)) {
+        return section;
+      }
     }
     return null; // If no parent with the value of this.RSTarget is found
-  }
-
-  handleButtonClick(event) {
-    const targetButton = event.target;
-    if (targetButton.classList.contains('btn-repeating-section-new-row')) {
-      const parentRepeatingSection = this.findParentRepeatingSection(targetButton);
-      if (parentRepeatingSection) {
-        console.log('Found parent repeating section:', parentRepeatingSection);
-        console.log('this.RSTarget:', this.RSTarget);
-        // Perform the action you want when the "Add new row" button of the correct repeating section is clicked
-        // For example, you can simulate a click event on the web component itself:
-        this.click();
-      } else {
-        console.log('Parent repeating section with the value of this.RSTarget not found.');
-      }
-    }
   }
 
   render() {
