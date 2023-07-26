@@ -16,7 +16,7 @@ class rsFillerElement extends LitElement {
           title: 'Repeating section data',
           description: 'JSON containing repeating section data'
         },
-        RSTarget: {
+        RSTargetClass: {
           type: 'string',
           title: 'Target class',
           description: 'Class name used to target repeating section'
@@ -40,20 +40,22 @@ class rsFillerElement extends LitElement {
   constructor() {
     super();
     this.RSTarget = ""
-    console.log(this.RSTarget)
+    console.log("Class is: "+this.RSTarget)
     this.handleButtonClick = this.handleButtonClick.bind(this);
   }
 
   connectedCallback() {
-    super.connectedCallback();
-    this.findAndClickButton();
-  }
-
-  findAndClickButton() {
-    if (this.RSTarget) {
-      const siblingButton = this.RSTarget.nextElementSibling.querySelector("button.btn-repeating-section-new-row");
-      if (siblingButton) {
-        siblingButton.click(); // Programmatically click the button
+    // Find the ntx-repeating-section with the target class
+    const ntxRepeatingSections = this.parentElement.querySelectorAll('ntx-repeating-section');
+    for (const ntxSection of ntxRepeatingSections) {
+      if (ntxSection.classList.contains(this.RSTarget)) {
+        // Found the correct ntx-repeating-section
+        // Find the button inside it and click it
+        const button = ntxSection.querySelector("button.btn-repeating-section-new-row");
+        if (button) {
+          button.click(); // Programmatically click the button
+          break; // Stop searching after the first occurrence with the target class
+        }
       }
     }
   }
