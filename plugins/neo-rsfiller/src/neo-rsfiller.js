@@ -40,7 +40,7 @@ class rsFillerElement extends LitElement {
   firstUpdated() {
     console.log("firstUpdated is being called");
   
-    const ntxRepeatingSections = this.parentElement.querySelectorAll('ntx-repeating-section');
+    const ntxRepeatingSections = window.document.querySelectorAll('ntx-repeating-section');
     console.log("ntxRepeatingSections:", ntxRepeatingSections); 
   
     for (const ntxSection of ntxRepeatingSections) {
@@ -53,8 +53,8 @@ class rsFillerElement extends LitElement {
   
         if (button) {
           console.log("Clicking the button");
-          button.click(); 
-          break; 
+          button.click();
+          break;
         }
       }
     }
@@ -62,7 +62,9 @@ class rsFillerElement extends LitElement {
 
   render() {
     console.log("Class is: " + this.rstarget);
-    return html`<p>Class: ${this.rstarget}</p>`;
+    return html`
+    <p>Class: ${this.rstarget}</p>
+    <p>Version 1</p>`;
   }
 }
 

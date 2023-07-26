@@ -3,4 +3,6 @@
       :host {
         display: block;
       }
-    `}constructor(){super(),this.rstarget=""}firstUpdated(){console.log("firstUpdated is being called");const t=this.parentElement.querySelectorAll("ntx-repeating-section");console.log("ntxRepeatingSections:",t);for(const e of t)if(e.querySelector(`div.${this.rstarget}`)){console.log("Found a div with the target class");const t=e.querySelector("button.btn-repeating-section-new-row");if(console.log("Button:",t),t){console.log("Clicking the button"),t.click();break}}}render(){return console.log("Class is: "+this.rstarget),M`<p>Class: ${this.rstarget}</p>`}})})();
+    `}constructor(){super(),this.rstarget=""}firstUpdated(){console.log("firstUpdated is being called");const t=window.document.querySelectorAll("ntx-repeating-section");console.log("ntxRepeatingSections:",t);for(const e of t)if(e.querySelector(`div.${this.rstarget}`)){console.log("Found a div with the target class");const t=e.querySelector("button.btn-repeating-section-new-row");if(console.log("Button:",t),t){console.log("Clicking the button"),t.click();break}}}render(){return console.log("Class is: "+this.rstarget),M`
+    <p>Class: ${this.rstarget}</p>
+    <p>Version 1</p>`}})})();
