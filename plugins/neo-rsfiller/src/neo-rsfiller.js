@@ -39,43 +39,29 @@ class rsFillerElement extends LitElement {
   
   constructor() {
     super();
-    this.RSJson = '';
-    this.RSTarget = ''; // Initialize RSTarget with the target class name
+    this.RSTarget = "";
+    this.handleButtonClick = this.handleButtonClick.bind(this);
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.handleButtonClick = this.handleButtonClick.bind(this);
-    this.addButtonProgrammatically();
+    this.findAndClickButton();
   }
 
-  addButtonProgrammatically() {
-    // Find the parent repeating section with the value of this.RSTarget
-    const parentRepeatingSection = this.findParentRepeatingSection();
-    if (parentRepeatingSection) {
-      console.log('Found parent repeating section:', parentRepeatingSection);
-      console.log('this.RSTarget:', this.RSTarget);
-
-      // Perform the action you want when the "Add new row" button of the correct repeating section is clicked
-      // For example, programmatically click the button:
-      const addButton = parentRepeatingSection.querySelector('.btn-repeating-section-new-row');
-      if (addButton) {
-        addButton.click();
+  findAndClickButton() {
+    const repeatingSections = document.getElementsByClassName(this.RSTarget);
+    if (repeatingSections.length > 0) {
+      this.RSTarget = repeatingSections[0];
+      const button = this.RSTarget.querySelector("button.btn-repeating-section-new-row");
+      if (button) {
+        button.click(); // Programmatically click the button
       }
-    } else {
-      console.log('Parent repeating section with the value of this.RSTarget not found.');
     }
   }
 
-  findParentRepeatingSection() {
-    // Helper function to find the parent repeating section with the value of this.RSTarget
-    const repeatingSections = this.shadowRoot.querySelectorAll('ntx-repeating-section');
-    for (const section of repeatingSections) {
-      if (section.classList.contains(this.RSTarget)) {
-        return section;
-      }
-    }
-    return null; // If no parent with the value of this.RSTarget is found
+  handleButtonClick() {
+    // Your code here to handle the button click
+    console.log("Button clicked");
   }
 
   render() {
