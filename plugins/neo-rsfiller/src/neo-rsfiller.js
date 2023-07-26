@@ -38,14 +38,23 @@ class rsFillerElement extends LitElement {
   }
 
   firstUpdated() {
+    console.log("firstUpdated is being called"); // Log message
+
     // Find the ntx-repeating-section with the target class
     const ntxRepeatingSections = this.parentElement.querySelectorAll('ntx-repeating-section');
+    console.log("ntxRepeatingSections:", ntxRepeatingSections); // Log found elements
+
     for (const ntxSection of ntxRepeatingSections) {
       if (ntxSection.classList.contains(this.rstarget)) {
         // Found the correct ntx-repeating-section
+        console.log("Found the ntx-repeating-section with the target class"); // Log message
+
         // Find the button inside it and click it
         const button = ntxSection.querySelector("button.btn-repeating-section-new-row");
+        console.log("Button:", button); // Log found button
+
         if (button) {
+          console.log("Clicking the button"); // Log message
           button.click(); // Programmatically click the button
           break; // Stop searching after the first occurrence with the target class
         }
