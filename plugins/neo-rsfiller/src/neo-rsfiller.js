@@ -39,7 +39,8 @@ class rsFillerElement extends LitElement {
   
   constructor() {
     super();
-    this.RSTarget = "";
+    this.RSTarget = ""
+    console.log(this.RSTarget)
     this.handleButtonClick = this.handleButtonClick.bind(this);
   }
 
@@ -49,12 +50,10 @@ class rsFillerElement extends LitElement {
   }
 
   findAndClickButton() {
-    const targetDivs = document.getElementsByClassName("RSTargetClass1");
-    if (targetDivs.length > 0) {
-      this.RSTarget = targetDivs[0];
-      const button = this.RSTarget.querySelector("button.btn-repeating-section-new-row");
-      if (button) {
-        button.click(); // Programmatically click the button
+    if (this.RSTarget) {
+      const siblingButton = this.RSTarget.nextElementSibling.querySelector("button.btn-repeating-section-new-row");
+      if (siblingButton) {
+        siblingButton.click(); // Programmatically click the button
       }
     }
   }
