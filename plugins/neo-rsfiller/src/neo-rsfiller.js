@@ -12,13 +12,13 @@ class rsFillerElement extends LitElement {
       version: '1.0',
       properties: {
         RSJson: {
-          type: 'string',
           title: 'Repeating section data',
+          type: 'string',
           description: 'JSON containing repeating section data'
         },
         RSTarget: {
-          type: 'string',
           title: 'Target class',
+          type: 'string',
           description: 'Class name used to target repeating section'
         },
       },
@@ -43,6 +43,7 @@ class rsFillerElement extends LitElement {
   
   constructor() {
     super();
+    this.RSTarget = ""
     console.log("Class is: "+this.RSTarget)
     this.handleButtonClick = this.handleButtonClick.bind(this);
   }
