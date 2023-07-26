@@ -11,6 +11,11 @@ class rsFillerElement extends LitElement {
       groupName: 'Form Tools',
       version: '1.0',
       properties: {
+        rsdata: {
+          title: 'Repeating section data',
+          type: 'string',
+          description: 'Enter repeating section data as a string'
+        },
         rstarget: {
           title: 'Target class',
           type: 'string',
@@ -34,6 +39,7 @@ class rsFillerElement extends LitElement {
 
   constructor() {
     super();
+    this.rsdata = '';
     this.rstarget = '';
   }
 
