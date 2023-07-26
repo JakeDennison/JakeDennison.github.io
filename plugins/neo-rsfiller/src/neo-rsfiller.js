@@ -11,11 +11,6 @@ class rsFillerElement extends LitElement {
       groupName: 'Form Tools',
       version: '1.0',
       properties: {
-        RSJson: {
-          title: 'Repeating section data',
-          type: 'string',
-          description: 'JSON containing repeating section data'
-        },
         RSTarget: {
           title: 'Target class',
           type: 'string',
@@ -43,7 +38,6 @@ class rsFillerElement extends LitElement {
 
   constructor() {
     super();
-    console.log("Class is: "+this.RSTarget)
   }
 
   connectedCallback() {
@@ -63,7 +57,8 @@ class rsFillerElement extends LitElement {
   }
 
   render() {
-    return `<p>Class: ${this.RSTarget}</p>`;
+    console.log("Class is: " + this.RSTarget);
+    return html`<p>Class: ${this.RSTarget}</p>`;
   }
 }
 
