@@ -43,8 +43,8 @@ class rsFillerElement extends LitElement {
     this.RSTarget = ''; // Initialize the RSTarget property
   }
 
-  connectedCallback() {
-    super.connectedCallback();
+  async firstUpdated() {
+    await this.updateComplete; // Wait for the component to finish updating
 
     // If RSTarget is specified and RSJson has data, call the clickSimulation function
     if (this.RSTarget) {
