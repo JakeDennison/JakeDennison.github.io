@@ -40,44 +40,46 @@ class rsFillerElement extends LitElement {
   constructor() {
     super();
     this.RSJson = '';
-    this.RSTarget = ''; // Initialize the RSTarget property
+    this.RSTarget = ''; // Initialize RSTarget with the target class name
   }
 
-  async firstUpdated() {
-    await this.updateComplete; // Wait for the component to finish updating
+  connectedCallback() {
+    super.connectedCallback();
+    this.handleButtonClick = this.handleButtonClick.bind(this);
+    document.addEventListener('click', this.handleButtonClick);
+  }
 
-    // If RSTarget is specified and RSJson has data, call the clickSimulation function
-    if (this.RSTarget) {
-      this.clickSimulation();
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('click', this.handleButtonClick);
+  }
+
+  findParentRepeatingSection(button) {
+    // Helper function to find the parent repeating section with class "RSTargetClass1"
+    let parent = button.previousElementSibling;
+    while (parent) {
+      if (parent.classList.contains('RSTargetClass1')) {
+        return parent;
+      }
+      parent = parent.previousElementSibling;
     }
+    return null; // If no parent with class "RSTargetClass1" is found
   }
 
-  clickSimulation() {
-    // Access the shadow DOM
-    const shadowRoot = this.shadowRoot;
-
-    if (shadowRoot) {
-      // Find the element with the specified class name (RSTarget) within the shadow DOM
-      const parentElement = shadowRoot.querySelector('.' + this.RSTarget);
-
-      if (parentElement) {
-        // Find the button element inside the parent element with class 'btn-repeating-section-new-row'
-        const button = parentElement.querySelector('button.btn-repeating-section-new-row');
-
-        if (button) {
-          // Simulate a click event on the button
-          button.click();
-        } else {
-          console.log("Button not found inside the parent element with class " + this.RSTarget + ".");
-        }
-      } else {
-        console.log("Parent element with class " + this.RSTarget + " not found.");
+  handleButtonClick(event) {
+    const targetButton = event.target;
+    if (targetButton.classList.contains('btn-repeating-section-new-row')) {
+      const parentRepeatingSection = this.findParentRepeatingSection(targetButton);
+      if (parentRepeatingSection) {
+        // Perform the action you want when the "Add new row" button of the correct repeating section is clicked
+        // For example, you can simulate a click event on the web component itself:
+        this.click();
       }
     }
   }
 
   render() {
-    return html``;
+    // You can add the template for your web component here
   }
 }
 
