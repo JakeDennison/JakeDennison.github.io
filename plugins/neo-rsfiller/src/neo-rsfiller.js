@@ -43,7 +43,7 @@ class rsFillerElement extends LitElement {
   
   constructor() {
     super();
-    RSTarget ="",
+    this.RSTarget ="",
     console.log("Class is: "+this.RSTarget)
     this.handleButtonClick = this.handleButtonClick.bind(this);
   }

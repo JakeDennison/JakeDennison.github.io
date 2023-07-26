@@ -3,4 +3,4 @@
       :host {
         display: block;
       }
-    `}static properties={RSTarget:""};constructor(){super(),RSTarget="",console.log("Class is: "+this.RSTarget),this.handleButtonClick=this.handleButtonClick.bind(this)}connectedCallback(){const t=this.parentElement.querySelectorAll("ntx-repeating-section");for(const e of t)if(e.classList.contains(this.RSTarget)){const t=e.querySelector("button.btn-repeating-section-new-row");if(t){t.click();break}}}handleButtonClick(){console.log("Button clicked")}render(){}})})();
+    `}static properties={RSTarget:""};constructor(){super(),this.RSTarget="",console.log("Class is: "+this.RSTarget),this.handleButtonClick=this.handleButtonClick.bind(this)}connectedCallback(){const t=this.parentElement.querySelectorAll("ntx-repeating-section");for(const e of t)if(e.classList.contains(this.RSTarget)){const t=e.querySelector("button.btn-repeating-section-new-row");if(t){t.click();break}}}handleButtonClick(){console.log("Button clicked")}render(){}})})();
