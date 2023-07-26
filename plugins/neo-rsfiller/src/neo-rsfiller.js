@@ -55,15 +55,15 @@ class rsFillerElement extends LitElement {
   }
 
   findParentRepeatingSection(button) {
-    // Helper function to find the parent repeating section with class "RSTargetClass1"
+    // Helper function to find the parent repeating section with the value of this.RSTarget
     let parent = button.previousElementSibling;
     while (parent) {
-      if (parent.classList.contains('RSTargetClass1')) {
+      if (parent.classList.contains(this.RSTarget)) {
         return parent;
       }
       parent = parent.previousElementSibling;
     }
-    return null; // If no parent with class "RSTargetClass1" is found
+    return null; // If no parent with the value of this.RSTarget is found
   }
 
   handleButtonClick(event) {
@@ -71,9 +71,13 @@ class rsFillerElement extends LitElement {
     if (targetButton.classList.contains('btn-repeating-section-new-row')) {
       const parentRepeatingSection = this.findParentRepeatingSection(targetButton);
       if (parentRepeatingSection) {
+        console.log('Found parent repeating section:', parentRepeatingSection);
+        console.log('this.RSTarget:', this.RSTarget);
         // Perform the action you want when the "Add new row" button of the correct repeating section is clicked
         // For example, you can simulate a click event on the web component itself:
         this.click();
+      } else {
+        console.log('Parent repeating section with the value of this.RSTarget not found.');
       }
     }
   }
