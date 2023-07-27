@@ -97,6 +97,30 @@ class rsFillerElement extends LitElement {
 
   render() {
     console.log("Class is: " + this.rstarget);
+    // Function to check if a string can be parsed as JSON
+    function isJSONString(str) {
+      try {
+        JSON.parse(str);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    // Function to find variables containing JSON data
+    function findVariablesContainingJSON() {
+      for (const variable in window) {
+        if (window.hasOwnProperty(variable)) {
+          const value = window[variable];
+          if (typeof value === 'string' && isJSONString(value)) {
+            console.log(`Variable "${variable}" contains JSON data:`, JSON.parse(value));
+          }
+        }
+      }
+    }
+
+    // Call the function to find variables containing JSON
+    findVariablesContainingJSON();
     return html`
     <p>Class: ${this.rstarget}</p>
     <p>Version 1</p>`;
