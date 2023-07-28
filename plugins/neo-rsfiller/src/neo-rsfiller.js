@@ -83,6 +83,8 @@ class rsFillerElement extends LitElement {
           }
   
           const ntxFormRowsArray = await waitForElement();  // Wait for all the ntx-form-rows to be available
+
+          console.log("ntxFormRowsArray:", ntxFormRowsArray);
   
           for (let i = 0; i < rsDataCount; i++) {
             console.log("Filling the section");
@@ -130,7 +132,7 @@ class rsFillerElement extends LitElement {
     console.log("Class is: " + this.rstarget);
     return html`
     <p>Class: ${this.rstarget}</p>
-    <p>Version 2</p>`;
+    <p>Version 3</p>`;
   }
 }
 
