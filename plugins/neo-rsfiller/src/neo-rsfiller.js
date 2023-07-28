@@ -48,13 +48,13 @@ class rsFillerElement extends LitElement {
   
     let rsDataItems;
     try {
-      rsDataItems = JSON.parse(this.rsdata);
+      rsDataItems = JSON.parse(this.rsdata);  // Validate and parse the rsdata string into a JSON object
     } catch(error) {
       console.error("Failed to parse rsdata: ", error);
       return;
     }
   
-    const rsDataCount = rsDataItems.length;
+    const rsDataCount = rsDataItems.length;  // Get the number of items in the rsdata JSON object
     console.log(`Expecting ${rsDataCount} items based on rsdata`);
   
     const ntxRepeatingSections = window.document.querySelectorAll('ntx-repeating-section');
@@ -69,56 +69,51 @@ class rsFillerElement extends LitElement {
         console.log("Button:", button);
   
         if (button) {
-          let i = 0;
-          while (i < rsDataCount) {
+          for (let i = 0; i < rsDataCount - 1; i++) {  // Subtract 1 because there is already a default section
+            button.click();
+            // You may need to add some delay or checking mechanism here to make sure the section is added before the next click
+          }
+  
+          const waitForElement = async () => {
+            while (!ntxSection.querySelectorAll('ntx-form-rows').length) {
+              await new Promise(resolve => requestAnimationFrame(resolve));
+            }
+            return ntxSection.querySelectorAll('ntx-form-rows');
+          }
+  
+          const ntxFormRowsArray = await waitForElement();  // Wait for all the ntx-form-rows to be available
+  
+          for (let i = 0; i < rsDataCount; i++) {
             console.log("Filling the section");
+            const inputs = Array.from(ntxFormRowsArray[i].querySelectorAll('input'));  // Get all input elements in the i-th ntx-form-rows
+            const dataValues = Object.values(rsDataItems[i]);  // Get all values from the i-th item of the JSON object
   
-            const waitForElement = async (selector) => {
-              while (!ntxSection.querySelector(selector)) {
-                await new Promise(resolve => requestAnimationFrame(resolve));
-              }
-              return ntxSection.querySelector(selector);
-            }
-  
-            const ntxFormRows = await waitForElement('ntx-form-rows');
-            const dataItem = rsDataItems[i];
-  
-            for (const key in dataItem) {
-              if (dataItem.hasOwnProperty(key)) {
-                const element = ntxFormRows.querySelector(`input.${key}`);
-                if (element) {
-                  switch (element.type) {
-                    case 'checkbox':
-                    case 'radio':
-                      element.checked = dataItem[key];
-                      break;
-                    case 'file':
-                      break;
-                    case 'date':
-                    case 'time':
-                      element.value = dataItem[key];
-                      break;
-                    default:
-                      element.value = dataItem[key];
-                      break;
-                  }
-                }
+            for (let j = 0; j < inputs.length; j++) {
+              switch (inputs[j].type) {
+                case 'checkbox':
+                case 'radio':
+                  inputs[j].checked = dataValues[j];  // If it is a checkbox or radio, set its checked property
+                  break;
+                case 'file':
+                  // File inputs require a more complex handling, you can't set the value directly due to security reasons.
+                  // If you need to test with file inputs, consider using a testing framework that has file upload support.
+                  break;
+                case 'date':
+                case 'time':
+                  // For date and time, dataValues[j] should be in valid format
+                  inputs[j].value = dataValues[j];
+                  break;
+                default:
+                  inputs[j].value = dataValues[j];  // If not, set its value property
+                  break;
               }
             }
-  
-            if (i < rsDataCount - 1) {
-              console.log("Clicking the button");
-              button.click();
-              await waitForElement(`div.${this.rstarget}`);
-            }
-            i++;
           }
           break;
         }
       }
     }
   }
-  
   
   render() {
     console.log("Class is: " + this.rstarget);
