@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/JSDenintex/JSDenintex.github.io#readme",
   "dependencies": {
+    "flatpickr": "^4.6.13",
     "lit": "^2.6.1",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"

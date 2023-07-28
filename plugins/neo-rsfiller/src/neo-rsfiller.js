@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import flatpickr from 'flatpickr';
 
 class rsFillerElement extends LitElement {
   static getMetaConfig() {
@@ -100,9 +101,13 @@ class rsFillerElement extends LitElement {
                   break;
                 case 'date':
                 case 'time':
-                  // For date and time, dataValues[j] should be in valid format
-                  inputs[j].readOnly = false;  // Disable readOnly attribute
-                  inputs[j].value = dataValues[j];  // Change the value
+                  // Get the flatpickr instance from the input
+                  let flatpickrInstance = inputs[j]._flatpickr;
+                  if(flatpickrInstance) {
+                    flatpickrInstance.setDate(dataValues[j], true);
+                  } else {
+                    console.warn(`No flatpickr instance found for input ${j}`);
+                  }
                   break;
                 default:
                   inputs[j].value = dataValues[j];  // If not, set its value property
