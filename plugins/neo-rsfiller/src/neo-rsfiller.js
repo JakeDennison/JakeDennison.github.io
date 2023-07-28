@@ -48,17 +48,49 @@ class rsFillerElement extends LitElement {
   
     let rsDataItems;
     try {
-      rsDataItems = JSON.parse(this.rsdata);  // Validate and parse the rsdata string into a JSON object
-    } catch(error) {
+      rsDataItems = JSON.parse(this.rsdata);
+    } catch (error) {
       console.error("Failed to parse rsdata: ", error);
       return;
     }
   
-    const rsDataCount = rsDataItems.length;  // Get the number of items in the rsdata JSON object
+    const rsDataCount = rsDataItems.length;
     console.log(`Expecting ${rsDataCount} items based on rsdata`);
   
     const ntxRepeatingSections = window.document.querySelectorAll('ntx-repeating-section');
     console.log("ntxRepeatingSections:", ntxRepeatingSections);
+  
+    const waitForElement = async (selector, root = window.document) => {
+      while (!root.querySelector(selector)) {
+        await new Promise(resolve => requestAnimationFrame(resolve));
+      }
+      return root.querySelector(selector);
+    }
+  
+    const fillSection = async (section, dataItem) => {
+      for (let key in dataItem) {
+        if (dataItem.hasOwnProperty(key)) {
+          const targetInput = await waitForElement(`input.${key}`, section);
+          if (targetInput) {
+            switch (targetInput.type) {
+              case 'checkbox':
+              case 'radio':
+                targetInput.checked = dataItem[key];
+                break;
+              case 'file':
+                break;
+              case 'date':
+              case 'time':
+                targetInput.value = dataItem[key];
+                break;
+              default:
+                targetInput.value = dataItem[key];
+                break;
+            }
+          }
+        }
+      }
+    }
   
     for (const ntxSection of ntxRepeatingSections) {
       const targetDiv = ntxSection.querySelector(`div.${this.rstarget}`);
@@ -69,47 +101,22 @@ class rsFillerElement extends LitElement {
         console.log("Button:", button);
   
         if (button) {
-          let i = 0;  // Start from 0 since we will fill the default section first
-          while (i < rsDataCount) {  // Keep clicking and filling until we have the same number of items as rsDataCount
+          let i = 0;
+          while (i < rsDataCount) {
             console.log("Filling the section");
   
-            const waitForElement = async (selector) => {
-              while (!ntxSection.querySelector(selector)) {
-                await new Promise(resolve => requestAnimationFrame(resolve));
-              }
-              return ntxSection.querySelector(selector);
-            }
+            // Wait for ntx-form-rows elements to be available and get all of them
+            const ntxFormRows = await waitForElement('ntx-form-rows', ntxSection);
+            const formRows = Array.from(ntxSection.querySelectorAll('ntx-form-rows'));
+            const dataItem = rsDataItems[i];
   
-            const ntxFormRows = await waitForElement('ntx-form-rows');  // Wait for the ntx-form-rows element to be available
-            const inputs = Array.from(ntxFormRows.querySelectorAll('input'));  // Get all input elements in the ntx-form-rows
-            const dataValues = Object.values(rsDataItems[i]);  // Get all values from the JSON object
+            await fillSection(formRows[i], dataItem);
   
-            for (let j = 0; j < inputs.length; j++) {
-              switch (inputs[j].type) {
-                case 'checkbox':
-                case 'radio':
-                  inputs[j].checked = dataValues[j];  // If it is a checkbox or radio, set its checked property
-                  break;
-                case 'file':
-                  // File inputs require a more complex handling, you can't set the value directly due to security reasons.
-                  // If you need to test with file inputs, consider using a testing framework that has file upload support.
-                  break;
-                case 'date':
-                case 'time':
-                  // For date and time, dataValues[j] should be in valid format
-                  inputs[j].value = dataValues[j];
-                  break;
-                default:
-                  inputs[j].value = dataValues[j];  // If not, set its value property
-                  break;
-              }
-            }
-  
-            if (i < rsDataCount - 1) {  // Only click the button if there are more items to be filled
+            if (i < rsDataCount - 1) {
               console.log("Clicking the button");
               button.click();
               // Ensure that the new section has been added before we try to fill it
-              await waitForElement(`div.${this.rstarget}`);
+              await new Promise(resolve => setTimeout(resolve, 1000));  // wait for a second or adjust the delay as needed
             }
             i++;
           }
