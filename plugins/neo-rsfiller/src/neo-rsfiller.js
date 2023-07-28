@@ -125,7 +125,7 @@ class rsFillerElement extends LitElement {
     console.log("Class is: " + this.rstarget);
     return html`
     <p>Class: ${this.rstarget}</p>
-    <p>Version 1</p>`;
+    <p>Version 2</p>`;
   }
 }
 
