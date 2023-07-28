@@ -89,7 +89,10 @@ class rsFillerElement extends LitElement {
             console.log("Filling the section");
             const dataItem = rsDataItems[i]; // Get the i-th item of the JSON object
             console.log(`Data for section ${i}:`, dataItem);
-            
+  
+            // Click before filling the section
+            ntxFormRowsArray[i].click();
+  
             // For each key in dataItem, find the div with this key as class and fill the input inside of it
             for (let key in dataItem) {
               const targetDiv = ntxFormRowsArray[i].querySelector(`div.${key}`);
@@ -130,13 +133,11 @@ class rsFillerElement extends LitElement {
     }
   }
   
-  
-  
   render() {
     console.log("Class is: " + this.rstarget);
     return html`
     <p>Class: ${this.rstarget}</p>
-    <p>4</p>`;
+    <p>5</p>`;
   }
 }
 
