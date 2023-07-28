@@ -101,7 +101,9 @@ class rsFillerElement extends LitElement {
                 case 'date':
                 case 'time':
                   // For date and time, dataValues[j] should be in valid format
-                  inputs[j].value = dataValues[j];
+                  inputs[j].readOnly = false;  // Disable readOnly attribute
+                  inputs[j].value = dataValues[j];  // Change the value
+                  inputs[j].readOnly = true;  // Re-enable readOnly attribute
                   break;
                 default:
                   inputs[j].value = dataValues[j];  // If not, set its value property
