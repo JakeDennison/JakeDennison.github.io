@@ -83,18 +83,22 @@ class rsFillerElement extends LitElement {
           }
   
           const ntxFormRowsArray = await waitForElement();  // Wait for all the ntx-form-rows to be available
-
           console.log("ntxFormRowsArray:", ntxFormRowsArray);
-  
+          
           for (let i = 0; i < rsDataCount; i++) {
             console.log("Filling the section");
             const dataItem = rsDataItems[i]; // Get the i-th item of the JSON object
-  
+            console.log(`Data for section ${i}:`, dataItem);
+            
             // For each key in dataItem, find the div with this key as class and fill the input inside of it
             for (let key in dataItem) {
               const targetDiv = ntxFormRowsArray[i].querySelector(`div.${key}`);
+              console.log(`Looking for div with class ${key} in section ${i}:`, targetDiv);
+              
               if (targetDiv) {
                 const input = targetDiv.querySelector('input, ntx-datetime-picker input');
+                console.log(`Looking for input in div with class ${key}:`, input);
+                
                 if (input) {
                   switch (input.type) {
                     case 'checkbox':
@@ -132,7 +136,7 @@ class rsFillerElement extends LitElement {
     console.log("Class is: " + this.rstarget);
     return html`
     <p>Class: ${this.rstarget}</p>
-    <p>Version 3</p>`;
+    <p>4</p>`;
   }
 }
 
