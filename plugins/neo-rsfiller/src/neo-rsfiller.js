@@ -86,40 +86,45 @@ class rsFillerElement extends LitElement {
   
           for (let i = 0; i < rsDataCount; i++) {
             console.log("Filling the section");
-            const inputs = Array.from(ntxFormRowsArray[i].querySelectorAll('input'));  // Get all input elements in the i-th ntx-form-rows
-            const dataValues = Object.values(rsDataItems[i]);  // Get all values from the i-th item of the JSON object
+            const dataItem = rsDataItems[i]; // Get the i-th item of the JSON object
   
-            for (let j = 0; j < inputs.length; j++) {
-              switch (inputs[j].type) {
-                case 'checkbox':
-                case 'radio':
-                  inputs[j].checked = dataValues[j];  // If it is a checkbox or radio, set its checked property
-                  break;
-                case 'file':
-                  // File inputs require a more complex handling, you can't set the value directly due to security reasons.
-                  // If you need to test with file inputs, consider using a testing framework that has file upload support.
-                  break;
-                case 'date':
-                case 'time':
-                  // Get the flatpickr instance from the input
-                  let flatpickrInstance = inputs[j]._flatpickr;
-                  if(flatpickrInstance) {
-                    flatpickrInstance.setDate(dataValues[j], true);
-                  } else {
-                    console.warn(`No flatpickr instance found for input ${j}`);
+            // For each key in dataItem, find the div with this key as class and fill the input inside of it
+            for (let key in dataItem) {
+              const targetDiv = ntxFormRowsArray[i].querySelector(`div.${key}`);
+              if (targetDiv) {
+                const input = targetDiv.querySelector('input, ntx-datetime-picker input');
+                if (input) {
+                  switch (input.type) {
+                    case 'checkbox':
+                    case 'radio':
+                      input.checked = dataItem[key];
+                      break;
+                    case 'file':
+                      // handle file input
+                      break;
+                    case 'date':
+                    case 'time':
+                      let flatpickrInstance = input._flatpickr;
+                      if(flatpickrInstance) {
+                        flatpickrInstance.setDate(dataItem[key], true);
+                      } else {
+                        console.warn(`No flatpickr instance found for input ${input.name}`);
+                      }
+                      break;
+                    default:
+                      input.value = dataItem[key];
+                      break;
                   }
-                  break;
-                default:
-                  inputs[j].value = dataValues[j];  // If not, set its value property
-                  break;
+                }
               }
             }
           }
-          break;
         }
       }
     }
   }
+  
+  
   
   render() {
     console.log("Class is: " + this.rstarget);
