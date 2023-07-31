@@ -83,23 +83,22 @@ class unitElement extends LitElement {
     return [
       globalStyle,
       css`
-        :host {
-          display: block;
-        }
         .neo-unit-control {
           position: relative;
           display: flex;
           flex-wrap: wrap;
           align-items: stretch;
           width: 100%;
+          box-sizing: border-box;
         }
-        
+
         .neo-unit-control .input-unit-group-append {
           border-bottom-left-radius: 4px;
           border-top-left-radius: 4px;
           border-color: #898F94;
           background: #FFFFFF;
           font-size: 14px;
+          display: flex;
         }
         
         .neo-unit-control .input-unit-group-append .neo-btn-input-icon:last-child {
@@ -143,13 +142,16 @@ class unitElement extends LitElement {
         }
         
       .neo-unit-control .nx-zinc-control-input {
-          flex: 1;
+        display: flex;  
+        flex: 1;
       }
 
-      .neo-unit-control .ntx-simple-number {
-        width: 100%;
-        box-sizing: border-box;
+      .neo-unit-control .nx-zinc-control-input .input-group {
+        align-items: stretch;
         display: flex;
+        flex-wrap: wrap;
+        position: relative;
+        width: 100%;
       }
 
       .neo-unit-control > div.nx-zinc-control-input > ntx-simple-number > input{
@@ -158,7 +160,7 @@ class unitElement extends LitElement {
         box-sizing: border-box;
         margin: 0;
         appearance: none;
-        display: block;
+        display: flex;
         font-weight: 400;
         line-height: 1;
         padding: .4375rem .75rem;
@@ -241,14 +243,13 @@ class unitElement extends LitElement {
   
     return html`
       <div class="neo-unit-control">
-        <div class="input-unit-group-append">
-          <button type="button" class="neo-btn-input-icon neo-unit-btn">
-            <span>${unitsOfMeasurement[this.unittype].symbol}</span>
-          </button>
-        </div>
-        <div class="nx-zinc-control-input">
-          <ntx-simple-number>
-            <input type="text" 
+          <div class="input-unit-group-append">
+            <button type="button" class="neo-btn-input-icon neo-unit-btn">
+              <span>${unitsOfMeasurement[this.unittype].symbol}</span>
+            </button>
+          </div>
+          <div class="nx-zinc-control-input input-group">
+            <input type="text"
               data-simple-control="true"
               ntxmaskablenumberinputvalueaccessor=""
               class="form-control nx-theme-input-1 ng-untouched ng-pristine ng-valid"
@@ -258,12 +259,10 @@ class unitElement extends LitElement {
               value=${displayedValue}
               @blur=${this.onChange}
             >
-          </ntx-simple-number>
-        </div>
+          </div>
       </div>
     `;
   }
-  
 }
 
 customElements.define('neo-unit', unitElement);
