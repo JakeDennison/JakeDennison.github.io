@@ -196,11 +196,7 @@ class unitElement extends LitElement {
     const trimmedValue = inputValue.trim();
     const numericValue = parseFloat(trimmedValue);
   
-    let displayedValue = ""; // Initialize the displayedValue
-  
-    if (!isNaN(numericValue) && trimmedValue !== "") { // Check for NaN and empty input
-      // Existing code for handling numeric values...
-    }
+    if (!isNaN(numericValue) && trimmedValue !== "") {
   
     const valueToSend = isNaN(numericValue) || trimmedValue === "" ? null : numericValue; // Use null if the value is NaN or empty input
   
@@ -212,7 +208,10 @@ class unitElement extends LitElement {
     });
   
     this.dispatchEvent(customEvent);
-    e.target.value = displayedValue;
+    e.target.value = displayedValue; // Update the value directly on the input element
+    } else {
+      e.target.value = ""; // Reset the input value if it's empty or not a number
+    }
   }
   
   render() {
