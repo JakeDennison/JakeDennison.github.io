@@ -168,10 +168,10 @@ class unitElement extends LitElement {
         transition: none;
         width: 100%;
         height: auto;
-        border: 1px solid #898f94;
+        border: 1px solid #898F94;
         text-align: right;
         caret-color: #161718;
-        color: #161718;
+        color: var(--bs-body-color);
         border-color: #898F94;
         font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
         background: #FFFFFF;
@@ -194,31 +194,21 @@ class unitElement extends LitElement {
   
     let displayedValue = ""; // Initialize the displayedValue
   
-    if (!isNaN(numericValue)) {
-      // Apply rounding if enabled
-      if (this.boolRound) {
-        displayedValue = numericValue.toLocaleString(undefined, { minimumFractionDigits: this.decimalplaces + 1, maximumFractionDigits: this.decimalplaces + 1 });
-      } else {
-        displayedValue = numericValue.toLocaleString(undefined, { minimumFractionDigits: this.decimalplaces, maximumFractionDigits: this.decimalplaces });
-      }
+    if (!isNaN(numericValue) && trimmedValue !== "") { // Check for NaN and empty input
+      // Existing code for handling numeric values...
   
-      // Apply fixed value behavior if enabled
-      if (this.boolFixed) {
-        displayedValue = displayedValue.padEnd(displayedValue.indexOf('.') + this.decimalplaces + 1, '0');
-      }
+      const customEvent = new CustomEvent('ntx-value-change', {
+        bubbles: true,
+        cancelable: false,
+        composed: true,
+        detail: numericValue,
+      });
+  
+      this.dispatchEvent(customEvent); // Dispatch the event only when the input is numeric and not empty
+      e.target.value = displayedValue;
     }
-  
-    const customEvent = new CustomEvent('ntx-value-change', {
-      bubbles: true,
-      cancelable: false,
-      composed: true,
-      detail: numericValue,
-    });
-  
-    this.dispatchEvent(customEvent);
-    e.target.value = displayedValue;
   }
-    
+  
   render() {
     // Calculate the placeholder as before
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
