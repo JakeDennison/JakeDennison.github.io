@@ -124,8 +124,6 @@ class unitElement extends LitElement {
           font-size: 20px;
           font-style: normal;
           overflow: hidden;
-          line-height: var(--bs-body-line-height); /* Add this line to inherit line-height */
-          min-height:35px;
         }     
         
         .neo-btn-input-icon {
