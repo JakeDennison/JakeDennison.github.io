@@ -124,6 +124,7 @@ class unitElement extends LitElement {
           font-size: 20px;
           font-style: normal;
           overflow: hidden;
+          line-height: var(--bs-body-line-height);
         }     
         
         .neo-btn-input-icon {
@@ -147,20 +148,22 @@ class unitElement extends LitElement {
       .neo-unit-control .nx-zinc-control-input .input-group {
         align-items: stretch;
         display: flex;
+        flex-grow: 1;
         flex-wrap: wrap;
         position: relative;
         width: 100%;
       }
 
-      .neo-unit-control > div.nx-zinc-control-input > ntx-simple-number > input{
+      .neo-unit-control > div.nx-zinc-control-input > input{
         word-break: break-word;
         user-select: none;
         box-sizing: border-box;
         margin: 0;
         appearance: none;
         display: flex;
+        flex-grow: 1;
         font-weight: 400;
-        line-height: 1;
+        line-height: var(--bs-body-line-height);
         padding: .4375rem .75rem;
         transition: none;
         width: 100%;
