@@ -191,26 +191,29 @@ class unitElement extends LitElement {
   }
 
   onChange(e) {
+    // Ensure value maintains decimal places
     const inputValue = e.target.value;
     const trimmedValue = inputValue.trim();
     const numericValue = parseFloat(trimmedValue);
   
-    if (!isNaN(numericValue) && trimmedValue !== "") {
-      // Apply formatting logic here...
+    let displayedValue = ""; // Initialize the displayedValue
   
-      const customEvent = new CustomEvent('ntx-value-change', {
-        bubbles: true,
-        cancelable: false,
-        composed: true,
-        detail: numericValue,
-      });
-  
-      this.dispatchEvent(customEvent);
-      e.target.value = displayedValue; // Update the value directly on the input element
-    } else {
-      e.target.value = ""; // Reset the input value if it's empty or not a number
+    if (!isNaN(numericValue) && trimmedValue !== "") { // Check for NaN and empty input
+      // Existing code for handling numeric values...
     }
-  }  
+  
+    const valueToSend = isNaN(numericValue) || trimmedValue === "" ? null : numericValue; // Use null if the value is NaN or empty input
+  
+    const customEvent = new CustomEvent('ntx-value-change', {
+      bubbles: true,
+      cancelable: false,
+      composed: true,
+      detail: valueToSend, // Send the appropriate value
+    });
+  
+    this.dispatchEvent(customEvent);
+    e.target.value = displayedValue;
+  }
   
   render() {
     // Calculate the placeholder as before
