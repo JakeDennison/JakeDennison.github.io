@@ -191,27 +191,39 @@ class unitElement extends LitElement {
   }
 
   onChange(e) {
-    // Ensure value maintains decimal places
     const inputValue = e.target.value;
     const trimmedValue = inputValue.trim();
     const numericValue = parseFloat(trimmedValue);
   
+    // Initialize the displayedValue
+    let displayedValue = "";
+  
     if (!isNaN(numericValue) && trimmedValue !== "") {
+      // Apply your formatting logic here...
   
-    const valueToSend = isNaN(numericValue) || trimmedValue === "" ? null : numericValue; // Use null if the value is NaN or empty input
+      displayedValue = numericValue.toLocaleString(undefined, {
+        minimumFractionDigits: this.decimalplaces,
+        maximumFractionDigits: this.decimalplaces
+      });
   
-    const customEvent = new CustomEvent('ntx-value-change', {
-      bubbles: true,
-      cancelable: false,
-      composed: true,
-      detail: valueToSend, // Send the appropriate value
-    });
+      // Apply fixed value behavior if enabled
+      if (this.boolFixed) {
+        displayedValue = displayedValue.padEnd(displayedValue.indexOf('.') + this.decimalplaces + 1, '0');
+      }
   
-    this.dispatchEvent(customEvent);
-    e.target.value = displayedValue; // Update the value directly on the input element
-    } else {
-      e.target.value = ""; // Reset the input value if it's empty or not a number
+      // Dispatch the custom event with the numeric value
+      const customEvent = new CustomEvent('ntx-value-change', {
+        bubbles: true,
+        cancelable: false,
+        composed: true,
+        detail: numericValue,
+      });
+  
+      this.dispatchEvent(customEvent);
     }
+  
+    // Update the input value directly
+    e.target.value = displayedValue;
   }
   
   render() {
