@@ -198,25 +198,38 @@ class unitElement extends LitElement {
     // Initialize the displayedValue
     let displayedValue = "";
   
-    if (!isNaN(numericValue) && trimmedValue !== "") {
-      // Apply your formatting logic here...
+    // If the input is not empty
+    if (trimmedValue !== "") {
+      // If the numeric value is not NaN
+      if (!isNaN(numericValue)) {
+        // Apply your formatting logic here...
+        displayedValue = numericValue.toLocaleString(undefined, {
+          minimumFractionDigits: this.decimalplaces,
+          maximumFractionDigits: this.decimalplaces
+        });
   
-      displayedValue = numericValue.toLocaleString(undefined, {
-        minimumFractionDigits: this.decimalplaces,
-        maximumFractionDigits: this.decimalplaces
-      });
+        // Apply fixed value behavior if enabled
+        if (this.boolFixed) {
+          displayedValue = displayedValue.padEnd(displayedValue.indexOf('.') + this.decimalplaces + 1, '0');
+        }
   
-      // Apply fixed value behavior if enabled
-      if (this.boolFixed) {
-        displayedValue = displayedValue.padEnd(displayedValue.indexOf('.') + this.decimalplaces + 1, '0');
+        // Dispatch the custom event with the numeric value
+        const customEvent = new CustomEvent('ntx-value-change', {
+          bubbles: true,
+          cancelable: false,
+          composed: true,
+          detail: numericValue,
+        });
+  
+        this.dispatchEvent(customEvent);
       }
-  
-      // Dispatch the custom event with the numeric value
+    } else {
+      // If the input is empty, dispatch an event with detail as an empty string
       const customEvent = new CustomEvent('ntx-value-change', {
         bubbles: true,
         cancelable: false,
         composed: true,
-        detail: numericValue,
+        detail: "",
       });
   
       this.dispatchEvent(customEvent);
@@ -225,6 +238,7 @@ class unitElement extends LitElement {
     // Update the input value directly
     e.target.value = displayedValue;
   }
+  
   
   render() {
     // Calculate the placeholder as before
