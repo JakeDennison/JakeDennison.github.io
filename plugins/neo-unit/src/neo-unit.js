@@ -182,20 +182,21 @@ class unitElement extends LitElement {
         outline: none;
         outline-offset: 0;
       }
+
+      .neo-unit-control > div.nx-zinc-control-input > input::placeholder{
+        color: var(--bs-body-color);
+      }
       `
     ];
   }
 
   onChange(e) {
-    // Ensure value maintains decimal places
     const inputValue = e.target.value;
     const trimmedValue = inputValue.trim();
     const numericValue = parseFloat(trimmedValue);
   
-    let displayedValue = ""; // Initialize the displayedValue
-  
-    if (!isNaN(numericValue) && trimmedValue !== "") { // Check for NaN and empty input
-      // Existing code for handling numeric values...
+    if (!isNaN(numericValue) && trimmedValue !== "") {
+      // Apply formatting logic here...
   
       const customEvent = new CustomEvent('ntx-value-change', {
         bubbles: true,
@@ -204,10 +205,12 @@ class unitElement extends LitElement {
         detail: numericValue,
       });
   
-      this.dispatchEvent(customEvent); // Dispatch the event only when the input is numeric and not empty
-      e.target.value = displayedValue;
+      this.dispatchEvent(customEvent);
+      e.target.value = displayedValue; // Update the value directly on the input element
+    } else {
+      e.target.value = ""; // Reset the input value if it's empty or not a number
     }
-  }
+  }  
   
   render() {
     // Calculate the placeholder as before
