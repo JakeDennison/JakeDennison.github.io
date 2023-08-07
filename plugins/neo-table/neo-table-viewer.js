@@ -16,6 +16,11 @@ export class MyTable extends LitElement {
           title: 'Object',
           description: 'Test'
         },
+        replaceKeys:{
+          type: 'string',
+          title: 'List keys to rename',
+          description: 'Use key-value pairs to rename columns separating by colon e.g. oldKey1:newKey1,oldKey2:newKey2'
+        },
         pageItemLimit: {
           type: 'string',
           enum: ['5','10','15', '30', '50', '100'],
@@ -36,6 +41,7 @@ export class MyTable extends LitElement {
   
   static properties = {
     dataobject: '',
+    replaceKeys: '',
     pageItemLimit: { type: Number },
     currentPage: { type: Number },
   };
@@ -50,28 +56,51 @@ export class MyTable extends LitElement {
   constructor() {
     super();
     this.dataobject = '';
+    this.replaceKeys = '';
     this.pageItemLimit = 5;
     this.currentPage = 1;
   }
 
-  parseDataObject() {
-    let data;
+    parseDataObject() {
+      let data;
 
-    try {
-      data = JSON.parse(this.dataobject);
-      data = this.replaceUnicodeRegex(data);
-    } catch (e) {
-      console.log("XML detected");
       try {
-        data = this.parseXmlDataObject();
-        console.log('XML converted to JSON:', data);
+        data = JSON.parse(this.dataobject);
+        data = this.replaceUnicodeRegex(data);
       } catch (e) {
-        console.error(e);
-        data = null;
+        console.log("XML detected");
+        try {
+          data = this.parseXmlDataObject();
+          console.log('XML converted to JSON:', data);
+        } catch (e) {
+          console.error(e);
+          data = null;
+        }
       }
-    }
 
-    return data;
+      if (this.replaceKeys && data) {
+        data = this.renameKeys(data);
+      }
+
+      return data;
+  }
+
+  renameKeys(data) {
+    // create a map of oldKey:newKey pairs
+    const keyMap = this.replaceKeys.split(',').reduce((result, pair) => {
+      const [oldKey, newKey] = pair.split(':');
+      result[oldKey.trim()] = newKey.trim();
+      return result;
+    }, {});
+
+    // map over each object in data array and replace keys as necessary
+    return data.map(obj => {
+      return Object.keys(obj).reduce((newObj, key) => {
+        const newKey = keyMap[key] || key; // get the new key if it exists in the map, otherwise use the old key
+        newObj[newKey] = obj[key];
+        return newObj;
+      }, {});
+    });
   }
 
   replaceUnicodeRegex(input) {
@@ -106,9 +135,13 @@ export class MyTable extends LitElement {
       data.push(row);
     }
   
+    if (this.replaceKeys && data) {
+      return this.renameKeys(data);
+    }
+
     return data;
-  }
-  
+}
+
   changePage(newPage) {
     if (newPage > 0 && newPage <= this.totalPages) {
       this.currentPage = newPage;
