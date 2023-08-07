@@ -1,5 +1,4 @@
 import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2.6.1/all/lit-all.min.js';
-import { parseISO, format } from 'https://cdn.jsdelivr.net/npm/date-fns@2.30.0/+esm/index.js';
 
 export class MyTable extends LitElement {
   static getMetaConfig() {
@@ -32,8 +31,7 @@ export class MyTable extends LitElement {
         prefDateFormat: {
           type: 'string',
           title: 'Date format',
-          description: 'enter a preferred date format such as DD/MM/YYYY HH:mm:ss zz',
-          defaultValue: 'dd/MM/yyyy',
+          description: 'enter a preferred date format such as DD/MM/YYYY HH:mm:ss zz'
         },
       },
       events: ["ntx-value-change"],
@@ -65,7 +63,7 @@ export class MyTable extends LitElement {
     super();
     this.dataobject = '';
     this.replaceKeys = '';
-    this.prefDateFormat= 'dd/MM/yyyy';
+    this.prefDateFormat= '';
     this.pageItemLimit = "5";
     this.currentPage = 1;
   }
@@ -87,37 +85,29 @@ export class MyTable extends LitElement {
         }
       }
 
-      data = data.map(item => this.replaceKeysAndFormatDates(item));
+      if (this.replaceKeys && data) {
+        data = this.renameKeys(data);
+      }
 
       return data;
   }
 
-  replaceKeysAndFormatDates(item) {
-    const keyPairs = this.replaceKeys.split(';').map(pair => pair.split(':'));
-    const newItem = {...item};  // copy all properties of the item
+  renameKeys(data) {
+    // create a map of oldKey:newKey pairs
+    const keyMap = this.replaceKeys.split(',').reduce((result, pair) => {
+      const [oldKey, newKey] = pair.split(':');
+      result[oldKey.trim()] = newKey.trim();
+      return result;
+    }, {});
 
-    for (const [oldKey, newKey] of keyPairs) {
-      if (item.hasOwnProperty(oldKey)) {
-        let value = item[oldKey];
-        
-        // Check if the value looks like a date
-        if (this.isIso8601Date(value)) {
-          // Parse and format the date
-          const date = parseISO(value);
-          value = format(date, this.prefDateFormat);
-        }
-        
-        newItem[newKey] = value;
-        delete newItem[oldKey];
-      }
-    }
-
-    return newItem;
-}
-
-  isIso8601Date(value) {
-    const iso8601DatePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
-    return iso8601DatePattern.test(value);
+    // map over each object in data array and replace keys as necessary
+    return data.map(obj => {
+      return Object.keys(obj).reduce((newObj, key) => {
+        const newKey = keyMap[key] || key; // get the new key if it exists in the map, otherwise use the old key
+        newObj[newKey] = obj[key];
+        return newObj;
+      }, {});
+    });
   }
 
   replaceUnicodeRegex(input) {
@@ -149,9 +139,13 @@ export class MyTable extends LitElement {
         row[fieldName] = fieldValue;
       }
   
-      data.push(this.replaceKeysAndFormatDates(row));
+      data.push(row);
     }
   
+    if (this.replaceKeys && data) {
+      return this.renameKeys(data);
+    }
+
     return data;
 }
 
