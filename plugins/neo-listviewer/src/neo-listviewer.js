@@ -43,7 +43,12 @@ class listviewElement extends LitElement {
           type: 'string',
           title: 'Preferred date format',
           description: 'Enter a common data format to set the dates returned accordingly e.g. YYYY-MM-DD HH:mm:ss'
-        }
+        },
+        boolFilter: {
+          title: 'Show filter options?',
+          type: 'boolean',
+          defaultValue: true,
+        },
       },
       standardProperties: {
         fieldLabel: true,
@@ -123,6 +128,7 @@ class listviewElement extends LitElement {
       ignoredKeys: { type: String },
       renamedKeys: { type: String },
       dateFormat: { type: String },
+      boolFilter: { type: Boolean },
     };
   }
 
@@ -138,6 +144,7 @@ class listviewElement extends LitElement {
     this.ignoredKeys = '';
     this.renamedKeys = '';
     this.dateFormat = '';
+    this.boolFilter = true;
   }
 
   connectedCallback() {
@@ -177,215 +184,225 @@ class listviewElement extends LitElement {
   }
 
   preprocessData() {
-    // The list of default keys to ignore
-    const defaultIgnoredKeys = [
-      'FileSystemObjectType',
-      'ServerRedirectedEmbedUri',
-      'ServerRedirectedEmbedUrl',
-      'ComplianceAssetId',
-      '_ColorTag',
-      'FileLeafRef',
-      'GUID',
-      'Attachments',
-      'OData__UIVersionString'
-    ];
+      const defaultIgnoredKeys = [
+          'FileSystemObjectType',
+          'ServerRedirectedEmbedUri',
+          'ServerRedirectedEmbedUrl',
+          'ComplianceAssetId',
+          '_ColorTag',
+          'FileLeafRef',
+          'GUID',
+          'Attachments',
+          'OData__UIVersionString'
+      ];
 
-    // Convert the ignoredKeys property to an array, removing any whitespace
-    const additionalIgnoredKeys = this.ignoredKeys ? this.ignoredKeys.split(',').map(key => key.trim()) : [];
+      const additionalIgnoredKeys = this.ignoredKeys ? this.ignoredKeys.split(',').map(key => key.trim()) : [];
+      const ignoredKeys = defaultIgnoredKeys.concat(additionalIgnoredKeys);
 
-    // Combine the default keys with the ones specified by the property
-    const ignoredKeys = defaultIgnoredKeys.concat(additionalIgnoredKeys);
+      const renamedKeysObject = this.parseRenamedKeysToObject();
 
-    this.listdata = this.listdata.map((item, index) => {
-      // Check if item is null or not an object
-      if (!item || typeof item !== 'object') {
-        return item;
-      }
+      this.listdata = this.listdata.map(item => {
+        if (!item || typeof item !== 'object') {
+          return item;
+        }
   
-      let newItem = { ...item };
+        let newItem = { ...item };
+  
+        for (const key of ignoredKeys) {
+          delete newItem[key];
+        }
+  
+        newItem = this.handlePersonField(newItem);
+        newItem = this.handleEmailFields(newItem);
+        newItem = this.handleJSONFields(newItem);
+        newItem = this.handleDateFields(newItem);
+        newItem = this.handleHyperlinkFields(newItem);
+        newItem = this.handleSemicolonSeparatedValues(newItem);
+  
+        for (const [oldKey, newKey] of Object.entries(renamedKeysObject)) {
+          if (newItem.hasOwnProperty(oldKey)) {
+            newItem[newKey] = newItem[oldKey];
+            delete newItem[oldKey];
+          }
+        }
+  
+        return newItem;
+      });
+    }
 
-      for (const key of ignoredKeys) {
-        delete newItem[key];
-      }
-
-      // Handle objects with the "Person" field data structure
+  handlePersonField(item) {
       for (const [key, value] of Object.entries(item)) {
-        // Check if value is null or not an object
-        if (!value || typeof value !== 'object') {
-          continue;
-        }
+          if (!value || typeof value !== 'object') {
+              continue;
+          }
 
-        if (Object.keys(value).includes('EMail')) {
-          let parentKeyName = key.endsWith('_Email') ? key.slice(0, -6) : key;
-          const emailKey = `${parentKeyName}_Email`;
-          const usernameKey = `${parentKeyName}_Username`;
-          const displayNameKey = `${parentKeyName}_DisplayName`;
+          if (Object.keys(value).includes('EMail')) {
+              let parentKeyName = key.endsWith('_Email') ? key.slice(0, -6) : key;
+              const emailKey = `${parentKeyName}_Email`;
+              const usernameKey = `${parentKeyName}_Username`;
+              const displayNameKey = `${parentKeyName}_DisplayName`;
 
-          newItem[parentKeyName] = value.EMail; // Replace the parent key field with the email property
-          delete newItem[emailKey]; // Remove the _Email field
-          delete newItem[usernameKey]; // Remove the _Username field
-          delete newItem[displayNameKey]; // Remove the _DisplayName field
-        }
+              item[parentKeyName] = value.EMail;
+              delete item[emailKey];
+              delete item[usernameKey];
+              delete item[displayNameKey];
+          }
       }
+      return item;
+  }
 
-      // Handle flat keys ending with "_Email" and delete corresponding "_Id" and "_StringId" keys
+  handleEmailFields(item) {
       const emailsItem = {};
       for (const [key, value] of Object.entries(item)) {
-        if (key.endsWith('_Email')) {
-          let name = key.slice(0, -6); // Remove "_Email" to get the name
-          emailsItem[name] = value; // Replace the key field with the email value
+          if (key.endsWith('_Email')) {
+              let name = key.slice(0, -6);
+              emailsItem[name] = value;
 
-          // If corresponding "_Id" and "_StringId" keys exist, delete them
-          let idKey = `${name}Id`;
-          let stringIdKey = `${name}StringId`;
-          if (item.hasOwnProperty(idKey)) {
-            delete item[idKey];
+              let idKey = `${name}Id`;
+              let stringIdKey = `${name}StringId`;
+              if (item.hasOwnProperty(idKey)) {
+                  delete item[idKey];
+              }
+              if (item.hasOwnProperty(stringIdKey)) {
+                  delete item[stringIdKey];
+              }
+          } else {
+              emailsItem[key] = value;
           }
-          if (item.hasOwnProperty(stringIdKey)) {
-            delete item[stringIdKey];
-          }
-        } else {
-          emailsItem[key] = value; // Copy other properties to the new object
-        }
       }
+      return emailsItem;
+  }
 
-      // Process each property of the item
-      for (const [key, value] of Object.entries(newItem)) {
-        // Handle JSON-encoded fields
-        if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-          try {
-            const jsonObj = JSON.parse(value);
-            
-            // Handle location field
-            if (
-              jsonObj.Address &&
-              jsonObj.Address.Street &&
-              jsonObj.Address.City &&
-              jsonObj.Address.CountryOrRegion
-            ) {
-              newItem[key] = `${jsonObj.Address.Street}, ${jsonObj.Address.City}, ${jsonObj.Address.CountryOrRegion}`;
-            }
-  
-            // Handle image field
-            if (jsonObj.serverUrl && jsonObj.serverRelativeUrl) {
-              newItem[key] = `<img height="42px" width="42px" src="${jsonObj.serverUrl}${jsonObj.serverRelativeUrl}" alt="Image">`;
-            }
-          } catch (error) {
-            // Invalid JSON, leave the value as it is
-          }
-        }
-  
-        // Handle date and time fields
-        if (typeof value === 'string') {
-          const dateFormat = this.dateFormat;
-          let formattedDate = null;
+  handleJSONFields(item) {
+      for (const [key, value] of Object.entries(item)) {
+          if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+              try {
+                  const jsonObj = JSON.parse(value);
+                  if (
+                      jsonObj.Address &&
+                      jsonObj.Address.Street &&
+                      jsonObj.Address.City &&
+                      jsonObj.Address.CountryOrRegion
+                  ) {
+                      item[key] = `${jsonObj.Address.Street}, ${jsonObj.Address.City}, ${jsonObj.Address.CountryOrRegion}`;
+                  }
 
-          if (dateFormat) {
-            // Check if the value matches the ISO format
-            if (value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/)) {
-              const date = new Date(value);
-              formattedDate = this.formatDate(date, dateFormat);
-            }
+                  if (jsonObj.serverUrl && jsonObj.serverRelativeUrl) {
+                      item[key] = `<img height="42px" width="42px" src="${jsonObj.serverUrl}${jsonObj.serverRelativeUrl}" alt="Image">`;
+                  }
+              } catch (error) {
+                  // Invalid JSON, leave the value as it is
+              }
           }
-
-          if (formattedDate) {
-            newItem[key] = formattedDate;
-          }
-        }
-
-        // Handle hyperlink field
-        if (typeof value === 'string') {
-          const regex = /^https?:\/\/[^\s,]+, .+$/;
-          if (regex.test(value)) {
-            const [url, label] = value.split(', ');
-            newItem[key] = url; // Store only the URL part
-          }
-        }
-  
-      // Handle semicolon-separated values
-        if (
-          typeof value === 'string' && 
-          value.includes(';') &&
-          !value.toLowerCase().includes('<div') // Ignore the value if it contains "<div"
-        ) {
-          const choices = value.split(';').map(choice => choice.trim().replace('#', ''));
-          newItem[key] = choices.map(choice => `<span class="choice-pill">${choice}</span>`).join('');
-        }
       }
-  
-      return newItem;
-    });
+      return item;
+  }
+
+  handleDateFields(item) {
+      const dateFormat = this.dateFormat;
+      for (const [key, value] of Object.entries(item)) {
+          if (typeof value === 'string') {
+              if (dateFormat && value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/)) {
+                  const date = new Date(value);
+                  const formattedDate = this.formatDate(date, dateFormat);
+                  item[key] = formattedDate;
+              }
+          }
+      }
+      return item;
+  }
+
+  handleHyperlinkFields(item) {
+      const regex = /^https?:\/\/[^\s,]+, .+$/;
+      for (const [key, value] of Object.entries(item)) {
+          if (typeof value === 'string') {
+              if (regex.test(value)) {
+                  const [url, label] = value.split(', ');
+                  item[key] = url;
+              }
+          }
+      }
+      return item;
+  }
+
+  handleSemicolonSeparatedValues(item) {
+      for (const [key, value] of Object.entries(item)) {
+          if (
+              typeof value === 'string' &&
+              value.includes(';') &&
+              !value.toLowerCase().includes('<div')
+          ) {
+              const choices = value.split(';').map(choice => choice.trim().replace('#', ''));
+              item[key] = choices.map(choice => `<span class="choice-pill">${choice}</span>`).join('');
+          }
+      }
+      return item;
   }
   
   firstUpdated() {
     super.firstUpdated();
-  
+
     // Preprocess the data and rename keys
     const updatedData = this.listdata.map(item => {
-      const renamedItem = { ...item };
-  
-      // Rename the keys based on the this.renamedKeys property
-      if (this.renamedKeys) {
-        const keyValuePairArray = this.renamedKeys.split(',').map(pair => pair.trim());
-        keyValuePairArray.forEach(pair => {
-          const [oldKey, newKey] = pair.split(':');
-          if (renamedItem.hasOwnProperty(oldKey)) {
-            renamedItem[newKey] = renamedItem[oldKey];
-            delete renamedItem[oldKey];
-          }
-        });
-      }
-  
-      return renamedItem;
+        const renamedItem = { ...item };
+
+        for (const [oldKey, newKey] of Object.entries(this.parseRenamedKeysToObject())) {
+            if (renamedItem.hasOwnProperty(oldKey)) {
+                renamedItem[newKey] = renamedItem[oldKey];
+                delete renamedItem[oldKey];
+            }
+        }
+
+        return renamedItem;
     });
-  
+
     const { data: tabledata, keys } = this.parseDataObject();
-  
+
     if (!tabledata) {
-      console.error('Invalid data object');
-      return;
+        console.error('Invalid data object');
+        return;
     }
-  
+
     this.keys = keys;
-  
+
     // Preprocess the data
     this.listdata = tabledata.map(item => ({ ...item })); // Make a copy of the tabledata array
-  
+
     this.preprocessData();
-  
+
     // Replace Unicode regex
     const processedData = this.replaceUnicodeRegex(this.listdata);
-  
+
     // Handle formatting
     const columns = Object.keys(processedData[0]).map(key => {
-      return {
-        title: key,
-        field: key,
-        formatter: (cell) => {
-          const value = cell.getValue();
-          if (value === null || value === undefined) {
-            return ''; // Return an empty string for null or undefined values
-          } else if (typeof value === 'string' && value.startsWith('http')) {
-            return html`<a href="${value}" target="_blank">${value}</a>`;
-          }
-          return value;
-        }
-      };
+        return {
+            title: key, // Use the new key here
+            field: key, // Use the new key here
+            formatter: (cell) => {
+                const value = cell.getValue();
+                if (value === null || value === undefined) {
+                    return ''; // Return an empty string for null or undefined values
+                } else if (typeof value === 'string' && value.startsWith('http')) {
+                    return html`<a href="${value}" target="_blank">${value}</a>`;
+                }
+                return value;
+            }
+        };
     });
-  
+
     const tableDiv = this.shadowRoot.querySelector('#table'); // Get the table div
     tableDiv.classList.add("neo-lv-table");
-  
+
     // Keep a reference to the Tabulator instance
     this.table = new Tabulator(tableDiv, {
-      data: processedData, // Use the preprocessed and parsed data
-      layout: 'fitDataFill',
-      pagination: 'local',
-      paginationSize: this.pageItemLimit,
-      paginationSizeSelector: [5, 10, 15, 30, 50, 100],
-      movableColumns: true,
-      height: 'auto',
-      columns: columns,
+        data: processedData, // Use the preprocessed and parsed data
+        layout: 'fitDataFill',
+        pagination: 'local',
+        paginationSize: this.pageItemLimit,
+        paginationSizeSelector: [5, 10, 15, 30, 50, 100],
+        movableColumns: true,
+        height: 'auto',
+        columns: columns, // Use the updated columns array
     });
   
     this.table.updateData(updatedData);
