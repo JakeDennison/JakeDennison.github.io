@@ -50,6 +50,11 @@ class listviewElement extends LitElement {
           title: 'Specify the order of keys',
           description: 'Semicolon separate a list of keys to define the order e.g. Key1;Key2;Key3'
         },
+        editableKeys:{
+          type: 'string',
+          title: 'Specify the columns that should be editable',
+          description: 'Semicolon separate a list of keys (column names) to define the order e.g. Key1;Key2;Key3'
+        },
         dateFormat:{
           type: 'string',
           title: 'Preferred date format',
@@ -419,6 +424,7 @@ class listviewElement extends LitElement {
       return {
         title: key,
         field: key,
+        editor: false,
         formatter: (cell) => {
           const value = cell.getValue();
           if (value === null || value === undefined) {
@@ -430,40 +436,25 @@ class listviewElement extends LitElement {
         }
       };
     });
+
+    // Parse editableKeys property and split into an array
+    const editableKeysList = this.editableKeys ? this.editableKeys.split(';').map(key => key.trim()) : [];
+
+    // Iterate through columns and set editor property for matching keys
+    columns.forEach(column => {
+      if (editableKeysList.includes(column.field)) {
+        column.editor = true; // Set editor property for editable columns
+      }
+    });
   
     const tableDiv = this.shadowRoot.querySelector('#table'); // Get the table div
     tableDiv.classList.add("neo-lv-table");
-    const contextMenuItems = [
-      {
-        label: "Edit",
-        action: function(e, row) {
-          const id = row.getData().ID;
-          // Handle edit action here
-          console.log("Edit ID:", id);
-        }
-      },
-      {
-        label: "Open",
-        action: function(e, row) {
-          const id = row.getData().ID;
-          const url = `${this.listURL}/DispForm.aspx?ID=${id}`;
-          window.open(url, "_blank");
-        }
-      },
-      {
-        label: "Select",
-        action: function(e, row) {
-          const rowData = row.getData();
-          const idValue = rowData.ID;
-          console.log("Selected ID Value:", idValue);
-        }
-      }
-    ];
-  
+
     // Keep a reference to the Tabulator instance
     this.table = new Tabulator(tableDiv, {
       data: processedData,
       layout: 'fitDataFill',
+      history:true,
       pagination: 'local',
       paginationSize: this.pageItemLimit,
       paginationSizeSelector: [5, 10, 15, 30, 50, 100],
@@ -471,7 +462,6 @@ class listviewElement extends LitElement {
       height: 'auto',
       rowHeight:'41',
       selectable: true,
-      contextMenu: contextMenuItems,
       columns: columns,
     });
   
@@ -481,12 +471,6 @@ class listviewElement extends LitElement {
       const id = row.getData().ID;
       const url = `${this.listURL}/DispForm.aspx?ID=${id}`;
       window.open(url, "_blank");
-    });
-  
-    this.table.on("rowClick", (e, row) => {
-      const rowData = row.getData();
-      const idValue = rowData.ID;
-      console.log("Selected ID Value:", idValue);
     });
   }
   
@@ -498,6 +482,14 @@ class listviewElement extends LitElement {
 
   handleResetClick() {
     this.table.clearFilter();
+  }
+
+  handleUndo() {
+    table.undo();
+  }
+
+  handleRedo() {
+    table.redo();
   }
 
   render() {
@@ -513,10 +505,18 @@ class listviewElement extends LitElement {
           <button id="filter-btn" class="fltr-btn" @click="${this.handleFilterClick}">Filter</button>
           <button id="reset-btn" class="fltr-btn" @click="${this.handleResetClick}">Reset</button>
         </div>
+        <div>
+          <button id="history-undo" @click="${this.handleUndo}">Undo Edit</button>
+          <button id="history-redo" @click="${this.handleRedo}">Redo Edit</button>
+        </div>
         <div id="table"></div>
       `;
     } else {
       return html`
+      <div>
+          <button id="history-undo">Undo Edit</button>
+          <button id="history-redo">Redo Edit</button>
+      </div>
         <div id="table"></div>
       `;
     }
