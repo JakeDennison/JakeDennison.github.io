@@ -184,51 +184,65 @@ class listviewElement extends LitElement {
   }
 
   preprocessData() {
-      const defaultIgnoredKeys = [
-          'FileSystemObjectType',
-          'ServerRedirectedEmbedUri',
-          'ServerRedirectedEmbedUrl',
-          'ComplianceAssetId',
-          '_ColorTag',
-          'FileLeafRef',
-          'GUID',
-          'Attachments',
-          'OData__UIVersionString'
-      ];
+    const defaultIgnoredKeys = [
+        'FileSystemObjectType',
+        'ServerRedirectedEmbedUri',
+        'ServerRedirectedEmbedUrl',
+        'ComplianceAssetId',
+        '_ColorTag',
+        'FileLeafRef',
+        'GUID',
+        'Attachments',
+        'OData__UIVersionString'
+    ];
 
-      const additionalIgnoredKeys = this.ignoredKeys ? this.ignoredKeys.split(',').map(key => key.trim()) : [];
-      const ignoredKeys = defaultIgnoredKeys.concat(additionalIgnoredKeys);
+    const additionalIgnoredKeys = this.ignoredKeys ? this.ignoredKeys.split(',').map(key => key.trim()) : [];
+    const ignoredKeys = defaultIgnoredKeys.concat(additionalIgnoredKeys);
 
-      const renamedKeysObject = this.parseRenamedKeysToObject();
+    const renamedKeysObject = this.parseRenamedKeysToObject();
 
-      this.listdata = this.listdata.map(item => {
-        if (!item || typeof item !== 'object') {
-          return item;
+    this.listdata = this.listdata.map(item => {
+      if (!item || typeof item !== 'object') {
+        return item;
+      }
+
+      let newItem = { ...item };
+
+      for (const key of ignoredKeys) {
+        delete newItem[key];
+      }
+
+      newItem = this.handlePersonField(newItem);
+      newItem = this.handleEmailFields(newItem);
+      newItem = this.handleJSONFields(newItem);
+      newItem = this.handleDateFields(newItem);
+      newItem = this.handleHyperlinkFields(newItem);
+      newItem = this.handleSemicolonSeparatedValues(newItem);
+
+      for (const [oldKey, newKey] of Object.entries(renamedKeysObject)) {
+        if (newItem.hasOwnProperty(oldKey)) {
+          newItem[newKey] = newItem[oldKey];
+          delete newItem[oldKey];
         }
-  
-        let newItem = { ...item };
-  
-        for (const key of ignoredKeys) {
-          delete newItem[key];
+      }
+
+      return newItem;
+    });
+  }
+
+  parseRenamedKeysToObject() {
+    const renamedKeysObject = {};
+    if (this.renamedKeys) {
+      const pairs = this.renamedKeys.split(',');
+      for (const pair of pairs) {
+        const [oldKey, newKey] = pair.split(':').map(item => item.trim());
+        if (oldKey && newKey) {
+          renamedKeysObject[oldKey] = newKey;
         }
-  
-        newItem = this.handlePersonField(newItem);
-        newItem = this.handleEmailFields(newItem);
-        newItem = this.handleJSONFields(newItem);
-        newItem = this.handleDateFields(newItem);
-        newItem = this.handleHyperlinkFields(newItem);
-        newItem = this.handleSemicolonSeparatedValues(newItem);
-  
-        for (const [oldKey, newKey] of Object.entries(renamedKeysObject)) {
-          if (newItem.hasOwnProperty(oldKey)) {
-            newItem[newKey] = newItem[oldKey];
-            delete newItem[oldKey];
-          }
-        }
-  
-        return newItem;
-      });
+      }
     }
+    return renamedKeysObject;
+  }
 
   handlePersonField(item) {
       for (const [key, value] of Object.entries(item)) {
