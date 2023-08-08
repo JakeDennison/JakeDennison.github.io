@@ -181,43 +181,49 @@ class listviewElement extends LitElement {
         this.renamedKeysObject[oldKey] = newKey;
       }
     }
-    this.loadData();
   }
   
   parseDataObject() {
     let tabledata, keys;
-  
+
     try {
-      tabledata = JSON.parse(this.dataobject);
-      tabledata = this.replaceUnicodeRegex(tabledata);
-  
-      // Rearrange data based on the orderKeys property
-      const columnOrder = this.orderKeys ? this.orderKeys.split(';').map(key => key.trim()) : [];
-      tabledata = this.rearrangeData(tabledata, columnOrder);
-  
-      // Rename keys in the data based on renamedKeys property
-      const renamedKeysObject = this.parseRenamedKeysToObject();
-      tabledata = tabledata.map(item => {
-        const newItem = {};
-        for (const [oldKey, newKey] of Object.entries(renamedKeysObject)) {
-          if (item.hasOwnProperty(oldKey)) {
-            newItem[newKey] = item[oldKey];
-          } else {
-            newItem[oldKey] = item[oldKey];
-          }
-        }
-        return newItem;
-      });
-  
-      keys = tabledata.length > 0 ? Object.keys(tabledata[0]) : [];
+        tabledata = JSON.parse(this.dataobject);
+        tabledata = this.replaceUnicodeRegex(tabledata);
+
+        // Split renamed keys into an array of oldKey:newKey pairs
+        const renamedKeyPairs = this.renamedKeys.split(',').map(pair => pair.trim().split(':'));
+        
+        // Create a map of oldKey:newKey pairs
+        const keyMap = renamedKeyPairs.reduce((result, [oldKey, newKey]) => {
+            result[oldKey] = newKey;
+            return result;
+        }, {});
+
+        // Map over each object in data array and replace keys as necessary
+        tabledata = tabledata.map(item => {
+            const newItem = {};
+            for (const [oldKey, value] of Object.entries(item)) {
+                const newKey = keyMap[oldKey] || oldKey;
+                newItem[newKey] = value;
+            }
+            return newItem;
+        });
+
+        keys = tabledata.length > 0 ? Object.keys(tabledata[0]) : [];
+
+        // Rearrange data based on the orderKeys property
+        const columnOrder = this.orderKeys ? this.orderKeys.split(';').map(key => key.trim()) : [];
+        tabledata = this.rearrangeData(tabledata, columnOrder);
+        
     } catch (e) {
-      console.error(e);
-      tabledata = null;
-      keys = [];
+        console.error(e);
+        tabledata = null;
+        keys = [];
     }
-  
+
     return { data: tabledata, keys };
-  }
+}
+
   
   rearrangeData(data, columnOrder) {
     return data.map(item => {
