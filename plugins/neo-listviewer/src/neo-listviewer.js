@@ -362,66 +362,66 @@ class listviewElement extends LitElement {
   
   firstUpdated() {
     super.firstUpdated();
-
+  
     const { data: tabledata, keys } = this.parseDataObject();
-
+  
     if (!tabledata) {
-        console.error('Invalid data object');
-        return;
+      console.error('Invalid data object');
+      return;
     }
-
+  
+    this.keys = keys;
+  
     // Preprocess the data
     this.listdata = tabledata.map(item => ({ ...item })); // Make a copy of the tabledata array
-
+  
     this.preprocessData();
-
+  
     // Replace Unicode regex
     const processedData = this.replaceUnicodeRegex(this.listdata);
-
+  
     // Handle formatting
     const columns = Object.keys(processedData[0]).map(key => {
-        return {
-            title: key, // Use the new key here
-            field: key, // Use the new key here
-            formatter: (cell) => {
-                const value = cell.getValue();
-                if (value === null || value === undefined) {
-                    return ''; // Return an empty string for null or undefined values
-                } else if (typeof value === 'string' && value.startsWith('http')) {
-                    return html`<a href="${value}" target="_blank">${value}</a>`;
-                }
-                return value;
-            }
-        };
+      return {
+        title: key,
+        field: key,
+        formatter: (cell) => {
+          const value = cell.getValue();
+          if (value === null || value === undefined) {
+            return '';
+          } else if (typeof value === 'string' && value.startsWith('http')) {
+            return html`<a href="${value}" target="_blank">${value}</a>`;
+          }
+          return value;
+        }
+      };
     });
-
+  
     const tableDiv = this.shadowRoot.querySelector('#table'); // Get the table div
     tableDiv.classList.add("neo-lv-table");
-
+  
     // Keep a reference to the Tabulator instance
     this.table = new Tabulator(tableDiv, {
-        data: processedData, // Use the preprocessed and parsed data
-        layout: 'fitDataFill',
-        pagination: 'local',
-        paginationSize: this.pageItemLimit,
-        paginationSizeSelector: [5, 10, 15, 30, 50, 100],
-        movableColumns: true,
-        height: 'auto',
-        columns: columns, // Use the updated columns array
+      data: processedData,
+      layout: 'fitDataFill',
+      pagination: 'local',
+      paginationSize: this.pageItemLimit,
+      paginationSizeSelector: [5, 10, 15, 30, 50, 100],
+      movableColumns: true,
+      height: 'auto',
+      columns: columns,
     });
   
-    this.table.updateData(updatedData);
+    this.table.updateData(processedData);
   
     this.table.on("rowDblClick", (e, row) => {
-      // Double-click event handler
-      const id = row.getData().ID; // Get the ID value from the double-clicked row
-      const url = `${this.listURL}/DispForm.aspx?ID=${id}`; // Combine the list URL and ID to form the SharePoint item URL
+      const id = row.getData().ID;
+      const url = `${this.listURL}/DispForm.aspx?ID=${id}`;
       window.open(url, "_blank");
     });
   
     this.table.on("rowClick", (e, row) => {
-      // Row click event handler
-      e.preventDefault(); // Prevent default row selection behavior
+      e.preventDefault();
     });
   }
   
