@@ -436,7 +436,7 @@ class listviewElement extends LitElement {
       paginationSizeSelector: [5, 10, 15, 30, 50, 100],
       movableColumns: true,
       height: 'auto',
-      rowHeight:'auto',
+      rowHeight:'31',
       columns: columns,
     });
   
