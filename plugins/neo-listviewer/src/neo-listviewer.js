@@ -117,7 +117,11 @@ class listviewElement extends LitElement {
     .neo-lv-table {
       border: 1px solid var(--ntx-form-theme-color-border);
       border-radius: var(--ntx-form-theme-border-radius);
-    } 
+    }
+
+    #table {
+      min-height: 200px;
+    }
   `;
 
   static get properties() {
