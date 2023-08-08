@@ -165,6 +165,15 @@ class listviewElement extends LitElement {
     linkElem.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/tabulator/5.5.0/css/tabulator_bootstrap5.min.css');  // replace with the actual path to CSS
   
     this.shadowRoot.appendChild(linkElem);
+
+    if (this.renamedKeys) {
+      this.renamedKeysObject = {};
+      const pairs = this.renamedKeys.split(',');
+      for (const pair of pairs) {
+        const [oldKey, newKey] = pair.split(':').map(k => k.trim());
+        this.renamedKeysObject[oldKey] = newKey;
+      }
+    }
   }
   
   parseDataObject() {
