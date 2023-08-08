@@ -433,6 +433,32 @@ class listviewElement extends LitElement {
   
     const tableDiv = this.shadowRoot.querySelector('#table'); // Get the table div
     tableDiv.classList.add("neo-lv-table");
+    const contextMenuItems = [
+      {
+        label: "Edit",
+        action: function(e, row) {
+          const id = row.getData().ID;
+          // Handle edit action here
+          console.log("Edit ID:", id);
+        }
+      },
+      {
+        label: "Open",
+        action: function(e, row) {
+          const id = row.getData().ID;
+          const url = `${this.listURL}/DispForm.aspx?ID=${id}`;
+          window.open(url, "_blank");
+        }
+      },
+      {
+        label: "Select",
+        action: function(e, row) {
+          const rowData = row.getData();
+          const idValue = rowData.ID;
+          console.log("Selected ID Value:", idValue);
+        }
+      }
+    ];
   
     // Keep a reference to the Tabulator instance
     this.table = new Tabulator(tableDiv, {
@@ -445,6 +471,7 @@ class listviewElement extends LitElement {
       height: 'auto',
       rowHeight:'41',
       selectable: true,
+      contextMenu: contextMenuItems,
       columns: columns,
     });
   
@@ -458,7 +485,8 @@ class listviewElement extends LitElement {
   
     this.table.on("rowClick", (e, row) => {
       const rowData = row.getData();
-      console.log("Selected Row Data:", rowData);
+      const idValue = rowData.ID;
+      console.log("Selected ID Value:", idValue);
     });
   }
   
