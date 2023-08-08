@@ -169,45 +169,39 @@ class listviewElement extends LitElement {
   
   parseDataObject() {
     let tabledata, keys;
-      try {
-          tabledata = JSON.parse(this.dataobject);
-          tabledata = this.replaceUnicodeRegex(tabledata);
 
-          // Rename keys in the data based on renamedKeys property
-          const renamedKeysObject = this.parseRenamedKeys(this.renamedKeys);
-          tabledata = tabledata.map(item => {
-              const newItem = {};
-              for (const [oldKey, newKey] of Object.entries(renamedKeysObject)) {
-                  if (item.hasOwnProperty(oldKey)) {
-                      newItem[newKey] = item[oldKey];
-                  } else {
-                      newItem[oldKey] = item[oldKey];
-                  }
-              }
-              return newItem;
-          });
+    try {
+        tabledata = JSON.parse(this.dataobject);
+        tabledata = this.replaceUnicodeRegex(tabledata);
 
-          keys = tabledata.length > 0 ? Object.keys(tabledata[0]) : [];
-      } catch (e) {
-          console.error(e);
-          tabledata = null;
-          keys = [];
-      }
+        // Split renamed keys into an array of oldKey:newKey pairs
+        const renamedKeyPairs = this.renamedKeys.split(',').map(pair => pair.trim().split(':'));
+        
+        // Create a map of oldKey:newKey pairs
+        const keyMap = renamedKeyPairs.reduce((result, [oldKey, newKey]) => {
+            result[oldKey] = newKey;
+            return result;
+        }, {});
 
-      return { data: tabledata, keys };
-  }
+        // Map over each object in data array and replace keys as necessary
+        tabledata = tabledata.map(item => {
+            const newItem = {};
+            for (const [oldKey, value] of Object.entries(item)) {
+                const newKey = keyMap[oldKey] || oldKey;
+                newItem[newKey] = value;
+            }
+            return newItem;
+        });
 
-  parseRenamedKeys(renamedKeys) {
-    const renamedKeysObject = {};
-    if (renamedKeys) {
-        const pairs = renamedKeys.split(',');
-        for (const pair of pairs) {
-            const [oldKey, newKey] = pair.split(':').map(k => k.trim());
-            renamedKeysObject[oldKey] = newKey;
-        }
+        keys = tabledata.length > 0 ? Object.keys(tabledata[0]) : [];
+    } catch (e) {
+        console.error(e);
+        tabledata = null;
+        keys = [];
     }
-    return renamedKeysObject;
-  }
+
+    return { data: tabledata, keys };
+}
 
   constructUrl(baseUrl, endpoint) {
     return baseUrl.endsWith('/') ? `${baseUrl}${endpoint}` : `${baseUrl}/${endpoint}`;
