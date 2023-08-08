@@ -461,7 +461,6 @@ class listviewElement extends LitElement {
       movableColumns: true,
       height: 'auto',
       rowHeight:'41',
-      selectable: true,
       columns: columns,
     });
   
