@@ -436,22 +436,27 @@ class listviewElement extends LitElement {
   }
 
   render() {
-    return html`
-      ${this.boolFilter
-        ? html`
-            <div style="margin-bottom:5px">
-              <select id="filter-field">
-                ${this.filteredKeys.map(key => html`<option value="${key}">${key}</option>`)}
-              </select>
-              <input id="filter-value" type="text" placeholder="Filter value"/>
-              <button id="filter-btn" class="fltr-btn" @click="${this.handleFilterClick}">Filter</button>
-              <button id="reset-btn" class="fltr-btn" @click="${this.handleResetClick}">Reset</button>
-            </div>
-          `
-        : ''}
-      <div id="table"></div>
-    `;
+    let filterOptions = this.keys.map(key => this.renamedKeysObject[key] || key); // Use renamed keys if available
+  
+    if (this.boolFilter) {
+      return html`
+        <div style="margin-bottom:5px">
+          <select id="filter-field">
+            ${filterOptions.map(key => html`<option value="${key}">${key}</option>`)}
+          </select>
+          <input id="filter-value" type="text" placeholder="Filter value"/>
+          <button id="filter-btn" class="fltr-btn" @click="${this.handleFilterClick}">Filter</button>
+          <button id="reset-btn" class="fltr-btn" @click="${this.handleResetClick}">Reset</button>
+        </div>
+        <div id="table"></div>
+      `;
+    } else {
+      return html`
+        <div id="table"></div>
+      `;
+    }
   }
+  
 }
 
 customElements.define('neo-listviewer', listviewElement);
