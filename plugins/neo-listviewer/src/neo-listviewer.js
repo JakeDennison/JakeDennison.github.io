@@ -65,6 +65,10 @@ class listviewElement extends LitElement {
       border:1px solid #dee2e6;
       border-radius:3px;
     }
+
+    .tabulator-col-resize-handle {
+    height: auto !important; /* Adjust the height as needed */
+    }
     /* Custom styles for the filter bar */
     #filter-value {
       padding: 4px;
@@ -129,6 +133,7 @@ class listviewElement extends LitElement {
       renamedKeys: { type: String },
       dateFormat: { type: String },
       boolFilter: { type: Boolean },
+      filteredKeys: { type: Array },
     };
   }
 
@@ -159,17 +164,18 @@ class listviewElement extends LitElement {
   
   parseDataObject() {
     let tabledata, keys;
-
+  
     try {
       tabledata = JSON.parse(this.dataobject);
       tabledata = this.replaceUnicodeRegex(tabledata);
       keys = tabledata.length > 0 ? Object.keys(tabledata[0]) : [];
+      this.filteredKeys = keys;
     } catch (e) {
       console.error(e);
       tabledata = null;
       keys = [];
     }
-
+  
     return { data: tabledata, keys };
   }
 
@@ -446,16 +452,18 @@ class listviewElement extends LitElement {
 
   render() {
     return html`
-      ${this.boolFilter ? html`
-        <div style="margin-bottom:5px">
-          <select id="filter-field">
-            ${this.keys.map(key => html`<option value="${key}">${key}</option>`)}
-          </select>
-          <input id="filter-value" type="text" placeholder="Filter value"/>
-          <button id="filter-btn" class="fltr-btn" @click="${this.handleFilterClick}">Filter</button>
-          <button id="reset-btn" class="fltr-btn" @click="${this.handleResetClick}">Reset</button>
-        </div>
-      ` : ''}
+      ${this.boolFilter
+        ? html`
+            <div style="margin-bottom:5px">
+              <select id="filter-field">
+                ${this.filteredKeys.map(key => html`<option value="${key}">${key}</option>`)}
+              </select>
+              <input id="filter-value" type="text" placeholder="Filter value"/>
+              <button id="filter-btn" class="fltr-btn" @click="${this.handleFilterClick}">Filter</button>
+              <button id="reset-btn" class="fltr-btn" @click="${this.handleResetClick}">Reset</button>
+            </div>
+          `
+        : ''}
       <div id="table"></div>
     `;
   }
