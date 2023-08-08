@@ -29,6 +29,12 @@ class listviewElement extends LitElement {
           description: 'Number of items to show per page',
           defaultValue: '5',
         },
+        selectedItems:{
+          type: 'string',
+          title: 'Selected Items',
+          description: 'Store selected item IDs, ID must be available in JSON to work.',
+          isValueField: true,
+        },
         ignoredKeys:{
           type: 'string',
           title: 'Keys to ignore',
@@ -55,10 +61,11 @@ class listviewElement extends LitElement {
           defaultValue: true,
         },
       },
+      events: ["ntx-value-change"],
       standardProperties: {
         fieldLabel: true,
         description: true,
-      }
+      },
     };
   }
 
@@ -437,6 +444,7 @@ class listviewElement extends LitElement {
       movableColumns: true,
       height: 'auto',
       rowHeight:'41',
+      selectable: true,
       columns: columns,
     });
   
@@ -449,7 +457,8 @@ class listviewElement extends LitElement {
     });
   
     this.table.on("rowClick", (e, row) => {
-      e.preventDefault();
+      const rowData = row.getData();
+      console.log("Selected Row Data:", rowData);
     });
   }
   
