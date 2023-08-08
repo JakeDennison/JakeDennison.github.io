@@ -74,6 +74,7 @@ class listviewElement extends LitElement {
     .tabulator-col-resize-handle {
     height: auto !important; /* Adjust the height as needed */
     }
+
     /* Custom styles for the filter bar */
     #filter-value {
       padding: 4px;
@@ -123,10 +124,6 @@ class listviewElement extends LitElement {
       border: 1px solid var(--ntx-form-theme-color-border);
       border-radius: var(--ntx-form-theme-border-radius);
     }
-
-    #table {
-      min-height: 200px;
-    }
   `;
 
   static get properties() {
@@ -169,7 +166,7 @@ class listviewElement extends LitElement {
   
     const linkElem = document.createElement('link');
     linkElem.setAttribute('rel', 'stylesheet');
-    linkElem.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/tabulator/5.5.1/css/tabulator_modern.min.css');  // replace with the actual path to CSS
+    linkElem.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/tabulator/5.5.1/css/tabulator_semanticui.min.css');
   
     this.shadowRoot.appendChild(linkElem);
 
@@ -214,7 +211,7 @@ class listviewElement extends LitElement {
         // Rearrange data based on the orderKeys property
         const columnOrder = this.orderKeys ? this.orderKeys.split(';').map(key => key.trim()) : [];
         tabledata = this.rearrangeData(tabledata, columnOrder);
-        
+
     } catch (e) {
         console.error(e);
         tabledata = null;
