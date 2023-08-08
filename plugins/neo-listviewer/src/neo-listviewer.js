@@ -149,6 +149,7 @@ class listviewElement extends LitElement {
     this.ignoredKeys = '';
     this.renamedKeys = '';
     this.dateFormat = '';
+    this.filteredKeys= [];
     this.boolFilter = true;
   }
 
