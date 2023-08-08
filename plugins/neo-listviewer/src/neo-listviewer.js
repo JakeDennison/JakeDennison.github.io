@@ -169,8 +169,22 @@ class listviewElement extends LitElement {
     try {
       tabledata = JSON.parse(this.dataobject);
       tabledata = this.replaceUnicodeRegex(tabledata);
+      
+      // Rename keys in the data based on renamedKeys property
+      const renamedKeysObject = this.parseRenamedKeysToObject();
+      tabledata = tabledata.map(item => {
+        const newItem = {};
+        for (const [oldKey, newKey] of Object.entries(renamedKeysObject)) {
+          if (item.hasOwnProperty(oldKey)) {
+            newItem[newKey] = item[oldKey];
+          } else {
+            newItem[oldKey] = item[oldKey];
+          }
+        }
+        return newItem;
+      });
+  
       keys = tabledata.length > 0 ? Object.keys(tabledata[0]) : [];
-      this.filteredKeys = keys;
     } catch (e) {
       console.error(e);
       tabledata = null;
@@ -179,6 +193,7 @@ class listviewElement extends LitElement {
   
     return { data: tabledata, keys };
   }
+  
 
   constructUrl(baseUrl, endpoint) {
     return baseUrl.endsWith('/') ? `${baseUrl}${endpoint}` : `${baseUrl}/${endpoint}`;
@@ -206,8 +221,6 @@ class listviewElement extends LitElement {
     const additionalIgnoredKeys = this.ignoredKeys ? this.ignoredKeys.split(',').map(key => key.trim()) : [];
     const ignoredKeys = defaultIgnoredKeys.concat(additionalIgnoredKeys);
 
-    const renamedKeysObject = this.parseRenamedKeysToObject();
-
     this.listdata = this.listdata.map(item => {
       if (!item || typeof item !== 'object') {
         return item;
@@ -226,29 +239,8 @@ class listviewElement extends LitElement {
       newItem = this.handleHyperlinkFields(newItem);
       newItem = this.handleSemicolonSeparatedValues(newItem);
 
-      for (const [oldKey, newKey] of Object.entries(renamedKeysObject)) {
-        if (newItem.hasOwnProperty(oldKey)) {
-          newItem[newKey] = newItem[oldKey];
-          delete newItem[oldKey];
-        }
-      }
-
       return newItem;
     });
-  }
-
-  parseRenamedKeysToObject() {
-    const renamedKeysObject = {};
-    if (this.renamedKeys) {
-      const pairs = this.renamedKeys.split(',');
-      for (const pair of pairs) {
-        const [oldKey, newKey] = pair.split(':').map(item => item.trim());
-        if (oldKey && newKey) {
-          renamedKeysObject[oldKey] = newKey;
-        }
-      }
-    }
-    return renamedKeysObject;
   }
 
   handlePersonField(item) {
@@ -363,28 +355,12 @@ class listviewElement extends LitElement {
   firstUpdated() {
     super.firstUpdated();
 
-    // Preprocess the data and rename keys
-    const updatedData = this.listdata.map(item => {
-        const renamedItem = { ...item };
-
-        for (const [oldKey, newKey] of Object.entries(this.parseRenamedKeysToObject())) {
-            if (renamedItem.hasOwnProperty(oldKey)) {
-                renamedItem[newKey] = renamedItem[oldKey];
-                delete renamedItem[oldKey];
-            }
-        }
-
-        return renamedItem;
-    });
-
     const { data: tabledata, keys } = this.parseDataObject();
 
     if (!tabledata) {
         console.error('Invalid data object');
         return;
     }
-
-    this.keys = keys;
 
     // Preprocess the data
     this.listdata = tabledata.map(item => ({ ...item })); // Make a copy of the tabledata array
