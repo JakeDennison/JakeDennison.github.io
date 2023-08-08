@@ -71,10 +71,6 @@ class listviewElement extends LitElement {
       border-radius:3px;
     }
 
-    .tabulator-col-resize-handle {
-    height: auto !important; /* Adjust the height as needed */
-    }
-
     /* Custom styles for the filter bar */
     #filter-value {
       padding: 4px;
@@ -440,6 +436,7 @@ class listviewElement extends LitElement {
       paginationSizeSelector: [5, 10, 15, 30, 50, 100],
       movableColumns: true,
       height: 'auto',
+      rowHeight:'auto',
       columns: columns,
     });
   
