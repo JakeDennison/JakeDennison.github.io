@@ -169,7 +169,7 @@ class listviewElement extends LitElement {
   
     const linkElem = document.createElement('link');
     linkElem.setAttribute('rel', 'stylesheet');
-    linkElem.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/tabulator/5.5.0/css/tabulator_bootstrap5.min.css');  // replace with the actual path to CSS
+    linkElem.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/tabulator/5.5.1/css/tabulator_modern.min.css');  // replace with the actual path to CSS
   
     this.shadowRoot.appendChild(linkElem);
 
