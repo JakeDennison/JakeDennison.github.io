@@ -3,7 +3,6 @@
       :host {
         display: block;
         width: 100%;
-        height:600px;
       }
     `}constructor(){super(),this.base64Data="",this.pdfparam="",this.docheight=""}render(){if(!this.base64Data)return M``;const t=this.pdfparam?`#${this.pdfparam}`:"",e=`data:application/pdf;base64,${this.base64Data}`,i=this.docheight?`height: ${this.docheight};`:"";return M`
       <iframe

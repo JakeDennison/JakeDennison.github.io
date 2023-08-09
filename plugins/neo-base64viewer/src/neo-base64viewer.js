@@ -37,7 +37,6 @@ class base64viewerElement extends LitElement {
       :host {
         display: block;
         width: 100%;
-        height:600px;
       }
     `;
   }
