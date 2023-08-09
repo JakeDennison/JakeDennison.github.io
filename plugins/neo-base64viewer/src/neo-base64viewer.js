@@ -6,7 +6,7 @@ class base64viewerElement extends LitElement {
       controlName: 'neo-base64viewer',
       fallbackDisableSubmit: false,
       description: '',
-      iconUrl: `https://jsdenintex.github.io/plugins/neo-base64viewer/dist/icon.svg`,
+      iconUrl: `https://jsdenintex.github.io/plugins/neo-base64viewer/dist/files/icon.svg`,
       groupName: 'Visual',
       version: '1.0',
       properties: {
