@@ -17,6 +17,15 @@ class base64viewerElement extends LitElement {
           title: 'File as Base64',
           description: 'Please convert the file into Base64 and enter the value here.'
         },
+        pdfparam: {
+          type: 'string',
+          title: 'PDF parameters',
+          description: 'https://tinytip.co/tips/html-pdf-params/ - e.g. #zoom=FitH'
+        },
+        docheight: {
+          type: 'string',
+          title: 'Height',
+        },
       },
       standardProperties: {
         fieldLabel: true,
@@ -30,7 +39,7 @@ class base64viewerElement extends LitElement {
       :host {
         display: block;
         width: 100%;
-        height: 100%;
+        height:600px;
       }
     `;
   }
@@ -38,21 +47,27 @@ class base64viewerElement extends LitElement {
   constructor() {
     super();
     this.base64Data = '';
+    this.pdfparam = '';
+    this.docheight = '';
   }
 
   render() {
     if (!this.base64Data) {
-      return html`
-      `;
+      return html``;
     }
 
+    const pdfParams = this.pdfparam ? `#${this.pdfparam}` : '';
     const dataUrl = `data:application/pdf;base64,${this.base64Data}`;
+
+    const iframeStyle = this.docheight
+      ? `height: ${this.docheight};`
+      : '';
 
     return html`
       <iframe
-        src="${dataUrl}"
+        src="${dataUrl}${pdfParams}"
+        style="${iframeStyle}"
         width="100%"
-        height="100%"
         frameborder="0"
         allowfullscreen
       ></iframe>
