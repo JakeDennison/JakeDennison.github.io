@@ -58,7 +58,13 @@ class base64viewerElement extends LitElement {
       return;
     }
 
-    const binaryData = Buffer.from(this.base64Data, 'base64');
+    const binaryString = atob(this.base64Data);
+    const len = binaryString.length;
+    const uint8Array = new Uint8Array(len);
+
+    for (let i = 0; i < len; ++i) {
+      uint8Array[i] = binaryString.charCodeAt(i);
+    }
 
     pdfjsLib.getDocument({ data: binaryData }).promise.then(pdfDocument => {
       const container = this.shadowRoot.querySelector('#pdfViewer');
