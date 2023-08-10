@@ -1,4 +1,6 @@
 import { LitElement, html, css } from 'lit';
+import pdfjsLib from 'pdfjs-dist';
+import '/pdfjs-dist/web/pdf_viewer.css';
 
 class base64viewerElement extends LitElement {
   static getMetaConfig() {
@@ -51,26 +53,39 @@ class base64viewerElement extends LitElement {
     this.docheight = '600px';
   }
 
+  firstUpdated() {
+    if (!this.base64Data) {
+      return;
+    }
+  
+    const binaryData = Buffer.from(this.base64Data, 'base64');
+  
+    pdfjsLib.getDocument({ data: binaryData }).promise.then(pdfDocument => {
+      const container = this.shadowRoot.querySelector('#pdfViewer');
+      const viewer = new pdfjsLib.PDFViewer({
+        container,
+      });
+  
+      pdfDocument.getPage(1).then(page => {
+        viewer.setDocument(pdfDocument);
+        viewer.setInitialPage(page);
+      });
+    });
+  }
+  
   render() {
     if (!this.base64Data) {
       return html``;
     }
-
-    const pdfParams = this.pdfparam ? `#${this.pdfparam}` : '';
-    const dataUrl = `data:application/pdf;base64,${this.base64Data}`;
-
-    const iframeStyle = this.docheight
+  
+    const containerStyle = this.docheight
       ? `height: ${this.docheight};`
       : '';
-
+  
     return html`
-      <iframe
-        src="${dataUrl}${pdfParams}"
-        style="${iframeStyle}"
-        width="100%"
-        frameborder="0"
-        allowfullscreen
-      ></iframe>
+      <div style="${containerStyle}">
+        <div id="pdfViewer" class="pdfViewer"></div>
+      </div>
     `;
   }
 }
