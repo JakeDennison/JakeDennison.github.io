@@ -18,8 +18,8 @@ class base64viewerElement extends LitElement {
         pdfparam: {
           type: 'string',
           title: 'PDF parameters',
-          description: 'https://tinytip.co/tips/html-pdf-params/ - e.g. #zoom=FitH will fit the width of the document',
-          defaultValue: '#zoom=FitH',
+          description: 'https://tinytip.co/tips/html-pdf-params/ - e.g. zoom=FitH will fit the width of the document',
+          defaultValue: 'zoom=FitH',
         },
         docheight: {
           type: 'string',
@@ -47,7 +47,7 @@ class base64viewerElement extends LitElement {
   constructor() {
     super();
     this.base64Data = '';
-    this.pdfparam = '#zoom=FitH';
+    this.pdfparam = 'zoom=FitH';
     this.docheight = '600px';
   }
 
