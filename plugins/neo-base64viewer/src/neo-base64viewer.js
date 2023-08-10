@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import pdfjsLib from 'pdfjs-dist';
-import '/pdfjs-dist/web/pdf_viewer.css';
+import '../node_modules/pdfjs-dist/web/pdf_viewer.css';
 
 class base64viewerElement extends LitElement {
   static getMetaConfig() {
