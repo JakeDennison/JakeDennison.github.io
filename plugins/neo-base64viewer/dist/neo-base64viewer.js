@@ -4,7 +4,7 @@
         display: block;
         width: 100%;
       }
-    `}constructor(){super(),this.base64Data="",this.pdfparam="zoom=FitH",this.docheight="600px"}firstUpdated(){if(!this.base64Data)return;const t=atob(this.base64Data),e=t.length,n=new Uint8Array(e);for(let i=0;i<e;++i)n[i]=t.charCodeAt(i);it().getDocument({data:binaryData}).promise.then((t=>{const e=this.shadowRoot.querySelector("#pdfViewer"),n=new(it().PDFViewer)({container:e});t.getPage(1).then((e=>{n.setDocument(t),n.setInitialPage(e)}))}))}render(){if(!this.base64Data)return D``;const t=this.docheight?`height: ${this.docheight};`:"";return D`
+    `}constructor(){super(),this.base64Data="",this.pdfparam="zoom=FitH",this.docheight="600px"}firstUpdated(){if(!this.base64Data)return;const t=atob(this.base64Data),e=t.length,n=new Uint8Array(e);for(let i=0;i<e;++i)n[i]=t.charCodeAt(i);it().getDocument({data:binaryData}).promise.then((t=>{const e=this.shadowRoot.querySelector("#pdfViewer"),n=new(it().PDFViewer)({container:e});n.setDocument(t),t.getPage(1).then((t=>{n.setInitialPage(t)}))}))}render(){if(!this.base64Data)return D``;const t=this.docheight?`height: ${this.docheight};`:"";return D`
       <div style="${t}">
         <div id="pdfViewer" class="pdfViewer"></div>
       </div>

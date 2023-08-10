@@ -71,9 +71,10 @@ class base64viewerElement extends LitElement {
       const viewer = new pdfjsLib.PDFViewer({
         container,
       });
-
+    
+      viewer.setDocument(pdfDocument);
+    
       pdfDocument.getPage(1).then(page => {
-        viewer.setDocument(pdfDocument);
         viewer.setInitialPage(page);
       });
     });
