@@ -1,6 +1,4 @@
 import { LitElement, html, css } from 'lit';
-import pdfjsLib from 'pdfjs-dist';
-import '../node_modules/pdfjs-dist/web/pdf_viewer.css';
 
 class base64viewerElement extends LitElement {
   static getMetaConfig() {
@@ -53,33 +51,6 @@ class base64viewerElement extends LitElement {
     this.docheight = '600px';
   }
 
-  firstUpdated() {
-    if (!this.base64Data) {
-      return;
-    }
-
-    const binaryString = atob(this.base64Data);
-    const len = binaryString.length;
-    const uint8Array = new Uint8Array(len);
-
-    for (let i = 0; i < len; ++i) {
-      uint8Array[i] = binaryString.charCodeAt(i);
-    }
-
-    pdfjsLib.getDocument({ data: binaryData }).promise.then(pdfDocument => {
-      const container = this.shadowRoot.querySelector('#pdfViewer');
-      const viewer = new pdfjsLib.PDFViewer({
-        container,
-      });
-    
-      viewer.setDocument(pdfDocument);
-    
-      pdfDocument.getPage(1).then(page => {
-        viewer.setInitialPage(page);
-      });
-    });
-  }
-  
   render() {
     if (!this.base64Data) {
       return html``;
@@ -94,6 +65,30 @@ class base64viewerElement extends LitElement {
         <div id="pdfViewer" class="pdfViewer"></div>
       </div>
     `;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.loadPdfJs();
+  }
+
+  async loadPdfJs() {
+    const pdfJsScript = document.createElement('script');
+    pdfJsScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js';
+    pdfJsScript.type = 'text/javascript';
+    pdfJsScript.async = true;
+
+    const pdfViewerLink = document.createElement('link');
+    pdfViewerLink.rel = 'stylesheet';
+    pdfViewerLink.type = 'text/css';
+    pdfViewerLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf_viewer.min.css';
+
+    document.head.appendChild(pdfJsScript);
+    document.head.appendChild(pdfViewerLink);
+
+    pdfJsScript.onload = () => {
+      this.firstUpdated();
+    };
   }
 
   async renderPdf() {
@@ -123,6 +118,28 @@ class base64viewerElement extends LitElement {
 
     return uint8Array;
   }
+
+  firstUpdated() {
+    if (!this.base64Data) {
+      return;
+    }
+
+    const binaryData = atob(this.base64Data);
+    const loadingTask = pdfjsLib.getDocument({ data: binaryData });
+
+    loadingTask.promise.then(pdfDocument => {
+      const container = this.shadowRoot.querySelector('#pdfViewer');
+      const viewer = new pdfjsLib.PDFViewer({
+        container,
+      });
+
+      viewer.setDocument(pdfDocument);
+      pdfDocument.getPage(1).then(page => {
+        viewer.setInitialPage(page);
+      });
+    });
+  }
+  
 }
 
 customElements.define('neo-base64viewer', base64viewerElement);
