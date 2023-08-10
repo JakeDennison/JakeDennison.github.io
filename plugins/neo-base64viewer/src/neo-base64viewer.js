@@ -56,90 +56,23 @@ class base64viewerElement extends LitElement {
       return html``;
     }
 
-    const containerStyle = this.docheight
+    const pdfParams = this.pdfparam ? `#${this.pdfparam}` : '';
+    const dataUrl = `data:application/pdf;base64,${this.base64Data}`;
+
+    const iframeStyle = this.docheight
       ? `height: ${this.docheight};`
       : '';
 
     return html`
-      <div style="${containerStyle}">
-        <div id="pdfViewer" class="pdfViewer"></div>
-      </div>
+      <iframe
+        src="${dataUrl}${pdfParams}"
+        style="${iframeStyle}"
+        width="100%"
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
     `;
   }
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.loadPdfJs();
-  }
-
-  async loadPdfJs() {
-    const pdfJsScript = document.createElement('script');
-    pdfJsScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js';
-    pdfJsScript.type = 'text/javascript';
-    pdfJsScript.async = true;
-  
-    const pdfViewerLink = document.createElement('link');
-    pdfViewerLink.rel = 'stylesheet';
-    pdfViewerLink.type = 'text/css';
-    pdfViewerLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf_viewer.min.css';
-  
-    pdfJsScript.onload = () => {
-      this.firstUpdated();
-    };
-  
-    document.head.appendChild(pdfJsScript);
-    document.head.appendChild(pdfViewerLink);
-  }
-  
-  async renderPdf() {
-    if (!this.base64Data) {
-      return;
-    }
-
-    const uint8Array = this.base64ToUint8Array(this.base64Data);
-    const loadingTask = pdfjsLib.getDocument(uint8Array);
-
-    const pdfDocument = await loadingTask.promise;
-    const pdfViewer = new pdfjsLib.PDFViewer({
-      container: this.shadowRoot.querySelector('#pdfContainer'),
-    });
-
-    pdfViewer.setDocument(pdfDocument);
-  }
-
-  base64ToUint8Array(base64String) {
-    const binaryString = atob(base64String);
-    const len = binaryString.length;
-    const uint8Array = new Uint8Array(len);
-
-    for (let i = 0; i < len; ++i) {
-      uint8Array[i] = binaryString.charCodeAt(i);
-    }
-
-    return uint8Array;
-  }
-
-  firstUpdated() {
-    if (!this.base64Data) {
-      return;
-    }
-
-    const binaryData = atob(this.base64Data);
-    const loadingTask = pdfjsLib.getDocument({ data: binaryData });
-
-    loadingTask.promise.then(pdfDocument => {
-      const container = this.shadowRoot.querySelector('#pdfViewer');
-      const viewer = new pdfjsLib.PDFViewer({
-        container,
-      });
-
-      viewer.setDocument(pdfDocument);
-      pdfDocument.getPage(1).then(page => {
-        viewer.setInitialPage(page);
-      });
-    });
-  }
-  
 }
 
 customElements.define('neo-base64viewer', base64viewerElement);
