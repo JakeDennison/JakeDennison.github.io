@@ -77,20 +77,20 @@ class base64viewerElement extends LitElement {
     pdfJsScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js';
     pdfJsScript.type = 'text/javascript';
     pdfJsScript.async = true;
-
+  
     const pdfViewerLink = document.createElement('link');
     pdfViewerLink.rel = 'stylesheet';
     pdfViewerLink.type = 'text/css';
     pdfViewerLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf_viewer.min.css';
-
-    document.head.appendChild(pdfJsScript);
-    document.head.appendChild(pdfViewerLink);
-
+  
     pdfJsScript.onload = () => {
       this.firstUpdated();
     };
+  
+    document.head.appendChild(pdfJsScript);
+    document.head.appendChild(pdfViewerLink);
   }
-
+  
   async renderPdf() {
     if (!this.base64Data) {
       return;
