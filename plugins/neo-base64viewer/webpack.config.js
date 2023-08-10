@@ -6,6 +6,7 @@ module.exports = {
   output: {
     filename: 'neo-base64viewer.js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '',
   },
   module: {
     rules: [
