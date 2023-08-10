@@ -8,4 +8,4 @@
       <div style="${t}">
         <div id="pdfViewer" class="pdfViewer"></div>
       </div>
-    `}})})()})();
+    `}async renderPdf(){if(!this.base64Data)return;const t=this.base64ToUint8Array(this.base64Data),e=it().getDocument(t),n=await e.promise;new(it().PDFViewer)({container:this.shadowRoot.querySelector("#pdfContainer")}).setDocument(n)}base64ToUint8Array(t){const e=atob(t),n=e.length,i=new Uint8Array(n);for(let t=0;t<n;++t)i[t]=e.charCodeAt(t);return i}})})()})();

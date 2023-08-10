@@ -57,15 +57,15 @@ class base64viewerElement extends LitElement {
     if (!this.base64Data) {
       return;
     }
-  
+
     const binaryData = Buffer.from(this.base64Data, 'base64');
-  
+
     pdfjsLib.getDocument({ data: binaryData }).promise.then(pdfDocument => {
       const container = this.shadowRoot.querySelector('#pdfViewer');
       const viewer = new pdfjsLib.PDFViewer({
         container,
       });
-  
+
       pdfDocument.getPage(1).then(page => {
         viewer.setDocument(pdfDocument);
         viewer.setInitialPage(page);
@@ -77,16 +77,44 @@ class base64viewerElement extends LitElement {
     if (!this.base64Data) {
       return html``;
     }
-  
+
     const containerStyle = this.docheight
       ? `height: ${this.docheight};`
       : '';
-  
+
     return html`
       <div style="${containerStyle}">
         <div id="pdfViewer" class="pdfViewer"></div>
       </div>
     `;
+  }
+
+  async renderPdf() {
+    if (!this.base64Data) {
+      return;
+    }
+
+    const uint8Array = this.base64ToUint8Array(this.base64Data);
+    const loadingTask = pdfjsLib.getDocument(uint8Array);
+
+    const pdfDocument = await loadingTask.promise;
+    const pdfViewer = new pdfjsLib.PDFViewer({
+      container: this.shadowRoot.querySelector('#pdfContainer'),
+    });
+
+    pdfViewer.setDocument(pdfDocument);
+  }
+
+  base64ToUint8Array(base64String) {
+    const binaryString = atob(base64String);
+    const len = binaryString.length;
+    const uint8Array = new Uint8Array(len);
+
+    for (let i = 0; i < len; ++i) {
+      uint8Array[i] = binaryString.charCodeAt(i);
+    }
+
+    return uint8Array;
   }
 }
 
