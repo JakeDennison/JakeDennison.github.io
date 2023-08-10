@@ -63,7 +63,13 @@ class base64viewerElement extends LitElement {
       return html``;
     }
 
-    const base64Array = JSON.parse(this.base64Data);
+    let base64Array = [];
+    if (Array.isArray(this.base64Data)) {
+      base64Array = this.base64Data;
+    } else {
+      base64Array = [this.base64Data];
+    }
+
     const pdfParams = this.pdfparam ? `#${this.pdfparam}` : '';
     const iframeStyle = this.docheight ? `height: ${this.docheight};` : '';
 
