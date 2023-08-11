@@ -1,11 +1,11 @@
-neo-rsfiller plugin//3d object viewer.
+neo-rs plugin//3d object viewer.
 
 version 1.0
 Plugin uses three.js 
 
 Properties
 
-The neo-rsfiller plugin provides the following properties:
+The neo-rs plugin provides the following properties:
 
     src (string): The URL of the 3D object to display.
     This is set inside the Nintex plugin control panel in the forms designer canvas.

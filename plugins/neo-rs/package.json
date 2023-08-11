@@ -1,8 +1,8 @@
 {
-  "name": "neo-rsfiller",
+  "name": "neo-rs",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/neo-rsfiller.js",
+  "main": "./src/neo-rs.js",
   "browser": "./src/index.html",
   "scripts": {
     "build": "webpack"

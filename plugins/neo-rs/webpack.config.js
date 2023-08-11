@@ -1,10 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/neo-rsfiller.js',
+  entry: './src/neo-rs.js',
   mode: 'production',
   output: {
-    filename: 'neo-rsfiller.js',
+    filename: 'neo-rs.js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {
