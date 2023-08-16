@@ -1,10 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/neo-template.js',
+  entry: './src/neo-btn.js',
   mode: 'production',
   output: {
-    filename: 'neo-template.js',
+    filename: 'neo-btn.js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {
@@ -13,10 +13,6 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: 'babel-loader',
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
       },
     ],
   },

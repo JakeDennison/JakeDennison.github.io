@@ -1,0 +1,187 @@
+<html lang="en">
+
+<head>
+    <title>Home | Nintex AssureSign</title>
+    <link rel="apple-touch-icon" href="/apple_touch_icon.png">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="WebResource.ashx?r=MinimalBaseCss&amp;v=7.12.157.0" media="all">
+    <link rel="stylesheet" type="text/css" href="WebResource.ashx?r=DefaultCss&amp;v=7.12.157.0" media="all">
+</head>
+
+<body>
+    <form method="post" action="./" id="frmMain">
+        <div class="aspNetHidden">
+            <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+            <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+            <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="">
+        </div>
+
+        <script type="text/javascript">
+            <!--
+            var theForm = document.forms['frmMain'];
+            if (!theForm) {
+            theForm = document.frmMain;
+            }
+            function __doPostBack(eventTarget, eventArgument) {
+            if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+                theForm.__EVENTTARGET.value = eventTarget;
+                theForm.__EVENTARGUMENT.value = eventArgument;
+                theForm.submit();
+            }
+            }
+            // -->
+        </script>
+
+
+        <div class="aspNetHidden">
+
+            <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="CA0B0334">
+            <input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="">
+        </div>
+        <div class="PageHeader">
+            <div class="PageHeader_Branding"><a href="/"><img src="ui/logo"
+                        data-testid="page-header-logo"><span>Nintex</span></a></div>
+            <div class="PageHeader_Branding_Print"><img src="ui/logo/secondary" height="35"
+                    data-testid="logo-secondary"></div>
+            <div class="ClientNameAndMenuContainer">
+                <div id="ClientNameContainer" class="PageHeader_ClientName">
+                    <div id="ClientNameTextOnlyContainer">
+                        <p id="ClientNameTextOnly">Nintex - Demo &amp; Test</p>
+                        <p id="PageHeader_UserName">Jake Dennison</p>
+                    </div>
+                    <div class="ClientNameWrapper"></div>
+                </div>
+                <div id="PageHeader_NavigationMenu">
+                    <div class="NavigationMenuButton" id="hamburger">
+                        <div><span
+                                style="height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; overflow: hidden; pointer-events: none; "></span><svg
+                                viewBox="0 0 24 24"
+                                style="display: inline-block; color: rgb(51, 51, 51); fill: rgb(51, 51, 51); height: 24px; width: 24px; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms; ">
+                                <path class="PageHeader_SvgFill" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z">
+                                </path>
+                            </svg></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="PageBody">
+            <div class="PageContent">
+
+                <div id="Welcome">
+                    <div class="Message">What would you like to do?</div>
+                    <ul>
+                        <li><a href="ui/simpleSetup" id="lnkSimpleSetup">Send envelope (simple setup)</a></li>
+                        <li><a href="ui/simpleSetup/#/templates" id="lnkSimpleSetupTemplates">View templates (simple
+                                setup)</a></li>
+                        <li><a href="ReportList.aspx" id="lnkReports">View reports</a></li>
+                        <li><a href="bulksend" id="lnkBulkSend">Bulk send</a></li>
+                        <li><a href="Administration.aspx?ct=u" id="lnkUsers">Manage users</a></li>
+                        <li><a href="Administration.aspx?ct=s" id="lnkSettings">Configure settings</a></li>
+                        <li><a href="https://account.assuresign.net" id="lnkAccountApp">View my account</a></li>
+                    </ul>
+                </div>
+                <div id="Dashboard">
+                    <div id="ImportantActivity" class="Panel Primary">
+                        <div class="Header"><span>My Important Activity</span></div>
+                        <div class="Body">
+                            <div class="Item Top"><a id="documentsPendingLink"></a></div>
+                            <div class="Item"><a id="documentsExpiringLink"
+                                    href="ReportViewer.aspx?r=DocumentSearch&amp;lfq=1&amp;usc=jake.dennison(demo)@nintex.com&amp;exprds=638277408000000000&amp;exprde=638278271999970000&amp;ds=5">Documents
+                                    expiring in the next 24 hours: 0</a></div>
+                            <div class="Item"><a id="documentsToSignLink">Documents requiring your signature: 0</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="CurrentActivity" class="Panel">
+                        <div class="Header"><span>My Activity</span></div>
+                        <div class="Body">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td></td>
+                                        <td class="numericCell">Today</td>
+                                        <td class="numericCell">Last 31 Days</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Documents started</td>
+                                        <td class="numericCell"><a id="todayStartedLink"
+                                                href="ReportViewer.aspx?r=DocumentSearch&amp;lfq=1&amp;usc=jake.dennison(demo)@nintex.com&amp;strtds=638277408000000000&amp;strtde=638278271999970000">0</a>
+                                        </td>
+                                        <td class="numericCell"><a id="monthStartedLink"
+                                                href="ReportViewer.aspx?r=DocumentSearch&amp;lfq=1&amp;usc=jake.dennison(demo)@nintex.com&amp;strtds=638250624000000000&amp;strtde=638278271999970000">0</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Documents completed</td>
+                                        <td class="numericCell"><a id="todayCompletedLink"
+                                                href="ReportViewer.aspx?r=DocumentSearch&amp;lfq=1&amp;usc=jake.dennison(demo)@nintex.com&amp;compds=638277408000000000&amp;compde=638278271999970000&amp;ds=3">0</a>
+                                        </td>
+                                        <td class="numericCell"><a id="monthCompletedLink"
+                                                href="ReportViewer.aspx?r=DocumentSearch&amp;lfq=1&amp;usc=jake.dennison(demo)@nintex.com&amp;compds=638250624000000000&amp;compde=638278271999970000&amp;ds=3">0</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Documents declined</td>
+                                        <td class="numericCell"><a id="todayDeclinedLink"
+                                                href="ReportViewer.aspx?r=DocumentSearch&amp;lfq=1&amp;usc=jake.dennison(demo)@nintex.com&amp;decds=638277408000000000&amp;decde=638278271999970000&amp;ds=7">0</a>
+                                        </td>
+                                        <td class="numericCell"><a id="monthDeclinedLink"
+                                                href="ReportViewer.aspx?r=DocumentSearch&amp;lfq=1&amp;usc=jake.dennison(demo)@nintex.com&amp;decds=638250624000000000&amp;decde=638278271999970000&amp;ds=7">0</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Documents cancelled</td>
+                                        <td class="numericCell"><a id="todayCancelledLink"
+                                                href="ReportViewer.aspx?r=DocumentSearch&amp;lfq=1&amp;usc=jake.dennison(demo)@nintex.com&amp;cands=638277408000000000&amp;cande=638278271999970000&amp;ds=6">0</a>
+                                        </td>
+                                        <td class="numericCell"><a id="monthCancelledLink"
+                                                href="ReportViewer.aspx?r=DocumentSearch&amp;lfq=1&amp;usc=jake.dennison(demo)@nintex.com&amp;cands=638250624000000000&amp;cande=638278271999970000&amp;ds=6">0</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Documents expired</td>
+                                        <td class="numericCell"><a id="todayExpiredLink"
+                                                href="ReportViewer.aspx?r=DocumentSearch&amp;lfq=1&amp;usc=jake.dennison(demo)@nintex.com&amp;exprds=638277408000000000&amp;exprde=638278271999970000&amp;ds=4">0</a>
+                                        </td>
+                                        <td class="numericCell"><a id="monthExpiredLink"
+                                                href="ReportViewer.aspx?r=DocumentSearch&amp;lfq=1&amp;usc=jake.dennison(demo)@nintex.com&amp;exprds=638250624000000000&amp;exprde=638278271999970000&amp;ds=4">0</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="PageFooter">
+            <div><span class="PageFooter_Copyright">©2023 Nintex UK Ltd All Rights Reserved.</span><span
+                    class="PageFooter_Hostname">version 7.12.157.0 | esigWeb3</span></div>
+            <script
+                type="text/javascript">window.onresize = function () { var f = document.getElementById("frmMain"); if (f) { f.className = f.className; } }</script>
+        </div>
+    </form>
+    <script type="text/javascript" src="WebResource.ashx?r=MinimalBaseJs&amp;v=7.12.157.0"></script>
+
+
+    <ul class="PageHeader_NavigationLinks">
+        <li><a id="menuLnkHome" class="Active" href="Default.aspx"><span>Home</span></a></li>
+        <li><a id="menuLnkAdministration" class="Inactive" href="Administration.aspx"><span>Administration</span></a>
+        </li>
+        <li><a id="menuLnkReports" class="Inactive" href="ReportList.aspx"><span>Reports</span></a></li>
+        <li><a id="menuLnkBulk Send" class="Inactive" href="bulksend/"><span>Bulk Send</span></a></li>
+        <li><a id="menuLnkSimpleSetupEnvelopes" class="Inactive" href="ui/simpleSetup/"><span>Simple Setup
+                    Envelopes</span></a></li>
+        <li><a id="menuLnkSimpleSetupTemplates" class="Inactive" href="ui/simpleSetup/#/templates"><span>Simple Setup
+                    Templates</span></a></li>
+        <li><a id="menuLnkSetup" class="Inactive" href="Documents.aspx"><span>Classic Documents</span></a></li>
+        <li><a id="menuLnkTemplates" class="Inactive" href="Templates.aspx"><span>Classic Templates</span></a></li>
+        <li><a id="menuLnkProfile" href="https://account.assuresign.net/#/Profile"><span>My Profile</span></a></li>
+        <li><a id="menuLnkHelp" href="Help.aspx" target="_blank"><span>Help</span></a></li>
+        <li><a id="menuLnkLogout" href="javascript:__doPostBack('menuLnkLogout','')"><span>Sign Out</span></a></li>
+    </ul>
+</body>
+
+</html>

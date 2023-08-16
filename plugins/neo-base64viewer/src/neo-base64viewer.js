@@ -40,7 +40,7 @@ class base64viewerElement extends LitElement {
         },
         docloaded: {
           title: 'Document displayed',
-          description: 'Enable to prevent refresh on base64 value change.',
+          description: 'Do not change this.',
           type: 'boolean',
           defaultValue: false,
           isValueField: true,

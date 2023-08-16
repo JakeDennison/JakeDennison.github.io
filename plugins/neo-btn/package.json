@@ -1,8 +1,8 @@
 {
-  "name": "neo-template",
+  "name": "neo-btn",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/neo-template.js",
+  "main": "./src/neo-btn.js",
   "browser": "./src/index.html",
   "scripts": {
     "build": "webpack"
@@ -18,9 +18,7 @@
   },
   "homepage": "https://github.com/JSDenintex/JSDenintex.github.io#readme",
   "dependencies": {
-    "css-loader": "^6.8.1",
     "lit": "^2.6.1",
-    "style-loader": "^3.3.3",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
   },
