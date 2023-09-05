@@ -21,6 +21,11 @@ class rsElement extends LitElement {
           type: 'string',
           description: 'Class name used to target repeating section'
         },
+        boolDynamic: {
+        title: 'Enable dynamic value',
+        type: 'boolean',
+        description: 'Setting to true will set the number of sections if the value changes, please be aware this will delete data in the repeating section'
+      },
       },
       standardProperties: {
         fieldLabel: true,
@@ -43,7 +48,15 @@ class rsElement extends LitElement {
     this.rstarget = ''; 
   }
 
-  async firstUpdated() {
+  updated(changedProperties) {
+    super.updated(changedProperties);
+
+    if (changedProperties.has('rsnumber')) {
+      this.handleRsNumberChange();
+    }
+  }
+
+  async handleRsNumberChange() {
     const rsnumberCount = this.rsnumber;
 
     const ntxRepeatingSections = window.document.querySelectorAll('ntx-repeating-section');
