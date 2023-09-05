@@ -49,12 +49,14 @@ class rsElement extends LitElement {
   }
 
   updated(changedProperties) {
-    super.updated(changedProperties);
-
+    super.updated(changedProperties); // Don't forget to call super
+    console.log('Properties updated:', changedProperties);
     if (changedProperties.has('rsnumber')) {
+      console.log('rsnumber has been updated:', this.rsnumber);
       this.handleRsNumberChange();
     }
   }
+  
 
   async handleRsNumberChange() {
     const rsnumberCount = this.rsnumber;
