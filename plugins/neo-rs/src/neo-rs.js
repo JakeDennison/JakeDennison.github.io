@@ -78,7 +78,9 @@ class rsElement extends LitElement {
   }
 
   render() {
-    return html``;
+    return html`
+      <div>RS Number: ${this.rsnumber}</div>
+    `;
   }
 }
 
