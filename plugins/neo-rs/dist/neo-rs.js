@@ -3,6 +3,6 @@
       :host {
         display: block;
       }
-    `}constructor(){super(),this.rsnumber=0,this.rstarget="",this.initialRsNumber=void 0}async firstUpdated(){this.initialRsNumber=this.rsnumber,this.runActions()}async updated(t){super.updated(t),t.has("rsnumber")&&this.runActions()}runActions(){if(void 0!==this.initialRsNumber&&this.rsnumber>0){const t=this.rsnumber,e=window.document.querySelectorAll("ntx-repeating-section");for(const s of e){const e=s.querySelector(`div.${this.rstarget}`),i=s.querySelector("button.btn-repeating-section-new-row");if(i&&e)for(let e=0;e<t-1;e++)i.click()}}}render(){return M`
+    `}constructor(){super(),this.rsnumber=0,this.rstarget="",this.initialRsNumber=void 0}async firstUpdated(){this.initialRsNumber=this.rsnumber,this.runActions()}async updated(t){super.updated(t),t.has("rsnumber")&&(this.runActions(),console.log("rsnumber changed"))}runActions(){if(void 0!==this.initialRsNumber&&this.rsnumber>0){const t=this.rsnumber,e=window.document.querySelectorAll("ntx-repeating-section");for(const s of e){const e=s.querySelector(`div.${this.rstarget}`),i=s.querySelector("button.btn-repeating-section-new-row");if(i&&e)for(let e=0;e<t-1;e++)i.click()}}}render(){return M`
       <div>rsNumber: ${this.rsnumber}</div>
     `}})})();
