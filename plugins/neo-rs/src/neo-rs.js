@@ -54,16 +54,16 @@ class rsElement extends lit_1.LitElement {
     runActions() {
         console.log('runActions called');
         console.log('rsnumber:', this.rsnumber);
-        // Construct the class selector based on this.rstarget
-        const targetClassName = this.rstarget;
-        // Select the repeating section with the dynamic target class
-        const targetRepeatingSection = this.shadowRoot.querySelector(`.${targetClassName}`);
-        if (targetRepeatingSection) {
-            // Find the next sibling element (which should be the button)
-            const button = targetRepeatingSection.nextElementSibling;
-            if (button) {
-                // Click the button
-                for (let i = 0; i < this.rsnumber - 1; i++) {
+        const rsnumberCount = this.rsnumber;
+        const ntxRepeatingSections = this.shadowRoot.querySelectorAll('ntx-repeating-section');
+        console.log("ntxRepeatingSections:", ntxRepeatingSections);
+        for (const ntxSection of ntxRepeatingSections) {
+            const targetDiv = ntxSection.querySelector(`div.${this.rstarget}`);
+            console.log("Target Div:", targetDiv);
+            const button = ntxSection.querySelector("button.btn-repeating-section-new-row");
+            console.log("Button:", button);
+            if (button && targetDiv) {
+                for (let i = 0; i < rsnumberCount - 1; i++) {
                     button.click();
                 }
             }
