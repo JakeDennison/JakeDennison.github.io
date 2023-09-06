@@ -41,40 +41,32 @@ class rsElement extends LitElement {
     super();
     this.rsnumber = 0;
     this.rstarget = '';
-    this.initialRsNumber = undefined;
   }
 
-  async firstUpdated() {
-    this.initialRsNumber = this.rsnumber;
-    this.runActions();
-  }
-
-  async updated(changedProperties) {
+  updated(changedProperties) {
     super.updated(changedProperties);
 
     if (changedProperties.has('rsnumber')) {
       this.runActions();
-      console.log('rsnumber changed')
     }
   }
 
   runActions() {
-    if (this.initialRsNumber !== undefined && this.rsnumber > 0) {
-      const rsnumberCount = this.rsnumber;
-      const ntxRepeatingSections = window.document.querySelectorAll('ntx-repeating-section');
+    const rsnumberCount = this.rsnumber;
+    const ntxRepeatingSections = this.shadowRoot.querySelectorAll('ntx-repeating-section');
 
-      for (const ntxSection of ntxRepeatingSections) {
-        const targetDiv = ntxSection.querySelector(`div.${this.rstarget}`);
-        const button = ntxSection.querySelector("button.btn-repeating-section-new-row");
+    for (const ntxSection of ntxRepeatingSections) {
+      const targetDiv = ntxSection.querySelector(`div.${this.rstarget}`);
+      const button = ntxSection.querySelector("button.btn-repeating-section-new-row");
 
-        if (button && targetDiv) {
-          for (let i = 0; i < rsnumberCount - 1; i++) {
-            button.click();
-          }
+      if (button && targetDiv) {
+        for (let i = 0; i < rsnumberCount - 1; i++) {
+          button.click();
         }
       }
     }
   }
+
 
   render() {
     return html`
