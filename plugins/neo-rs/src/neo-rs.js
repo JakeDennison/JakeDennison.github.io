@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 
 class rsElement extends LitElement {
   static getMetaConfig() {
+    // plugin contract information
     return {
       controlName: 'neo-rs',
       fallbackDisableSubmit: false,
@@ -20,11 +21,6 @@ class rsElement extends LitElement {
           type: 'string',
           description: 'Class name used to target repeating section'
         },
-        boolDynamic: {
-          title: 'Enable dynamic value',
-          type: 'boolean',
-          description: 'Setting to true will set the number of sections if the value changes, please be aware this will delete data in the repeating section'
-        },
       },
       standardProperties: {
         fieldLabel: true,
@@ -33,35 +29,21 @@ class rsElement extends LitElement {
     };
   }
 
-  static styles = css`
-    :host {
-      display: block;
-    }
-  `;
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
+    `;
+  }
 
   constructor() {
     super();
     this.rsnumber = 0;
-    this.rstarget = '';
-
-    // Call the function to click the repeating section on load
-    this.clickRepeatingSection();
+    this.rstarget = ''; 
   }
 
-  updated(changedProperties) {
-    super.updated(changedProperties);
-    console.log('Properties updated:', changedProperties);
-    if (changedProperties.has('rsnumber')) {
-      console.log('rsnumber has been updated:', this.rsnumber);
-      this.handleRsNumberChange();
-    }
-  }
-
-  async handleRsNumberChange() {
-    this.clickRepeatingSection();
-  }
-
-  async clickRepeatingSection() {
+  async firstUpdated() {
     const rsnumberCount = this.rsnumber;
 
     const ntxRepeatingSections = window.document.querySelectorAll('ntx-repeating-section');
@@ -83,9 +65,7 @@ class rsElement extends LitElement {
   }
 
   render() {
-    return html`
-      <div>RS Number: ${this.rsnumber}</div>
-    `;
+    return html``;
   }
 }
 
