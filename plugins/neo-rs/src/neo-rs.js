@@ -55,7 +55,8 @@ class rsElement extends lit_1.LitElement {
         console.log('runActions called');
         console.log('rsnumber:', this.rsnumber);
         const rsnumberCount = this.rsnumber;
-        const ntxRepeatingSections = this.shadowRoot.querySelectorAll('ntx-repeating-section');
+        // Select the repeating sections in the main DOM
+        const ntxRepeatingSections = document.querySelectorAll('ntx-repeating-section');
         console.log("ntxRepeatingSections:", ntxRepeatingSections);
         for (const ntxSection of ntxRepeatingSections) {
             const targetDiv = ntxSection.querySelector(`div.${this.rstarget}`);
