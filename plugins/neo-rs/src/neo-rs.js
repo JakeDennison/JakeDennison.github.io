@@ -53,7 +53,7 @@ class rsElement extends LitElement {
     console.log('Properties updated:', changedProperties);
     if (changedProperties.has('rsnumber')) {
       console.log('rsnumber has been updated:', this.rsnumber);
-      this.handleRsNumberChange();
+      this.handleRsNumberChange()
     }
   }
   
