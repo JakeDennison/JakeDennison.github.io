@@ -42,13 +42,12 @@ class rsElement extends lit_1.LitElement {
     }
     firstUpdated(changedProperties) {
         super.firstUpdated(changedProperties);
-        this.runActions(); // Trigger actions on component load
     }
     updated(changedProperties) {
         super.updated(changedProperties);
         if (changedProperties.has('rsnumber')) {
             this.runActions();
-            this.requestUpdate(); // Manually trigger a re-render when rsnumber changes
+            this.requestUpdate();
         }
     }
     runActions() {

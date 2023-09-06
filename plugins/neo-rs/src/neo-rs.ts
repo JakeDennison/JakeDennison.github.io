@@ -40,7 +40,6 @@ class rsElement extends LitElement {
 
   firstUpdated(changedProperties: PropertyValues) {
     super.firstUpdated(changedProperties);
-    this.runActions(); // Trigger actions on component load
   }
 
   updated(changedProperties: PropertyValues) {
@@ -48,7 +47,7 @@ class rsElement extends LitElement {
 
     if (changedProperties.has('rsnumber')) {
       this.runActions();
-      this.requestUpdate(); // Manually trigger a re-render when rsnumber changes
+      this.requestUpdate();
     }
   }
 
