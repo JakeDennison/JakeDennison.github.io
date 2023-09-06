@@ -43,11 +43,16 @@ class rsElement extends LitElement {
     this.rstarget = '';
   }
 
+  firstUpdated() {
+    this.runActions();
+  }
+
   updated(changedProperties) {
     super.updated(changedProperties);
 
     if (changedProperties.has('rsnumber')) {
       this.runActions();
+      this.requestUpdate();
     }
   }
 
