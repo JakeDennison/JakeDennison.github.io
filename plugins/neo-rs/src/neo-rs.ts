@@ -1,4 +1,5 @@
-import { LitElement, html, css, property, PropertyValues } from 'lit';
+import { LitElement, html, css, PropertyValues } from 'lit';
+import { property } from 'lit/decorators.js';
 import { PluginContract, PropType as PluginProperty } from '@nintex/form-plugin-contract';
 
 // Define the contract information using @nintex/form-plugin-contract
@@ -58,7 +59,7 @@ class rsElement extends LitElement {
 
     for (const ntxSection of ntxRepeatingSections) {
       const targetDiv = ntxSection.querySelector(`div.${this.rstarget}`);
-      const button = ntxSection.querySelector("button.btn-repeating-section-new-row");
+      const button = ntxSection.querySelector("button.btn-repeating-section-new-row") as HTMLButtonElement;
 
       if (button && targetDiv) {
         for (let i = 0; i < rsnumberCount - 1; i++) {
