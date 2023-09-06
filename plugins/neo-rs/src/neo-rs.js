@@ -40,13 +40,25 @@ class rsElement extends LitElement {
   constructor() {
     super();
     this.rsnumber = 0;
-    this.rstarget = ''; 
+    this.rstarget = '';
+    this.initialRsNumber = undefined;
+  }
+
+  async firstUpdated() {
+    this.initialRsNumber = this.rsnumber;
+    this.runActions();
   }
 
   async updated(changedProperties) {
     super.updated(changedProperties);
 
-    if (changedProperties.has('rsnumber') && this.rsnumber > 0) {
+    if (changedProperties.has('rsnumber')) {
+      this.runActions();
+    }
+  }
+
+  runActions() {
+    if (this.initialRsNumber !== undefined && this.rsnumber > 0) {
       const rsnumberCount = this.rsnumber;
       const ntxRepeatingSections = window.document.querySelectorAll('ntx-repeating-section');
 
