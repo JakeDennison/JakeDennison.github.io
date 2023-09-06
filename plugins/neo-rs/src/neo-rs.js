@@ -43,29 +43,30 @@ class rsElement extends LitElement {
     this.rstarget = ''; 
   }
 
-  async firstUpdated() {
-    const rsnumberCount = this.rsnumber;
+  async updated(changedProperties) {
+    super.updated(changedProperties);
 
-    const ntxRepeatingSections = window.document.querySelectorAll('ntx-repeating-section');
-    console.log("ntxRepeatingSections:", ntxRepeatingSections);
+    if (changedProperties.has('rsnumber') && this.rsnumber > 0) {
+      const rsnumberCount = this.rsnumber;
+      const ntxRepeatingSections = window.document.querySelectorAll('ntx-repeating-section');
 
-    for (const ntxSection of ntxRepeatingSections) {
-      const targetDiv = ntxSection.querySelector(`div.${this.rstarget}`);
-      console.log("Target Div:", targetDiv);
+      for (const ntxSection of ntxRepeatingSections) {
+        const targetDiv = ntxSection.querySelector(`div.${this.rstarget}`);
+        const button = ntxSection.querySelector("button.btn-repeating-section-new-row");
 
-      const button = ntxSection.querySelector("button.btn-repeating-section-new-row");
-      console.log("Button:", button);
-
-      if (button && targetDiv) {
-        for (let i = 0; i < rsnumberCount - 1; i++) { 
-          button.click();
+        if (button && targetDiv) {
+          for (let i = 0; i < rsnumberCount - 1; i++) {
+            button.click();
+          }
         }
       }
     }
   }
 
   render() {
-    return html``;
+    return html`
+      <div>rsNumber: ${this.rsnumber}</div>
+    `;
   }
 }
 
