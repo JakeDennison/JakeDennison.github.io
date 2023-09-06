@@ -57,6 +57,7 @@ class rsElement extends LitElement {
   }
 
   runActions() {
+    console.log('actions running')
     const rsnumberCount = this.rsnumber;
     const ntxRepeatingSections = this.shadowRoot.querySelectorAll('ntx-repeating-section');
 

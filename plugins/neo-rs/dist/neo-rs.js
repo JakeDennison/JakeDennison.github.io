@@ -3,6 +3,6 @@
       :host {
         display: block;
       }
-    `}constructor(){super(),this.rsnumber=0,this.rstarget=""}firstUpdated(){this.runActions()}updated(t){super.updated(t),t.has("rsnumber")&&(this.runActions(),this.requestUpdate())}runActions(){const t=this.rsnumber,e=this.shadowRoot.querySelectorAll("ntx-repeating-section");for(const s of e){const e=s.querySelector(`div.${this.rstarget}`),i=s.querySelector("button.btn-repeating-section-new-row");if(i&&e)for(let e=0;e<t-1;e++)i.click()}}render(){return M`
+    `}constructor(){super(),this.rsnumber=0,this.rstarget=""}firstUpdated(){this.runActions()}updated(t){super.updated(t),t.has("rsnumber")&&(this.runActions(),this.requestUpdate())}runActions(){console.log("actions running");const t=this.rsnumber,e=this.shadowRoot.querySelectorAll("ntx-repeating-section");for(const s of e){const e=s.querySelector(`div.${this.rstarget}`),i=s.querySelector("button.btn-repeating-section-new-row");if(i&&e)for(let e=0;e<t-1;e++)i.click()}}render(){return M`
       <div>rsNumber: ${this.rsnumber}</div>
     `}})})();
