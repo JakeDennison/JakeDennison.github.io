@@ -42,6 +42,7 @@ class rsElement extends lit_1.LitElement {
     }
     firstUpdated(changedProperties) {
         super.firstUpdated(changedProperties);
+        this.runActions();
     }
     updated(changedProperties) {
         super.updated(changedProperties);
@@ -53,20 +54,29 @@ class rsElement extends lit_1.LitElement {
     runActions() {
         console.log('runActions called');
         console.log('rsnumber:', this.rsnumber);
-        const rsnumberCount = this.rsnumber;
-        // Select the repeating sections in the main DOM
-        const ntxRepeatingSections = document.querySelectorAll('ntx-repeating-section');
-        console.log("ntxRepeatingSections:", ntxRepeatingSections);
-        for (const ntxSection of ntxRepeatingSections) {
-            const targetDiv = ntxSection.querySelector(`div.${this.rstarget}`);
-            console.log("Target Div:", targetDiv);
-            const button = ntxSection.querySelector("button.btn-repeating-section-new-row");
-            console.log("Button:", button);
-            if (button && targetDiv) {
-                for (let i = 0; i < rsnumberCount - 1; i++) {
+        // Construct the class selector based on this.rstarget
+        const targetClassName = this.rstarget;
+        // Select the repeating section with the dynamic target class
+        const targetRepeatingSection = this.shadowRoot.querySelector(`.${targetClassName}`);
+        if (targetRepeatingSection) {
+            // Find the next sibling element (which should be the button)
+            const button = targetRepeatingSection.nextElementSibling;
+            if (button) {
+                // Click the button to add new repeating sections
+                for (let i = 0; i < this.rsnumber - 1; i++) {
                     button.click();
                 }
             }
+        }
+        // Handle clearing existing repeating sections when rsnumber changes
+        this.clearExistingRepeatingSections();
+    }
+    clearExistingRepeatingSections() {
+        // Select all delete buttons for existing repeating sections
+        const deleteButtons = this.shadowRoot.querySelectorAll("button.ntx-repeating-section-remove-button");
+        // Click each delete button to remove existing repeating sections
+        for (const deleteButton of deleteButtons) {
+            deleteButton.click(); // Cast to HTMLButtonElement
         }
     }
     render() {
