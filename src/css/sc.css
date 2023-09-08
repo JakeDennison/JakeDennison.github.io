@@ -1,0 +1,80 @@
+/* 
+https://imgur.com/xKBKVD1.png
+https://imgur.com/dqC5J0m.png
+*/
+
+[dir] .nx-theme-styles .nx-form.container-fluid.nx-theme-form {
+    border:0;
+    border-radius: 1em;
+}
+
+.nx-has-error>span:last-of-type, .nx-nested-form-has-error>span:last-of-type{
+    border-radius:4px;
+    margin-top: 4px;
+}
+
+.form-group.nx-has-error .ntx-simple-select .ng-select:not(.ng-select-opened){
+    border-color:#ccd8d9;
+}
+
+[dir] .nx-theme-styles .nx-theme-input-1,
+ntx-simple-currency .nx-simple-currency-control ntx-simple-number input.form-control:last-child,
+[dir] .nx-theme-styles ntx-currency .nx-simple-currency-control .input-group-append .nx-btn-input-icon:last-child,
+[dir] .nx-theme-styles ntx-datetime .nx-theme-datepicker-1 .input-group .input-group-append .nx-btn-input-icon:last-child,
+[dir] .nx-theme-styles .nx-theme-ng-select-1.ng-select:not(.ng-select-opened),
+.nx-theme-styles ntx-geolocation .input-group .nx-theme-input-1.form-control:not(:only-child),
+[dir] .nx-theme-styles ntx-geolocation .input-group .nx-theme-input-1.input-group-append .nx-btn-input-icon:last-child,
+[dir] .nx-theme-styles .nx-barcode-control.input-group .nx-theme-input-1.input-group-append .nx-btn-input-icon:last-child,
+.input-group-append>.nx-btn-input-icon:last-child,
+.ntx-simple-select .ng-select .ng-select-container,
+.ntx-simple-select .ng-select {
+    border-radius: 0px;
+}
+
+input.form-control, select.form-control, textarea.form-control,
+ntx-simple-currency .nx-simple-currency-control .input-group-append>.ntx-currency-btn:last-child,
+.ntx-simple-select .ng-select,
+.nx-btn-input-icon,
+ntx-control-loading {
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+[dir] .nx-theme-styles .nx-theme-form,
+[dir] .nx-theme-styles .nx-theme-form .nx-theme-input-1,
+[dir] .nx-theme-styles .nx-theme-form  ntx-textbox .nx-theme-input-1,
+[dir] .nx-theme-styles .nx-theme-form ntx-repeating-section ntx-textbox .nx-theme-input-1,
+[dir] .nx-theme-styles .nx-theme-form ntx-group ntx-textbox .nx-theme-input-1,
+.nx-multi-page-heading,
+[dir] .nx-theme-styles .mat-stepper-horizontal,
+.nx-theme-styles .ntx-simple-select .ng-select.nx-theme-ng-select-1 .ng-select-container,
+[dir] .nx-theme-styles .nx-theme-form .nx-theme-label-1,
+[dir] .nx-theme-styles .nx-theme-form .nx-theme-input-1,
+[dir] .nx-theme-styles .nx-theme-radio-1 .nx-radio .nx-radio-container .nx-radio-label,
+.nx-form
+ { 
+	background-color: #fff!important;
+    color: #003D40!important
+}
+
+[dir] .nx-theme-styles mat-step-header[aria-selected="true"] {
+    background-color: #d6ebff;
+}
+
+[dir] .nx-theme-styles .nx-theme-page {
+    background-color: #003D40;
+  }
+
+[dir] .nx-theme-styles .nx-theme-form .nx-theme-button-1 { 
+background-color: #003D40; 
+color: #fff; 
+font-size: 1.2em; 
+text-transform: uppercase; 
+font-weight: 700; 
+width: 100%; 
+}
+
+.scgb {
+     background-color: #003D40;
+}

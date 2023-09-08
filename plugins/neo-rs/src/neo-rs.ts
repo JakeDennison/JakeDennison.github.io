@@ -47,8 +47,9 @@ class rsElement extends LitElement {
     super.updated(changedProperties);
 
     if (changedProperties.has('rsnumber')) {
-      this.runActions();
       this.requestUpdate();
+      this.clearExistingRepeatingSections();
+      this.runActions();
     }
   }
 
@@ -56,26 +57,25 @@ class rsElement extends LitElement {
     console.log('runActions called');
     console.log('rsnumber:', this.rsnumber);
   
-    // Construct the class selector based on this.rstarget
-    const targetClassName = this.rstarget;
+    const rsnumberCount = this.rsnumber;
   
-    // Select the repeating section with the dynamic target class
-    const targetRepeatingSection = this.shadowRoot!.querySelector(`.${targetClassName}`);
+    // Select the repeating sections in the main DOM
+    const ntxRepeatingSections = document.querySelectorAll('ntx-repeating-section');
+    console.log("ntxRepeatingSections:", ntxRepeatingSections);
   
-    if (targetRepeatingSection) {
-      // Find the next sibling element (which should be the button)
-      const button = targetRepeatingSection.nextElementSibling as HTMLButtonElement;
+    for (const ntxSection of ntxRepeatingSections) {
+      const targetDiv = ntxSection.querySelector(`div.${this.rstarget}`);
+      console.log("Target Div:", targetDiv);
   
-      if (button) {
-        // Click the button to add new repeating sections
-        for (let i = 0; i < this.rsnumber - 1; i++) {
+      const button = ntxSection.querySelector("button.btn-repeating-section-new-row") as HTMLButtonElement;
+      console.log("Button:", button);
+  
+      if (button && targetDiv) {
+        for (let i = 0; i < rsnumberCount - 1; i++) {
           button.click();
         }
       }
     }
-  
-    // Handle clearing existing repeating sections when rsnumber changes
-    this.clearExistingRepeatingSections();
   }
   
   private clearExistingRepeatingSections() {
