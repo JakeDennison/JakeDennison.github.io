@@ -23,7 +23,7 @@
         -moz-border-radius: 50%;    /* Firefox */
         position: absolute;
         top: 10px;
-        left: 50%;
+        left: 25%;
         transform: translateX(-50%);
         border: 3px solid white;
         overflow: hidden; 
@@ -48,7 +48,7 @@
               <p class="card-text"><strong>${t[this.partner]}</strong></p>
               <p class="card-text">${t[this.locations]}</p>
           </div>
-          <div class="card-footer">
+          <div class="card-footer d-flex justify-content-end">
               <a href="${t[this.linkedins]}" target="_blank">
                   <img src="https://jsdenintex.github.io/plugins/neo-contacts/dist/LinkedIn_Logo.svg" alt="LinkedIn" height="32">
               </a>
