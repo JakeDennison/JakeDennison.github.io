@@ -39,10 +39,17 @@ class contactsElement extends LitElement {
   }
 
   render() {
-    let contacts;
+    let contacts = [];
+
     try {
-        contacts = JSON.parse(this.contactsJSON);
-        if (!Array.isArray(contacts) || contacts.length === 0) {
+        if (this.contactsJSON) {
+            const parsedContacts = JSON.parse(this.contactsJSON);
+            if (Array.isArray(parsedContacts) && parsedContacts.length > 0) {
+                contacts = parsedContacts;
+            } else {
+                contacts = defaultContacts;
+            }
+        } else {
             contacts = defaultContacts;
         }
     } catch (error) {
