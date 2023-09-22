@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/neo-rs.js',
+  entry: './src/neo-rs.ts', // Update the entry point to your TypeScript file
   mode: 'production',
   output: {
     filename: 'neo-rs.js',
@@ -10,10 +10,13 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.tsx?$/, // Match TypeScript files
         exclude: /node_modules/,
-        use: 'babel-loader',
+        use: 'ts-loader',
       },
     ],
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'], // Add '.tsx' and '.ts' extensions
   },
 };
