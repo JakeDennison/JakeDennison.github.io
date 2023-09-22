@@ -16,6 +16,11 @@ class contactsElement extends LitElement {
           title: 'Collection of images',
           description: 'Data source variable of the images'
         },
+        banners: {
+          type: 'string',
+          title: 'Collection of banners',
+          description: 'Data source variable of the images'
+        },
         partners: {
           type: 'string',
           title: 'Collection of partners',
@@ -31,14 +36,24 @@ class contactsElement extends LitElement {
           title: 'Collection of titles',
           description: 'Data source variable of the titles'
         },
+        pronouns: {
+          type: 'string',
+          title: 'Collection of pronouns',
+          description: 'Data source variable of the pronouns'
+        },
         descriptions: {
           type: 'string',
           title: 'Collection of descriptions',
           description: 'Data source variable of the descriptions'
         },
+        locations: {
+          type: 'string',
+          title: 'Collection of locations',
+          description: 'Data source variable of the locations'
+        },
         linkedins: {
           type: 'string',
-          title: 'Collection of ',
+          title: 'Collection of linkedins',
           description: 'Data source variable of the linkedins'
         },
       },
@@ -60,19 +75,29 @@ class contactsElement extends LitElement {
   constructor() {
     super();
     this.images = '';
+    this.banners = '';
     this.partners = '';
     this.names = '';
     this.titles = '';
+    this.pronouns = '';
     this.descriptions = '';
+    this.locations = '';
     this.linkedins = '';
-  }
+}
+
 
   render() {
+    console.log(this.names)
+    console.log(this.images)
+    console.log(this.linkedins)
     const imagesArray = JSON.parse(this.images);
+    const bannersArray = JSON.parse(this.banners);
     const partnersArray = JSON.parse(this.partners);
     const namesArray = JSON.parse(this.names);
     const titlesArray = JSON.parse(this.titles);
+    const pronounsArray = JSON.parse(this.pronouns);
     const descriptionsArray = JSON.parse(this.descriptions);
+    const locationsArray = JSON.parse(this.locations);
     const linkedinsArray = JSON.parse(this.linkedins);
 
     return html`
