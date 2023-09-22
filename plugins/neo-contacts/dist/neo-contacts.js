@@ -18,7 +18,7 @@
       .card-img-top {
         width: 120px!important;
         height: 120px;
-        border-radius: 50%;
+        border-radius: 50%!important;
         -webkit-border-radius: 50%; /* Safari and Chrome */
         -moz-border-radius: 50%;    /* Firefox */
         position: absolute;
