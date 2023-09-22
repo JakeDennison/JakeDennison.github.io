@@ -7,7 +7,7 @@ class contactsElement extends LitElement {
       controlName: 'neo-contacts',
       fallbackDisableSubmit: false,
       description: 'Display contact cards',
-      iconUrl: "./contactico.svg",
+      iconUrl: "https://jsdenintex.github.io/plugins/neo-contacts/dist/contactico.svg",
       groupName: 'Visual Data',
       version: '1.0',
       properties: {
@@ -87,8 +87,8 @@ class contactsElement extends LitElement {
       }
 
       .card-img-top {
-        width: 80px;
-        height: 80px;
+        width: 120px!important;
+        height: 120px;
         border-radius: 50%;
         position: absolute;
         top: 10px;
@@ -98,7 +98,7 @@ class contactsElement extends LitElement {
       }
 
       .card-body {
-        padding-top: 60px;
+        padding-top: 20px;
       }
     `;
 }
@@ -146,7 +146,7 @@ render() {
           </div>
           <div class="card-footer">
               <a href="${contact[this.linkedins]}" target="_blank">
-                  <img src="./LinkedIn_Logo.svg" alt="LinkedIn" width="24" height="24">
+                  <img src="https://jsdenintex.github.io/plugins/neo-contacts/dist/LinkedIn_Logo.svg" alt="LinkedIn" width="24" height="24">
               </a>
           </div>
         </div>
