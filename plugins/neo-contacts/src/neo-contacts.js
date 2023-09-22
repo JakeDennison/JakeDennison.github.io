@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit';
-import { contacts as defaultContacts } from './contactsData.js';
 
 class contactsElement extends LitElement {
   static getMetaConfig() {
@@ -12,10 +11,35 @@ class contactsElement extends LitElement {
       groupName: 'Visual Data',
       version: '1.0',
       properties: {
-        contactsJSON: {
+        images: {
           type: 'string',
-          title: 'Contacts data source',
-          description: 'Data source variable of the contacts list'
+          title: 'Collection of images',
+          description: 'Data source variable of the images'
+        },
+        partners: {
+          type: 'string',
+          title: 'Collection of partners',
+          description: 'Data source variable of the partners'
+        },
+        names: {
+          type: 'string',
+          title: 'Collection of names',
+          description: 'Data source variable of the names'
+        },
+        titles: {
+          type: 'string',
+          title: 'Collection of titles',
+          description: 'Data source variable of the titles'
+        },
+        descriptions: {
+          type: 'string',
+          title: 'Collection of descriptions',
+          description: 'Data source variable of the descriptions'
+        },
+        linkedins: {
+          type: 'string',
+          title: 'Collection of ',
+          description: 'Data source variable of the linkedins'
         },
       },
       standardProperties: {
@@ -35,26 +59,21 @@ class contactsElement extends LitElement {
   
   constructor() {
     super();
-    this.contactsJSON = '';
+    this.images = '';
+    this.partners = '';
+    this.names = '';
+    this.titles = '';
+    this.descriptions = '';
+    this.linkedins = '';
   }
 
   render() {
-    let contacts = [];
-
-    try {
-        if (this.contactsJSON) {
-            const parsedContacts = JSON.parse(this.contactsJSON);
-            if (Array.isArray(parsedContacts) && parsedContacts.length > 0) {
-                contacts = parsedContacts;
-            } else {
-                contacts = defaultContacts;
-            }
-        } else {
-            contacts = defaultContacts;
-        }
-    } catch (error) {
-        contacts = defaultContacts;
-    }
+    const imagesArray = JSON.parse(this.images);
+    const partnersArray = JSON.parse(this.partners);
+    const namesArray = JSON.parse(this.names);
+    const titlesArray = JSON.parse(this.titles);
+    const descriptionsArray = JSON.parse(this.descriptions);
+    const linkedinsArray = JSON.parse(this.linkedins);
 
     return html`
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
