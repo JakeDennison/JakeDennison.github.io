@@ -90,11 +90,14 @@ class contactsElement extends LitElement {
         width: 120px!important;
         height: 120px;
         border-radius: 50%;
+        -webkit-border-radius: 50%; /* Safari and Chrome */
+        -moz-border-radius: 50%;    /* Firefox */
         position: absolute;
         top: 10px;
         left: 50%;
         transform: translateX(-50%);
         border: 3px solid white;
+        overflow: hidden; 
       }
 
       .card-body {
@@ -139,14 +142,14 @@ render() {
             <img src="${contact[this.images]}" class="card-img-top" alt="${contact[this.names]}">
           </div>
           <div class="card-body">
-              <h5 class="card-title">${contact[this.names]} <span class="text-muted">${contact[this.pronouns]}</span></h5>
+              <h5 class="card-title .fw-bold">${contact[this.names]} <span class="text-muted">${contact[this.pronouns]}</span></h5>
               <p class="card-text">${contact[this.descriptions]}</p>
               <p class="card-text"><strong>${contact[this.partner]}</strong></p>
               <p class="card-text">${contact[this.locations]}</p>
           </div>
           <div class="card-footer">
               <a href="${contact[this.linkedins]}" target="_blank">
-                  <img src="https://jsdenintex.github.io/plugins/neo-contacts/dist/LinkedIn_Logo.svg" alt="LinkedIn" width="24" height="24">
+                  <img src="https://jsdenintex.github.io/plugins/neo-contacts/dist/LinkedIn_Logo.svg" alt="LinkedIn" height="32">
               </a>
           </div>
         </div>
