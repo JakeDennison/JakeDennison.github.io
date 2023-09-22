@@ -7,7 +7,7 @@ class contactsElement extends LitElement {
       controlName: 'neo-contacts',
       fallbackDisableSubmit: false,
       description: 'Display contact cards',
-      iconUrl: "People",
+      iconUrl: "./contactico.svg",
       groupName: 'Visual Data',
       version: '1.0',
       properties: {
@@ -74,8 +74,35 @@ class contactsElement extends LitElement {
       :host {
         display: block;
       }
+
+      .card-banner {
+        width: 100%;
+        height: 150px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .card-banner img {
+        width: 100%;
+      }
+
+      .card-img-top {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 3px solid white;
+      }
+
+      .card-body {
+        padding-top: 60px;
+      }
     `;
-  }
+}
+
   
   constructor() {
     super();
@@ -107,14 +134,19 @@ render() {
     <div class="card-group">
       ${contactsData.map(contact => html`
         <div class="card">
-          <img src="${contact[this.images]}" class="card-img-top" alt="${contact[this.names]}">
+          <div class="card-banner">
+            <img src="${contact[this.banners]}" alt="Banner">
+            <img src="${contact[this.images]}" class="card-img-top" alt="${contact[this.names]}">
+          </div>
           <div class="card-body">
-              <h5 class="card-title">${contact[this.names]}</h5>
+              <h5 class="card-title">${contact[this.names]} <span class="text-muted">${contact[this.pronouns]}</span></h5>
               <p class="card-text">${contact[this.descriptions]}</p>
+              <p class="card-text"><strong>${contact[this.partner]}</strong></p>
+              <p class="card-text">${contact[this.locations]}</p>
           </div>
           <div class="card-footer">
               <a href="${contact[this.linkedins]}" target="_blank">
-                  <img src="path/to/linkedin-logo.svg" alt="LinkedIn" width="24" height="24">
+                  <img src="./LinkedIn_Logo.svg" alt="LinkedIn" width="24" height="24">
               </a>
           </div>
         </div>
