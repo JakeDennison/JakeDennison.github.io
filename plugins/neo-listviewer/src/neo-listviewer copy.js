@@ -29,6 +29,12 @@ class listviewElement extends LitElement {
           description: 'Number of items to show per page',
           defaultValue: '5',
         },
+        selectedItems:{
+          type: 'string',
+          title: 'Selected Items',
+          description: 'Store selected item IDs, ID must be available in JSON to work.',
+          isValueField: true,
+        },
         ignoredKeys:{
           type: 'string',
           title: 'Keys to ignore',
@@ -44,6 +50,11 @@ class listviewElement extends LitElement {
           title: 'Specify the order of keys',
           description: 'Semicolon separate a list of keys to define the order e.g. Key1;Key2;Key3'
         },
+        editableKeys:{
+          type: 'string',
+          title: 'Specify the columns that should be editable',
+          description: 'Semicolon separate a list of keys (column names) to define the order e.g. Key1;Key2;Key3'
+        },
         dateFormat:{
           type: 'string',
           title: 'Preferred date format',
@@ -55,10 +66,11 @@ class listviewElement extends LitElement {
           defaultValue: true,
         },
       },
+      events: ["ntx-value-change"],
       standardProperties: {
         fieldLabel: true,
         description: true,
-      }
+      },
     };
   }
 
@@ -69,10 +81,6 @@ class listviewElement extends LitElement {
       padding: 8px 12px;
       border:1px solid #dee2e6;
       border-radius:3px;
-    }
-
-    .tabulator-col-resize-handle {
-    height: auto !important; /* Adjust the height as needed */
     }
 
     /* Custom styles for the filter bar */
@@ -416,6 +424,7 @@ class listviewElement extends LitElement {
       return {
         title: key,
         field: key,
+        editor: false,
         formatter: (cell) => {
           const value = cell.getValue();
           if (value === null || value === undefined) {
@@ -427,19 +436,32 @@ class listviewElement extends LitElement {
         }
       };
     });
+
+    // Parse editableKeys property and split into an array
+    const editableKeysList = this.editableKeys ? this.editableKeys.split(';').map(key => key.trim()) : [];
+
+    // Iterate through columns and set editor property for matching keys
+    columns.forEach(column => {
+      if (editableKeysList.includes(column.field)) {
+        column.editor = true; // Set editor property for editable columns
+      }
+    });
   
     const tableDiv = this.shadowRoot.querySelector('#table'); // Get the table div
     tableDiv.classList.add("neo-lv-table");
-  
+
     // Keep a reference to the Tabulator instance
     this.table = new Tabulator(tableDiv, {
       data: processedData,
       layout: 'fitDataFill',
+      history:true,
       pagination: 'local',
       paginationSize: this.pageItemLimit,
       paginationSizeSelector: [5, 10, 15, 30, 50, 100],
       movableColumns: true,
       height: 'auto',
+      rowHeight:'41',
+      selectable: true,
       columns: columns,
     });
   
@@ -449,10 +471,6 @@ class listviewElement extends LitElement {
       const id = row.getData().ID;
       const url = `${this.listURL}/DispForm.aspx?ID=${id}`;
       window.open(url, "_blank");
-    });
-  
-    this.table.on("rowClick", (e, row) => {
-      e.preventDefault();
     });
   }
   
@@ -464,6 +482,14 @@ class listviewElement extends LitElement {
 
   handleResetClick() {
     this.table.clearFilter();
+  }
+
+  handleUndo() {
+    table.undo();
+  }
+
+  handleRedo() {
+    table.redo();
   }
 
   render() {
@@ -479,10 +505,18 @@ class listviewElement extends LitElement {
           <button id="filter-btn" class="fltr-btn" @click="${this.handleFilterClick}">Filter</button>
           <button id="reset-btn" class="fltr-btn" @click="${this.handleResetClick}">Reset</button>
         </div>
+        <div>
+          <button id="history-undo" @click="${this.handleUndo}">Undo Edit</button>
+          <button id="history-redo" @click="${this.handleRedo}">Redo Edit</button>
+        </div>
         <div id="table"></div>
       `;
     } else {
       return html`
+      <div>
+          <button id="history-undo">Undo Edit</button>
+          <button id="history-redo">Redo Edit</button>
+      </div>
         <div id="table"></div>
       `;
     }

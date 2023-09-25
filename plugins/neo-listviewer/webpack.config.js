@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/neo-listviewer.js',
+  entry: './src/neo-listviewer.ts',  // Change this to .ts
   mode: 'production',
   output: {
     filename: 'neo-listviewer.js',
@@ -9,6 +9,11 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.ts$/,       // New rule for .ts files
+        exclude: /node_modules/,
+        use: 'ts-loader',
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -19,5 +24,8 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
     ],
+  },
+  resolve: {
+    extensions: ['.ts', '.js'],  // Recognize .ts files
   },
 };
