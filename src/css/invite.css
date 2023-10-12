@@ -1,0 +1,46 @@
+.nx-form,
+#nx-form-container > div > div.ng-star-inserted > ntx-form-rows > form > div:nth-child(1) > div ,
+#nx-form-container > div > div.ng-star-inserted > ntx-form-rows > form > div:nth-child(3) > div,
+#_e52b91ba827644d699d44c746634bec0-group-control,
+#_f57b033ad0904a809084742f291219f2-group-control,
+#nx-form-container > div {
+    padding:0px;
+    border: none;
+    box-shadow: none;
+}
+
+.nx-form {
+    width:100%;
+    max-width:100%;
+    height: 100%;
+}
+
+.nx-form-runtime-content {
+    padding: 0px;
+}
+
+.submit-btn{
+   text-align: right;
+}
+
+#nx-form-container > div > div.ng-star-inserted > ntx-form-rows > form > div:nth-child(4) {
+    display: none;
+}
+
+.page-group {
+    padding: 0 10% 0 10%;
+}
+
+/* Large devices (window width: 992px - 1199px) */
+@media (max-width: 992px) {
+    .page-group {
+        padding: 0 5% 0 5%;
+    }
+}
+
+/* Medium devices (window width: 768px - 991px) */
+@media (max-width: 768px) {
+    .page-group {
+        padding: 0;
+    }
+}
