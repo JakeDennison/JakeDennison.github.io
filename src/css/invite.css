@@ -44,3 +44,56 @@
         padding: 0;
     }
 }
+
+/* OLD */
+
+@font-face {
+    font-family: 'Maytra';
+    src: url('https://jsdenintex.github.io/src/fonts/Maytra.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+.nx-form,
+#nx-form-container > div > div.ng-star-inserted > ntx-form-rows > form > div:nth-child(1) > div ,
+#nx-form-container > div > div.ng-star-inserted > ntx-form-rows > form > div:nth-child(3) > div,
+#_e52b91ba827644d699d44c746634bec0-group-control,
+#_f57b033ad0904a809084742f291219f2-group-control,
+#nx-form-container > div {
+    padding:0px;
+    border: none;
+    box-shadow: none;
+}
+
+.nx-form-runtime-content {
+    padding: 0px;
+}
+
+.submit-btn{
+   text-align: center;
+}
+
+#_35aa5b1f47494b388c38680e3b701c3f {
+    font-size:32px;
+}
+
+#nx-form-container > div > div.ng-star-inserted > ntx-form-rows > form > div:nth-child(4) {
+    display: none;
+}
+
+.fancy-font, .fancy-font * {
+    font-family: 'Maytra', 'Open Sans', Helvetica, Arial, sans-serif;
+}
+
+
+
+<p class="text-center"><span style="font-size:26px"><a href="https://maps.app.goo.gl/eUSZojcrQPL22zaY7" target="_blank" style="color: rgb(91, 91, 91);">Danson House</a></span></p>
+
+<p class="text-center"><span style="font-size:26px"><a href="https://maps.app.goo.gl/eUSZojcrQPL22zaY7" target="_blank" style="color: rgb(91, 91, 91);">Danson Park, Danson Road, Bexleyheath DA6 8HL</a></span></p>
+
+
+
+<p class="text-center"><span style="font-size:26px"><a href="https://maps.app.goo.gl/5H3sZaZaiAyXnSS68" target="_blank" style="color: rgb(91, 91, 91);>Holiday Inn London - Bexley</a></span></p>
+
+<p class="text-center"><span style="font-size:26px"><a href="https://maps.app.goo.gl/5H3sZaZaiAyXnSS68" target="_blank" style="color: rgb(91, 91, 91);>Black Prince Interchange, E Rochester Wy, Bexley DA5 1ND</a></span></p>
