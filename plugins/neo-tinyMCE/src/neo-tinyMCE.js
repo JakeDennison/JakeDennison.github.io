@@ -16,6 +16,12 @@ class tinyMCEElement extends LitElement {
           title: 'Default HMTL',
           description: 'Provide a variable or stringified html',
         },
+        htmlOutput: {
+          type: 'string',
+          title: 'Default HMTL',
+          description: 'Provide a variable or stringified html',
+          isValueField: true,
+        },
         apikey: {
           type: 'string',
           title: 'tinyMCE API Key',
@@ -47,8 +53,8 @@ class tinyMCEElement extends LitElement {
   handleChangeEvent(editor) {
     console.log('Editor content changed');
     const newHtmlValue = editor.getContent();
-    this.htmlValue = newHtmlValue;
-    this.requestUpdate('htmlValue');
+    this.htmlOutput = newHtmlValue;
+    this.requestUpdate('htmlOutput');
     this.dispatchEvent(new CustomEvent('ntx-value-change', {
       bubbles: true,
       composed: true,
