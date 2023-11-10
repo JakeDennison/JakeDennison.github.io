@@ -74,4 +74,4 @@ class tinyMCEElement extends LitElement {
 }
 
 
-customElements.define('neo-tinymce', templateElement);
+customElements.define('neo-tinymce', tinyMCEElement);
