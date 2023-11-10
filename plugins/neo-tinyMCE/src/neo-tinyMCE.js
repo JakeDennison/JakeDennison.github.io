@@ -38,26 +38,21 @@ class tinyMCEElement extends LitElement {
       tinymceScript.src = 'https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/tinymce.min.js';
       tinymceScript.type = 'text/javascript';
       tinymceScript.referrerpolicy = 'origin';
-
+  
       const tinymceCssLink = document.createElement('link');
       tinymceCssLink.href = 'https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/skins/ui/oxide/content.min.css';
       tinymceCssLink.rel = 'stylesheet';
-
-      // Wait for the scripts to load before initializing TinyMCE
-      await Promise.all([
-        new Promise((resolve) => {
-          tinymceScript.onload = resolve;
-          document.head.appendChild(tinymceScript);
-        }),
-        new Promise((resolve) => {
-          tinymceJQueryScript.onload = resolve;
-          document.head.appendChild(tinymceJQueryScript);
-        }),
-        new Promise((resolve) => {
-          tinymceCssLink.onload = resolve;
-          document.head.appendChild(tinymceCssLink);
-        }),
-      ]);
+  
+      // Wait for the script and stylesheet to load
+      await new Promise((resolve) => {
+        tinymceScript.onload = resolve;
+        document.head.appendChild(tinymceScript);
+      });
+  
+      await new Promise((resolve) => {
+        tinymceCssLink.onload = resolve;
+        document.head.appendChild(tinymceCssLink);
+      });
 
       // Initialize TinyMCE after the scripts have loaded
       tinymce.init({
