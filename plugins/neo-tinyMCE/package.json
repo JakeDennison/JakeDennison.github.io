@@ -1,0 +1,31 @@
+{
+  "name": "neo-tinyMCE",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/neo-tinyMCE.js",
+  "browser": "./src/index.html",
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JSDenintex/JSDenintex.github.io.git"
+  },
+  "author": "Jake Dennison",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/JSDenintex/JSDenintex.github.io/issues"
+  },
+  "homepage": "https://github.com/JSDenintex/JSDenintex.github.io#readme",
+  "dependencies": {
+    "css-loader": "^6.8.1",
+    "lit": "^2.6.1",
+    "style-loader": "^3.3.3",
+    "tinymce": "^6.7.2",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  },
+  "devDependencies": {
+    "babel-loader": "^9.1.2"
+  }
+}
