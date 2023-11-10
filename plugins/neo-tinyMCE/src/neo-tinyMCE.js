@@ -52,8 +52,7 @@ class tinyMCEElement extends LitElement {
 
   render() {
     return html`
-      <script defer src="https://jsdenintex.github.io/plugins/neo-tinyMCE/dist/tinymce.js"></script>
-      <link href="https://jsdenintex.github.io/plugins/neo-tinyMCE/dist/tinymce.css" rel="stylesheet">
+      <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-webcomponent@2/dist/tinymce-webcomponent.min.js"></script>
       <textarea id="tiny-mce-editor">${this.htmlValue}</textarea>`;
   }
 
