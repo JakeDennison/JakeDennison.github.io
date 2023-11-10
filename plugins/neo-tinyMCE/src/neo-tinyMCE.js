@@ -68,8 +68,8 @@ class tinyMCEElement extends LitElement {
   }
 
   initializeTinyMCE() {
-    console.log("TinyMCE script loaded");
-    const textarea = this.shadowRoot.querySelector('textarea#tiny-mce-editor');
+    console.log("TinyMCE script loaded")
+    const textarea = this.shadowRoot.querySelector('textarea#tiny-mce-editor')
     if (textarea && !this.tinymceInitialized) {
       console.log("tinyMCE init")
       tinymce.init({
