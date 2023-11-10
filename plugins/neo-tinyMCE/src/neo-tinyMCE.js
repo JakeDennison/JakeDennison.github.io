@@ -82,13 +82,10 @@ class tinyMCEElement extends LitElement {
         autoresize_min_height: 200,
         statusbar: true,
         branding: false,
-        setup: function (editor) {
-          // Custom setup function for additional configuration or event handling
-          editor.on('init', function () {
+        setup: editor => {
+          editor.on('init', () => {
             console.log('Editor initialized');
           });
-        },
-        setup: editor => {
           editor.on('change', () => {
             this.htmlValue = editor.getContent();
             this.dispatchEvent(new CustomEvent('change', { detail: this.htmlValue }));
@@ -102,15 +99,14 @@ class tinyMCEElement extends LitElement {
     return html`<textarea id="tiny-mce-editor">${this.htmlValue}</textarea>`;
   }
 
-  // Getter and setter for the htmlValue to work with TinyMCE
   get value() {
     return this.htmlValue;
   }
-
+  
   set value(val) {
     this.htmlValue = val;
-    if (tinymce.get('my-tinymce')) {
-      tinymce.get('my-tinymce').setContent(val);
+    if (tinymce.get('tiny-mce-editor')) {
+      tinymce.get('tiny-mce-editor').setContent(val);
     }
   }
 }
