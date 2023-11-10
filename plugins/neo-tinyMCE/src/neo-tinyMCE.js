@@ -36,38 +36,59 @@ class tinyMCEElement extends LitElement {
       }
     `;
   }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.loadTinyMCEScript();
+  }
+
+  loadTinyMCEScript() {
+    console.log("script being added")
+    if (!window.tinymce) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/tinymce.min.js';
+      script.onload = () => {
+        this.initializeTinyMCE();
+      };
+      document.head.appendChild(script);
+    } else {
+      this.initializeTinyMCE();
+    }
+  }
+
+  initializeTinyMCE() {
+    console.log("TinyMCE script loaded");
+    const textarea = this.shadowRoot.querySelector('textarea#tiny-mce-editor');
+    if (textarea) {
+      tinymce.init({
+        target: textarea,
+        plugins: [
+          'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+          'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+          'insertdatetime', 'media', 'table', 'help', 'wordcount'
+        ],
+        toolbar: 'undo redo | blocks | ' +
+        'bold italic backcolor | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | ' +
+        'removeformat | help',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+        autoresize_max_height: 500,
+        autoresize_min_height: 200,
+        statusbar: true,
+        branding: false,
+        setup: function (editor) {
+          // Custom setup function for additional configuration or event handling
+          editor.on('init', function () {
+            console.log('Editor initialized');
+          });
+        }
+      });
+    }
+  }
   
   render() {
     return html`
       <div>
-      <script src="https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/tinymce.min.js"></script>
-      <script>
-        console.log("script started")
-        const textarea = this.shadowRoot.querySelector('textarea#tiny-mce-editor');
-        tinymce.init({
-          target: textarea,
-          plugins: [
-            'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'help', 'wordcount'
-          ],
-          toolbar: 'undo redo | blocks | ' +
-          'bold italic backcolor | alignleft aligncenter ' +
-          'alignright alignjustify | bullist numlist outdent indent | ' +
-          'removeformat | help',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-          autoresize_max_height: 500,
-          autoresize_min_height: 200,
-          statusbar: true,
-          branding: false,
-          setup: function (editor) {
-            // Custom setup function for additional configuration or event handling
-            editor.on('init', function () {
-              console.log('Editor initialized');
-            });
-          }
-        });
-      </script>
       <link rel="stylesheet" href="https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/skins/ui/oxide/content.min.css">
         <!-- Your TinyMCE editor here -->
         <textarea id="tiny-mce-editor">${this.htmlValue}</textarea>
