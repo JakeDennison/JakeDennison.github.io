@@ -90,20 +90,6 @@ class tinyMCEElement extends LitElement {
             // Set the initial content of the editor to this.htmlValue
             editor.setContent(this.htmlValue);
           });
-
-          editor.on('change', () => {
-            // Update this.htmlValue with the new content when the editor content changes
-            console.log("content changed")
-            this.htmlValue = editor.getContent();
-            const args = {
-              bubbles: true,
-              cancelable: false,
-              composed: true,
-              detail: this.htmlValue,
-            };
-            const event = new CustomEvent('ntx-value-change', args);
-            this.dispatchEvent(event);
-          });
         },
       });
 
