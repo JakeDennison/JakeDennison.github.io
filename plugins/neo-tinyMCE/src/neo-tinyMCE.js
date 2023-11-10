@@ -15,6 +15,11 @@ class tinyMCEElement extends LitElement {
           type: 'string',
           title: 'HTML value to be displayed in the editor',
           description: 'Provide a variable or stringified html',
+        },
+        htmlOutput: {
+          type: 'string',
+          title: 'HTML value to be displayed in the editor',
+          description: 'Provide a variable or stringified html',
           isValueField: true,
         },
         apikey: {
@@ -93,12 +98,12 @@ class tinyMCEElement extends LitElement {
           editor.on('change', () => {
             // Update this.htmlValue with the new content when the editor content changes
             console.log("content changed")
-            this.htmlValue = editor.getContent();
+      
             const args = {
               bubbles: true,
               cancelable: false,
               composed: true,
-              detail: this.htmlValue,
+              detail: editor.getContent(),
             };
             const event = new CustomEvent('ntx-value-change', args);
             this.dispatchEvent(event);
