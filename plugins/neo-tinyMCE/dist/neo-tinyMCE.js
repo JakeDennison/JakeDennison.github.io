@@ -3,7 +3,7 @@
       :host {
         display: block;
       }
-    `}firstUpdated(){tinymce.init({selector:"textarea",plugins:"autoresize lists link image",toolbar:"undo redo | bold italic | bullist numlist | link image",autoresize_max_height:500,autoresize_min_height:200,statusbar:!0,branding:!1,setup:function(e){e.on("init",(function(){console.log("Editor initialized")}))}})}constructor(){super(),this.htmlValue=""}render(){return M`
+    `}firstUpdated(){tinymce.init({selector:"textarea",plugins:["advlist","autoresize","autolink","lists","link","image","charmap","preview","anchor","searchreplace","visualblocks","code","fullscreen","insertdatetime","media","table","help","wordcount"],toolbar:"undo redo | blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help",content_style:"body { font-family:Helvetica,Arial,sans-serif; font-size:16px }",autoresize_max_height:500,autoresize_min_height:200,statusbar:!0,branding:!1,setup:function(e){e.on("init",(function(){console.log("Editor initialized")}))}})}constructor(){super(),this.htmlValue=""}render(){return M`
       <div>
         <!-- Your TinyMCE editor here -->
         <textarea>${this.htmlValue}</textarea>

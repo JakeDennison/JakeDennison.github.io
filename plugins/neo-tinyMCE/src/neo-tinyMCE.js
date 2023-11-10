@@ -36,13 +36,21 @@ class tinyMCEElement extends LitElement {
   
   firstUpdated() {
     tinymce.init({
-      selector: 'textarea', // Selector for the textarea element to convert into an editor
-      plugins: 'autoresize lists link image', // List of plugins to enable
-      toolbar: 'undo redo | bold italic | bullist numlist | link image', // Toolbar buttons and layout
-      autoresize_max_height: 500, // Maximum height for autoresize
-      autoresize_min_height: 200, // Minimum height for autoresize
-      statusbar: true, // Show the status bar
-      branding: false, // Remove TinyMCE branding
+      selector: 'textarea',
+      plugins: [
+        'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+        'insertdatetime', 'media', 'table', 'help', 'wordcount'
+      ],
+      toolbar: 'undo redo | blocks | ' +
+      'bold italic backcolor | alignleft aligncenter ' +
+      'alignright alignjustify | bullist numlist outdent indent | ' +
+      'removeformat | help',
+      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+      autoresize_max_height: 500,
+      autoresize_min_height: 200,
+      statusbar: true,
+      branding: false,
       setup: function (editor) {
         // Custom setup function for additional configuration or event handling
         editor.on('init', function () {
