@@ -34,6 +34,7 @@ class tinyMCEElement extends LitElement {
   constructor() {
     super();
     this.htmlValue = '';
+    this.tinymceInitialized = false; // Add an initialization flag
   }
 
   static get styles() {
@@ -50,9 +51,9 @@ class tinyMCEElement extends LitElement {
   }
 
   loadTinyMCEScript() {
-    console.log("script being added")
-    console.log(this.apikey)
-    if (!window.tinymce) {
+    console.log("script being added");
+    console.log(this.apikey);
+    if (!window.tinymce && !this.tinymceInitialized) {
       const apiKey = this.apikey || '';
       const script = document.createElement('script');
       script.src = `https://cdn.tiny.cloud/1/${apiKey}/tinymce/6.7.2-32/tinymce.min.js`;
@@ -60,7 +61,7 @@ class tinyMCEElement extends LitElement {
         this.initializeTinyMCE();
       };
       document.head.appendChild(script);
-    } else {
+    } else if (!this.tinymceInitialized) {
       this.initializeTinyMCE();
     }
   }
@@ -85,14 +86,15 @@ class tinyMCEElement extends LitElement {
         autoresize_min_height: 200,
         statusbar: true,
         branding: false,
-        setup: function (editor) {
+        setup: (editor) => {
           // Custom setup function for additional configuration or event handling
-          editor.on('init', function () {
+          editor.on('init', () => {
             console.log('Editor initialized');
             // Set the initial content of the editor to this.htmlValue
             editor.setContent(this.htmlValue);
-          }.bind(this));
-          editor.on('change', function () {
+          });
+
+          editor.on('change', () => {
             // Update this.htmlValue with the new content when the editor content changes
             this.htmlValue = editor.getContent();
             const args = {
@@ -103,9 +105,11 @@ class tinyMCEElement extends LitElement {
             };
             const event = new CustomEvent('ntx-value-change', args);
             this.dispatchEvent(event);
-          }.bind(this));
-        }.bind(this)
+          });
+        },
       });
+
+      this.tinymceInitialized = true; // Set the flag to indicate initialization
     }
   }
   
