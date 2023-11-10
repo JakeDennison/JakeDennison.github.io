@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit';
-import { render as initializeEditor } from './editor';
 
 class tinyMCEElement extends LitElement {
   static getMetaConfig() {
@@ -37,34 +36,42 @@ class tinyMCEElement extends LitElement {
       }
     `;
   }
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.initializeTinyMCE();
-  }
-
-  initializeTinyMCE() {
-    console.log("tinyMCE init")
-    this.updateComplete.then(() => {
-      initializeEditor(this.renderRoot.querySelector('#tiny-mce-editor'));
-    });
-  }
-
+  
   render() {
     return html`
-      <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-webcomponent@2/dist/tinymce-webcomponent.min.js"></script>
-      <textarea id="tiny-mce-editor">${this.htmlValue}</textarea>`;
-  }
-
-  get value() {
-    return this.htmlValue;
-  }
-  
-  set value(val) {
-    this.htmlValue = val;
-    if (tinymce.get('tiny-mce-editor')) {
-      tinymce.get('tiny-mce-editor').setContent(val);
-    }
+      <div>
+      <script src="https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/tinymce.min.js"></script>
+      <script>
+        console.log("script started")
+        tinymce.init({
+          selector: 'textarea#tiny-mce-editor',
+          plugins: [
+            'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+            'insertdatetime', 'media', 'table', 'help', 'wordcount'
+          ],
+          toolbar: 'undo redo | blocks | ' +
+          'bold italic backcolor | alignleft aligncenter ' +
+          'alignright alignjustify | bullist numlist outdent indent | ' +
+          'removeformat | help',
+          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+          autoresize_max_height: 500,
+          autoresize_min_height: 200,
+          statusbar: true,
+          branding: false,
+          setup: function (editor) {
+            // Custom setup function for additional configuration or event handling
+            editor.on('init', function () {
+              console.log('Editor initialized');
+            });
+          }
+        });
+      </script>
+      <link rel="stylesheet" href="https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/skins/ui/oxide/content.min.css">
+        <!-- Your TinyMCE editor here -->
+        <textarea id="tiny-mce-editor">${this.htmlValue}</textarea>
+      </div>
+    `;
   }
 }
 
