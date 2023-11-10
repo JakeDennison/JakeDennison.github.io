@@ -1,4 +1,24 @@
 import { LitElement, html, css } from 'lit';
+import tinymce from 'tinymce';
+import 'tinymce/plugins/advlist';
+import 'tinymce/plugins/autoresize';
+import 'tinymce/plugins/autolink';
+import 'tinymce/plugins/lists';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/image';
+import 'tinymce/plugins/charmap';
+import 'tinymce/plugins/preview';
+import 'tinymce/plugins/anchor';
+import 'tinymce/plugins/searchreplace';
+import 'tinymce/plugins/visualblocks';
+import 'tinymce/plugins/code';
+import 'tinymce/plugins/fullscreen';
+import 'tinymce/plugins/insertdatetime';
+import 'tinymce/plugins/media';
+import 'tinymce/plugins/table';
+import 'tinymce/plugins/help';
+import 'tinymce/plugins/wordcount';
+import 'tinymce/skins/ui/oxide/skin.min.css';
 
 class tinyMCEElement extends LitElement {
   static getMetaConfig() {
@@ -36,42 +56,62 @@ class tinyMCEElement extends LitElement {
       }
     `;
   }
-  
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.initializeTinyMCE();
+  }
+
+  initializeTinyMCE() {
+    // Ensure the element is rendered before initializing TinyMCE
+    this.updateComplete.then(() => {
+      tinymce.init({
+        target: this.renderRoot.querySelector('#my-tinymce'),
+        selector: 'textarea#tiny-mce-editor',
+        plugins: [
+          'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+          'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+          'insertdatetime', 'media', 'table', 'help', 'wordcount'
+        ],
+        toolbar: 'undo redo | blocks | ' +
+        'bold italic backcolor | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | ' +
+        'removeformat | help',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+        autoresize_max_height: 500,
+        autoresize_min_height: 200,
+        statusbar: true,
+        branding: false,
+        setup: function (editor) {
+          // Custom setup function for additional configuration or event handling
+          editor.on('init', function () {
+            console.log('Editor initialized');
+          });
+        },
+        setup: editor => {
+          editor.on('change', () => {
+            this.htmlValue = editor.getContent();
+            this.dispatchEvent(new CustomEvent('change', { detail: this.htmlValue }));
+          });
+        }
+      });
+    });
+  }
+
   render() {
-    return html`
-      <div>
-      <script src="https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/tinymce.min.js"></script>
-      <script>
-        console.log("script started")
-        tinymce.init({
-          selector: 'textarea#tiny-mce-editor',
-          plugins: [
-            'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'help', 'wordcount'
-          ],
-          toolbar: 'undo redo | blocks | ' +
-          'bold italic backcolor | alignleft aligncenter ' +
-          'alignright alignjustify | bullist numlist outdent indent | ' +
-          'removeformat | help',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-          autoresize_max_height: 500,
-          autoresize_min_height: 200,
-          statusbar: true,
-          branding: false,
-          setup: function (editor) {
-            // Custom setup function for additional configuration or event handling
-            editor.on('init', function () {
-              console.log('Editor initialized');
-            });
-          }
-        });
-      </script>
-      <link rel="stylesheet" href="https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/skins/ui/oxide/content.min.css">
-        <!-- Your TinyMCE editor here -->
-        <textarea id="tiny-mce-editor">${this.htmlValue}</textarea>
-      </div>
-    `;
+    return html`<textarea id="my-tinymce">${this.htmlValue}</textarea>`;
+  }
+
+  // Getter and setter for the htmlValue to work with TinyMCE
+  get value() {
+    return this.htmlValue;
+  }
+
+  set value(val) {
+    this.htmlValue = val;
+    if (tinymce.get('my-tinymce')) {
+      tinymce.get('my-tinymce').setContent(val);
+    }
   }
 }
 
