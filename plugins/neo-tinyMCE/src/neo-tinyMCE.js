@@ -107,8 +107,9 @@ class tinyMCEElement extends LitElement {
             // Set the initial content of the editor to this.htmlValue
             editor.setContent(this.htmlValue);
           });
-          editor.on('change', () => {
-            this.handleChangeEvent(editor);
+          editor.on('Change', (e) => {
+            const newHtmlValue = e.getContent();
+            this.handleChangeEvent(newHtmlValue);
           });
         },
       });
