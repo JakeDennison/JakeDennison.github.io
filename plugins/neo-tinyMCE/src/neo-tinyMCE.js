@@ -14,9 +14,11 @@ class tinyMCEElement extends LitElement {
         htmlValue: {
           type: 'string',
           title: 'HTML value to be displayed in the editor',
-          description: 'Provide a variable or stringified html'
+          description: 'Provide a variable or stringified html',
+          isValueField: true,
         },
       },
+      events: ["ntx-value-change"],
       standardProperties: {
         fieldLabel: true,
         description: true,
@@ -80,8 +82,19 @@ class tinyMCEElement extends LitElement {
           // Custom setup function for additional configuration or event handling
           editor.on('init', function () {
             console.log('Editor initialized');
-          });
-        }
+            editor.setContent(this.htmlValue);
+          }.bind(this));
+          editor.on('change', function () {
+            const args = {
+              bubbles: true,
+              cancelable: false,
+              composed: true,
+              detail: editor.getContent(),
+            };
+            const event = new CustomEvent('ntx-value-change', args);
+            this.dispatchEvent(event);
+          }.bind(this));
+        }.bind(this)
       });
     }
   }
