@@ -3,7 +3,7 @@
       :host {
         display: block;
       }
-    `}firstUpdated(){tinymce.init({selector:"textarea",plugins:"autoresize lists link image",toolbar:"undo redo | bold italic | bullist numlist | link image",height:300,width:"100%",autoresize_max_height:500,autoresize_min_height:200,content_css:"path/to/your/custom.css",menubar:!1,statusbar:!0,branding:!1,setup:function(e){e.on("init",(function(){console.log("Editor initialized")}))}})}constructor(){super(),this.htmlValue=""}render(){return M`
+    `}firstUpdated(){tinymce.init({selector:"textarea",plugins:"autoresize lists link image",toolbar:"undo redo | bold italic | bullist numlist | link image",autoresize_max_height:500,autoresize_min_height:200,statusbar:!0,branding:!1,setup:function(e){e.on("init",(function(){console.log("Editor initialized")}))}})}constructor(){super(),this.htmlValue=""}render(){return M`
       <div>
         <!-- Your TinyMCE editor here -->
         <textarea>${this.htmlValue}</textarea>

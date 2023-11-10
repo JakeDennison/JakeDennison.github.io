@@ -39,12 +39,8 @@ class tinyMCEElement extends LitElement {
       selector: 'textarea', // Selector for the textarea element to convert into an editor
       plugins: 'autoresize lists link image', // List of plugins to enable
       toolbar: 'undo redo | bold italic | bullist numlist | link image', // Toolbar buttons and layout
-      height: 300, // Height of the editor in pixels
-      width: '100%', // Width of the editor
       autoresize_max_height: 500, // Maximum height for autoresize
       autoresize_min_height: 200, // Minimum height for autoresize
-      content_css: 'path/to/your/custom.css', // Custom CSS file to style the editor content
-      menubar: false, // Hide the menubar
       statusbar: true, // Show the status bar
       branding: false, // Remove TinyMCE branding
       setup: function (editor) {
