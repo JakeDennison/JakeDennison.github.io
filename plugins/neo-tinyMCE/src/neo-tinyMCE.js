@@ -70,7 +70,7 @@ class tinyMCEElement extends LitElement {
   initializeTinyMCE() {
     console.log("TinyMCE script loaded");
     const textarea = this.shadowRoot.querySelector('textarea#tiny-mce-editor');
-    if (textarea) {
+    if (textarea && !this.tinymceInitialized) {
       tinymce.init({
         target: textarea,
         plugins: [
