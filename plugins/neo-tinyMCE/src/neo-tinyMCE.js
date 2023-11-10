@@ -35,7 +35,6 @@ class tinyMCEElement extends LitElement {
     super();
     this.htmlValue = '';
     this.tinymceInitialized = false; // Add an initialization flag
-    this.loadTinyMCEScript();
   }
 
   static get styles() {
@@ -44,6 +43,11 @@ class tinyMCEElement extends LitElement {
         display: block;
       }
     `;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.loadTinyMCEScript();
   }
 
   loadTinyMCEScript() {
@@ -67,6 +71,7 @@ class tinyMCEElement extends LitElement {
     console.log("TinyMCE script loaded");
     const textarea = this.shadowRoot.querySelector('textarea#tiny-mce-editor');
     if (textarea && !this.tinymceInitialized) {
+      console.log("tinyMCE init")
       tinymce.init({
         target: textarea,
         plugins: [
