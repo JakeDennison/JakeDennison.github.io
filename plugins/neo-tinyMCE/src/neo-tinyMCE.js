@@ -1,6 +1,4 @@
 import { LitElement, html, css } from 'lit';
-import 'tinymce/tinymce';
-import 'tinymce/skins/ui/oxide/content.css';
 
 class tinyMCEElement extends LitElement {
   static getMetaConfig() {
