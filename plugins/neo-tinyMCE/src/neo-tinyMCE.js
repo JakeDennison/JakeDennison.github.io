@@ -67,7 +67,7 @@ class tinyMCEElement extends LitElement {
     // Ensure the element is rendered before initializing TinyMCE
     this.updateComplete.then(() => {
       tinymce.init({
-        selector: 'textarea#tiny-mce-editor',
+        target: this.renderRoot.querySelector('#tiny-mce-editor'),
         plugins: [
           'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
           'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
