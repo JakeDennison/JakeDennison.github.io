@@ -34,31 +34,71 @@ class tinyMCEElement extends LitElement {
     `;
   }
   
+  async loadTinyMCE() {
+    if (!this.tinymceLoaded) {
+      const tinymceScript = document.createElement('script');
+      tinymceScript.src = 'https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js';
+      tinymceScript.type = 'text/javascript';
+      tinymceScript.referrerpolicy = 'origin';
+
+      const tinymceJQueryScript = document.createElement('script');
+      tinymceJQueryScript.src = 'https://cdn.tiny.cloud/1/no-api-key/tinymce/5/jquery.tinymce.min.js';
+      tinymceJQueryScript.type = 'text/javascript';
+      tinymceJQueryScript.referrerpolicy = 'origin';
+
+      const tinymceCssLink = document.createElement('link');
+      tinymceCssLink.href = 'https://cdn.tiny.cloud/1/no-api-key/tinymce/5/skins/ui/oxide/content.min.css';
+      tinymceCssLink.rel = 'stylesheet';
+
+      // Wait for the scripts to load before initializing TinyMCE
+      await Promise.all([
+        new Promise((resolve) => {
+          tinymceScript.onload = resolve;
+          document.head.appendChild(tinymceScript);
+        }),
+        new Promise((resolve) => {
+          tinymceJQueryScript.onload = resolve;
+          document.head.appendChild(tinymceJQueryScript);
+        }),
+        new Promise((resolve) => {
+          tinymceCssLink.onload = resolve;
+          document.head.appendChild(tinymceCssLink);
+        }),
+      ]);
+
+      // Initialize TinyMCE after the scripts have loaded
+      tinymce.init({
+        selector: 'textarea#tiny-mce-editor',
+        plugins: [
+          'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+          'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+          'insertdatetime', 'media', 'table', 'help', 'wordcount'
+        ],
+        toolbar: 'undo redo | blocks | ' +
+        'bold italic backcolor | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | ' +
+        'removeformat | help',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+        autoresize_max_height: 500,
+        autoresize_min_height: 200,
+        statusbar: true,
+        branding: false,
+        setup: function (editor) {
+          // Custom setup function for additional configuration or event handling
+          editor.on('init', function () {
+            console.log('Editor initialized');
+          });
+        },
+      });
+
+      // Mark TinyMCE as loaded to prevent re-loading
+      this.tinymceLoaded = true;
+    }
+  }
+
+
   firstUpdated() {
-    tinymce.init({
-      selector: 'textarea#basic-example',
-      plugins: [
-        'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-        'insertdatetime', 'media', 'table', 'help', 'wordcount'
-      ],
-      toolbar: 'undo redo | blocks | ' +
-      'bold italic backcolor | alignleft aligncenter ' +
-      'alignright alignjustify | bullist numlist outdent indent | ' +
-      'removeformat | help',
-      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-      autoresize_max_height: 500,
-      autoresize_min_height: 200,
-      statusbar: true,
-      branding: false,
-      setup: function (editor) {
-        // Custom setup function for additional configuration or event handling
-        editor.on('init', function () {
-          console.log('Editor initialized');
-        });
-      },
-    });
-    
+    this.loadTinyMCE();
   }
 
 
@@ -71,7 +111,7 @@ class tinyMCEElement extends LitElement {
     return html`
       <div>
         <!-- Your TinyMCE editor here -->
-        <textarea id="basic-example">${this.htmlValue}</textarea>
+        <textarea id="tiny-mce-editor">${this.htmlValue}</textarea>
       </div>
     `;
   }
