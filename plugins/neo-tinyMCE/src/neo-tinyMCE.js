@@ -1,5 +1,8 @@
 import { LitElement, html, css } from 'lit';
 import tinymce from 'tinymce';
+import 'tinymce/themes/silver';
+import 'tinymce/plugins/link';
+import 'tinymce/icons/default';
 import 'tinymce/plugins/advlist';
 import 'tinymce/plugins/autoresize';
 import 'tinymce/plugins/autolink';
