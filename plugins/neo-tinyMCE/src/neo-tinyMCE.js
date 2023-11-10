@@ -44,9 +44,9 @@ class tinyMCEElement extends LitElement {
     `;
   }
 
-  handleChangeEvent(e) {
+  handleChangeEvent(editor) {
     console.log('Editor content changed');
-    const newHtmlValue = e.target.getContent();
+    const newHtmlValue = editor.getContent();
     this.htmlValue = newHtmlValue;
     this.requestUpdate('htmlValue');
     this.dispatchEvent(new CustomEvent('ntx-value-change', {
