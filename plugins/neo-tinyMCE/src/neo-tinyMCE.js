@@ -93,6 +93,7 @@ class tinyMCEElement extends LitElement {
 
           editor.on('change', () => {
             // Update this.htmlValue with the new content when the editor content changes
+            console.log("content changed")
             this.htmlValue = editor.getContent();
             const args = {
               bubbles: true,
@@ -102,7 +103,6 @@ class tinyMCEElement extends LitElement {
             };
             const event = new CustomEvent('ntx-value-change', args);
             this.dispatchEvent(event);
-            editor.setContent(this.htmlValue);
           });
         },
       });
