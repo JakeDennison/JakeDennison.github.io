@@ -106,6 +106,7 @@ class tinyMCEElement extends LitElement {
             };
             const event = new CustomEvent('ntx-value-change', args);
             this.dispatchEvent(event);
+            editor.setContent(this.htmlValue);
           });
         },
       });
