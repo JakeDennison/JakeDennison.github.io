@@ -51,9 +51,10 @@ class tinyMCEElement extends LitElement {
   }
 
   loadTinyMCEScript() {
-    console.log("script being added");
-    console.log(this.apikey);
+    console.log(this.tinymceInitialized)
     if (!window.tinymce && !this.tinymceInitialized) {
+      console.log("script being added");
+      console.log(this.apikey);
       const apiKey = this.apikey || '';
       const script = document.createElement('script');
       script.src = `https://cdn.tiny.cloud/1/${apiKey}/tinymce/6.7.2-32/tinymce.min.js`;
