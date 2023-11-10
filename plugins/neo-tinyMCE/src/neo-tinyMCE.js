@@ -16,12 +16,6 @@ class tinyMCEElement extends LitElement {
           title: 'Default HMTL',
           description: 'Provide a variable or stringified html',
         },
-        htmlOutput: {
-          type: 'string',
-          title: 'HTML Output',
-          description: 'Provide a variable or stringified html',
-          isValueField: true,
-        },
         apikey: {
           type: 'string',
           title: 'tinyMCE API Key',
@@ -107,6 +101,9 @@ class tinyMCEElement extends LitElement {
             // Set the initial content of the editor to this.htmlValue
             editor.setContent(this.htmlValue);
           });
+          editor.on('change', () => {
+            this.handleChangeEvent(editor);
+          });
         },
       });
 
@@ -122,7 +119,7 @@ class tinyMCEElement extends LitElement {
       <div>
       <link rel="stylesheet" href="${stylesheetUrl}">
         <!-- Your TinyMCE editor here -->
-        <textarea id="tiny-mce-editor" .on-Change=${e => handleChangeEvent(e)}>${this.htmlValue}</textarea>
+        <textarea id="tiny-mce-editor">${this.htmlValue}</textarea>
       </div>
     `;
   }
