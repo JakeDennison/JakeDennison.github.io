@@ -40,6 +40,7 @@ class tinyMCEElement extends LitElement {
   
   async loadTinyMCE() {
     if (!this.tinymceLoaded) {
+      setTimeout(() => {
       // Initialize TinyMCE after the scripts have loaded
       tinymce.init({
         selector: 'textarea#tiny-mce-editor',
@@ -67,6 +68,7 @@ class tinyMCEElement extends LitElement {
 
       // Mark TinyMCE as loaded to prevent re-loading
       this.tinymceLoaded = true;
+    }, 0);
     }
   }
 
