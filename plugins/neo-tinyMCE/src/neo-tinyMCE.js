@@ -67,7 +67,6 @@ class tinyMCEElement extends LitElement {
     // Ensure the element is rendered before initializing TinyMCE
     this.updateComplete.then(() => {
       tinymce.init({
-        target: this.renderRoot.querySelector('#my-tinymce'),
         selector: 'textarea#tiny-mce-editor',
         plugins: [
           'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
@@ -100,7 +99,7 @@ class tinyMCEElement extends LitElement {
   }
 
   render() {
-    return html`<textarea id="my-tinymce">${this.htmlValue}</textarea>`;
+    return html`<textarea id="tiny-mce-editor">${this.htmlValue}</textarea>`;
   }
 
   // Getter and setter for the htmlValue to work with TinyMCE
