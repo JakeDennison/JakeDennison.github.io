@@ -63,6 +63,7 @@ class tinyMCEElement extends LitElement {
   }
 
   initializeTinyMCE() {
+    console.log("tinyMCE init")
     // Ensure the element is rendered before initializing TinyMCE
     this.updateComplete.then(() => {
       tinymce.init({
