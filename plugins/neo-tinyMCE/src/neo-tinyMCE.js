@@ -46,7 +46,7 @@ class tinyMCEElement extends LitElement {
     console.log("script being added")
     if (!window.tinymce) {
       const script = document.createElement('script');
-      script.src = 'https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/tinymce.min.js';
+      script.src = 'https://cdn.tiny.cloud/1/no_api_key/tinymce/6/tinymce.min.js';
       script.onload = () => {
         this.initializeTinyMCE();
       };
@@ -89,7 +89,7 @@ class tinyMCEElement extends LitElement {
   render() {
     return html`
       <div>
-      <link rel="stylesheet" href="https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/skins/ui/oxide/content.min.css">
+      <link rel="stylesheet" href="https://cdn.tiny.cloud/1/no_api_key/tinymce/6/skins/ui/oxide/content.min.css">
         <!-- Your TinyMCE editor here -->
         <textarea id="tiny-mce-editor">${this.htmlValue}</textarea>
       </div>
