@@ -13,12 +13,12 @@ class tinyMCEElement extends LitElement {
       properties: {
         htmlValue: {
           type: 'string',
-          title: 'HTML value to be displayed in the editor',
+          title: 'Default HMTL',
           description: 'Provide a variable or stringified html',
         },
         htmlOutput: {
           type: 'string',
-          title: 'HTML value to be displayed in the editor',
+          title: 'HTML Output',
           description: 'Provide a variable or stringified html',
           isValueField: true,
         },
@@ -48,6 +48,18 @@ class tinyMCEElement extends LitElement {
         display: block;
       }
     `;
+  }
+
+  handleChangeEvent(e) {
+    console.log('Editor content changed');
+    const newHtmlValue = e.target.getContent();
+    this.htmlValue = newHtmlValue;
+    this.requestUpdate('htmlValue');
+    this.dispatchEvent(new CustomEvent('ntx-value-change', {
+      bubbles: true,
+      composed: true,
+      detail: newHtmlValue,
+    }));
   }
 
   loadTinyMCEScript() {
@@ -95,19 +107,6 @@ class tinyMCEElement extends LitElement {
             // Set the initial content of the editor to this.htmlValue
             editor.setContent(this.htmlValue);
           });
-          editor.on('change', () => {
-            // Update this.htmlValue with the new content when the editor content changes
-            console.log("content changed")
-      
-            const args = {
-              bubbles: true,
-              cancelable: false,
-              composed: true,
-              detail: editor.getContent(),
-            };
-            const event = new CustomEvent('ntx-value-change', args);
-            this.dispatchEvent(event);
-          });
         },
       });
 
@@ -123,7 +122,7 @@ class tinyMCEElement extends LitElement {
       <div>
       <link rel="stylesheet" href="${stylesheetUrl}">
         <!-- Your TinyMCE editor here -->
-        <textarea id="tiny-mce-editor">${this.htmlValue}</textarea>
+        <textarea id="tiny-mce-editor" .on-Change=${e => handleChangeEvent(e)}>${this.htmlValue}</textarea>
       </div>
     `;
   }
