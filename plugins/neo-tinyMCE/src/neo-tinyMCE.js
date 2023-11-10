@@ -45,11 +45,6 @@ class tinyMCEElement extends LitElement {
     `;
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.loadTinyMCEScript();
-  }
-
   loadTinyMCEScript() {
     console.log("load state:"+this.tinymceInitialized)
     if (!window.tinymce && !this.tinymceInitialized) {
@@ -70,7 +65,7 @@ class tinyMCEElement extends LitElement {
   initializeTinyMCE() {
     console.log("TinyMCE script loaded")
     const textarea = this.shadowRoot.querySelector('textarea#tiny-mce-editor')
-    if (textarea && !this.tinymceInitialized) {
+    if (textarea) {
       console.log("tinyMCE init")
       tinymce.init({
         target: textarea,
@@ -118,6 +113,7 @@ class tinyMCEElement extends LitElement {
   }
   
   render() {
+    this.loadTinyMCEScript();
     const stylesheetUrl = `https://cdn.tiny.cloud/1/${this.apikey || ''}/tinymce/6/skins/ui/oxide/content.min.css`;
     return html`
       <div>
