@@ -89,14 +89,17 @@ class tinyMCEElement extends LitElement {
           // Custom setup function for additional configuration or event handling
           editor.on('init', function () {
             console.log('Editor initialized');
+            // Set the initial content of the editor to this.htmlValue
             editor.setContent(this.htmlValue);
           }.bind(this));
           editor.on('change', function () {
+            // Update this.htmlValue with the new content when the editor content changes
+            this.htmlValue = editor.getContent();
             const args = {
               bubbles: true,
               cancelable: false,
               composed: true,
-              detail: editor.getContent(),
+              detail: this.htmlValue,
             };
             const event = new CustomEvent('ntx-value-change', args);
             this.dispatchEvent(event);
