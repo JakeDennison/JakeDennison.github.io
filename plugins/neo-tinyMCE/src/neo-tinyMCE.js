@@ -50,9 +50,8 @@ class tinyMCEElement extends LitElement {
     `;
   }
 
-  handleChangeEvent(editor) {
+  handleChangeEvent(newHtmlValue) {
     console.log('Editor content changed');
-    const newHtmlValue = editor.getContent();
     this.htmlOutput = newHtmlValue;
     this.requestUpdate('htmlOutput');
     this.dispatchEvent(new CustomEvent('ntx-value-change', {
@@ -107,8 +106,8 @@ class tinyMCEElement extends LitElement {
             // Set the initial content of the editor to this.htmlValue
             editor.setContent(this.htmlValue);
           });
-          editor.on('Change', (e) => {
-            const newHtmlValue = e.getContent();
+          editor.on('Change', (editor) => {
+            const newHtmlValue = editor.getContent();
             this.handleChangeEvent(newHtmlValue);
           });
         },
