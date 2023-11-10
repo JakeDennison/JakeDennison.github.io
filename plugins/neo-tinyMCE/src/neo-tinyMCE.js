@@ -17,6 +17,11 @@ class tinyMCEElement extends LitElement {
           description: 'Provide a variable or stringified html',
           isValueField: true,
         },
+        apikey: {
+          type: 'string',
+          title: 'tinyMCE API Key',
+          description: 'provide your tinyMCE API Key',
+        },
       },
       events: ["ntx-value-change"],
       standardProperties: {
@@ -48,7 +53,7 @@ class tinyMCEElement extends LitElement {
     console.log("script being added")
     if (!window.tinymce) {
       const script = document.createElement('script');
-      script.src = 'https://cdn.tiny.cloud/1/no_api_key/tinymce/6/tinymce.min.js';
+      script.src = 'https://cdn.tiny.cloud/1/no-origin/tinymce/6.7.2-32/tinymce.min.js';
       script.onload = () => {
         this.initializeTinyMCE();
       };
@@ -102,7 +107,7 @@ class tinyMCEElement extends LitElement {
   render() {
     return html`
       <div>
-      <link rel="stylesheet" href="https://cdn.tiny.cloud/1/no_api_key/tinymce/6/skins/ui/oxide/content.min.css">
+      <link rel="stylesheet" href="https://cdn.tiny.cloud/1/no-origin/tinymce/6/skins/ui/oxide/content.min.css">
         <!-- Your TinyMCE editor here -->
         <textarea id="tiny-mce-editor">${this.htmlValue}</textarea>
       </div>
