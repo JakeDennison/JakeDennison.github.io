@@ -24,6 +24,12 @@ class tinyMCEElement extends LitElement {
     };
   }
 
+  constructor() {
+    super();
+    this.htmlValue = '';
+    this.tinymceLoaded = false;
+  }
+
   static get styles() {
     return css`
       :host {
@@ -34,26 +40,6 @@ class tinyMCEElement extends LitElement {
   
   async loadTinyMCE() {
     if (!this.tinymceLoaded) {
-      const tinymceScript = document.createElement('script');
-      tinymceScript.src = 'https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/tinymce.min.js';
-      tinymceScript.type = 'text/javascript';
-      tinymceScript.referrerpolicy = 'origin';
-  
-      const tinymceCssLink = document.createElement('link');
-      tinymceCssLink.href = 'https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/skins/ui/oxide/content.min.css';
-      tinymceCssLink.rel = 'stylesheet';
-  
-      // Wait for the script and stylesheet to load
-      await new Promise((resolve) => {
-        tinymceScript.onload = resolve;
-        document.head.appendChild(tinymceScript);
-      });
-  
-      await new Promise((resolve) => {
-        tinymceCssLink.onload = resolve;
-        document.head.appendChild(tinymceCssLink);
-      });
-
       // Initialize TinyMCE after the scripts have loaded
       tinymce.init({
         selector: 'textarea#tiny-mce-editor',
@@ -84,20 +70,15 @@ class tinyMCEElement extends LitElement {
     }
   }
 
-
   firstUpdated() {
     this.loadTinyMCE();
-  }
-
-
-  constructor() {
-    super();
-    this.htmlValue = '';
   }
 
   render() {
     return html`
       <div>
+      <script src="https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/tinymce.min.js"></script>
+      <link rel="stylesheet" href="https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/skins/ui/oxide/content.min.css">
         <!-- Your TinyMCE editor here -->
         <textarea id="tiny-mce-editor">${this.htmlValue}</textarea>
       </div>
