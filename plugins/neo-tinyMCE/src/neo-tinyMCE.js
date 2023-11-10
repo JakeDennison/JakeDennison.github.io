@@ -51,7 +51,7 @@ class tinyMCEElement extends LitElement {
   }
 
   loadTinyMCEScript() {
-    console.log(this.tinymceInitialized)
+    console.log("load state:"+this.tinymceInitialized)
     if (!window.tinymce && !this.tinymceInitialized) {
       console.log("script being added");
       console.log(this.apikey);
@@ -113,7 +113,7 @@ class tinyMCEElement extends LitElement {
       });
 
       this.tinymceInitialized = true; // Set the flag to indicate initialization
-      console.log(this.tinymceInitialized)
+      console.log("init state:"+this.tinymceInitialized)
     }
   }
   
