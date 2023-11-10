@@ -35,17 +35,12 @@ class tinyMCEElement extends LitElement {
   async loadTinyMCE() {
     if (!this.tinymceLoaded) {
       const tinymceScript = document.createElement('script');
-      tinymceScript.src = 'https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js';
+      tinymceScript.src = 'https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/tinymce.min.js';
       tinymceScript.type = 'text/javascript';
       tinymceScript.referrerpolicy = 'origin';
 
-      const tinymceJQueryScript = document.createElement('script');
-      tinymceJQueryScript.src = 'https://cdn.tiny.cloud/1/no-api-key/tinymce/5/jquery.tinymce.min.js';
-      tinymceJQueryScript.type = 'text/javascript';
-      tinymceJQueryScript.referrerpolicy = 'origin';
-
       const tinymceCssLink = document.createElement('link');
-      tinymceCssLink.href = 'https://cdn.tiny.cloud/1/no-api-key/tinymce/5/skins/ui/oxide/content.min.css';
+      tinymceCssLink.href = 'https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6/skins/ui/oxide/content.min.css';
       tinymceCssLink.rel = 'stylesheet';
 
       // Wait for the scripts to load before initializing TinyMCE
