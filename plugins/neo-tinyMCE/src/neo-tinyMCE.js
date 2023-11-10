@@ -110,6 +110,7 @@ class tinyMCEElement extends LitElement {
       });
 
       this.tinymceInitialized = true; // Set the flag to indicate initialization
+      console.log(this.tinymceInitialized)
     }
   }
   
