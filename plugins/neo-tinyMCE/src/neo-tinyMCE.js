@@ -99,6 +99,12 @@ class tinyMCEElement extends LitElement {
     return !(changedProperties.size === 1 && changedProperties.has('htmlOutput'));
   }
 
+  updated(changedProperties) {
+    if (changedProperties.has('htmlOutput')) {
+      this.dispatchValueChange();
+    }
+  }
+
   initializeTinyMCE() {
     console.log("TinyMCE script loaded")
     const textarea = this.shadowRoot.querySelector('textarea#tiny-mce-editor')
@@ -131,7 +137,6 @@ class tinyMCEElement extends LitElement {
             console.log('Editor instance:', editor);
             const newHtmlValue = editor.getContent();
             this.htmlOutput = newHtmlValue;
-            this.dispatchValueChange();
         });
         
         },
