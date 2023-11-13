@@ -41,6 +41,7 @@ class tinyMCEElement extends LitElement {
     this.htmlValue = '';
     this.htmlOutput = '';
     this.tinymceInitialized = false; // Add an initialization flag
+    this.loadTinyMCEScript();
   }
 
   static get styles() {
@@ -67,7 +68,7 @@ class tinyMCEElement extends LitElement {
   shouldUpdate(changedProperties) {
     // Prevent update if only `htmlOutput` has changed
     return !(changedProperties.size === 1 && changedProperties.has('htmlOutput'));
-  }  
+  }
 
   loadTinyMCEScript() {
     console.log("load state:"+this.tinymceInitialized)
@@ -130,7 +131,6 @@ class tinyMCEElement extends LitElement {
   }
   
   render() {
-    this.loadTinyMCEScript();
     const stylesheetUrl = `https://cdn.tiny.cloud/1/${this.apikey || ''}/tinymce/6/skins/ui/oxide/content.min.css`;
     return html`
       <div>
