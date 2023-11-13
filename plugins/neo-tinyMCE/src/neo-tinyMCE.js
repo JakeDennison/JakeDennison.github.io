@@ -45,14 +45,17 @@ class tinyMCEElement extends LitElement {
     super();
     this.htmlValue = '';
     this.htmlOutput = '';
+    this.tinymceLoaded = false;
   }
 
   async connectedCallback() {
     super.connectedCallback();
     if (!window.tinymce) {
-      console.log("load state:" + this.tinymceInitialized);
       console.log("script being added");
-      await this.loadTinyMCEScript();
+      if (!tinymceLoaded){
+        await this.loadTinyMCEScript();
+        this.tinymceLoaded = true;
+      }
       this.initializeTinyMCE();
     }
   }
@@ -67,19 +70,11 @@ class tinyMCEElement extends LitElement {
       document.head.appendChild(script);
     });
   }
-  
-
-  firstUpdated(){
-    if (!this.tinymceInitialized) {
-      this.initializeTinyMCE();
-    }
-  }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     if (window.tinymce) {
       tinymce.remove(this.shadowRoot.querySelector('textarea#tiny-mce-editor'));
-      this.tinymceInitialized = false;
     }
   }
 
@@ -109,10 +104,6 @@ class tinyMCEElement extends LitElement {
   }
 
   async initializeTinyMCE() {
-    if (!window.tinymce) {
-      await this.loadTinyMCEScript(); // Assume this method loads the script and returns a Promise
-    }
-
     // Check for an existing instance and clean it up if necessary
     const existingEditor = tinymce.get('tiny-mce-editor');
     if (existingEditor) {
