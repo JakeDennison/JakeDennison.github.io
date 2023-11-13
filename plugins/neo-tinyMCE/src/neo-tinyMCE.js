@@ -36,6 +36,11 @@ class tinyMCEElement extends LitElement {
     };
   }
 
+  static properties = {
+    htmlOutput: '',
+    htmlValue: '',
+  };
+
   constructor() {
     super();
     this.htmlValue = '';
