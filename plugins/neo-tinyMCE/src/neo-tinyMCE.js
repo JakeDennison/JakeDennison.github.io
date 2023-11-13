@@ -61,7 +61,7 @@ class tinyMCEElement extends LitElement {
       detail: this.htmlOutput,
     });
   
-    this.dispatchEvent(customEvent);
+    //this.dispatchEvent(customEvent);
   }
 
   shouldUpdate(changedProperties) {
