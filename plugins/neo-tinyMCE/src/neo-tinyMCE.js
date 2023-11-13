@@ -51,15 +51,16 @@ class tinyMCEElement extends LitElement {
     `;
   }
 
-  handleChangeEvent(newHtmlValue) {
+  handleChangeEvent() {
     console.log('Editor content changed');
-    this.htmlOutput = newHtmlValue;
-    this.requestUpdate('htmlOutput');
-    this.dispatchEvent(new CustomEvent('ntx-value-change', {
+    const customEvent = new CustomEvent('ntx-value-change', {
       bubbles: true,
+      cancelable: false,
       composed: true,
-      detail: newHtmlValue,
-    }));
+      detail: this.htmlOutput,
+    });
+  
+    this.dispatchEvent(customEvent);
   }
 
   loadTinyMCEScript() {
@@ -111,7 +112,8 @@ class tinyMCEElement extends LitElement {
             console.log('Editor instance:', editor);
             const newHtmlValue = editor.getContent();
             console.log('New HTML Value:', newHtmlValue);
-            //this.handleChangeEvent(newHtmlValue);
+            this.htmlOutput = newHtmlValue;
+            this.handleChangeEvent();
         });
         
         },
