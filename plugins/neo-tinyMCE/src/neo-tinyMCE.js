@@ -100,7 +100,6 @@ class tinyMCEElement extends LitElement {
   }
 
   shouldUpdate(changedProperties) {
-    // Prevent update if only `htmlOutput` has changed
     return !(changedProperties.size === 1 && changedProperties.has('htmlOutput'));
   }
 
@@ -126,22 +125,25 @@ class tinyMCEElement extends LitElement {
         statusbar: true,
         branding: false,
         setup: (editor) => {
-          // Custom setup function for additional configuration or event handling
           editor.on('init', () => {
             console.log('Editor initialized');
-            // Set the initial content of the editor to this.htmlValue
-            editor.setContent(this.htmlValue);
+            if (this.htmlValue) {
+              editor.setContent(this.htmlValue);
+            }
           });
           editor.on('change', () => {
-            console.log('Editor instance:', editor);
-            const newHtmlValue = editor.getContent();
-            this.dispatchValueChange(newHtmlValue);
+            if (editor.isDirty()) {
+              console.log('Editor instance:', editor);
+              const newHtmlValue = editor.getContent();
+              this.dispatchValueChange(newHtmlValue);
+              editor.setDirty(false);
+            }
         });
         
         },
       });
 
-      this.tinymceInitialized = true; // Set the flag to indicate initialization
+      this.tinymceInitialized = true;
       console.log("init state:"+this.tinymceInitialized)
     }
   }
@@ -151,7 +153,6 @@ class tinyMCEElement extends LitElement {
     return html`
       <div>
       <link rel="stylesheet" href="${stylesheetUrl}">
-        <!-- Your TinyMCE editor here -->
         <textarea id="tiny-mce-editor">${this.htmlValue}</textarea>
       </div>
     `;
