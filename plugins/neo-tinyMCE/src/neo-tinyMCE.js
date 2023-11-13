@@ -40,11 +40,23 @@ class tinyMCEElement extends LitElement {
     super();
     this.htmlValue = '';
     this.htmlOutput = '';
-    this.tinymceInitialized = false; // Add an initialization flag 
   }
 
   connectedCallback(){
-    this.loadTinyMCEScript();
+    console.log("load state:"+this.tinymceInitialized)
+    console.log("script being added");
+    console.log(this.apikey);
+    const apiKey = this.apikey || '';
+    const script = document.createElement('script');
+    script.src = `https://cdn.tiny.cloud/1/${apiKey}/tinymce/6.7.2-32/tinymce.min.js`;
+    script.onload = () => {
+      this.initializeTinyMCE();
+    };
+    document.head.appendChild(script);
+  }
+
+  firstUpdated(){
+    this.initializeTinyMCE();
   }
 
   static get styles() {
@@ -71,23 +83,6 @@ class tinyMCEElement extends LitElement {
   shouldUpdate(changedProperties) {
     // Prevent update if only `htmlOutput` has changed
     return !(changedProperties.size === 1 && changedProperties.has('htmlOutput'));
-  }
-
-  loadTinyMCEScript() {
-    console.log("load state:"+this.tinymceInitialized)
-    if (!window.tinymce && !this.tinymceInitialized) {
-      console.log("script being added");
-      console.log(this.apikey);
-      const apiKey = this.apikey || '';
-      const script = document.createElement('script');
-      script.src = `https://cdn.tiny.cloud/1/${apiKey}/tinymce/6.7.2-32/tinymce.min.js`;
-      script.onload = () => {
-        this.initializeTinyMCE();
-      };
-      document.head.appendChild(script);
-    } else if (!this.tinymceInitialized) {
-      this.initializeTinyMCE();
-    }
   }
 
   initializeTinyMCE() {
