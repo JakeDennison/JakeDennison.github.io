@@ -96,7 +96,7 @@ class tinyMCEElement extends LitElement {
       detail: this.htmlOutput,
     });
   
-    //setTimeout(() => this.dispatchEvent(customEvent), 0);
+    setTimeout(() => this.dispatchEvent(customEvent), 0);
   }
 
   shouldUpdate(changedProperties) {
@@ -142,7 +142,6 @@ class tinyMCEElement extends LitElement {
             console.log('Editor instance:', editor);
             const newHtmlValue = editor.getContent();
             this.htmlOutput = newHtmlValue;
-            console.log('HTML Output Value:', this.htmlOutput);
         });
         
         },
