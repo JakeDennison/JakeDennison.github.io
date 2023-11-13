@@ -18,7 +18,7 @@ class tinyMCEElement extends LitElement {
         },
         htmlOutput: {
           type: 'string',
-          title: 'Default HMTL',
+          title: 'Output HMTL',
           description: 'Provide a variable or stringified html',
           isValueField: true,
         },
@@ -39,6 +39,7 @@ class tinyMCEElement extends LitElement {
   constructor() {
     super();
     this.htmlValue = '';
+    this.htmlOutput = '';
     this.tinymceInitialized = false; // Add an initialization flag
   }
 
