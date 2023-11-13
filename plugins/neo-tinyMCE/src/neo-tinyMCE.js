@@ -45,12 +45,11 @@ class tinyMCEElement extends LitElement {
     super();
     this.htmlValue = '';
     this.htmlOutput = '';
-    this.tinymceInitialized = false;
   }
 
   async connectedCallback() {
     super.connectedCallback();
-    if (!this.tinymceInitialized && !window.tinymce) {
+    if (!window.tinymce) {
       console.log("load state:" + this.tinymceInitialized);
       console.log("script being added");
       await this.loadTinyMCEScript();
@@ -78,7 +77,7 @@ class tinyMCEElement extends LitElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    if (this.tinymceInitialized && window.tinymce) {
+    if (window.tinymce) {
       tinymce.remove(this.shadowRoot.querySelector('textarea#tiny-mce-editor'));
       this.tinymceInitialized = false;
     }
@@ -120,8 +119,6 @@ class tinyMCEElement extends LitElement {
       existingEditor.remove();
     }
 
-
-
     console.log("TinyMCE script loaded")
     const textarea = this.shadowRoot.querySelector('textarea#tiny-mce-editor')
     if (textarea) {
@@ -160,9 +157,6 @@ class tinyMCEElement extends LitElement {
         
         },
       });
-
-      this.tinymceInitialized = true;
-      console.log("init state:"+this.tinymceInitialized)
     }
   }
   
