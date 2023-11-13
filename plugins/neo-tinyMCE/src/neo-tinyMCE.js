@@ -51,8 +51,9 @@ class tinyMCEElement extends LitElement {
     `;
   }
 
-  handleChangeEvent() {
+  dispatchValueChange() {
     console.log('Editor content changed');
+    console.log('New HTML Value:', this.htmlOutput);
     const customEvent = new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: false,
@@ -111,9 +112,8 @@ class tinyMCEElement extends LitElement {
           editor.on('change', () => {
             console.log('Editor instance:', editor);
             const newHtmlValue = editor.getContent();
-            console.log('New HTML Value:', newHtmlValue);
             this.htmlOutput = newHtmlValue;
-            this.handleChangeEvent();
+            this.dispatchValueChange();
         });
         
         },
