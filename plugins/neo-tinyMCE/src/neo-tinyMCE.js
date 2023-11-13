@@ -40,7 +40,10 @@ class tinyMCEElement extends LitElement {
     super();
     this.htmlValue = '';
     this.htmlOutput = '';
-    this.tinymceInitialized = false; // Add an initialization flag
+    this.tinymceInitialized = false; // Add an initialization flag 
+  }
+
+  connectedCallback(){
     this.loadTinyMCEScript();
   }
 
