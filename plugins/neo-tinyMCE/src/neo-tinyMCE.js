@@ -52,7 +52,7 @@ class tinyMCEElement extends LitElement {
     super.connectedCallback();
     if (!window.tinymce) {
       console.log("script being added");
-      if (!tinymceLoaded){
+      if (!this.tinymceLoaded){
         await this.loadTinyMCEScript();
         this.tinymceLoaded = true;
       }
