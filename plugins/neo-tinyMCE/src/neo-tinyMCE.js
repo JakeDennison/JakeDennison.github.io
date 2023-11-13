@@ -86,14 +86,14 @@ class tinyMCEElement extends LitElement {
     `;
   }
 
-  dispatchValueChange() {
+  dispatchValueChange(newHtmlValue) {
     console.log('Editor content changed');
-    console.log('New HTML Value:', this.htmlOutput);
+    console.log('New HTML Value:', newHtmlValue);
     const customEvent = new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: false,
       composed: true,
-      detail: this.htmlOutput,
+      detail: newHtmlValue,
     });
   
     setTimeout(() => this.dispatchEvent(customEvent), 0);
@@ -102,12 +102,6 @@ class tinyMCEElement extends LitElement {
   shouldUpdate(changedProperties) {
     // Prevent update if only `htmlOutput` has changed
     return !(changedProperties.size === 1 && changedProperties.has('htmlOutput'));
-  }
-
-  updated(changedProperties) {
-    if (changedProperties.has('htmlOutput')) {
-      this.dispatchValueChange();
-    }
   }
 
   initializeTinyMCE() {
@@ -141,7 +135,7 @@ class tinyMCEElement extends LitElement {
           editor.on('change', () => {
             console.log('Editor instance:', editor);
             const newHtmlValue = editor.getContent();
-            this.htmlOutput = newHtmlValue;
+            this.dispatchValueChange(newHtmlValue);
         });
         
         },
