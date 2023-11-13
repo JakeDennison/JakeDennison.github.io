@@ -137,6 +137,7 @@ class tinyMCEElement extends LitElement {
             console.log('Editor instance:', editor);
             const newHtmlValue = editor.getContent();
             this.htmlOutput = newHtmlValue;
+            console.log('HTML Output Value:', this.htmlOutput);
         });
         
         },
