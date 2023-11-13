@@ -131,13 +131,13 @@ class tinyMCEElement extends LitElement {
               editor.setContent(this.htmlValue);
             }
           });
-          editor.on('change', () => {
+          editor.on('blur', () => {
             if (editor.isDirty()) {
               console.log('Editor instance:', editor);
               const newHtmlValue = editor.getContent();
               this.dispatchValueChange(newHtmlValue);
               editor.setDirty(false);
-            }
+          }
         });
         
         },
