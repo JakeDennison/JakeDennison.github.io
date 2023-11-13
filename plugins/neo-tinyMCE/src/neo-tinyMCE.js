@@ -64,6 +64,11 @@ class tinyMCEElement extends LitElement {
     this.dispatchEvent(customEvent);
   }
 
+  shouldUpdate(changedProperties) {
+    // Prevent update if only `htmlOutput` has changed
+    return !(changedProperties.size === 1 && changedProperties.has('htmlOutput'));
+  }  
+
   loadTinyMCEScript() {
     console.log("load state:"+this.tinymceInitialized)
     if (!window.tinymce && !this.tinymceInitialized) {
