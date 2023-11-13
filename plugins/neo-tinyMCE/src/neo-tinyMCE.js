@@ -40,23 +40,37 @@ class tinyMCEElement extends LitElement {
     super();
     this.htmlValue = '';
     this.htmlOutput = '';
+    this.tinymceInitialized = false;
   }
 
-  connectedCallback(){
-    console.log("load state:"+this.tinymceInitialized)
-    console.log("script being added");
-    console.log(this.apikey);
-    const apiKey = this.apikey || '';
-    const script = document.createElement('script');
-    script.src = `https://cdn.tiny.cloud/1/${apiKey}/tinymce/6.7.2-32/tinymce.min.js`;
-    script.onload = () => {
-      this.initializeTinyMCE();
-    };
-    document.head.appendChild(script);
+  connectedCallback() {
+    super.connectedCallback();
+      if (!this.tinymceInitialized && !window.tinymce) {
+      console.log("load state:"+this.tinymceInitialized)
+      console.log("script being added");
+      console.log(this.apikey);
+      const apiKey = this.apikey || '';
+      const script = document.createElement('script');
+      script.src = `https://cdn.tiny.cloud/1/${apiKey}/tinymce/6.7.2-32/tinymce.min.js`;
+      script.onload = () => {
+        this.initializeTinyMCE();
+      };
+      document.head.appendChild(script);
+    }
   }
 
   firstUpdated(){
-    this.initializeTinyMCE();
+    if (!this.tinymceInitialized) {
+      this.initializeTinyMCE();
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.tinymceInitialized && window.tinymce) {
+      tinymce.remove(this.shadowRoot.querySelector('textarea#tiny-mce-editor'));
+      this.tinymceInitialized = false;
+    }
   }
 
   static get styles() {
