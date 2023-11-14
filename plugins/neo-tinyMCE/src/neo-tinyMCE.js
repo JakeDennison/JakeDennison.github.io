@@ -74,7 +74,9 @@ class tinyMCEElement extends LitElement {
       document.head.appendChild(link);
       tinyMCEElement.stylesheetLoaded = true;
     }
-    this.initializeTinyMCE();
+    if (this.tinymceLoaded) {
+      this.initializeTinyMCE();
+    }
   }
   
   loadTinyMCEScript() {
