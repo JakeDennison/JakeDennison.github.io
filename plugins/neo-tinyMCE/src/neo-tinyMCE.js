@@ -41,7 +41,7 @@ class tinyMCEElement extends LitElement {
     htmlValue: '',
     editorId: { type: String },
     uniqueString: { type: String },
-    ToolbarId: { type: String },
+    toolsId: { type: String },
   };
 
   constructor() {
@@ -135,6 +135,7 @@ class tinyMCEElement extends LitElement {
     console.log("tinyMCE init");
     tinymce.init({
         target: editableDiv,
+        inline: true,
         plugins: [
           'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
           'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
