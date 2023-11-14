@@ -13,7 +13,12 @@ class tinyMCEElement extends LitElement {
       properties: {
         htmlValue: {
           type: 'string',
-          title: 'HMTL Content',
+          title: 'Default HMTL',
+          description: 'Provide a variable or stringified html',
+        },
+        htmlOutput: {
+          type: 'string',
+          title: 'Output HMTL',
           description: 'Provide a variable or stringified html',
           isValueField: true,
         },
@@ -32,12 +37,14 @@ class tinyMCEElement extends LitElement {
   }
 
   static properties = {
+    htmlOutput: '',
     htmlValue: '',
   };
 
   constructor() {
     super();
     this.htmlValue = '';
+    this.htmlOutput = '';
     this.tinymceLoaded = false;
   }
 
@@ -91,12 +98,11 @@ class tinyMCEElement extends LitElement {
   
     setTimeout(() => this.dispatchEvent(customEvent), 100);
     tinymce.remove(this.shadowRoot.querySelector('textarea#tiny-mce-editor'));
-    this.htmlValue = newHtmlValue
-    initializeTinyMCE()
+    this.initializeTinyMCE()
   }
 
   shouldUpdate(changedProperties) {
-    return !(changedProperties.size === 1 && changedProperties.has('htmlValue'));
+    return !(changedProperties.size === 1 && changedProperties.has('htmlOutput'));
   }
 
   async initializeTinyMCE() {
