@@ -63,23 +63,20 @@ class tinyMCEElement extends LitElement {
 
   async connectedCallback() {
     super.connectedCallback();
-    if (!window.tinymce && !this.tinymceLoaded) {
-      console.log("script being added");
+    if (!document.querySelector('script[src*="tinymce.min.js"]')) {
+      console.log("TinyMCE script being added");
       await this.loadTinyMCEScript();
-      this.tinymceLoaded = true;
     }
-    if (!tinyMCEElement.stylesheetLoaded) {
+    if (!document.querySelector('link[href*="oxide/content.min.css"]')) {
+      console.log("TinyMCE stylesheet being added");
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = `https://cdn.tiny.cloud/1/${this.apikey || ''}/tinymce/6/skins/ui/oxide/content.min.css`;
       document.head.appendChild(link);
-      tinyMCEElement.stylesheetLoaded = true;
     }
-    if (this.tinymceLoaded) {
-      this.initializeTinyMCE();
-    }
+    this.initializeTinyMCE();
   }
-  
+    
   loadTinyMCEScript() {
     return new Promise((resolve, reject) => {
       const apiKey = this.apikey || '';
