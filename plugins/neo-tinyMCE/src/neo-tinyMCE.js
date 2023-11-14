@@ -7,7 +7,7 @@ class tinyMCEElement extends LitElement {
       controlName: 'neo-tinymce',
       fallbackDisableSubmit: false,
       description: '',
-      iconUrl: "",
+      iconUrl: "https://jsdenintex.github.io/plugins/neo-tinyMCE/dist/tiny-white-sm.svg",
       groupName: 'Custom controls',
       version: '1.0',
       properties: {
