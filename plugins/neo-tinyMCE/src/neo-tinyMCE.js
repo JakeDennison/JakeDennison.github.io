@@ -155,7 +155,6 @@ class tinyMCEElement extends LitElement {
         setup: (editor) => {
           editor.on('init', () => {
             console.log('Editor initialized');
-            editor.setContent(this.htmlValue);
           });
           editor.on('blur', () => {
             if (editor.isDirty()) {
@@ -182,7 +181,7 @@ class tinyMCEElement extends LitElement {
   render() {
     return html`
       <div>
-        <textarea id="${this.editorId}"></textarea>
+        <textarea id="${this.editorId}" .innerHTML="${this.htmlValue}"></textarea>
       </div>
     `;
   }
