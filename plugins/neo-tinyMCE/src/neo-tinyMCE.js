@@ -135,7 +135,6 @@ class tinyMCEElement extends LitElement {
     console.log("tinyMCE init");
     tinymce.init({
         target: editableDiv,
-        inline: true,
         plugins: [
           'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
           'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
@@ -150,6 +149,11 @@ class tinyMCEElement extends LitElement {
         autoresize_min_height: 200,
         statusbar: true,
         branding: false,
+        mobile: {
+          menubar: true,
+          plugins: 'autosave lists autolink',
+          toolbar: 'undo bold italic styles'
+        },
         fixed_toolbar_container: `#${this.toolsId}`,
         setup: (editor) => {
           editor.on('init', () => {
