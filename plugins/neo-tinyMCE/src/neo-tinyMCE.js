@@ -43,12 +43,16 @@ class tinyMCEElement extends LitElement {
   static properties = {
     htmlOutput: '',
     htmlValue: '',
-    uniqueId: { type: String },
+    editorId: { type: String },
+    uniqueString: { type: String },
+    ToolbarId: { type: String },
   };
 
   constructor() {
     super();
-    this.uniqueId = `tiny-${Math.random().toString(36).substring(2, 11)}`;
+    this.uniqueString = `tiny-${Math.random().toString(36).substring(2, 11)}`;
+    this.editorId = `tiny-${this.uniqueString}`;
+    this.toolsId = `tools-${this.uniqueString}`;
     this.htmlValue = '';
     this.htmlOutput = '';
     this.tinymceLoaded = false;
@@ -114,14 +118,14 @@ class tinyMCEElement extends LitElement {
 
   async initializeTinyMCE() {
     // Check for an existing instance and clean it up if necessary
-    const existingEditor = tinymce.get(this.uniqueId);
+    const existingEditor = tinymce.get(this.editorId);
     if (existingEditor) {
       existingEditor.remove();
     }
   
     console.log("TinyMCE script loaded");
   
-    const editableDiv = this.shadowRoot.querySelector(`#${this.uniqueId}`);
+    const editableDiv = this.shadowRoot.querySelector(`#${this.editorId}`);
     console.log("Editable Div:", editableDiv);
 
   if (editableDiv) {
@@ -143,6 +147,7 @@ class tinyMCEElement extends LitElement {
         autoresize_min_height: 200,
         statusbar: true,
         branding: false,
+        fixed_toolbar_container: `#${this.toolsId}`,
         setup: (editor) => {
           editor.on('init', () => {
             console.log('Editor initialized');
@@ -163,7 +168,7 @@ class tinyMCEElement extends LitElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    const editor = tinymce.get(this.uniqueId);
+    const editor = tinymce.get(this.editorId);
     if (editor) {
       editor.remove();
     }
@@ -172,7 +177,8 @@ class tinyMCEElement extends LitElement {
   render() {
     return html`
       <div>
-        <div id="${this.uniqueId}" .innerHTML="${this.htmlValue}"></div>
+        <div id="${this.toolsId}"></div>
+        <div id="${this.editorId}" .innerHTML="${this.htmlValue}"></div>
       </div>
     `;
   }
