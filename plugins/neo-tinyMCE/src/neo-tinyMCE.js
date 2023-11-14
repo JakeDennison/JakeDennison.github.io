@@ -51,7 +51,7 @@ class tinyMCEElement extends LitElement {
   constructor() {
     super();
     this.uniqueString = `tiny-${Math.random().toString(36).substring(2, 11)}`;
-    this.editorId = `tiny-${this.uniqueString}`;
+    this.editorId = `editor-${this.uniqueString}`;
     this.toolsId = `tools-${this.uniqueString}`;
     this.htmlValue = '';
     this.htmlOutput = '';
