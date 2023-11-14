@@ -119,7 +119,7 @@ class tinyMCEElement extends LitElement {
 
   async initializeTinyMCE() {
     // Check for an existing instance and clean it up if necessary
-    const existingEditor = tinymce.get('#${this.uniqueId}');
+    const existingEditor = tinymce.get(`#${this.uniqueId}`);
     if (existingEditor) {
       existingEditor.remove();
     }
