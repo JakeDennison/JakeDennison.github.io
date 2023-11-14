@@ -110,6 +110,7 @@ class tinyMCEElement extends LitElement {
 
   async initializeTinyMCE() {
     // Check for an existing instance and clean it up if necessary
+    setTimeout(async () => {
     const existingEditor = tinymce.get(this.editorId);
     if (existingEditor) {
       existingEditor.remove();
@@ -159,6 +160,7 @@ class tinyMCEElement extends LitElement {
         },
       });
     }
+    }, 400);
   }
 
   disconnectedCallback() {
