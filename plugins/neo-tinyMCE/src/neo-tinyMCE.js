@@ -88,10 +88,13 @@ class tinyMCEElement extends LitElement {
   disconnectedCallback() {
     super.disconnectedCallback();
     if (window.tinymce) {
-      tinymce.remove(this.shadowRoot.querySelector('textarea#tiny-mce-editor'));
+      const editor = tinymce.get(this.uniqueId);
+      if (editor) {
+        editor.remove();
+      }
     }
   }
-
+  
   static get styles() {
     return css`
       :host {
