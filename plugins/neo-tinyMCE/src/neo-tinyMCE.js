@@ -36,10 +36,6 @@ class tinyMCEElement extends LitElement {
     };
   }
 
-  createRenderRoot() {
-    return this;
-  }
-
   static properties = {
     htmlOutput: '',
     htmlValue: '',
