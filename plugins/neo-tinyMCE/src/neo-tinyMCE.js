@@ -93,7 +93,7 @@ class tinyMCEElement extends LitElement {
       :host {
         display: block;
       }
-      .tox-mbtn .tox-mbtn--select {
+      .tox .tox-mbtn {
         width: auto !important;
       }
     `;
