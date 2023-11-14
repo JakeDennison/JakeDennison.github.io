@@ -52,6 +52,7 @@ class tinyMCEElement extends LitElement {
     this.htmlValue = '';
     this.htmlOutput = '';
     this.tinymceLoaded = false;
+    this.stylesheetLoaded = false;
   }
 
   async connectedCallback() {
@@ -63,6 +64,13 @@ class tinyMCEElement extends LitElement {
         this.tinymceLoaded = true;
       }
       this.initializeTinyMCE();
+    }
+    if (!this.stylesheetLoaded) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = `https://cdn.tiny.cloud/1/${this.apikey || ''}/tinymce/6/skins/ui/oxide/content.min.css`;
+      document.head.appendChild(link);
+      this.stylesheetLoaded = true;
     }
   }
   
@@ -158,10 +166,8 @@ class tinyMCEElement extends LitElement {
   }
   
   render() {
-    const stylesheetUrl = `https://cdn.tiny.cloud/1/${this.apikey || ''}/tinymce/6/skins/ui/oxide/content.min.css`;
     return html`
       <div>
-      <link rel="stylesheet" href="${stylesheetUrl}">
         <textarea id="${this.uniqueId}">${this.htmlValue}</textarea>
       </div>
     `;
