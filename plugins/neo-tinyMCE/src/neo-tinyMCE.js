@@ -56,7 +56,7 @@ class tinyMCEElement extends LitElement {
 
   firstUpdated(changedProperties) {
     super.firstUpdated(changedProperties);
-    if (this.htmlValue) {
+    if (this.htmlValue && !this.htmlOutput) {
       this.dispatchValueChange(this.htmlValue);
     }
   }
