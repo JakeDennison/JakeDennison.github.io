@@ -68,7 +68,6 @@ class tinyMCEElement extends LitElement {
         await this.loadTinyMCEScript();
         this.tinymceLoaded = true;
       }
-      this.initializeTinyMCE();
     }
     if (!tinyMCEElement.stylesheetLoaded) {
       const link = document.createElement('link');
@@ -77,6 +76,11 @@ class tinyMCEElement extends LitElement {
       document.head.appendChild(link);
       tinyMCEElement.stylesheetLoaded = true;
     }
+  }
+  
+  firstUpdated(changedProperties) {
+    super.firstUpdated(changedProperties);
+    this.initializeTinyMCE();
   }
   
   loadTinyMCEScript() {
@@ -94,6 +98,13 @@ class tinyMCEElement extends LitElement {
     return css`
       :host {
         display: block;
+      }
+      .tox-toolbar {
+        position: absolute;
+        top: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
       }
     `;
   }
