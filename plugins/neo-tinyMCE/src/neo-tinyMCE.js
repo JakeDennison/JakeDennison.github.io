@@ -115,7 +115,7 @@ class tinyMCEElement extends LitElement {
     if (textarea) {
       console.log("tinyMCE init")
       tinymce.init({
-        target: textarea,
+        selector: textarea,
         plugins: [
           'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
           'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
