@@ -155,7 +155,7 @@ class tinyMCEElement extends LitElement {
           plugins: 'autosave lists autolink',
           toolbar: 'undo bold italic styles'
         },
-        fixed_toolbar_container: `#${this.toolsId}`,
+        fixed_toolbar_container_target: `#${this.toolsId}`,
         setup: (editor) => {
           editor.on('init', () => {
             console.log('Editor initialized');
