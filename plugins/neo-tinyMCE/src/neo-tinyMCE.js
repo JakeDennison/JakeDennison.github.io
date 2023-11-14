@@ -124,7 +124,7 @@ class tinyMCEElement extends LitElement {
       existingEditor.remove();
     }
     console.log("TinyMCE script loaded")
-    const textarea = document.querySelector('#${this.uniqueId}');
+    const textarea = document.querySelector(`#${this.uniqueId}`);
     console.log("Text area:", textarea)
     if (textarea) {
       console.log("tinyMCE init")
