@@ -123,6 +123,7 @@ class tinyMCEElement extends LitElement {
       console.log("tinyMCE init")
       tinymce.init({
         target: textarea,
+        inline: true,
         plugins: [
           'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
           'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
