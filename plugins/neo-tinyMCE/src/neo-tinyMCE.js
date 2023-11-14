@@ -36,13 +36,19 @@ class tinyMCEElement extends LitElement {
     };
   }
 
+  createRenderRoot() {
+    return this;
+  }
+
   static properties = {
     htmlOutput: '',
     htmlValue: '',
+    uniqueId: { type: String },
   };
 
   constructor() {
     super();
+    this.uniqueId = `tiny-${Math.random().toString(36).substring(2, 11)}`;
     this.htmlValue = '';
     this.htmlOutput = '';
     this.tinymceLoaded = false;
@@ -105,17 +111,17 @@ class tinyMCEElement extends LitElement {
 
   async initializeTinyMCE() {
     // Check for an existing instance and clean it up if necessary
-    const existingEditor = tinymce.get('tiny-mce-editor');
+    const existingEditor = tinymce.get('#${this.uniqueId}');
     if (existingEditor) {
       existingEditor.remove();
     }
 
     console.log("TinyMCE script loaded")
-    const textarea = this.shadowRoot.querySelector('textarea#tiny-mce-editor')
+    const textarea = document.querySelector('#${this.uniqueId}');
     if (textarea) {
       console.log("tinyMCE init")
       tinymce.init({
-        selector: textarea,
+        target: textarea,
         plugins: [
           'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
           'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
@@ -156,7 +162,7 @@ class tinyMCEElement extends LitElement {
     return html`
       <div>
       <link rel="stylesheet" href="${stylesheetUrl}">
-        <textarea id="tiny-mce-editor">${this.htmlValue}</textarea>
+        <textarea id="${this.uniqueId}">${this.htmlValue}</textarea>
       </div>
     `;
   }
