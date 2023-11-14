@@ -52,8 +52,9 @@ class tinyMCEElement extends LitElement {
     this.htmlValue = '';
     this.htmlOutput = '';
     this.tinymceLoaded = false;
-    this.stylesheetLoaded = false;
   }
+
+  static stylesheetLoaded = false;
 
   async connectedCallback() {
     super.connectedCallback();
@@ -65,12 +66,12 @@ class tinyMCEElement extends LitElement {
       }
       this.initializeTinyMCE();
     }
-    if (!this.stylesheetLoaded) {
+    if (!tinyMCEElement.stylesheetLoaded) {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = `https://cdn.tiny.cloud/1/${this.apikey || ''}/tinymce/6/skins/ui/oxide/content.min.css`;
       document.head.appendChild(link);
-      this.stylesheetLoaded = true;
+      tinyMCEElement.stylesheetLoaded = true;
     }
   }
   
@@ -120,7 +121,7 @@ class tinyMCEElement extends LitElement {
   
     console.log("TinyMCE script loaded");
   
-    const editableDiv = document.querySelector(`#${this.uniqueId}`);
+    const editableDiv = this.shadowRoot.querySelector(`#${this.uniqueId}`);
     console.log("Editable Div:", editableDiv);
 
   if (editableDiv) {
@@ -157,6 +158,14 @@ class tinyMCEElement extends LitElement {
           });
         },
       });
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    const editor = tinymce.get(this.uniqueId);
+    if (editor) {
+      editor.remove();
     }
   }
   
