@@ -69,7 +69,6 @@ class tinyMCEElement extends LitElement {
       tinyMCEElement.stylesheetLoaded = true;
     }
     if (this.tinymceLoaded) {
-      this.initializeTinyMCE();
     }
   }
   
@@ -81,6 +80,7 @@ class tinyMCEElement extends LitElement {
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);
+      this.initializeTinyMCE();
     });
   }
   
