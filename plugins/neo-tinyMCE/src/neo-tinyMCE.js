@@ -97,7 +97,6 @@ class tinyMCEElement extends LitElement {
     });
   
     setTimeout(() => this.dispatchEvent(customEvent), 100);
-    tinymce.remove(this.shadowRoot.querySelector('textarea#tiny-mce-editor'));
     this.initializeTinyMCE()
   }
 
