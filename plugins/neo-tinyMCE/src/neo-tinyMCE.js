@@ -97,7 +97,6 @@ class tinyMCEElement extends LitElement {
     });
   
     setTimeout(() => this.dispatchEvent(customEvent), 100);
-    this.initializeTinyMCE()
   }
 
   shouldUpdate(changedProperties) {
