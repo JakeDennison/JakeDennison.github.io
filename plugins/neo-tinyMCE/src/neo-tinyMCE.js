@@ -89,19 +89,11 @@ class tinyMCEElement extends LitElement {
       :host {
         display: block;
       }
-      .tox-toolbar {
-        position: absolute;
-        top: 50px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80%;
-      }
     `;
   }
 
   dispatchValueChange(newHtmlValue) {
     console.log('Editor content changed');
-    console.log('New HTML Value:', newHtmlValue);
     const customEvent = new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: true,
@@ -109,8 +101,7 @@ class tinyMCEElement extends LitElement {
       detail: newHtmlValue,
     });
   
-    setTimeout(() => this.dispatchEvent(customEvent), 0);
-    this.htmlValue = newHtmlValue;
+    this.dispatchEvent(customEvent)
   }
 
   shouldUpdate(changedProperties) {
