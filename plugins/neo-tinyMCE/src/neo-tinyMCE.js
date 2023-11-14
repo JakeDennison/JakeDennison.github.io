@@ -54,6 +54,13 @@ class tinyMCEElement extends LitElement {
 
   static stylesheetLoaded = false;
 
+  firstUpdated(changedProperties) {
+    super.firstUpdated(changedProperties);
+    if (this.htmlValue) {
+      this.dispatchValueChange(this.htmlValue);
+    }
+  }
+
   async connectedCallback() {
     super.connectedCallback();
     if (!window.tinymce && !this.tinymceLoaded) {
@@ -160,7 +167,7 @@ class tinyMCEElement extends LitElement {
         },
       });
     }
-    }, 400);
+    }, 0);
   }
 
   disconnectedCallback() {
