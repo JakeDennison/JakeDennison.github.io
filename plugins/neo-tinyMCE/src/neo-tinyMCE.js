@@ -84,16 +84,6 @@ class tinyMCEElement extends LitElement {
       document.head.appendChild(script);
     });
   }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    if (window.tinymce) {
-      const editor = tinymce.get(this.uniqueId);
-      if (editor) {
-        editor.remove();
-      }
-    }
-  }
   
   static get styles() {
     return css`
