@@ -104,6 +104,7 @@ class tinyMCEElement extends LitElement {
     });
   
     setTimeout(() => this.dispatchEvent(customEvent), 100);
+    this.htmlValue = newHtmlValue
   }
 
   shouldUpdate(changedProperties) {
@@ -161,8 +162,8 @@ class tinyMCEElement extends LitElement {
   
   render() {
     return html`
-      <div>
-        <textarea id="${this.uniqueId}">${this.htmlValue}</textarea>
+      <div id="${this.uniqueId}>
+        ${this.htmlValue}
       </div>
     `;
   }
