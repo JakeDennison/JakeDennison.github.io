@@ -48,7 +48,7 @@ class tinyMCEElement extends LitElement {
     this.uniqueString = `tiny-${Math.random().toString(36).substring(2, 11)}`;
     this.editorId = `editor-${this.uniqueString}`;
     this.htmlValue = '';
-    this.htmlOutput = '';
+    this.htmlOutput = this.htmlValue;
     this.tinymceLoaded = false;
   }
 
@@ -115,7 +115,7 @@ class tinyMCEElement extends LitElement {
       existingEditor.remove();
     }
   
-    console.log("TinyMCE script loaded");
+    console.log("TinyMCE loading");
   
     const editableDiv = this.shadowRoot.querySelector(`#${this.editorId}`);
     console.log("Editable Div:", editableDiv);
