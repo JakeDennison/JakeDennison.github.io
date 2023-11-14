@@ -155,6 +155,7 @@ class tinyMCEElement extends LitElement {
         setup: (editor) => {
           editor.on('init', () => {
             console.log('Editor initialized');
+            editor.setContent(this.htmlValue);
           });
           editor.on('blur', () => {
             if (editor.isDirty()) {
