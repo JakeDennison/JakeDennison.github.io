@@ -113,17 +113,20 @@ class tinyMCEElement extends LitElement {
 
   async initializeTinyMCE() {
     // Check for an existing instance and clean it up if necessary
-    const existingEditor = tinymce.get(`#${this.uniqueId}`);
+    const existingEditor = tinymce.get(this.uniqueId);
     if (existingEditor) {
       existingEditor.remove();
     }
-    console.log("TinyMCE script loaded")
-    const textarea = document.querySelector(`#${this.uniqueId}`);
-    console.log("Text area:", textarea)
-    if (textarea) {
-      console.log("tinyMCE init")
-      tinymce.init({
-        target: textarea,
+  
+    console.log("TinyMCE script loaded");
+  
+    const editableDiv = document.querySelector(`#${this.uniqueId}`);
+    console.log("Editable Div:", editableDiv);
+
+  if (editableDiv) {
+    console.log("tinyMCE init");
+    tinymce.init({
+        target: editableDiv,
         inline: true,
         plugins: [
           'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
@@ -142,9 +145,6 @@ class tinyMCEElement extends LitElement {
         setup: (editor) => {
           editor.on('init', () => {
             console.log('Editor initialized');
-            if (this.htmlValue) {
-              editor.setContent(this.htmlValue);
-            }
           });
           editor.on('blur', () => {
             if (editor.isDirty()) {
@@ -152,9 +152,8 @@ class tinyMCEElement extends LitElement {
               const newHtmlValue = editor.getContent();
               this.dispatchValueChange(newHtmlValue);
               editor.setDirty(false);
-          }
-        });
-        
+            }
+          });
         },
       });
     }
@@ -162,8 +161,8 @@ class tinyMCEElement extends LitElement {
   
   render() {
     return html`
-      <div id="${this.uniqueId}>
-        ${this.htmlValue}
+      <div>
+        <div id="${this.uniqueId}" .innerHTML="${this.htmlValue}"></div>
       </div>
     `;
   }
