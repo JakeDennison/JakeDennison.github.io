@@ -60,6 +60,7 @@ class tinyMCEElement extends LitElement {
       console.log("script being added");
       await this.loadTinyMCEScript();
       this.tinymceLoaded = true;
+      this.initializeTinyMCE();
     }
     if (!tinyMCEElement.stylesheetLoaded) {
       const link = document.createElement('link');
@@ -80,7 +81,6 @@ class tinyMCEElement extends LitElement {
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);
-      this.initializeTinyMCE();
     });
   }
   
