@@ -62,12 +62,10 @@ class tinyMCEElement extends LitElement {
 
   async connectedCallback() {
     super.connectedCallback();
-    if (!window.tinymce) {
+    if (!window.tinymce && !this.tinymceLoaded) {
       console.log("script being added");
-      if (!this.tinymceLoaded){
-        await this.loadTinyMCEScript();
-        this.tinymceLoaded = true;
-      }
+      await this.loadTinyMCEScript();
+      this.tinymceLoaded = true;
     }
     if (!tinyMCEElement.stylesheetLoaded) {
       const link = document.createElement('link');
@@ -76,10 +74,6 @@ class tinyMCEElement extends LitElement {
       document.head.appendChild(link);
       tinyMCEElement.stylesheetLoaded = true;
     }
-  }
-  
-  firstUpdated(changedProperties) {
-    super.firstUpdated(changedProperties);
     this.initializeTinyMCE();
   }
   
