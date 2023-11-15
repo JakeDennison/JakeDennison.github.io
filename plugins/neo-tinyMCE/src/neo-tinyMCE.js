@@ -140,61 +140,63 @@ class tinyMCEElement extends LitElement {
   }
 
   async initializeTinyMCE() {
-    // Check for an existing instance and clean it up if necessary
-    setTimeout(async () => {
-    const existingEditor = tinymce.get(this.editorId);
-    if (existingEditor) {
-      existingEditor.remove();
-    }
-  
-    console.log("TinyMCE loading");
-  
-    const editableDiv = this.shadowRoot.querySelector(`#${this.editorId}`);
-    console.log("Editable Div:", editableDiv);
+    if (this.tinymceLoaded) {
+      // Check for an existing instance and clean it up if necessary
+      setTimeout(async () => {
+      const existingEditor = tinymce.get(this.editorId);
+      if (existingEditor) {
+        existingEditor.remove();
+      }
+    
+      console.log("TinyMCE loading");
+    
+      const editableDiv = this.shadowRoot.querySelector(`#${this.editorId}`);
+      console.log("Editable Div:", editableDiv);
 
-  if (editableDiv) {
-    console.log("tinyMCE init");
-    console.log("Min:",this.CanvasMnH, "Max:", this.CanvasMxH);
-    const min_height = Number(this.CanvasMnH) || 200;
-    const max_height = Number(this.CanvasMxH) || 500;
-    tinymce.init({
-        target: editableDiv,
-        plugins: [
-          'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-          'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-          'insertdatetime', 'media', 'table', 'help', 'wordcount'
-        ],
-        toolbar: 'undo redo | blocks | ' +
-        'bold italic backcolor | alignleft aligncenter ' +
-        'alignright alignjustify | bullist numlist outdent indent | ' +
-        'removeformat | help',
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-        max_height: max_height,
-        min_height: min_height,
-        statusbar: true,
-        branding: false,
-        mobile: {
-          menubar: true,
-          plugins: 'autosave lists autolink',
-          toolbar: 'undo bold italic styles'
-        },
-        setup: (editor) => {
-          editor.on('init', () => {
-            console.log('Editor initialized');
-          });
-          editor.on('blur', () => {
-            if (editor.isDirty()) {
-              console.log('Editor instance:', editor);
-              const newHtmlValue = editor.getContent();
-              this.dispatchValueChange(newHtmlValue);
-              editor.setDirty(false);
-              this.htmlValue = newHtmlValue;
-            }
-          });
-        },
-      });
+    if (editableDiv) {
+      console.log("tinyMCE init");
+      console.log("Min:",this.CanvasMnH, "Max:", this.CanvasMxH);
+      const min_height = Number(this.CanvasMnH) || 200;
+      const max_height = Number(this.CanvasMxH) || 500;
+      tinymce.init({
+          target: editableDiv,
+          plugins: [
+            'advlist', 'autoresize', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+            'insertdatetime', 'media', 'table', 'help', 'wordcount'
+          ],
+          toolbar: 'undo redo | blocks | ' +
+          'bold italic backcolor | alignleft aligncenter ' +
+          'alignright alignjustify | bullist numlist outdent indent | ' +
+          'removeformat | help',
+          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+          max_height: max_height,
+          min_height: min_height,
+          statusbar: true,
+          branding: false,
+          mobile: {
+            menubar: true,
+            plugins: 'autosave lists autolink',
+            toolbar: 'undo bold italic styles'
+          },
+          setup: (editor) => {
+            editor.on('init', () => {
+              console.log('Editor initialized');
+            });
+            editor.on('blur', () => {
+              if (editor.isDirty()) {
+                console.log('Editor instance:', editor);
+                const newHtmlValue = editor.getContent();
+                this.dispatchValueChange(newHtmlValue);
+                editor.setDirty(false);
+                this.htmlValue = newHtmlValue;
+              }
+            });
+          },
+        });
+      }
+      }, 1000);
     }
-    }, 0);
   }
 
   disconnectedCallback() {
