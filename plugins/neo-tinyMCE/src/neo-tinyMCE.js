@@ -150,6 +150,7 @@ class tinyMCEElement extends LitElement {
 
   if (editableDiv) {
     console.log("tinyMCE init");
+    console.log("Min:",this.CanvasMnH, "Max:", this.CanvasMxH);
     tinymce.init({
         target: editableDiv,
         plugins: [
