@@ -49,9 +49,7 @@ class expressElement extends LitElement {
 
   firstUpdated(changedProperties) {
     super.firstUpdated(changedProperties);
-    controle.log(this.oTarget)
-    controle.log(this.oValue)
-    controle.log(this.oBool)
+
     // Run the logic on load if oBool is true
     if (this.oBool) {
       this._updateRadioControlValue();
@@ -61,15 +59,16 @@ class expressElement extends LitElement {
   updated(changedProperties) {
     super.updated(changedProperties);
 
-    // Check if oBool has changed and is now true
-    if (changedProperties.has('oBool') && this.oBool) {
+    // Check if oBool has changed and is now true, and if the update hasn't happened yet
+    if (changedProperties.has('oBool') && this.oBool && !this._hasUpdatedRadioControl) {
       this._updateRadioControlValue();
+      this._hasUpdatedRadioControl = true; // Set the flag to true after the update
     }
   }
 
   _updateRadioControlValue() {
     // Update the radio control's value when needed
-    console.log("Setting to: ",this.oValue)
+    console.log("Setting to: ", this.oValue);
     const radioControl = this.querySelector(`.${this.oTarget}`);
     if (radioControl) {
       radioControl.value = this.oValue;
