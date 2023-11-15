@@ -14,7 +14,7 @@ class templateElement extends LitElement {
       fallbackDisableSubmit: false,
       description: 'Display a print button on a bar at the top of the form',
       iconUrl: 'https://jsdenintex.github.io/plugins/neo-printform/dist/printing.svg',
-      groupName: 'Admin tools',
+      groupName: 'Admin Tools',
       version: '1.0',
       properties: {
         printfunction: {

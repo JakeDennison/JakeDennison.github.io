@@ -7,8 +7,8 @@ class expressElement extends LitElement {
       controlName: 'neo-express',
       fallbackDisableSubmit: false,
       description: 'Allow for instant form submission based on rules',
-      iconUrl: "boolean-icon",
-      groupName: 'Admin tools',
+      iconUrl: "boolean",
+      groupName: 'Admin Tools',
       version: '1.0',
       properties: {
         oTarget: {
