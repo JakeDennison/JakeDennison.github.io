@@ -40,20 +40,13 @@ class expressElement extends LitElement {
     oBool: { type: Boolean },
   };
 
+  _hasUpdatedRadioControl = false;
+
   constructor() {
     super();
     this.oTarget = '';
     this.oValue = '';
     this.oBool = false;
-  }
-
-  firstUpdated(changedProperties) {
-    super.firstUpdated(changedProperties);
-
-    // Run the logic on load if oBool is true
-    if (this.oBool) {
-      this._updateRadioControlValue();
-    }
   }
 
   updated(changedProperties) {
