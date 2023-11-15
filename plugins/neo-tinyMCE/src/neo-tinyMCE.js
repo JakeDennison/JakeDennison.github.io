@@ -124,10 +124,12 @@ class tinyMCEElement extends LitElement {
       const apiKey = this.apikey || '';
       const script = document.createElement('script');
       script.src = `https://cdn.tiny.cloud/1/${apiKey}/tinymce/6.7.2-32/tinymce.min.js`;
-      script.onload = resolve;
+      script.onload = () => {
+        this.tinymceLoaded = true;
+        resolve();
+      };
       script.onerror = reject;
       document.head.appendChild(script);
-      this.tinymceLoaded = true;
     });
   }
 
@@ -158,7 +160,7 @@ class tinyMCEElement extends LitElement {
 }
 
   async initializeTinyMCE() {
-    if (this.tinymceLoaded) {
+    if (this.tinymceLoaded && window.tinymce) {
       // Check for an existing instance and clean it up if necessary
       setTimeout(async () => {
       const existingEditor = tinymce.get(this.editorId);
