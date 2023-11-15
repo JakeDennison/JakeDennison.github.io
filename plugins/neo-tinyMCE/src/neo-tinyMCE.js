@@ -228,7 +228,7 @@ class tinyMCEElement extends LitElement {
           },
         });
       }
-      }, 10000);
+      }, 0);
     }
   }
   
