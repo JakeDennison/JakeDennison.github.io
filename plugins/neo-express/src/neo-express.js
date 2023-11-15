@@ -61,6 +61,9 @@ class expressElement extends LitElement {
 
   _updateRadioControlValue() {
     // Update the radio control's value when needed
+    console.log(this.oTarget)
+    console.log(this.oValue)
+    console.log(this.oBool)
     console.log("Setting to: ", this.oValue);
     const radioControl = this.querySelector(`.${this.oTarget}`);
     if (radioControl) {
