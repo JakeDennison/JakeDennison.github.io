@@ -49,7 +49,9 @@ class expressElement extends LitElement {
 
   firstUpdated(changedProperties) {
     super.firstUpdated(changedProperties);
-
+    controle.log(this.oTarget)
+    controle.log(this.oValue)
+    controle.log(this.oBool)
     // Run the logic on load if oBool is true
     if (this.oBool) {
       this._updateRadioControlValue();
