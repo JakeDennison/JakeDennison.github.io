@@ -94,8 +94,11 @@ class tinyMCEElement extends LitElement {
       link.href = `https://cdn.tiny.cloud/1/${this.apikey || ''}/tinymce/6/skins/ui/oxide/content.min.css`;
       document.head.appendChild(link);
     }
-    this.initializeTinyMCE();
+    if (this.tinymceLoaded) {
+      this.initializeTinyMCE()
+    }
   }
+
     
   loadTinyMCEScript() {
     return new Promise((resolve, reject) => {
@@ -105,6 +108,7 @@ class tinyMCEElement extends LitElement {
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);
+      this.tinymceLoaded = true;
     });
   }
   
