@@ -28,7 +28,7 @@ class tinyMCEElement extends LitElement {
           description: 'provide your tinyMCE API Key',
         },
         CanvasMnH: {
-          type: 'number',
+          type: 'integer',
           title: 'Canvas minimum height px',
           description: 'between 200-1000',
           minimum: 200,
@@ -36,7 +36,7 @@ class tinyMCEElement extends LitElement {
           defaultValue: 200,
         },
         CanvasMxH: {
-          type: 'number',
+          type: 'integer',
           title: 'Canvas maximum height px',
           description: 'between 200-1000',
           minimum: 200,
@@ -55,8 +55,8 @@ class tinyMCEElement extends LitElement {
   static properties = {
     htmlOutput: '',
     htmlValue: '',
-    CanvasMnH :200,
-    CanvasMxH :500,
+    CanvasMnH: { type: Number },
+    CanvasMxH: { type: Number },
     editorId: { type: String },
     uniqueString: { type: String },
   };
