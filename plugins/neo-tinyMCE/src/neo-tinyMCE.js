@@ -27,6 +27,22 @@ class tinyMCEElement extends LitElement {
           title: 'tinyMCE API Key',
           description: 'provide your tinyMCE API Key',
         },
+        CanvasMnH: {
+          type: 'number',
+          title: 'Canvas minimum height px',
+          description: 'between 200-1000',
+          minimum: 200,
+          maximum: 1000,
+          defaultValue: 200,
+        },
+        CanvasMxH: {
+          type: 'number',
+          title: 'Canvas maximum height px',
+          description: 'between 200-1000',
+          minimum: 200,
+          maximum: 1000,
+          defaultValue: 500,
+        },
       },
       events: ["ntx-value-change"],
       standardProperties: {
@@ -39,6 +55,8 @@ class tinyMCEElement extends LitElement {
   static properties = {
     htmlOutput: '',
     htmlValue: '',
+    CanvasMnH :200,
+    CanvasMxH :500,
     editorId: { type: String },
     uniqueString: { type: String },
   };
@@ -49,6 +67,8 @@ class tinyMCEElement extends LitElement {
     this.editorId = `editor-${this.uniqueString}`;
     this.htmlValue = '';
     this.htmlOutput = '';
+    this.CanvasMxH = 200;
+    this.CanvasMnH = 500;
     this.tinymceLoaded = false;
   }
 
@@ -142,8 +162,8 @@ class tinyMCEElement extends LitElement {
         'alignright alignjustify | bullist numlist outdent indent | ' +
         'removeformat | help',
         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-        autoresize_max_height: 500,
-        autoresize_min_height: 200,
+        autoresize_max_height: this.CanvasMnH || 200,
+        autoresize_min_height: this.CanvasMxH || 500,
         statusbar: true,
         branding: false,
         mobile: {
