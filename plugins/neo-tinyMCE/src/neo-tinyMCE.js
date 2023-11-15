@@ -155,6 +155,8 @@ class tinyMCEElement extends LitElement {
   if (editableDiv) {
     console.log("tinyMCE init");
     console.log("Min:",this.CanvasMnH, "Max:", this.CanvasMxH);
+    const min_height = Number(this.CanvasMnH) || 200;
+    const max_height = Number(this.CanvasMxH) || 500;
     tinymce.init({
         target: editableDiv,
         plugins: [
@@ -167,8 +169,8 @@ class tinyMCEElement extends LitElement {
         'alignright alignjustify | bullist numlist outdent indent | ' +
         'removeformat | help',
         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-        max_height: this.CanvasMxH || 500,
-        min_height: this.CanvasMnH || 200,
+        max_height: max_height,
+        min_height: min_height,
         statusbar: true,
         branding: false,
         mobile: {
