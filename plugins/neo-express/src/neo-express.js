@@ -65,7 +65,7 @@ class expressElement extends LitElement {
     console.log(this.oValue)
     console.log(this.oBool)
     console.log("Setting to: ", this.oValue);
-    const radioControl = this.querySelector(`.${this.oTarget}`);
+    const radioControl = this.shadowRoot.querySelector(`.${this.oTarget}`) || document.querySelector(`.${this.oTarget}`);
     if (radioControl) {
       radioControl.value = this.oValue;
     }
