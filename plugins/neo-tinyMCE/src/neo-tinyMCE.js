@@ -201,9 +201,11 @@ class tinyMCEElement extends LitElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    const editor = tinymce.get(this.editorId);
-    if (editor) {
-      editor.remove();
+    if (this.tinymceLoaded) {
+      const editor = tinymce.get(this.editorId);
+      if (editor) {
+        editor.remove();
+      }
     }
   }
   
