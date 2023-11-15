@@ -167,8 +167,8 @@ class tinyMCEElement extends LitElement {
         'alignright alignjustify | bullist numlist outdent indent | ' +
         'removeformat | help',
         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-        autoresize_max_height: this.CanvasMxH || 500,
-        autoresize_min_height: this.CanvasMnH || 200,
+        max_height: this.CanvasMxH || 500,
+        min_height: this.CanvasMnH || 200,
         statusbar: true,
         branding: false,
         mobile: {
