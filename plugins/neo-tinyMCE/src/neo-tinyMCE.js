@@ -225,17 +225,7 @@ class tinyMCEElement extends LitElement {
           },
         });
       }
-      }, 1000);
-    }
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    if (this.tinymceLoaded) {
-      const editor = tinymce.get(this.editorId);
-      if (editor) {
-        editor.remove();
-      }
+      }, 3000);
     }
   }
   
