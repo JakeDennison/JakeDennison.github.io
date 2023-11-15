@@ -201,6 +201,7 @@ class tinyMCEElement extends LitElement {
             editor.on('init', () => {
               this.toggleSpinner(false);
               const editorHeight = editor.getContainer().offsetHeight;
+              console.log('Editor initital height:', editorHeight);
               const textarea = this.shadowRoot.querySelector(`#${this.editorId}`);
               if (textarea) {
                   textarea.style.height = `${editorHeight}px`;
