@@ -65,9 +65,12 @@ class expressElement extends LitElement {
     console.log(this.oValue)
     console.log(this.oBool)
     console.log("Setting to: ", this.oValue);
-    const radioControl = this.shadowRoot.querySelector(`.${this.oTarget}`) || document.querySelector(`.${this.oTarget}`);
-    if (radioControl) {
-      radioControl.value = this.oValue;
+    const targetRadioLabel = this.shadowRoot.querySelector(`.nx-zinc-control-group label[data-e2e="set-${this.oTarget}"]`);
+    if (targetRadioLabel) {
+      const targetRadioInput = targetRadioLabel.querySelector('input');
+      if (targetRadioInput) {
+        targetRadioInput.value = this.oValue;
+      }
     }
   }
 }
