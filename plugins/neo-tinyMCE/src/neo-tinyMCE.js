@@ -52,6 +52,23 @@ class tinyMCEElement extends LitElement {
     };
   }
 
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
+      .tox .tox-mbtn {
+        width: auto !important;
+      }
+      .spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    `;
+  }
+
   static properties = {
     htmlOutput: '',
     htmlValue: '',
@@ -69,6 +86,7 @@ class tinyMCEElement extends LitElement {
     this.htmlOutput = '';
     this.CanvasMxH = 200;
     this.CanvasMnH = 500;
+    this.EditorFxH = '';
     this.tinymceLoaded = false;
   }
 
@@ -83,6 +101,7 @@ class tinyMCEElement extends LitElement {
 
   async connectedCallback() {
     super.connectedCallback();
+    this.toggleSpinner(true);
     if (!document.querySelector('script[src*="tinymce.min.js"]')) {
       console.log("TinyMCE script being added");
       await this.loadTinyMCEScript();
@@ -111,17 +130,6 @@ class tinyMCEElement extends LitElement {
       this.tinymceLoaded = true;
     });
   }
-  
-  static get styles() {
-    return css`
-      :host {
-        display: block;
-      }
-      .tox .tox-mbtn {
-        width: auto !important;
-      }
-    `;
-  }
 
   dispatchValueChange(newHtmlValue) {
     console.log('Editor content changed');
@@ -138,6 +146,16 @@ class tinyMCEElement extends LitElement {
   shouldUpdate(changedProperties) {
     return !(changedProperties.size === 1 && changedProperties.has('htmlValue'));
   }
+
+  toggleSpinner(show) {
+    let spinner = this.shadowRoot.querySelector('.spinner');
+    if (!spinner) {
+        spinner = document.createElement('div');
+        spinner.className = 'spinner';
+        this.shadowRoot.appendChild(spinner);
+    }
+    spinner.style.display = show ? 'block' : 'none';
+}
 
   async initializeTinyMCE() {
     if (this.tinymceLoaded) {
@@ -181,7 +199,12 @@ class tinyMCEElement extends LitElement {
           },
           setup: (editor) => {
             editor.on('init', () => {
-              console.log('Editor initialized');
+              this.toggleSpinner(false);
+              const editorHeight = editor.getContainer().offsetHeight;
+              const textarea = this.shadowRoot.querySelector(`#${this.editorId}`);
+              if (textarea) {
+                  textarea.style.height = `${editorHeight}px`;
+              }
             });
             editor.on('blur', () => {
               if (editor.isDirty()) {
@@ -190,6 +213,13 @@ class tinyMCEElement extends LitElement {
                 this.dispatchValueChange(newHtmlValue);
                 editor.setDirty(false);
                 this.htmlValue = newHtmlValue;
+                const editorContainer = editor.getContainer();
+                const editorOverallHeight = editorContainer ? editorContainer.offsetHeight : 0;
+                console.log('Editor overall height:', editorOverallHeight);
+                const textarea = this.shadowRoot.querySelector(`#${this.editorId}`);
+                if (textarea) {
+                    textarea.style.height = `${editorOverallHeight}px`;
+                }
               }
             });
           },
@@ -212,7 +242,7 @@ class tinyMCEElement extends LitElement {
   render() {
     return html`
       <div>
-        <textarea id="${this.editorId}" .innerHTML="${this.htmlValue}"></textarea>
+        <textarea style="width:100%" id="${this.editorId}" .innerHTML="${this.htmlValue}"></textarea>
       </div>
     `;
   }
