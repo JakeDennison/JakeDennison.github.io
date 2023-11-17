@@ -48,12 +48,7 @@ class pdfjsElement extends LitElement {
     super();
     this.src = '';
     this.height = '';
-  }
-
-  updated(changedProperties) {
-    if (changedProperties.has('src')) {
-      this.loadPdf();
-    }
+    this.loadPdf();
   }
 
   async loadPdf() {
@@ -89,7 +84,7 @@ class pdfjsElement extends LitElement {
       });
     }
   }
-  
+
   render() {
     return html`<div style="width:100%" height="${this.height}" id="pdf-container"></div>`;
   }
