@@ -44,6 +44,12 @@ class pdfjsElement extends LitElement {
       }
     `;
   }
+
+  constructor() {
+    super();
+    this.src = '';
+    this.height = '';
+  }
   
   updated(changedProperties) {
     if (changedProperties.has('src')) {
