@@ -48,7 +48,18 @@ class pdfjsElement extends LitElement {
     super();
     this.src = '';
     this.height = '';
+    
+  }
+
+  firstUpdated(){
+    super.firstUpdated()
     this.loadPdf();
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('src')) {
+        this.loadPdf();
+    }
   }
 
   async loadPdf() {
