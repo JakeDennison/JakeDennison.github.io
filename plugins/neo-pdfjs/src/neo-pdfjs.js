@@ -49,46 +49,7 @@ class pdfjsElement extends LitElement {
     this.src = '';
     this.height = '';
   }
-  
-  updated(changedProperties) {
-    if (changedProperties.has('src')) {
-      this.loadPdf();
-    }
-  }
 
-  async loadPdf() {
-    if (this.src) {
-      const pdfContainer = this.shadowRoot.getElementById('pdf-container');
-      // Clear the existing content
-      pdfContainer.innerHTML = '';
-      const loadingTask = pdfjsLib.getDocument(this.src);
-
-      loadingTask.promise.then(function (pdfDocument) {
-        // Fetch the first page of the PDF
-        pdfDocument.getPage(1).then(function (pdfPage) {
-          // Set the desired scale (e.g., 1.5 for 150% zoom)
-          const scale = 1.0;
-          const viewport = pdfPage.getViewport({ scale });
-
-          // Prepare canvas using PDF page dimensions
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
-
-          // Render PDF page into canvas context
-          const renderContext = {
-            canvasContext: context,
-            viewport: viewport,
-          };
-
-          pdfPage.render(renderContext).promise.then(function () {
-            pdfContainer.appendChild(canvas);
-          });
-        });
-      });
-    }
-  }
 
   render() {
     return html`<div style="width:100%" height="${this.height}" id="pdf-container"></div>`;
