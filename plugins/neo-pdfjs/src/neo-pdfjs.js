@@ -70,48 +70,14 @@ class pdfjsElement extends LitElement {
   }
 
   firstUpdated() {
-    this.loadPdf();
+    
   }
 
   updated(changedProperties) {
     if (changedProperties.has('src')) {
-        this.loadPdf();
+        
     }
   }
-
-  loadPdf() {
-    if (!this.src) return;
-
-    const pdfContainer = this.shadowRoot.getElementById('pdf-container');
-    if (!pdfContainer) return;
-    
-    pdfContainer.innerHTML = ''; // Clear the existing content
-
-    try {
-        const pdfDocument = getDocument(this.src).promise;
-        const pdfPage = pdfDocument.getPage(this.pageNumber);
-
-        const scale = this.scale;
-        const viewport = pdfPage.getViewport({ scale });
-
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-
-        const renderContext = {
-            canvasContext: context,
-            viewport: viewport,
-        };
-
-        pdfPage.render(renderContext).promise;
-        pdfContainer.appendChild(canvas);
-    } catch (error) {
-        console.error('Error loading PDF:', error);
-        // Handle error (e.g., show a message to the user)
-    }
-  }
-
 
   render() {
     return html`<div style="width:100%" height="${this.height}px" id="pdf-container"></div>`;
