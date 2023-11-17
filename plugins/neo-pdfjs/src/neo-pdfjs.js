@@ -42,10 +42,6 @@ class pdfjsElement extends LitElement {
       :host {
         display: block;
       }
-
-      #pdf-container {
-        width: 100%;
-      }
     `;
   }
   
@@ -93,7 +89,7 @@ class pdfjsElement extends LitElement {
   }
 
   render() {
-    return html`<div width="${this.height}" id="pdf-container"></div>`;
+    return html`<div style="width:100%" height="${this.height}" id="pdf-container"></div>`;
   }
 }
 
