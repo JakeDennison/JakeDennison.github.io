@@ -2,7 +2,6 @@ import { LitElement, html, css } from 'lit';
 import * as pdfjsLib from 'pdfjs-dist';
 
 class pdfjsElement extends LitElement {
-
   static getMetaConfig() {
     // plugin contract information
     return {
@@ -22,7 +21,7 @@ class pdfjsElement extends LitElement {
           type: 'string',
           title: 'Canvas Height in px',
           description: 'i.e. 500 or 750',
-          defaultValue: '500'
+          defaultValue: '500',
         },
       },
       standardProperties: {
@@ -62,9 +61,6 @@ class pdfjsElement extends LitElement {
       const pdfContainer = this.shadowRoot.getElementById('pdf-container');
       // Clear the existing content
       pdfContainer.innerHTML = '';
-
-      // Load and render the PDF using pdf.js
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'path-to-pdfjs-worker'; // Provide the path to the pdf.js worker script
       const loadingTask = pdfjsLib.getDocument(this.src);
 
       loadingTask.promise.then(function (pdfDocument) {
