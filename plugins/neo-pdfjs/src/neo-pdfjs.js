@@ -11,7 +11,7 @@ class pdfjsElement extends LitElement {
       description: '',
       iconUrl: "https://mozilla.github.io/pdf.js/images/logo.svg",
       groupName: 'Visual',
-      version: '1.0',
+      version: '1.1',
       properties: {
         src: {
           type: 'string',
@@ -21,7 +21,8 @@ class pdfjsElement extends LitElement {
         height: {
           type: 'string',
           title: 'Canvas Height in px',
-          description: 'i.e. 500 or 750'
+          description: 'i.e. 500 or 750',
+          defaultValue: '500'
         },
       },
       standardProperties: {
@@ -44,7 +45,6 @@ class pdfjsElement extends LitElement {
 
       #pdf-container {
         width: 100%;
-        height: var(--pdf-container-height, 500px);
       }
     `;
   }
@@ -93,7 +93,7 @@ class pdfjsElement extends LitElement {
   }
 
   render() {
-    return html`<div id="pdf-container"></div>`;
+    return html`<div width="${this.height}" id="pdf-container"></div>`;
   }
 }
 
