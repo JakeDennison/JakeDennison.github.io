@@ -20,7 +20,7 @@ class pdfjsElement extends LitElement {
         },
         height: {
           type: 'string',
-          title: 'Canvas Height (px)',
+          title: 'Canvas Height in px',
           description: 'i.e. 500 or 750'
         },
       },
