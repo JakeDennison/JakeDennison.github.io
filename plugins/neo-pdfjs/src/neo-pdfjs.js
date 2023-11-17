@@ -3,38 +3,44 @@ import * as pdfjsLib from 'pdfjs-dist';
 
 class pdfjsElement extends LitElement {
   static getMetaConfig() {
-    // plugin contract information
     return {
-      controlName: 'neo-pdfjs',
-      fallbackDisableSubmit: false,
-      description: '',
-      iconUrl: "https://mozilla.github.io/pdf.js/images/logo.svg",
-      groupName: 'Visual',
-      version: '1.1',
-      properties: {
-        src: {
-          type: 'string',
-          title: 'PDF source',
-          description: 'Please provide a URL to the PDF you wish to display'
+        controlName: 'neo-pdfjs',
+        fallbackDisableSubmit: false,
+        description: '',
+        iconUrl: "https://mozilla.github.io/pdf.js/images/logo.svg",
+        groupName: 'Visual',
+        version: '1.1',
+        properties: {
+            src: {
+                type: 'string',
+                title: 'PDF source',
+                description: 'Please provide a URL to the PDF you wish to display'
+            },
+            height: {
+                type: 'string',
+                title: 'Canvas Height in px',
+                description: 'Specify the height of the canvas, e.g., 500 or 750',
+                defaultValue: '500',
+            },
+            pageNumber: {
+                type: 'number',
+                title: 'Page Number',
+                description: 'Specify the page number of the PDF to display',
+                defaultValue: 1,
+            },
+            scale: {
+                type: 'number',
+                title: 'Scale',
+                description: 'Specify the scale for the PDF view (e.g., 1 for 100%, 1.5 for 150%)',
+                defaultValue: 1.0,
+            }
         },
-        height: {
-          type: 'string',
-          title: 'Canvas Height in px',
-          description: 'i.e. 500 or 750',
-          defaultValue: '500',
-        },
-      },
-      standardProperties: {
-        fieldLabel: true,
-        description: true,
-      }
+        standardProperties: {
+            fieldLabel: true,
+            description: true,
+        }
     };
-  }
-
-  static properties = {
-    src: { type: String },
-    height: { type: String },
-  };
+}
 
   static get styles() {
     return css`
@@ -44,11 +50,19 @@ class pdfjsElement extends LitElement {
     `;
   }
 
+  static properties = {
+    src: { type: String },
+    height: { type: String },
+    pageNumber: { type: Number },
+    scale: { type: Number }
+  };
+
   constructor() {
-    super();
-    this.src = '';
-    this.height = '';
-    
+      super();
+      this.src = '';
+      this.height = '';
+      this.pageNumber = 1;
+      this.scale = 1.0;
   }
 
   firstUpdated(){
@@ -63,38 +77,36 @@ class pdfjsElement extends LitElement {
   }
 
   async loadPdf() {
-    if (this.src) {
-      const pdfContainer = this.shadowRoot.getElementById('pdf-container');
-      // Clear the existing content
-      pdfContainer.innerHTML = '';
-      const loadingTask = pdfjsLib.getDocument(this.src);
+    if (!this.src) return;
 
-      loadingTask.promise.then(function (pdfDocument) {
-        // Fetch the first page of the PDF
-        pdfDocument.getPage(1).then(function (pdfPage) {
-          // Set the desired scale (e.g., 1.5 for 150% zoom)
-          const scale = 1.0;
-          const viewport = pdfPage.getViewport({ scale });
+    const pdfContainer = this.shadowRoot.getElementById('pdf-container');
+    pdfContainer.innerHTML = ''; // Clear the existing content
 
-          // Prepare canvas using PDF page dimensions
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
+    try {
+        const pdfDocument = await pdfjsLib.getDocument(this.src).promise;
+        const pdfPage = await pdfDocument.getPage(this.pageNumber);
 
-          // Render PDF page into canvas context
-          const renderContext = {
+        const scale = this.scale;
+        const viewport = pdfPage.getViewport({ scale });
+
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
             canvasContext: context,
             viewport: viewport,
-          };
+        };
 
-          pdfPage.render(renderContext).promise.then(function () {
-            pdfContainer.appendChild(canvas);
-          });
-        });
-      });
+        await pdfPage.render(renderContext).promise;
+        pdfContainer.appendChild(canvas);
+    } catch (error) {
+        console.error('Error loading PDF:', error);
+        // Handle error (e.g., show a message to the user)
     }
   }
+
 
   render() {
     return html`<div style="width:100%" height="${this.height}" id="pdf-container"></div>`;
