@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import * as pdfjsLib from 'pdfjs-dist';
+import { getDocument } from 'pdfjs-dist';
 
 class pdfjsElement extends LitElement {
   static getMetaConfig() {
@@ -47,6 +47,10 @@ class pdfjsElement extends LitElement {
       :host {
         display: block;
       }
+      canvas {
+        width: 100%;
+        height: auto;
+      }
     `;
   }
 
@@ -58,15 +62,14 @@ class pdfjsElement extends LitElement {
   };
 
   constructor() {
-      super();
-      this.src = '';
-      this.height = '';
-      this.pageNumber = 1;
-      this.scale = 1.0;
+    super();
+    this.src = '';
+    this.height = '500';
+    this.pageNumber = 1;
+    this.scale = 1.0;
   }
 
-  firstUpdated(){
-    super.firstUpdated()
+  firstUpdated() {
     this.loadPdf();
   }
 
@@ -79,18 +82,13 @@ class pdfjsElement extends LitElement {
   async loadPdf() {
     if (!this.src) return;
 
-    // Check if pdfjsLib and getDocument method are available
-    if (!pdfjsLib || typeof pdfjsLib.getDocument !== 'function') {
-        console.error('pdfjsLib is not loaded or getDocument method is not available.');
-        // Handle this situation appropriately, perhaps show a user-friendly message
-        return;
-    }
-
     const pdfContainer = this.shadowRoot.getElementById('pdf-container');
+    if (!pdfContainer) return;
+    
     pdfContainer.innerHTML = ''; // Clear the existing content
 
     try {
-        const pdfDocument = await pdfjsLib.getDocument(this.src).promise;
+        const pdfDocument = await getDocument(this.src).promise;
         const pdfPage = await pdfDocument.getPage(this.pageNumber);
 
         const scale = this.scale;
@@ -116,7 +114,7 @@ class pdfjsElement extends LitElement {
 
 
   render() {
-    return html`<div style="width:100%" height="${this.height}" id="pdf-container"></div>`;
+    return html`<div style="width:100%" height="${this.height}px" id="pdf-container"></div>`;
   }
 }
 
