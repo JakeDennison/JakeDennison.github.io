@@ -79,7 +79,7 @@ class pdfjsElement extends LitElement {
     }
   }
 
-  async loadPdf() {
+  loadPdf() {
     if (!this.src) return;
 
     const pdfContainer = this.shadowRoot.getElementById('pdf-container');
@@ -88,8 +88,8 @@ class pdfjsElement extends LitElement {
     pdfContainer.innerHTML = ''; // Clear the existing content
 
     try {
-        const pdfDocument = await getDocument(this.src).promise;
-        const pdfPage = await pdfDocument.getPage(this.pageNumber);
+        const pdfDocument = getDocument(this.src).promise;
+        const pdfPage = pdfDocument.getPage(this.pageNumber);
 
         const scale = this.scale;
         const viewport = pdfPage.getViewport({ scale });
@@ -104,7 +104,7 @@ class pdfjsElement extends LitElement {
             viewport: viewport,
         };
 
-        await pdfPage.render(renderContext).promise;
+        pdfPage.render(renderContext).promise;
         pdfContainer.appendChild(canvas);
     } catch (error) {
         console.error('Error loading PDF:', error);
