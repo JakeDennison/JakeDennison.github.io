@@ -79,6 +79,13 @@ class pdfjsElement extends LitElement {
   async loadPdf() {
     if (!this.src) return;
 
+    // Check if pdfjsLib and getDocument method are available
+    if (!pdfjsLib || typeof pdfjsLib.getDocument !== 'function') {
+        console.error('pdfjsLib is not loaded or getDocument method is not available.');
+        // Handle this situation appropriately, perhaps show a user-friendly message
+        return;
+    }
+
     const pdfContainer = this.shadowRoot.getElementById('pdf-container');
     pdfContainer.innerHTML = ''; // Clear the existing content
 
