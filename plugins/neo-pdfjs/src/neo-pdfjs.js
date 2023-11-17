@@ -52,7 +52,7 @@ class pdfjsElement extends LitElement {
 
     if (window.pdfjsLib) {
       // PDF.js is loaded, you can now use it
-      this.loadPDF('your-pdf-url.pdf');
+      this.loadPDF(this.src);
     }
   }
 
