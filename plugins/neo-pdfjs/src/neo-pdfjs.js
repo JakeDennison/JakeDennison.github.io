@@ -7,7 +7,7 @@ class pdfjsElement extends LitElement {
       controlName: 'neo-pdfjs',
       fallbackDisableSubmit: false,
       description: '',
-      iconUrl: "",
+      iconUrl: "https://mozilla.github.io/pdf.js/images/logo.svg",
       groupName: 'Visual',
       version: '1.0',
       properties: {
@@ -43,7 +43,6 @@ class pdfjsElement extends LitElement {
 
   async connectedCallback() {
     super.connectedCallback();
-    this.toggleSpinner(true);
 
     // Check if PDF.js script is already loaded
     if (!window.pdfjsLib) {
