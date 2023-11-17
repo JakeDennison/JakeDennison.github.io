@@ -91,7 +91,7 @@ class pdfjsElement extends LitElement {
   
   render() {
     return html`
-      <canvas></canvas>
+      <canvas style="width:100%"></canvas>
     `;
   }
 }
