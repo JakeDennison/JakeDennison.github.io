@@ -24,6 +24,10 @@ class templateElement extends LitElement {
     };
   }
 
+  static properties = {
+    src: '',
+  };
+
   static get styles() {
     return css`
       :host {
