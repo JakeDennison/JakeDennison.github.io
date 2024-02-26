@@ -1,25 +1,25 @@
-@media screen and (min-width: 0) {
+@media (min-width: 576px) { 
     .nx-form {
         width:100%;
         padding: 20px 15px
     }
-}
+ }
 
-@media screen and (min-width: 768px) {
+@media (min-width: 768px) { 
     .nx-form {
         width:100%;
         padding: 20px 15px
     }
-}
+ }
 
-@media screen and (min-width: 940px) {
+@media (min-width: 992px) {     
     .nx-form {
         width:900px;
         padding: 20px 15px;
-    }
+    } 
 }
 
-@media screen and (min-width: 1280px) {
+@media (min-width: 1200px) {
     .nx-form {
         width:1200px;
         padding: 25px 15px;
@@ -27,10 +27,10 @@
     }
 }
 
-@media screen and (min-width: 1920px) {
+@media (min-width: 1400px) { 
     .nx-form {
-        width:1500px;
+        width:1280px;
         padding: 25px 15px;
-        max-width: 1500px;
+        max-width: 1440px;
     }
 }
