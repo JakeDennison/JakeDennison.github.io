@@ -20,3 +20,4 @@ const svgPaths = [
     span.appendChild(svg);
   });
   
+alert("running")
