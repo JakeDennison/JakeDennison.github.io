@@ -1,6 +1,6 @@
 // Array of SVG paths for each step
 const svgPaths = [
-    '/img/consumer/svg/problem1.svg',
+    'https://www.wessexwater.co.uk/assets/img/consumer/svg/problem.svg',
     '/img/consumer/svg/problem2.svg',
     '/img/consumer/svg/problem3.svg',
     '/img/consumer/svg/problem4.svg'
