@@ -1,0 +1,68 @@
+@media (min-width: 576px) { 
+    .nx-form {
+        width:100%;
+        padding: 20px 15px
+    }
+ }
+
+@media (min-width: 768px) { 
+    .nx-form {
+        width:100%;
+        padding: 20px 15px
+    }
+ }
+
+@media (min-width: 992px) {     
+    .nx-form {
+        width:900px;
+        padding: 20px 15px;
+    } 
+}
+
+@media (min-width: 1200px) {
+    .nx-form {
+        width:1200px;
+        padding: 25px 15px;
+        max-width: 1200px;
+    }
+}
+
+@media (min-width: 1400px) { 
+    .nx-form {
+        width:1280px;
+        padding: 25px 15px;
+        max-width: 1440px;
+    }
+}
+
+
+.mat-step-icon.mat-step-icon-state-number .mat-step-icon-content .ng-star-inserted {
+    opacity: 0; /* Hide the existing number */
+}
+
+.mat-step-icon.mat-step-icon-state-number .mat-step-icon-content .ng-star-inserted + img {
+    display: block; /* Show the SVG */
+}
+
+.mat-step-icon.mat-step-icon-state-number .mat-step-icon-content .ng-star-inserted::before {
+    content: url("https://www.wessexwater.co.uk/assets/img/consumer/svg/problem.svg"); /* Set SVG as background */
+}
+
+[dir] .nx-theme-styles .mat-step-header .mat-step-icon.mat-step-icon-selected {
+    height: 48px;
+    width: 48px;
+}
+
+[dir] .nx-theme-styles .mat-step-header .mat-step-icon {
+    height: 48px;
+    width: 48px;
+}
+
+[dir] .nx-theme-styles .mat-horizontal-stepper-header-container .mat-horizontal-stepper-header {
+    height: 90px;
+}
+
+ntx-multi-page mat-horizontal-stepper .mat-horizontal-stepper-header {
+    height: 90px;
+}
+
