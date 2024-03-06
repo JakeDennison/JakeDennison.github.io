@@ -1,68 +1,106 @@
-@media (min-width: 576px) { 
-    .nx-form {
-        width:100%;
-        padding: 20px 15px
-    }
- }
-
-@media (min-width: 768px) { 
-    .nx-form {
-        width:100%;
-        padding: 20px 15px
-    }
- }
-
-@media (min-width: 992px) {     
-    .nx-form {
-        width:900px;
-        padding: 20px 15px;
-    } 
-}
-
-@media (min-width: 1200px) {
-    .nx-form {
-        width:1200px;
-        padding: 25px 15px;
-        max-width: 1200px;
-    }
-}
-
-@media (min-width: 1400px) { 
-    .nx-form {
-        width:1280px;
-        padding: 25px 15px;
-        max-width: 1440px;
-    }
-}
-
-
-.mat-step-icon.mat-step-icon-state-number .mat-step-icon-content .ng-star-inserted {
-    opacity: 0; /* Hide the existing number */
-}
-
-.mat-step-icon.mat-step-icon-state-number .mat-step-icon-content .ng-star-inserted + img {
-    display: block; /* Show the SVG */
-}
-
-.mat-step-icon.mat-step-icon-state-number .mat-step-icon-content .ng-star-inserted::before {
-    content: url("https://www.wessexwater.co.uk/assets/img/consumer/svg/problem.svg"); /* Set SVG as background */
-}
-
-[dir] .nx-theme-styles .mat-step-header .mat-step-icon.mat-step-icon-selected {
-    height: 48px;
-    width: 48px;
-}
-
-[dir] .nx-theme-styles .mat-step-header .mat-step-icon {
-    height: 48px;
-    width: 48px;
-}
-
-[dir] .nx-theme-styles .mat-horizontal-stepper-header-container .mat-horizontal-stepper-header {
-    height: 90px;
-}
-
-ntx-multi-page mat-horizontal-stepper .mat-horizontal-stepper-header {
-    height: 90px;
-}
-
+.choice-group .nx-radio-group {
+    display: flex; /* This will line up the child elements (buttons) in a row */
+  }
+  
+  .choice-group .nx-radio-inline {
+    flex: 1; /* This will allow each button to grow equally */
+    display: flex; /* Use flexbox for horizontal alignment */
+    align-items: center; /* Center-align vertically */
+    justify-content: center; /* Center-align horizontally */
+    padding: 10px;
+    margin: 0 25px; /* This gives some space between the buttons */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    height: 100px; /* Fixed height for the buttons */
+  }
+  
+  .choice-group .nx-radio-inline:hover {
+    background-color: #e6e6e6;
+  }
+  
+  /* Hide the browser default radio button */
+  .choice-group input[type="radio"] {
+    display: none;
+  }
+  
+  /* Adjustments for the label to make it a flex container */
+  .choice-group .nx-radio-label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align text and image at the start */
+    width: 100%; /* Full width to accommodate text and image */
+    height: 100%; /* Full height to fill the button */
+  }
+  
+  .dots-container {
+    background-image: url('https://www.wessexwater.co.uk/assets/img/consumer/svg/box-connector.svg');
+    background-repeat: repeat-y;
+    background-position: center;
+    width: 50px; /* Assuming this is a good width for the SVG */
+    height: 60px; /* Adjust the height based on the size of the SVG and desired spacing */
+    display: block;
+    margin: 0 auto; /* This will center the div on the page */
+  }
+  
+  /* MEDIA SIZE */
+  
+  
+  @media (min-width: 576px) { 
+      .nx-form {
+          width:100%;
+          padding: 20px 15px
+      }
+   }
+  
+  @media (min-width: 768px) { 
+      .nx-form {
+          width:100%;
+          padding: 20px 15px
+      }
+   }
+  
+  @media (min-width: 992px) {     
+      .nx-form {
+          width:900px;
+          padding: 20px 15px;
+      } 
+  }
+  
+  @media (min-width: 1200px) {
+      .nx-form {
+          width:1200px;
+          padding: 25px 15px;
+          max-width: 1200px;
+      }
+  }
+  
+  @media (min-width: 1400px) { 
+      .nx-form {
+          width:1280px;
+          padding: 25px 15px;
+          max-width: 1440px;
+      }
+  }
+  
+  /* NAVBAR */
+  
+  [dir] .nx-theme-styles .mat-step-header .mat-step-icon.mat-step-icon-selected {
+      height: 78px;
+      width: 78px;
+  }
+  
+  [dir] .nx-theme-styles .mat-step-header .mat-step-icon {
+      height: 78px;
+      width: 78px;
+  }
+  
+  [dir] .nx-theme-styles .mat-horizontal-stepper-header-container .mat-horizontal-stepper-header {
+      height: 128px;
+  }
+  
+  ntx-multi-page mat-horizontal-stepper .mat-horizontal-stepper-header {
+      height: 128px;
+  }
+  

@@ -1,3 +1,4 @@
 xtensions/Term store/tokens.json
 plugins/neo-base64viewer/src/neo-base64viewer.js
 xtensions/googlesheets.json
+node_modules/
