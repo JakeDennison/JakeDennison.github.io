@@ -90,22 +90,24 @@ export class MyTable extends LitElement {
     this.errorMessage = '';
   
     // Check if datatype is not defined
-    if (typeof this.datatype === 'undefined' || this.datatype === '') {
+    if (!this.datatype) {
       this.errorMessage = "Object data type not configured, please update the plugin properties and specify the data type.";
       console.error(this.errorMessage);
-      return null; // Exit the function early as there's no datatype to process
+      return null;
     }
   
     if (this.datatype === 'JSON') {
       try {
-        data = JSON.parse(this.dataobject);
+        // First, replace escaped backslashes to handle double-escaped JSON
+        let processedData = this.dataobject.replace(/\\\\/g, '\\');
+        data = JSON.parse(processedData);
         if (typeof data === 'string') {
-          data = JSON.parse(data); // Handle double-escaped JSON
+          data = JSON.parse(data); // Handle case where JSON was double-encoded
         }
         data = this.replaceUnicodeRegex(data); // Apply Unicode replacements
       } catch (e) {
         this.errorMessage = "Error parsing JSON data.";
-        console.error("Error parsing JSON:", e);
+        console.error(this.errorMessage, e);
         data = null; // In case of an error, reset data to null
       }
     } else if (this.datatype === 'XML') {
@@ -113,12 +115,12 @@ export class MyTable extends LitElement {
         data = this.parseXmlDataObject(); // Process the XML data
       } catch (e) {
         this.errorMessage = "Error parsing XML data.";
-        console.error("Error parsing XML:", e);
+        console.error(this.errorMessage, e);
         data = null; // In case of an error, reset data to null
       }
     } else {
       this.errorMessage = `Unsupported data type: ${this.datatype}.`;
-      console.error('Unsupported data type:', this.datatype);
+      console.error(this.errorMessage);
       data = null; // Handle unsupported data types
     }
   
@@ -128,6 +130,7 @@ export class MyTable extends LitElement {
   
     return data;
   }
+  
   
   renameKeys(data) {
     // create a map of oldKey:newKey pairs
