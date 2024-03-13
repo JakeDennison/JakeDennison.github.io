@@ -86,15 +86,17 @@ export class MyTable extends LitElement {
   }
 
   preprocessDoubleEscapedJson(jsonString) {
-    // Normalize the key names by removing extra spaces after colons in the keys
-    let normalizedJsonString = jsonString.replace(/: *(\\+)"/g, ':$1\\"');
-
     // Replace double-escaped sequences with single-escaped sequences
-    normalizedJsonString = normalizedJsonString.replace(/\\\\/g, '\\');
+    let normalizedJsonString = jsonString.replace(/\\\\/g, '\\');
     normalizedJsonString = normalizedJsonString.replace(/&quot;/ig,'"');
-    console.log("Normalized String:"+normalizedJsonString)
+
+    // Normalize the key names by removing extra spaces after colons in the keys
+    normalizedJsonString = normalizedJsonString.replace(/:\\"/g, ': \\"');
+
+    console.log("Normalized String: " + normalizedJsonString);
     return normalizedJsonString;
 }
+
 
   parseDataObject() {
     let data;
