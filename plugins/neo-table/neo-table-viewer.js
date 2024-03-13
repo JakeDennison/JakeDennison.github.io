@@ -89,11 +89,18 @@ export class MyTable extends LitElement {
     let data;
     this.errorMessage = '';
   
+    // Check if datatype is not defined
+    if (typeof this.datatype === 'undefined' || this.datatype === '') {
+      this.errorMessage = "Object data type not configured, please update the plugin properties and specify the data type.";
+      console.error(this.errorMessage);
+      return null; // Exit the function early as there's no datatype to process
+    }
+  
     if (this.datatype === 'JSON') {
       try {
         data = JSON.parse(this.dataobject);
         if (typeof data === 'string') {
-          data = JSON.parse(data);
+          data = JSON.parse(data); // Handle double-escaped JSON
         }
         data = this.replaceUnicodeRegex(data); // Apply Unicode replacements
       } catch (e) {
@@ -121,8 +128,6 @@ export class MyTable extends LitElement {
   
     return data;
   }
-  
-  
   
   renameKeys(data) {
     // create a map of oldKey:newKey pairs
