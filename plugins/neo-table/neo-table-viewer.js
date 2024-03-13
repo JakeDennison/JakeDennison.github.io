@@ -86,10 +86,10 @@ export class MyTable extends LitElement {
   }
 
   parseDataObject() {
+    // 1
     let data;
     this.errorMessage = '';
   
-    // Check if datatype is not defined
     if (!this.datatype) {
       this.errorMessage = "Object data type not configured, please update the plugin properties and specify the data type.";
       console.error(this.errorMessage);
@@ -98,39 +98,39 @@ export class MyTable extends LitElement {
   
     if (this.datatype === 'JSON') {
       try {
-        // First, replace escaped backslashes to handle double-escaped JSON
-        let processedData = this.dataobject.replace(/\\\\/g, '\\');
+        // Manually unescape the string to handle double-escaped JSON
+        let processedData = this.dataobject.replace(/\\\\"/g, '\"').replace(/\\\\/g, '\\');
         data = JSON.parse(processedData);
         if (typeof data === 'string') {
-          data = JSON.parse(data); // Handle case where JSON was double-encoded
+          data = JSON.parse(data); // In case JSON was double-encoded
         }
         data = this.replaceUnicodeRegex(data); // Apply Unicode replacements
       } catch (e) {
         this.errorMessage = "Error parsing JSON data.";
         console.error(this.errorMessage, e);
-        data = null; // In case of an error, reset data to null
+        data = null;
       }
     } else if (this.datatype === 'XML') {
       try {
-        data = this.parseXmlDataObject(); // Process the XML data
+        data = this.parseXmlDataObject();
       } catch (e) {
         this.errorMessage = "Error parsing XML data.";
         console.error(this.errorMessage, e);
-        data = null; // In case of an error, reset data to null
+        data = null;
       }
     } else {
       this.errorMessage = `Unsupported data type: ${this.datatype}.`;
       console.error(this.errorMessage);
-      data = null; // Handle unsupported data types
+      data = null;
     }
   
     if (this.replaceKeys && data) {
-      data = this.renameKeys(data); // Rename keys if applicable
+      data = this.renameKeys(data);
     }
   
     return data;
   }
-  
+
   
   renameKeys(data) {
     // create a map of oldKey:newKey pairs
