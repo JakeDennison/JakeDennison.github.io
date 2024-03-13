@@ -109,6 +109,7 @@ export class MyTable extends LitElement {
     if (this.datatype === 'JSON') {
       try {
         // Preprocess the JSON string to handle double escaping and normalize key names
+        console.log(this.dataobject)
         const processedData = this.preprocessDoubleEscapedJson(this.dataobject);
         data = JSON.parse(processedData);
         
