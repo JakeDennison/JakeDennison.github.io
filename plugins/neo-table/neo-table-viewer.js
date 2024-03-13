@@ -92,7 +92,7 @@ export class MyTable extends LitElement {
     // Replace double-escaped sequences with single-escaped sequences
     normalizedJsonString = normalizedJsonString.replace(/\\\\/g, '\\');
     normalizedJsonString = normalizedJsonString.replace(/&quot;/ig,'"');
-    
+    console.log("Normalised String:"+normalizedJsonString)
     return normalizedJsonString;
   }
   
