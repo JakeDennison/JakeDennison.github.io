@@ -85,8 +85,17 @@ export class MyTable extends LitElement {
     this.errorMessage = '';
   }
 
+  preprocessDoubleEscapedJson(jsonString) {
+    // Normalize the key names by removing extra spaces after colons in the keys
+    let normalizedJsonString = jsonString.replace(/:\\\\"/g, '\\":\\"');
+    
+    // Replace double-escaped sequences with single-escaped sequences
+    normalizedJsonString = normalizedJsonString.replace(/\\\\/g, '\\');
+    
+    return normalizedJsonString;
+  }
+  
   parseDataObject() {
-    // 1
     let data;
     this.errorMessage = '';
   
@@ -98,12 +107,15 @@ export class MyTable extends LitElement {
   
     if (this.datatype === 'JSON') {
       try {
-        // Manually unescape the string to handle double-escaped JSON
-        let processedData = this.dataobject.replace(/\\\\"/g, '\"').replace(/\\\\/g, '\\');
+        // Preprocess the JSON string to handle double escaping and normalize key names
+        const processedData = preprocessDoubleEscapedJson(this.dataobject);
         data = JSON.parse(processedData);
+        
+        // Additional check if data is still a string indicating further encoding
         if (typeof data === 'string') {
-          data = JSON.parse(data); // In case JSON was double-encoded
+          data = JSON.parse(data);
         }
+        
         data = this.replaceUnicodeRegex(data); // Apply Unicode replacements
       } catch (e) {
         this.errorMessage = "Error parsing JSON data.";
@@ -130,6 +142,7 @@ export class MyTable extends LitElement {
   
     return data;
   }
+  
 
   
   renameKeys(data) {
