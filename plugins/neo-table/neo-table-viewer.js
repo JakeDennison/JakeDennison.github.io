@@ -82,41 +82,46 @@ export class MyTable extends LitElement {
     this.prefDateFormat= '';
     this.pageItemLimit = "5";
     this.currentPage = 1;
+    this.errorMessage = '';
   }
 
   parseDataObject() {
     let data;
-    this.errorMessage = ''; // Reset error message at the start
+    this.errorMessage = '';
   
     if (this.datatype === 'JSON') {
       try {
         data = JSON.parse(this.dataobject);
-        data = this.replaceUnicodeRegex(data);
+        if (typeof data === 'string') {
+          data = JSON.parse(data);
+        }
+        data = this.replaceUnicodeRegex(data); // Apply Unicode replacements
       } catch (e) {
         this.errorMessage = "Error parsing JSON data.";
         console.error("Error parsing JSON:", e);
-        data = null;
+        data = null; // In case of an error, reset data to null
       }
     } else if (this.datatype === 'XML') {
       try {
-        data = this.parseXmlDataObject();
+        data = this.parseXmlDataObject(); // Process the XML data
       } catch (e) {
         this.errorMessage = "Error parsing XML data.";
         console.error("Error parsing XML:", e);
-        data = null;
+        data = null; // In case of an error, reset data to null
       }
     } else {
       this.errorMessage = `Unsupported data type: ${this.datatype}.`;
       console.error('Unsupported data type:', this.datatype);
-      data = null;
+      data = null; // Handle unsupported data types
     }
   
     if (this.replaceKeys && data) {
-      data = this.renameKeys(data);
+      data = this.renameKeys(data); // Rename keys if applicable
     }
   
     return data;
   }
+  
   
   
   renameKeys(data) {
@@ -188,11 +193,7 @@ export class MyTable extends LitElement {
   
     // Display error message if present
     if (this.errorMessage) {
-      return html`
-        <div class="alert alert-danger" role="alert">
-          ${this.errorMessage}
-        </div>
-      `;
+      return html`<p class="error-message">${this.errorMessage}</p>`;
     }
     
     if (!data || data.length === 0) {
