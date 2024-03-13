@@ -1,6 +1,13 @@
 import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2.6.1/all/lit-all.min.js';
 
 export class MyTable extends LitElement {
+  
+  static get properties() {
+    return {
+      errorMessage: { type: String },
+    };
+  }
+  
   static getMetaConfig() {
     // plugin contract information
     return {
@@ -15,6 +22,14 @@ export class MyTable extends LitElement {
           type: 'string',
           title: 'Object',
           description: 'Test'
+        },
+        datatype:{
+          title: 'Object Data Type',
+          type: 'string',
+          enum: ['JSON', 'XML'],
+            showAsRadio: true,
+            verticalLayout: true,
+            defaultValue: 'JSON',
         },
         replaceKeys:{
           type: 'string',
@@ -46,6 +61,7 @@ export class MyTable extends LitElement {
   
   static properties = {
     dataobject: '',
+    datatype: '',
     replaceKeys: '',
     prefDateFormat: '',
     pageItemLimit: { type: Number },
@@ -68,30 +84,41 @@ export class MyTable extends LitElement {
     this.currentPage = 1;
   }
 
-    parseDataObject() {
-      let data;
-
+  parseDataObject() {
+    let data;
+    this.errorMessage = ''; // Reset error message at the start
+  
+    if (this.datatype === 'JSON') {
       try {
         data = JSON.parse(this.dataobject);
         data = this.replaceUnicodeRegex(data);
       } catch (e) {
-        console.log("XML detected");
-        try {
-          data = this.parseXmlDataObject();
-          console.log('XML converted to JSON:', data);
-        } catch (e) {
-          console.error(e);
-          data = null;
-        }
+        this.errorMessage = "Error parsing JSON data.";
+        console.error("Error parsing JSON:", e);
+        data = null;
       }
-
-      if (this.replaceKeys && data) {
-        data = this.renameKeys(data);
+    } else if (this.datatype === 'XML') {
+      try {
+        data = this.parseXmlDataObject();
+      } catch (e) {
+        this.errorMessage = "Error parsing XML data.";
+        console.error("Error parsing XML:", e);
+        data = null;
       }
-
-      return data;
+    } else {
+      this.errorMessage = `Unsupported data type: ${this.datatype}.`;
+      console.error('Unsupported data type:', this.datatype);
+      data = null;
+    }
+  
+    if (this.replaceKeys && data) {
+      data = this.renameKeys(data);
+    }
+  
+    return data;
   }
-
+  
+  
   renameKeys(data) {
     // create a map of oldKey:newKey pairs
     const keyMap = this.replaceKeys.split(',').reduce((result, pair) => {
@@ -159,6 +186,15 @@ export class MyTable extends LitElement {
   render() {
     const data = this.parseDataObject();
   
+    // Display error message if present
+    if (this.errorMessage) {
+      return html`
+        <div class="alert alert-danger" role="alert">
+          ${this.errorMessage}
+        </div>
+      `;
+    }
+    
     if (!data || data.length === 0) {
       return html`
         <p>No Data Found</p>
