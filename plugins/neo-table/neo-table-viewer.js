@@ -34,7 +34,7 @@ export class MyTable extends LitElement {
         replaceKeys:{
           type: 'string',
           title: 'Rename keys JSON',
-          description: 'Use key-value pairs to rename columns, see gallery instructions'
+          description: 'Use key-value pairs to rename columns e.g. {"keyMappings": {"oldKey1": "newKey1","oldKey2": "newKey2"}}'
         },
         pageItemLimit: {
           type: 'string',
@@ -97,55 +97,61 @@ export class MyTable extends LitElement {
     return normalizedJsonString;
 }
 
-
-  parseDataObject() {
-    let data;
-    this.errorMessage = '';
+parseDataObject() {
+  let data;
+  this.errorMessage = '';
   
-    if (!this.datatype) {
-      this.errorMessage = "Object data type not configured, please update the plugin properties and specify the data type.";
-      console.error(this.errorMessage);
-      return null;
-    }
+  if (!this.datatype) {
+    this.errorMessage = "Object data type not configured, please update the plugin properties and specify the data type.";
+    console.error(this.errorMessage);
+    return null;
+  }
   
-    if (this.datatype === 'JSON') {
-      try {
-        // Preprocess the JSON string to handle double escaping and normalize key names
-        console.log(this.dataobject)
-        const processedData = this.preprocessDoubleEscapedJson(this.dataobject);
-        data = JSON.parse(processedData);
-        
-        // Additional check if data is still a string indicating further encoding
-        if (typeof data === 'string') {
-          data = JSON.parse(data);
-        }
-        
-        data = this.replaceUnicodeRegex(data); // Apply Unicode replacements
-      } catch (e) {
-        this.errorMessage = "Error parsing JSON data.";
-        console.error(this.errorMessage, e);
-        data = null;
+  // Check if dataobject is empty or undefined
+  if (!this.dataobject) {
+    console.error("No JSON data provided.");
+    return null;
+  }
+  
+  if (this.datatype === 'JSON') {
+    try {
+      // Preprocess the JSON string to handle double escaping and normalize key names
+      console.log(this.dataobject)
+      const processedData = this.preprocessDoubleEscapedJson(this.dataobject);
+      data = JSON.parse(processedData);
+      
+      // Additional check if data is still a string indicating further encoding
+      if (typeof data === 'string') {
+        data = JSON.parse(data);
       }
-    } else if (this.datatype === 'XML') {
-      try {
-        data = this.parseXmlDataObject();
-      } catch (e) {
-        this.errorMessage = "Error parsing XML data.";
-        console.error(this.errorMessage, e);
-        data = null;
-      }
-    } else {
-      this.errorMessage = `Unsupported data type: ${this.datatype}.`;
-      console.error(this.errorMessage);
+      
+      data = this.replaceUnicodeRegex(data); // Apply Unicode replacements
+    } catch (e) {
+      this.errorMessage = "Error parsing JSON data.";
+      console.error(this.errorMessage, e);
       data = null;
     }
-  
-    if (this.replaceKeys && data) {
-      data = this.renameKeys(data);
+  } else if (this.datatype === 'XML') {
+    try {
+      data = this.parseXmlDataObject();
+    } catch (e) {
+      this.errorMessage = "Error parsing XML data.";
+      console.error(this.errorMessage, e);
+      data = null;
     }
-  
-    return data;
+  } else {
+    this.errorMessage = `Unsupported data type: ${this.datatype}.`;
+    console.error(this.errorMessage);
+    data = null;
   }
+
+  if (this.replaceKeys && data) {
+    data = this.renameKeys(data);
+  }
+
+  return data;
+}
+
 
   renameKeys(data) {
     // Create a map of oldKey:newKey pairs
