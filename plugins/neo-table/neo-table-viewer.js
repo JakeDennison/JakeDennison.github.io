@@ -230,7 +230,7 @@ parseDataObject() {
     if (!data || data.length === 0) {
       return html`
         <div class="alert alert-secondary" role="alert">
-        No Data Found
+          No Data Found
         </div>
       `;
     }
@@ -243,7 +243,7 @@ parseDataObject() {
   
     const rows = paginatedData.map(row => html`
       <tr>
-        ${Object.keys(row).map(key => html`<td class="text-nowrap">${row[key]}</td>`)}
+        ${Object.values(row).map(value => html`<td>${this.renderField(value)}</td>`)}
       </tr>
     `);
   
@@ -311,6 +311,7 @@ parseDataObject() {
       </div>
     `;
   }
+  
 
   
 }
