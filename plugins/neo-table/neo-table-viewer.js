@@ -21,7 +21,7 @@ export class MyTable extends LitElement {
         dataobject: {
           type: 'string',
           title: 'Object',
-          description: 'Test'
+          description: 'JSON or XML data variable'
         },
         datatype:{
           title: 'Object Data Type',
