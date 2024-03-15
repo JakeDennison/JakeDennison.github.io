@@ -236,13 +236,9 @@ parseDataObject() {
     
     if (!data || data.length === 0) {
       return html`
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              No Data Found
-            </tr>
-          </thead>
-        </table>
+        <div class="alert alert-secondary" role="alert">
+        No Data Found
+        </div>
       `;
     }
   
