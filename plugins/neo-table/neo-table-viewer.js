@@ -243,7 +243,7 @@ parseDataObject() {
   
     const rows = paginatedData.map(row => html`
       <tr>
-        ${Object.values(row).map(value => html`<td>${this.renderField(value)}</td>`)}
+        ${Object.keys(row).map(key => html`<td class="text-nowrap">${row[key]}</td>`)}
       </tr>
     `);
   
