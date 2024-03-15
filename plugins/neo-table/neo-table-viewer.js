@@ -1,6 +1,4 @@
 import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2.6.1/all/lit-all.min.js';
-import format from 'https://cdn.jsdelivr.net/npm/date-fns@3.5.0/+esm'
-
 
 export class MyTable extends LitElement {
   
