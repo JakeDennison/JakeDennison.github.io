@@ -227,17 +227,33 @@ parseDataObject() {
         </ul>
       `;
     } else if (typeof field === 'object' && field !== null) {
-      return html`
-        <ul>
-          ${Object.entries(field).map(([key, value]) => html`
-            <li><strong>${key}</strong>: ${this.renderField(value)}</li>
-          `)}
-        </ul>
-      `;
+      // Check if the object contains nested JSON
+      if (Object.values(field).some(value => typeof value === 'object' && value !== null)) {
+        return html`
+          <table class="table mb-0">
+            ${Object.entries(field).map(([key, value]) => html`
+              <tr>
+                <th>${key}</th>
+                <td colspan="3">${this.renderField(value)}</td>
+              </tr>
+            `)}
+          </table>
+        `;
+      } else {
+        // Render simple object
+        return html`
+          <ul>
+            ${Object.entries(field).map(([key, value]) => html`
+              <li><strong>${key}</strong>: ${value !== null ? value : '-'}</li>
+            `)}
+          </ul>
+        `;
+      }
     } else {
       return field !== null ? field : '-';
     }
   }
+  
 
   render() {
     const data = this.parseDataObject();
