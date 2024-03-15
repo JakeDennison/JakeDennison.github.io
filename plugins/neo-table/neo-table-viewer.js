@@ -33,8 +33,8 @@ export class MyTable extends LitElement {
         },
         replaceKeys:{
           type: 'string',
-          title: 'List keys to rename',
-          description: 'Use key-value pairs to rename columns separating by colon e.g. oldKey1:newKey1,oldKey2:newKey2'
+          title: 'Rename keys JSON',
+          description: 'Use key-value pairs to rename columns, see gallery instructions'
         },
         pageItemLimit: {
           type: 'string',
@@ -147,23 +147,31 @@ export class MyTable extends LitElement {
     return data;
   }
 
-  
   renameKeys(data) {
-    // create a map of oldKey:newKey pairs
+    // Create a map of oldKey:newKey pairs
     const keyMap = this.replaceKeys.split(',').reduce((result, pair) => {
       const [oldKey, newKey] = pair.split(':');
       result[oldKey.trim()] = newKey.trim();
       return result;
     }, {});
-
-    // map over each object in data array and replace keys as necessary
-    return data.map(obj => {
+  
+    // Map over each object in data array and replace keys as necessary
+    const newData = data.map(obj => {
       return Object.keys(obj).reduce((newObj, key) => {
-        const newKey = keyMap[key] || key; // get the new key if it exists in the map, otherwise use the old key
+        const newKey = keyMap[key] || key; // Get the new key if it exists in the map, otherwise use the old key
         newObj[newKey] = obj[key];
         return newObj;
       }, {});
     });
+  
+    // Check for any old keys left unmapped
+    const unmappedKeys = Object.keys(keyMap).filter(oldKey => !data.some(obj => obj.hasOwnProperty(oldKey)));
+  
+    if (unmappedKeys.length > 0) {
+      console.warn('The following old keys are not found in the data and will not be renamed:', unmappedKeys);
+    }
+  
+    return newData;
   }
 
   replaceUnicodeRegex(input) {
