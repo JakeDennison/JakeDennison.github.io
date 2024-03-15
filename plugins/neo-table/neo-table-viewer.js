@@ -227,7 +227,7 @@ parseDataObject() {
     return data;
 }
 
-  formatDate(dateString, formatString) {
+  formatDates(dateString, formatString) {
     const date = new Date(dateString);
     return format(date, formatString);
   }
