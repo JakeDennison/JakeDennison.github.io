@@ -1,5 +1,5 @@
 import { html, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2.6.1/all/lit-all.min.js';
-import format from 'https://cdn.jsdelivr.net/npm/date-fns@3.5.0/index.min.js'
+import format from 'https://cdn.jsdelivr.net/npm/date-fns@3.5.0/+esm'
 
 
 export class MyTable extends LitElement {
@@ -44,12 +44,7 @@ export class MyTable extends LitElement {
           title: 'Page Item Limit',
           description: 'Number of items to show per page',
           defaultValue: '5',
-        },
-        prefDateFormat: {
-          type: 'string',
-          title: 'Date format',
-          description: 'enter a preferred date format such as DD/MM/YYYY HH:mm:ss zz'
-        },
+        }
       },
       events: ["ntx-value-change"],
       standardProperties: {
@@ -151,10 +146,6 @@ parseDataObject() {
       data = this.renameKeys(data);
     }
 
-    if (this.prefDateFormat) {
-      this.formatDates(data, this.prefDateFormat);
-    }
-
     return data;
   }
 
@@ -220,17 +211,8 @@ parseDataObject() {
       return this.renameKeys(data);
     }
 
-    if (this.prefDateFormat) {
-      this.formatDates(data, this.prefDateFormat);
-    }
-
     return data;
 }
-
-  formatDates(dateString, formatString) {
-    const date = new Date(dateString);
-    return format(date, formatString);
-  }
 
   changePage(newPage) {
     if (newPage > 0 && newPage <= this.totalPages) {
