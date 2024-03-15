@@ -131,52 +131,48 @@ parseDataObject() {
       console.error(this.errorMessage, e);
       data = null;
     }
-  } else if (this.datatype === 'XML') {
-    try {
-      data = this.parseXmlDataObject();
-    } catch (e) {
-      this.errorMessage = "Error parsing XML data.";
-      console.error(this.errorMessage, e);
+    } else if (this.datatype === 'XML') {
+      try {
+        data = this.parseXmlDataObject();
+      } catch (e) {
+        this.errorMessage = "Error parsing XML data.";
+        console.error(this.errorMessage, e);
+        data = null;
+      }
+    } else {
+      this.errorMessage = `Unsupported data type: ${this.datatype}.`;
+      console.error(this.errorMessage);
       data = null;
     }
-  } else {
-    this.errorMessage = `Unsupported data type: ${this.datatype}.`;
-    console.error(this.errorMessage);
-    data = null;
+
+    if (this.replaceKeys && data) {
+      data = this.renameKeys(data);
+    }
+
+    return data;
   }
-
-  if (this.replaceKeys && data) {
-    data = this.renameKeys(data);
-  }
-
-  return data;
-}
-
 
   renameKeys(data) {
-    // Create a map of oldKey:newKey pairs
-    const keyMap = this.replaceKeys.split(',').reduce((result, pair) => {
-      const [oldKey, newKey] = pair.split(':');
-      result[oldKey.trim()] = newKey.trim();
-      return result;
-    }, {});
-  
+    // Parse the JSON string to get the key mappings
+    const keyMappings = JSON.parse(this.replaceKeys).keyMappings;
+
     // Map over each object in data array and replace keys as necessary
     const newData = data.map(obj => {
-      return Object.keys(obj).reduce((newObj, key) => {
-        const newKey = keyMap[key] || key; // Get the new key if it exists in the map, otherwise use the old key
+      const newObj = {};
+      for (const key in obj) {
+        const newKey = keyMappings[key] || key; // Get the new key if it exists in the map, otherwise use the old key
         newObj[newKey] = obj[key];
-        return newObj;
-      }, {});
+      }
+      return newObj;
     });
-  
+
     // Check for any old keys left unmapped
-    const unmappedKeys = Object.keys(keyMap).filter(oldKey => !data.some(obj => obj.hasOwnProperty(oldKey)));
-  
+    const unmappedKeys = Object.keys(keyMappings).filter(oldKey => !Object.values(data).some(obj => obj.hasOwnProperty(oldKey)));
+
     if (unmappedKeys.length > 0) {
       console.warn('The following old keys are not found in the data and will not be renamed:', unmappedKeys);
     }
-  
+
     return newData;
   }
 
