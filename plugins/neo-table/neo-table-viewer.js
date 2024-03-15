@@ -219,6 +219,26 @@ parseDataObject() {
     }
   }
 
+  renderField(field) {
+    if (Array.isArray(field)) {
+      return html`
+        <ul>
+          ${field.map(item => html`<li>${this.renderField(item)}</li>`)}
+        </ul>
+      `;
+    } else if (typeof field === 'object' && field !== null) {
+      return html`
+        <ul>
+          ${Object.entries(field).map(([key, value]) => html`
+            <li><strong>${key}</strong>: ${this.renderField(value)}</li>
+          `)}
+        </ul>
+      `;
+    } else {
+      return field !== null ? field : '-';
+    }
+  }
+
   render() {
     const data = this.parseDataObject();
   
@@ -243,7 +263,7 @@ parseDataObject() {
   
     const rows = paginatedData.map(row => html`
       <tr>
-        ${Object.keys(row).map(key => html`<td class="text-nowrap">${row[key]}</td>`)}
+        ${Object.values(row).map(value => html`<td>${this.renderField(value)}</td>`)}
       </tr>
     `);
   
