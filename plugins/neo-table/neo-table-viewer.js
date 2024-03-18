@@ -262,7 +262,7 @@ parseDataObject() {
     if (this.errorMessage) {
       return html`<p class="error-message">${this.errorMessage}</p>`;
     }
-  
+    
     if (!data || data.length === 0) {
       return html`
         <div class="alert alert-secondary" role="alert">
@@ -271,57 +271,27 @@ parseDataObject() {
       `;
     }
   
-    // Pagination logic
     const startIndex = (this.currentPage - 1) * parseInt(this.pageItemLimit, 10);
     const endIndex = startIndex + parseInt(this.pageItemLimit, 10);
     const paginatedData = data.slice(startIndex, endIndex);
     const totalPages = Math.ceil(data.length / parseInt(this.pageItemLimit, 10));
     this.totalPages = totalPages; // Assign to component property
   
-    // Render rows with nested data handling
-    const rows = paginatedData.flatMap(item => {
-      // Main data row
-      const mainRow = html`
-        <tr>
-          ${Object.entries(item).filter(([key, value]) => 
-            !Array.isArray(value) && (typeof value !== 'object' || value === null))
-            .map(([key, value]) => html`<td>${value ?? '-'}</td>`)}
-        </tr>
-      `;
-  
-      // Nested data rows
-      const nestedDataRows = Object.entries(item).reduce((acc, [key, value]) => {
-        if (Array.isArray(value) || (typeof value === 'object' && value !== null)) {
-          const nestedRow = html`
-            <tr>
-              <td colspan="100%">
-                <table class="table mb-2 p-1">
-                  <thead>
-                    <tr><th>${key}</th></tr>
-                  </thead>
-                  <tbody>
-                    ${Array.isArray(value) ? value.map(nestedItem => this.renderNestedRow(nestedItem)) : this.renderNestedRow(value)}
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-          `;
-          acc.push(nestedRow);
-        }
-        return acc;
-      }, []);
-  
-      return [mainRow, ...nestedDataRows];
-    });
+    const rows = paginatedData.map(row => html`
+      <tr>
+        ${Object.values(row).map(value => html`<td>${this.renderField(value)}</td>`)}
+      </tr>
+    `);
   
     const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
   
-    // Pagination display logic
+    // Calculate the range of pages to display
     const maxPagesToShow = 5;
     const pageRange = Math.min(totalPages, maxPagesToShow);
     let startPage = Math.max(1, this.currentPage - Math.floor(pageRange / 2));
     const endPage = Math.min(totalPages, startPage + pageRange - 1);
-    
+  
+    // Adjust startPage if it exceeds the valid range
     if (endPage - startPage + 1 < pageRange) {
       startPage = Math.max(1, endPage - pageRange + 1);
     }
@@ -350,17 +320,35 @@ parseDataObject() {
           </tbody>
         </table>
       </div>
-      <!-- Pagination component here, similar to your existing pagination setup -->
+      <div class="row">
+        ${totalPages > 1 ? html`
+          <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+              <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
+                <a class="page-link page-txt-link" href="#" @click="${() => this.changePage(1)}">First</a>
+              </li>
+              <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
+                <a class="page-link page-txt-link" href="#" @click="${() => this.changePage(this.currentPage - 1)}">Previous</a>
+              </li>
+              ${Array.from({ length: endPage - startPage + 1 }, (_, i) => i + startPage).map(page => html`
+                <li class="page-item ${page === this.currentPage ? 'active' : ''}">
+                  <a class="page-link page-num-link" href="#" @click="${() => this.changePage(page)}">${page}</a>
+                </li>
+              `)}
+              <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
+                <a class="page-link page-txt-link" href="#" @click="${() => this.changePage(this.currentPage + 1)}">Next</a>
+              </li>
+              <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
+                <a class="page-link page-txt-link" href="#" @click="${() => this.changePage(totalPages)}">Last</a>
+              </li>
+            </ul>
+          </nav>
+        ` : ''}
+      </div>
     `;
   }
   
-  renderNestedRow(item) {
-    return html`
-      <tr>
-        ${Object.values(item).map(value => html`<td>${value}</td>`)}
-      </tr>
-    `;
-  }
+
   
 }
 
