@@ -262,7 +262,7 @@ parseDataObject() {
     if (this.errorMessage) {
       return html`<p class="error-message">${this.errorMessage}</p>`;
     }
-    
+  
     if (!data || data.length === 0) {
       return html`
         <div class="alert alert-secondary" role="alert">
@@ -271,82 +271,96 @@ parseDataObject() {
       `;
     }
   
+    // Pagination logic
     const startIndex = (this.currentPage - 1) * parseInt(this.pageItemLimit, 10);
     const endIndex = startIndex + parseInt(this.pageItemLimit, 10);
     const paginatedData = data.slice(startIndex, endIndex);
     const totalPages = Math.ceil(data.length / parseInt(this.pageItemLimit, 10));
     this.totalPages = totalPages; // Assign to component property
   
-    const rows = paginatedData.map(row => html`
-      <tr>
-        ${Object.values(row).map(value => html`<td>${this.renderField(value)}</td>`)}
-      </tr>
-    `);
+    // Render rows with nested data handling
+    const rows = paginatedData.flatMap(item => {
+      // Main data row
+      const mainRow = html`
+        <tr>
+          ${Object.entries(item).filter(([key, value]) => 
+            !Array.isArray(value) && (typeof value !== 'object' || value === null))
+            .map(([key, value]) => html`<td>${value ?? '-'}</td>`)}
+        </tr>
+      `;
+  
+      // Nested data rows
+      const nestedDataRows = Object.entries(item).reduce((acc, [key, value]) => {
+        if (Array.isArray(value) || (typeof value === 'object' && value !== null)) {
+          const nestedRow = html`
+            <tr>
+              <td colspan="100%">
+                <table class="table mb-2 p-1">
+                  <thead>
+                    <tr><th>${key}</th></tr>
+                  </thead>
+                  <tbody>
+                    ${Array.isArray(value) ? value.map(nestedItem => this.renderNestedRow(nestedItem)) : this.renderNestedRow(value)}
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          `;
+          acc.push(nestedRow);
+        }
+        return acc;
+      }, []);
+  
+      return [mainRow, ...nestedDataRows];
+    });
   
     const headers = Object.keys(data[0]).map(header => html`<th class="text-nowrap">${header}</th>`);
   
-    // Calculate the range of pages to display
+    // Pagination display logic
     const maxPagesToShow = 5;
     const pageRange = Math.min(totalPages, maxPagesToShow);
     let startPage = Math.max(1, this.currentPage - Math.floor(pageRange / 2));
     const endPage = Math.min(totalPages, startPage + pageRange - 1);
-  
-    // Adjust startPage if it exceeds the valid range
+    
     if (endPage - startPage + 1 < pageRange) {
       startPage = Math.max(1, endPage - pageRange + 1);
     }
   
     return html`
-    <style>
-      .page-txt-link {
-        width: 100px;
-        text-align:center;
-      }
-      .page-num-link {
-        width: 45px;
-        text-align:center;
-      }
-    </style>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <div class="table-responsive-md overflow-auto">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            ${headers}
-          </tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-renderField(value) {
-  if (Array.isArray(value) || (typeof value === 'object' && value !== null)) {
-    // It's a nested object or array, render as a nested table
-    const nestedRows = Array.isArray(value) ? value.map(item => this.renderNestedRow(item)) : [this.renderNestedRow(value)];
-    return html`
-      <table class="table mb-2 p-1">
-        ${nestedRows}
-      </table>
+      <style>
+        .page-txt-link {
+          width: 100px;
+          text-align:center;
+        }
+        .page-num-link {
+          width: 45px;
+          text-align:center;
+        }
+      </style>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <div class="table-responsive-md overflow-auto">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              ${headers}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      </div>
+      <!-- Pagination component here, similar to your existing pagination setup -->
     `;
-  } else {
-    // It's a simple value
-    return value ?? '-';
   }
-}
-
-renderNestedRow(item) {
-  return html`
-    <tr>
-      ${Object.values(item).map(nestedValue => html`<td>${nestedValue}</td>`)}
-    </tr>
-  `;
-}
   
-
+  renderNestedRow(item) {
+    return html`
+      <tr>
+        ${Object.values(item).map(value => html`<td>${value}</td>`)}
+      </tr>
+    `;
+  }
   
 }
 
