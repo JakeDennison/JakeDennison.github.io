@@ -297,56 +297,54 @@ parseDataObject() {
     }
   
     return html`
-      <style>
-        .page-txt-link {
-          width: 100px;
-          text-align:center;
-        }
-        .page-num-link {
-          width: 45px;
-          text-align:center;
-        }
-      </style>
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <div class="table-responsive-md overflow-auto">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              ${headers}
-            </tr>
-          </thead>
-          <tbody>
-            ${rows}
-          </tbody>
-        </table>
-      </div>
-      <div class="row">
-        ${totalPages > 1 ? html`
-          <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-              <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
-                <a class="page-link page-txt-link" href="#" @click="${() => this.changePage(1)}">First</a>
-              </li>
-              <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
-                <a class="page-link page-txt-link" href="#" @click="${() => this.changePage(this.currentPage - 1)}">Previous</a>
-              </li>
-              ${Array.from({ length: endPage - startPage + 1 }, (_, i) => i + startPage).map(page => html`
-                <li class="page-item ${page === this.currentPage ? 'active' : ''}">
-                  <a class="page-link page-num-link" href="#" @click="${() => this.changePage(page)}">${page}</a>
-                </li>
-              `)}
-              <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
-                <a class="page-link page-txt-link" href="#" @click="${() => this.changePage(this.currentPage + 1)}">Next</a>
-              </li>
-              <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
-                <a class="page-link page-txt-link" href="#" @click="${() => this.changePage(totalPages)}">Last</a>
-              </li>
-            </ul>
-          </nav>
-        ` : ''}
-      </div>
+    <style>
+      .page-txt-link {
+        width: 100px;
+        text-align:center;
+      }
+      .page-num-link {
+        width: 45px;
+        text-align:center;
+      }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <div class="table-responsive-md overflow-auto">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            ${headers}
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+renderField(value) {
+  if (Array.isArray(value) || (typeof value === 'object' && value !== null)) {
+    // It's a nested object or array, render as a nested table
+    const nestedRows = Array.isArray(value) ? value.map(item => this.renderNestedRow(item)) : [this.renderNestedRow(value)];
+    return html`
+      <table class="table mb-2 p-1">
+        ${nestedRows}
+      </table>
     `;
+  } else {
+    // It's a simple value
+    return value ?? '-';
   }
+}
+
+renderNestedRow(item) {
+  return html`
+    <tr>
+      ${Object.values(item).map(nestedValue => html`<td>${nestedValue}</td>`)}
+    </tr>
+  `;
+}
   
 
   
