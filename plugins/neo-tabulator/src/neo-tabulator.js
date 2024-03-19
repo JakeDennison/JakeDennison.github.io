@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { Tabulator } from 'tabulator-tables';
-import 'tabulator-tables/dist/css/tabulator.min.css';
+import tabulatorStyles from 'tabulator-tables/dist/css/tabulator.min.css';
+import tableStyles from './tableStyles.css';
 
 class TabulatorElement extends LitElement {
   static getMetaConfig() {
@@ -27,11 +28,11 @@ class TabulatorElement extends LitElement {
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-      }
-    `;
+    const tabulatorStyleSheet = new CSSStyleSheet();
+    tabulatorStyleSheet.replaceSync(tabulatorStyles);
+    const tableStyleSheet = new CSSStyleSheet();
+    tableStyleSheet.replaceSync(additionalStyles);
+    return [tabulatorStyleSheet, tableStyleSheet];
   }
   
   constructor() {
