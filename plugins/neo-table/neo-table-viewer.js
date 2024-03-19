@@ -349,14 +349,7 @@ export class MyTable extends LitElement {
           <tbody>
             ${paginatedData.map(row => html`
               <tr>
-                ${Object.values(row).map(value => html`
-                  <td>${this.renderField(value)}</td>
-                `)}
-              </tr>
-              <tr>
-                <td colspan="${Object.keys(row).length}">
-                  ${this.renderNestedTables(row)}
-                </td>
+                ${Object.values(row).map(value => html`<td>${this.renderField(value)}</td>`)}
               </tr>
             `)}
           </tbody>
@@ -387,6 +380,7 @@ export class MyTable extends LitElement {
           </nav>
         ` : ''}
       </div>
+      ${paginatedData.map(row => this.renderNestedTables(row))}
     `;
   }
   
@@ -394,22 +388,23 @@ export class MyTable extends LitElement {
     const nestedTables = Object.entries(row)
       .filter(([key, value]) => Array.isArray(value))
       .map(([key, value]) => html`
-        <table class="table mb-2 p-1">
-          <tbody>
-            <tr>
-              <th>${key}</th>
-            </tr>
-            ${value.map(item => html`
-              <tr>
-                <td>${this.renderField(item)}</td>
-              </tr>
-            `)}
-          </tbody>
-        </table>
+        <div>
+          <h5>${key}</h5>
+          <table class="table mb-2 p-1">
+            <tbody>
+              ${value.map(item => html`
+                <tr>
+                  <td>${this.renderField(item)}</td>
+                </tr>
+              `)}
+            </tbody>
+          </table>
+        </div>
       `);
   
     return html`${nestedTables}`;
   }
+  
   
 
 }
