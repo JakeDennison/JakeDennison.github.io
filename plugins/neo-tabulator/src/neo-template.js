@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
-import Tabulator from 'tabulator-tables'; // Import Tabulator (make sure to install it first or include it in your project)
-import 'tabulator-tables/dist/css/tabulator.min.css'; // Import Tabulator CSS
+import Tabulator from 'tabulator-tables';
+import 'tabulator-tables/dist/css/tabulator.min.css';
 
 class TabulatorElement extends LitElement {
   static getMetaConfig() {
