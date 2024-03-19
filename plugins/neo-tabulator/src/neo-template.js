@@ -6,7 +6,7 @@ class TabulatorElement extends LitElement {
   static getMetaConfig() {
     // plugin contract information
     return {
-      controlName: 'neo-template',
+      controlName: 'neo-tabulator',
       fallbackDisableSubmit: false,
       description: '',
       iconUrl: "",
@@ -25,7 +25,7 @@ class TabulatorElement extends LitElement {
       }
     };
   }
-  
+
   static get styles() {
     return css`
       :host {
