@@ -31,7 +31,7 @@ class TabulatorElement extends LitElement {
     const tabulatorStyleSheet = new CSSStyleSheet();
     tabulatorStyleSheet.replaceSync(tabulatorStyles);
     const tableStyleSheet = new CSSStyleSheet();
-    tableStyleSheet.replaceSync(additionalStyles);
+    tableStyleSheet.replaceSync(tableStyleSheet);
     return [tabulatorStyleSheet, tableStyleSheet];
   }
   
