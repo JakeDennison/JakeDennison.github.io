@@ -242,7 +242,7 @@ parseDataObject() {
       } else {
         // Render simple object
         return html`
-          <ul>
+          <ul style="list-style: none;">
             ${Object.entries(field).map(([key, value]) => html`
               <li><strong>${key}</strong>: ${value !== null ? value : '-'}</li>
             `)}
