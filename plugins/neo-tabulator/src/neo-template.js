@@ -3,10 +3,29 @@ import Tabulator from 'tabulator-tables'; // Import Tabulator (make sure to inst
 import 'tabulator-tables/dist/css/tabulator.min.css'; // Import Tabulator CSS
 
 class TabulatorElement extends LitElement {
-  static properties = {
-    src: { type: String },
-  };
-
+  static getMetaConfig() {
+    // plugin contract information
+    return {
+      controlName: 'neo-template',
+      fallbackDisableSubmit: false,
+      description: '',
+      iconUrl: "",
+      groupName: 'Visual Data',
+      version: '1.0',
+      properties: {
+        src: {
+          type: 'string',
+          title: 'Data Object',
+          description: 'JSON Object'
+        },
+      },
+      standardProperties: {
+        fieldLabel: true,
+        description: true,
+      }
+    };
+  }
+  
   static get styles() {
     return css`
       :host {
