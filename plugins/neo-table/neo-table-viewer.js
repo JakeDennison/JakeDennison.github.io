@@ -279,6 +279,23 @@ export class MyTable extends LitElement {
     }
   }
 
+  renderNestedTable(data) {
+    return html`
+      <table class="table mb-2 p-1">
+        <tbody>
+          ${Object.entries(data).map(([key, value]) => html`
+            <tr>
+              <th>${key}</th>
+              <td>
+                ${Array.isArray(value) ? this.renderNestedTable(value) : value}
+              </td>
+            </tr>
+          `)}
+        </tbody>
+      </table>
+    `;
+  }
+  
   render() {
     const data = this.parseDataObject();
   
@@ -322,14 +339,6 @@ export class MyTable extends LitElement {
           width: 45px;
           text-align:center;
         }
-        .nested-table{
-          column-span: all;
-        }
-        .nested-list {
-          list-style-type: none;
-          margin: 0;
-          padding: 0;
-        }
         .neo-table {
           -moz-user-select: text;
           -khtml-user-select: text;
@@ -349,28 +358,11 @@ export class MyTable extends LitElement {
           <tbody>
             ${paginatedData.map(row => html`
               <tr>
-                ${Object.entries(row).map(([key, value]) => {
-                  if (Array.isArray(value)) {
-                    return html`
-                      <td colspan="${Object.keys(row).length}">
-                        <table class="table mb-2 p-1">
-                          <tbody>
-                            <tr>
-                              <th>${key}</th>
-                            </tr>
-                            ${value.map(item => html`
-                              <tr>
-                                <td>${this.renderField(item)}</td>
-                              </tr>
-                            `)}
-                          </tbody>
-                        </table>
-                      </td>
-                    `;
-                  } else {
-                    return html`<td>${this.renderField(value)}</td>`;
-                  }
-                })}
+                ${Object.values(row).map(value => html`
+                  <td>
+                    ${Array.isArray(value) ? this.renderNestedTable(value) : value}
+                  </td>
+                `)}
               </tr>
             `)}
           </tbody>
@@ -403,8 +395,7 @@ export class MyTable extends LitElement {
       </div>
     `;
   }
-  
-  
+
 }
 
 customElements.define('neo-table-viewer', MyTable);
