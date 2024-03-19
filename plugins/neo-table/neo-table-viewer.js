@@ -404,6 +404,7 @@ export class MyTable extends LitElement {
     `;
   }
   
+  
 }
 
 customElements.define('neo-table-viewer', MyTable);
