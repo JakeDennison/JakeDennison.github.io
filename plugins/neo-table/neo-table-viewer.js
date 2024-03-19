@@ -242,11 +242,15 @@ parseDataObject() {
       } else {
         // Render simple object
         return html`
-          <ul class="nested-list">
-            ${Object.entries(field).map(([key, value]) => html`
-              <li>${value !== null ? value : '-'}</li>
-            `)}
-          </ul>
+        <tr>
+          <td>
+            <ul class="nested-list">
+              ${Object.entries(field).map(([key, value]) => html`
+                <li>${value !== null ? value : '-'}</li>
+              `)}
+            </ul>
+          </td>
+        </tr>
         `;
       }
     } else {
