@@ -1,8 +1,8 @@
 {
-  "name": "neo-template",
+  "name": "neo-tabulator",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/neo-template.js",
+  "main": "./src/neo-tabulator.js",
   "browser": "./src/index.html",
   "scripts": {
     "build": "webpack"

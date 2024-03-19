@@ -1,10 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/neo-template.js',
+  entry: './src/neo-tabulator.js',
   mode: 'production',
   output: {
-    filename: 'neo-template.js',
+    filename: 'neo-tabulator.js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {

@@ -1,11 +1,11 @@
-neo-template plugin//3d object viewer.
+neo-tabulator plugin//3d object viewer.
 
 version 1.0
 Plugin uses three.js 
 
 Properties
 
-The neo-template plugin provides the following properties:
+The neo-tabulator plugin provides the following properties:
 
     src (string): The URL of the 3D object to display.
     This is set inside the Nintex plugin control panel in the forms designer canvas.
