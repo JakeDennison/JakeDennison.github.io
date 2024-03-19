@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { Tabulator } from 'tabulator-tables';
-import tabulatorStyles from 'tabulator-tables/dist/css/tabulator.min.css';
+import tabulatorStyles from 'tabulator-tables/dist/css/tabulator_bootstrap5.min.css';
 import tableStyles from './tableStyles.css';
 
 class TabulatorElement extends LitElement {
@@ -31,7 +31,7 @@ class TabulatorElement extends LitElement {
     const tabulatorStyleSheet = new CSSStyleSheet();
     tabulatorStyleSheet.replaceSync(tabulatorStyles);
     const tableStyleSheet = new CSSStyleSheet();
-    tableStyleSheet.replaceSync(tableStyleSheet);
+    tableStyleSheet.replaceSync(tableStyles);
     return [tabulatorStyleSheet, tableStyleSheet];
   }
   
@@ -39,6 +39,14 @@ class TabulatorElement extends LitElement {
     super();
     this.src = '';
   }
+
+  connectedCallback() {
+    super.connectedCallback();
+    const styleEl = document.createElement('style');
+    styleEl.textContent = tabulatorStyles + tableStyles;
+    this.shadowRoot.appendChild(styleEl);
+  }
+  
 
   firstUpdated() {
     this._initializeTable();
