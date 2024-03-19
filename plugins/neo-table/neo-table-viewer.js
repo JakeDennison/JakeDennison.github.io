@@ -219,43 +219,46 @@ parseDataObject() {
 
   renderField(field) {
     if (Array.isArray(field)) {
-      return html`
-        <ul class="nested-list">
-          ${field.map(item => html`<li>${this.renderField(item)}</li>`)}
-        </ul>
-      `;
-    } else if (typeof field === 'object' && field !== null) {
-      // Check if the object contains nested JSON
-      if (Object.values(field).some(value => typeof value === 'object' && value !== null)) {
         return html`
-          <table class="table mb-0">
-            ${Object.entries(field).map(([key, value]) => html`
-              <tr>
-                <th>${key}</th>
-                <td colspan="3">${this.renderField(value)}</td>
-              </tr>
-            `)}
-          </table>
-        `;
-      } else {
-        // Render simple object
-        return html`
-        <tr>
-          <td>
             <ul class="nested-list">
-              ${Object.entries(field).map(([key, value]) => html`
-                <li>${value !== null ? value : '-'}</li>
-              `)}
+                ${field.map(item => html`<li>${this.renderField(item)}</li>`)}
             </ul>
-          </td>
-        </tr>
         `;
-      }
+    } else if (typeof field === 'object' && field !== null) {
+        // Check if the object contains nested JSON
+        if (Object.values(field).some(value => typeof value === 'object' && value !== null)) {
+            return html`
+                <tr>
+                    <td class="nested-table">
+                        <table class="table mb-2 p-1">
+                            <tbody>
+                                ${Object.entries(field).map(([key, value]) => html`
+                                    <tr>
+                                        <th>${key}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>${this.renderField(value)}</td>
+                                    </tr>
+                                `)}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            `;
+        } else {
+            // Render simple object
+            return html`
+                <ul class="nested-list">
+                    ${Object.entries(field).map(([key, value]) => html`
+                        <li>${value !== null ? value : '-'}</li>
+                    `)}
+                </ul>
+            `;
+        }
     } else {
-      return field !== null ? field : '-';
+        return field !== null ? field : '-';
     }
-  }
-  
+}
 
   render() {
     const data = this.parseDataObject();
@@ -307,6 +310,9 @@ parseDataObject() {
         .page-num-link {
           width: 45px;
           text-align:center;
+        }
+        .nested-table{
+          column-span: all;
         }
         .nested-list {
           list-style-type: none;
