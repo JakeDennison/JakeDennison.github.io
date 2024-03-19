@@ -29,8 +29,8 @@ class TabulatorElement extends LitElement {
 
   static get styles() {
     return css`
-      ${tabulatorStyles}
-      ${tableStyles}
+      ${unsafeCSS(tabulatorStyles)}
+      ${unsafeCSS(tableStyles)}
     `;
   }
 
