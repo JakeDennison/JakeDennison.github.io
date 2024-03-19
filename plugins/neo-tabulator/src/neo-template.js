@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import Tabulator from 'tabulator-tables';
+import { Tabulator } from 'tabulator-tables';
 import 'tabulator-tables/dist/css/tabulator.min.css';
 
 class TabulatorElement extends LitElement {
