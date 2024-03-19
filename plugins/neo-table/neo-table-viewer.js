@@ -313,10 +313,17 @@ parseDataObject() {
           margin: 0;
           padding: 0;
         }
+        .neo-table {
+          -moz-user-select: text;
+          -khtml-user-select: text;
+          -webkit-user-select: text;
+          -ms-user-select: text;
+          user-select: text;
+        }
       </style>
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="table-responsive-md overflow-auto">
-        <table class="table table-striped">
+        <table class="neo-table table table-striped">
           <thead>
             <tr>
               ${headers}
