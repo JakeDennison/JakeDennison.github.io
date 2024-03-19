@@ -220,7 +220,7 @@ parseDataObject() {
   renderField(field) {
     if (Array.isArray(field)) {
       return html`
-        <ul>
+        <ul class="nested-list">
           ${field.map(item => html`<li>${this.renderField(item)}</li>`)}
         </ul>
       `;
