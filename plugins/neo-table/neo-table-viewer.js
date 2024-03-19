@@ -226,24 +226,37 @@ parseDataObject() {
         `;
     } else if (typeof field === 'object' && field !== null) {
         // Check if the object contains nested JSON
-        if (Object.values(field).some(value => typeof value === 'object' && value !== null)) {
+        if (Object.values(field).some(value => Array.isArray(value))) {
             return html`
-                <tr>
-                    <td class="nested-table">
-                        <table class="table mb-2 p-1">
-                            <tbody>
-                                ${Object.entries(field).map(([key, value]) => html`
-                                    <tr>
-                                        <th>${key}</th>
-                                    </tr>
-                                    <tr>
-                                        <td>${this.renderField(value)}</td>
-                                    </tr>
-                                `)}
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
+                ${Object.entries(field).map(([key, value]) => {
+                    if (Array.isArray(value)) {
+                        return html`
+                            <tr>
+                                <td class="nested-table">
+                                    <table class="table mb-2 p-1">
+                                        <tbody>
+                                            <tr>
+                                                <th>${key}</th>
+                                            </tr>
+                                            ${value.map(item => html`
+                                                <tr>
+                                                    <td>${this.renderField(item)}</td>
+                                                </tr>
+                                            `)}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        `;
+                    } else {
+                        return html`
+                            <tr>
+                                <th>${key}</th>
+                                <td>${this.renderField(value)}</td>
+                            </tr>
+                        `;
+                    }
+                })}
             `;
         } else {
             // Render simple object
@@ -259,6 +272,7 @@ parseDataObject() {
         return field !== null ? field : '-';
     }
 }
+
 
   render() {
     const data = this.parseDataObject();
