@@ -244,7 +244,7 @@ parseDataObject() {
         return html`
           <ul class="nested-list">
             ${Object.entries(field).map(([key, value]) => html`
-              <li><strong>${key}</strong>: ${value !== null ? value : '-'}</li>
+              <li>${value !== null ? value : '-'}</li>
             `)}
           </ul>
         `;
