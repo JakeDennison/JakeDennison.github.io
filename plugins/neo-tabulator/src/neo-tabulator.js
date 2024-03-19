@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, unsafeCSS } from 'lit';
 import { Tabulator } from 'tabulator-tables';
 import tabulatorStyles from 'tabulator-tables/dist/css/tabulator_bootstrap5.min.css';
 import tableStyles from './tableStyles.css';
