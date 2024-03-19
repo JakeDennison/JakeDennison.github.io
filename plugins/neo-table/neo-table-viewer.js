@@ -88,7 +88,6 @@ export class MyTable extends LitElement {
     // Normalize the key names by removing extra spaces after colons in the keys
     normalizedJsonString = normalizedJsonString.replace(/:\\"/g, ': \\"');
 
-    console.log("Normalized String: " + normalizedJsonString);
     return normalizedJsonString;
 }
 
@@ -111,7 +110,6 @@ parseDataObject() {
   if (this.datatype === 'JSON') {
     try {
       // Preprocess the JSON string to handle double escaping and normalize key names
-      console.log(this.dataobject)
       const processedData = this.preprocessDoubleEscapedJson(this.dataobject);
       data = JSON.parse(processedData);
       
