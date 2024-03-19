@@ -28,16 +28,20 @@ class TabulatorElement extends LitElement {
   }
 
   static get styles() {
-    const tabulatorStyleSheet = new CSSStyleSheet();
-    tabulatorStyleSheet.replaceSync(tabulatorStyles);
-    const tableStyleSheet = new CSSStyleSheet();
-    tableStyleSheet.replaceSync(tableStyles);
-    return [tabulatorStyleSheet, tableStyleSheet];
+    return css`
+      ${tabulatorStyles}
+      ${tableStyles}
+    `;
   }
-  
+
   constructor() {
     super();
     this.src = '';
+    this.table = null; // Will hold the Tabulator instance
+  }
+
+  firstUpdated() {
+    this._initializeTable();
   }
 
   connectedCallback() {
@@ -47,28 +51,41 @@ class TabulatorElement extends LitElement {
     this.shadowRoot.appendChild(styleEl);
   }
   
-
-  firstUpdated() {
-    this._initializeTable();
-  }
-
   updated(changedProperties) {
     if (changedProperties.has('src') && this.src) {
       this._updateTable();
     }
   }
 
+  // Dynamically generate column definitions based on data
+  _generateColumns(data) {
+    if (!data || !data.length) return [];
+
+    const columnSet = new Set();
+    data.forEach(item => {
+      Object.keys(item).forEach(key => columnSet.add(key));
+    });
+
+    return Array.from(columnSet).map(key => ({
+      title: key, // Customize title as needed, perhaps a mapping based on key names
+      field: key,
+      formatter: "plaintext", // Default formatter, adjust as needed
+    }));
+  }
+
   _initializeTable() {
+    const data = JSON.parse(this.src || '[]');
     this.table = new Tabulator(this.shadowRoot.getElementById('tabulator'), {
-      data: JSON.parse(this.src), // Set data from the `src` property
-      autoColumns: true, // Automatically create columns from data keys
+      data: data, // Set initial data
+      columns: this._generateColumns(data), // Generate columns dynamically
       layout: "fitColumns", // Fit columns to width of table
     });
   }
 
   _updateTable() {
-    const data = JSON.parse(this.src);
-    this.table.setData(data);
+    const data = JSON.parse(this.src || '[]');
+    this.table.setColumns(this._generateColumns(data)); // Update columns dynamically
+    this.table.setData(data); // Update table data
   }
 
   render() {
