@@ -242,7 +242,7 @@ parseDataObject() {
       } else {
         // Render simple object
         return html`
-          <ul style="list-style: none;">
+          <ul class="nested-list">
             ${Object.entries(field).map(([key, value]) => html`
               <li><strong>${key}</strong>: ${value !== null ? value : '-'}</li>
             `)}
@@ -305,6 +305,11 @@ parseDataObject() {
         .page-num-link {
           width: 45px;
           text-align:center;
+        }
+        .nested-list {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
         }
       </style>
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
