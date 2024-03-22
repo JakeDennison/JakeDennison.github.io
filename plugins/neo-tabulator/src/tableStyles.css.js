@@ -12,4 +12,7 @@ export const tableStyles = css`
     white-space: nowrap;
     width: 100%;
 }
+.tabulator-cell {
+    width:"calc(100% - 24px)"
+}
 `;
