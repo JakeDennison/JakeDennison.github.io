@@ -8,6 +8,7 @@
 /* Sibling Element - Form Container */
 ntx-repeating-section ntx-form-runtime-light {
     flex-shrink: 1!important; /* FORCES it to shrink so they can fit together */
+    flex-grow: 1; /* Allow it to expand */
 }
 
 ntx-repeating-section .row>* {
