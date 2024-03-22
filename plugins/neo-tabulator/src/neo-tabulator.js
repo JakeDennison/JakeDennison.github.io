@@ -75,20 +75,26 @@ class TabulatorElement extends LitElement {
     holderEl.appendChild(tableEl);
     row.getElement().appendChild(holderEl);
 
-    // Iterate over each item in the row data
-    row.getData().items.forEach(item => {
-      var subTableEl = document.createElement("div");
-      holderEl.appendChild(subTableEl);
+    // Check if row data and items are defined
+    if (row.getData() && row.getData().items && Array.isArray(row.getData().items)) {
+        // Iterate over each item in the row data
+        row.getData().items.forEach(item => {
+            var subTableEl = document.createElement("div");
+            holderEl.appendChild(subTableEl);
 
-      var subTable = new Tabulator(subTableEl, {
-        layout: "fitColumns",
-        data: item.subItems, // Assuming subItems is an array containing subtable data
-        columns: Object.keys(item.subItems[0]).map(key => ({ title: key, field: key })) // Generate columns dynamically
-      });
-    });
+            var subTable = new Tabulator(subTableEl, {
+                layout: "fitColumns",
+                data: item.subItems || [], // Ensure subItems is an array
+                columns: Object.keys(item.subItems[0] || {}).map(key => ({ title: key, field: key })) // Generate columns dynamically
+            });
+        });
+    } else {
+        console.error("Row data or items are undefined or not an array:", row.getData());
+    }
 
     return holderEl; // Return the holder element containing the nested table
-  }
+}
+
 
   _updateTable() {
     const data = JSON.parse(this.src || '[]');
