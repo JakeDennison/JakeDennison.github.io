@@ -4,7 +4,7 @@ export const tableStyles = css`
 .tabulator-row.tabulator-row-even {
     background-color: #fff;
 }
-.tabulator-row .tabulator-cell {
+.tabulator .tabulator-header .tabulator-col {
     display: table-cell;
 }
 `;
