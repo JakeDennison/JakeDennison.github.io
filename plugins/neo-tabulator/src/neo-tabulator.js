@@ -1,4 +1,4 @@
-import { LitElement, html, css, unsafeCSS } from 'lit';
+import { LitElement, html } from 'lit';
 import { Tabulator } from 'tabulator-tables';
 import { tabulatorStyles } from './tabulatorStyles.css.js';
 import { tableStyles } from './tableStyles.css.js';
@@ -52,65 +52,39 @@ class TabulatorElement extends LitElement {
     }
   }
 
-  _generateColumns(data) {
-    if (!data || !data.length) return [];
-
-    const columns = [];
-
-    // Iterate over each item in data
-    data.forEach(item => {
-      // Iterate over each key in item
-      Object.keys(item).forEach(key => {
-        // Check if the value of the key is an array (nested data)
-        if (Array.isArray(item[key])) {
-          // Define a column for the nested data
-          columns.push({
-            title: key, // Customize title as needed
-            field: key, // Field name should match the key
-          });
-        } else {
-          // Define a regular column for non-nested data
-          columns.push({
-            title: key, // Customize title as needed
-            field: key // Field name should match the key
-          });
-        }
-      });
-    });
-
-    return columns;
+  render() {
+    return html`<div id="tabulator"></div>`; // Container for the Tabulator table
   }
 
   _initializeTable() {
     const data = JSON.parse(this.src || '[]');
     this.table = new Tabulator(this.shadowRoot.getElementById('tabulator'), {
       data: data,
-      columns: this._generateColumns(data),
+      height: "311px",
       layout: "fitColumns",
+      resizableColumns: false,
+      tooltips: true,
+      columns: Object.keys(data[0]).map(key => ({ title: key, field: key })), // Generate main table columns dynamically
       rowFormatter: this._rowFormatter.bind(this) // Bind the rowFormatter function to the current context
     });
   }
 
   _rowFormatter(row) {
-    // Create and style holder elements
     var holderEl = document.createElement("div");
     var tableEl = document.createElement("div");
-
-    holderEl.style.boxSizing = "border-box";
-    holderEl.style.padding = "10px 30px 10px 10px";
-    holderEl.style.borderTop = "1px solid #333";
-    holderEl.style.borderBottom = "1px solid #333";
-
-    tableEl.style.border = "1px solid #333";
-
     holderEl.appendChild(tableEl);
-
     row.getElement().appendChild(holderEl);
 
-    var subTable = new Tabulator(tableEl, {
-      layout: "fitColumns",
-      data: row.getData(), // Use row data as nested data
-      columns: this._generateColumns([row.getData()])[0].columns // Generate columns dynamically
+    // Iterate over each item in the row data
+    row.getData().items.forEach(item => {
+      var subTableEl = document.createElement("div");
+      holderEl.appendChild(subTableEl);
+
+      var subTable = new Tabulator(subTableEl, {
+        layout: "fitColumns",
+        data: item.subItems, // Assuming subItems is an array containing subtable data
+        columns: Object.keys(item.subItems[0]).map(key => ({ title: key, field: key })) // Generate columns dynamically
+      });
     });
 
     return holderEl; // Return the holder element containing the nested table
@@ -118,15 +92,9 @@ class TabulatorElement extends LitElement {
 
   _updateTable() {
     const data = JSON.parse(this.src || '[]');
-    this.table.setColumns(this._generateColumns(data)); // Update columns dynamically
+    this.table.setColumns(Object.keys(data[0]).map(key => ({ title: key, field: key }))); // Update main table columns dynamically
     this.table.setData(data); // Update table data
   }
-
-  render() {
-    return html`<div id="tabulator"></div>`; // Container for the Tabulator table
-  }
-
-
 }
 
 customElements.define('neo-tabulator', TabulatorElement);
