@@ -1,13 +1,13 @@
 .ntx-repeating-section-repeated-section {
     display: flex; /* Activates flexbox layout */
     align-items: center; /* Centers items vertically */
-    justify-content: space-between; /* Spaces out the children; adjust as needed */
-    flex-direction: row-reverse;
+    justify-content: space-between; /* Spaces out the children */
+    flex-direction: row-reverse; /* makes it so the delete button appears after the content */
 }
 
 /* Sibling Element - Form Container */
 ntx-repeating-section ntx-form-runtime-light {
-    flex-shrink: 1!important; /* Allow it to shrink */
+    flex-shrink: 1!important; /* FORCES it to shrink so they can fit together */
 }
 
 ntx-repeating-section .row>* {
@@ -17,6 +17,6 @@ ntx-repeating-section .row>* {
 .nx-repeating-section-container .nx-repeating-section-body .ntx-repeating-section-overlay {
     flex-shrink: 0; /* Prevent shrinking */
     margin-left: auto; /* Pushes the delete button to the end of the container */
-    align-self: flex-start;
-    padding: 5px;
+    align-self: flex-start; /* Aligns delete button to the top */
+    padding: 5px; 
 }
