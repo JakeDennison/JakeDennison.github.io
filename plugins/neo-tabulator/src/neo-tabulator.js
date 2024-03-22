@@ -54,19 +54,35 @@ class TabulatorElement extends LitElement {
 
   _generateColumns(data) {
     if (!data || !data.length) return [];
-  
+
     const columns = [];
-  
+
     // Iterate over each item in data
     data.forEach(item => {
       // Iterate over each key in item
       Object.keys(item).forEach(key => {
         // Check if the value of the key is an array (nested data)
         if (Array.isArray(item[key])) {
-          // Define a column for the nested data
+          // Define columns for the nested data
+          const nestedColumns = [];
+          const sampleNestedData = item[key][0]; // Take the first object in the array as a sample
+
+          // Iterate over keys of the nested object
+          for (const nestedKey in sampleNestedData) {
+            if (sampleNestedData.hasOwnProperty(nestedKey)) {
+              // Generate column definition for nested data
+              nestedColumns.push({
+                title: nestedKey, // Customize title as needed
+                field: key + "." + nestedKey, // Field name should match the key
+              });
+            }
+          }
+
+          // Add a column for the nested structure
           columns.push({
             title: key, // Customize title as needed
             field: key, // Field name should match the key
+            columns: nestedColumns,
             formatter: function(cell, formatterParams, onRendered) {
               // Create a new table element for the nested data
               const table = document.createElement('div');
@@ -99,10 +115,10 @@ class TabulatorElement extends LitElement {
         }
       });
     });
-  
+
     return columns;
   }
-  
+
   _initializeTable() {
     const data = JSON.parse(this.src || '[]');
     this.table = new Tabulator(this.shadowRoot.getElementById('tabulator'), {
@@ -121,6 +137,7 @@ class TabulatorElement extends LitElement {
   render() {
     return html`<div id="tabulator"></div>`; // Container for the Tabulator table
   }
+
 }
 
 customElements.define('neo-tabulator', TabulatorElement);
