@@ -52,12 +52,11 @@ class TabulatorElement extends LitElement {
     }
   }
 
-  // Dynamically generate column definitions based on data
   _generateColumns(data) {
     if (!data || !data.length) return [];
-
+  
     const columns = [];
-
+  
     // Iterate over each item in data
     data.forEach(item => {
       // Iterate over each key in item
@@ -71,13 +70,21 @@ class TabulatorElement extends LitElement {
             formatter: function(cell, formatterParams, onRendered) {
               // Create a new table element for the nested data
               const table = document.createElement('div');
-              const subTable = new Tabulator(table, {
-                layout: "fitColumns",
-                data: cell.getValue(), // Use cell value as data for the nested table
-                columns: Object.keys(cell.getValue()[0]).map(subKey => ({
-                  title: subKey,
-                  field: subKey
-                }))
+              table.classList.add('tabulator'); // Add Tabulator class to the nested table
+              table.setAttribute('tabulator-layout', 'fitColumns');
+              // Iterate over nested data and append rows
+              cell.getValue().forEach(nestedItem => {
+                const row = document.createElement('div');
+                row.classList.add('tabulator-row');
+                // Iterate over keys of nested item and append cells
+                Object.keys(nestedItem).forEach(nestedKey => {
+                  const cell = document.createElement('div');
+                  cell.classList.add('tabulator-cell');
+                  cell.setAttribute('tabulator-field', nestedKey);
+                  cell.textContent = nestedItem[nestedKey];
+                  row.appendChild(cell);
+                });
+                table.appendChild(row);
               });
               return table;
             }
@@ -92,10 +99,10 @@ class TabulatorElement extends LitElement {
         }
       });
     });
-
+  
     return columns;
   }
-
+  
   _initializeTable() {
     const data = JSON.parse(this.src || '[]');
     this.table = new Tabulator(this.shadowRoot.getElementById('tabulator'), {
