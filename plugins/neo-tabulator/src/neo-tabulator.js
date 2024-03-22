@@ -4,6 +4,10 @@ import { tabulatorStyles } from './tabulatorStyles.css.js';
 import { tableStyles } from './tableStyles.css.js';
 
 class TabulatorElement extends LitElement {
+  static get styles() {
+    return [tabulatorStyles, tableStyles];
+  }
+
   static getMetaConfig() {
     // plugin contract information
     return {
@@ -32,12 +36,10 @@ class TabulatorElement extends LitElement {
     };
   }
 
-  static styles = [tabulatorStyles, tableStyles];
-
   constructor() {
     super();
     this.src = '';
-    this.schema= '';
+    this.schema = '';
   }
 
   firstUpdated() {
@@ -45,14 +47,12 @@ class TabulatorElement extends LitElement {
   }
 
   render() {
-    return html`<div id="tabulator"></div>`; // Container for the Tabulator table
+    return html`<div id="tabulator"></div>`;
   }
 
   setupTabulator() {
-    // Check if src data is provided
     if (!this.src) return;
-  
-    // Parse src data as JSON
+
     let jsonData;
     try {
       jsonData = JSON.parse(this.src);
@@ -60,65 +60,80 @@ class TabulatorElement extends LitElement {
       console.error('Error parsing JSON data:', error);
       return;
     }
-  
-    // Dynamically generate main table columns from the first item, excluding array fields
-    const firstItemKeys = Object.keys(jsonData[0]);
-    const mainColumns = firstItemKeys.reduce((acc, key) => {
-      if (!Array.isArray(jsonData[0][key])) {
-        acc.push({
-          title: key,
-          field: key,
-        });
-      }
-      return acc;
-    }, []);
-  
-    // Function to generate sub-table columns dynamically
-    const generateSubTableColumns = (nestedDataArray) => {
-      if (!Array.isArray(nestedDataArray) || nestedDataArray.length === 0) {
-        console.error('Invalid or empty nested data array');
-        return [];
-      }
-  
-      const objectKeys = Object.keys(nestedDataArray[0]);
-      return objectKeys.map(key => ({
-        title: key,
-        field: key,
-      }));
-    };
-  
-    // Define the main table
-    var table = new Tabulator(this.shadowRoot.querySelector("#tabulator"), {
+
+    let schema;
+    try {
+      schema = this.schema ? JSON.parse(this.schema) : null;
+    } catch (error) {
+      console.error('Error parsing schema:', error);
+      schema = null;
+    }
+
+    const columns = schema ? this.applySchemaMainColumns(schema.mainColumns) : this.generateDynamicColumns(jsonData);
+
+    new Tabulator(this.shadowRoot.querySelector("#tabulator"), {
       height: "311px",
       layout: "fitColumns",
       data: jsonData,
-      columns: mainColumns,
-      rowFormatter: function(row) {
-        for (let key in row.getData()) {
-          if (Array.isArray(row.getData()[key])) {
-            console.log("Creating subtable for key:", key, "with data:", row.getData()[key]);
-            var holderEl = document.createElement("div");
-            var tableEl = document.createElement("div");
-            holderEl.style.boxSizing = "border-box";
-            holderEl.style.padding = "10px 30px 10px 10px";
-            holderEl.style.borderTop = "1px solid #333";
-            holderEl.style.borderBottom = "1px solid #333";
-            tableEl.style.border = "1px solid #333";
-            holderEl.appendChild(tableEl);
-            row.getElement().appendChild(holderEl);
-  
-            // Dynamically generate columns for the sub-table
-            var subTable = new Tabulator(tableEl, {
-              layout: "fitColumns",
-              data: row.getData()[key],
-              columns: generateSubTableColumns(row.getData()[key])
-            });
-          }
+      columns: columns,
+      rowFormatter: (row) => {
+        if (schema && schema.subTables) {
+          this.setupSubTablesUsingSchema(row, schema.subTables);
+        } else {
+          this.setupDynamicSubTables(row, jsonData);
         }
       }
     });
   }
-  
+
+  applySchemaMainColumns(schemaMainColumns) {
+    return schemaMainColumns;
+  }
+
+  generateDynamicColumns(jsonData) {
+    const firstItemKeys = Object.keys(jsonData[0]);
+    return firstItemKeys.reduce((acc, key) => {
+      if (!Array.isArray(jsonData[0][key])) {
+        acc.push({ title: key, field: key });
+      }
+      return acc;
+    }, []);
+  }
+
+  setupSubTablesUsingSchema(row, subTablesSchema) {
+    Object.keys(subTablesSchema).forEach(key => {
+      if (Array.isArray(row.getData()[key])) {
+        this.createSubTable(row, key, subTablesSchema[key]);
+      }
+    });
+  }
+
+  setupDynamicSubTables(row, jsonData) {
+    Object.keys(jsonData[0]).forEach(key => {
+      if (Array.isArray(row.getData()[key])) {
+        const columns = this.generateDynamicColumns(row.getData()[key]);
+        this.createSubTable(row, key, columns);
+      }
+    });
+  }
+
+  createSubTable(row, key, columns) {
+    var holderEl = document.createElement("div");
+    var tableEl = document.createElement("div");
+    holderEl.style.boxSizing = "border-box";
+    holderEl.style.padding = "10px 30px 10px 10px";
+    holderEl.style.borderTop = "1px solid #333";
+    holderEl.style.borderBottom = "1px solid #333";
+    tableEl.style.border = "1px solid #333";
+    holderEl.appendChild(tableEl);
+    row.getElement().appendChild(holderEl);
+
+    new Tabulator(tableEl, {
+      layout: "fitColumns",
+      data: row.getData()[key],
+      columns: columns
+    });
+  }
 }
 
 customElements.define('neo-tabulator', TabulatorElement);
