@@ -52,6 +52,7 @@ class TabulatorElement extends LitElement {
     // Check if src data is provided
     if (!this.src) return;
   
+    // Parse src data as JSON
     let jsonData;
     try {
       jsonData = JSON.parse(this.src);
@@ -60,43 +61,31 @@ class TabulatorElement extends LitElement {
       return;
     }
   
-    let schemaData;
-    const hasSchema = this.schema && this.schema.trim() !== '';
-    if (hasSchema) {
-      try {
-        schemaData = JSON.parse(this.schema); // Parse the schema property if it exists
-      } catch (error) {
-        console.error('Error parsing schema:', error);
-        schemaData = null; // Reset schemaData to null if parsing fails
+    // Dynamically generate main table columns from the first item, excluding array fields
+    const firstItemKeys = Object.keys(jsonData[0]);
+    const mainColumns = firstItemKeys.reduce((acc, key) => {
+      if (!Array.isArray(jsonData[0][key])) {
+        acc.push({
+          title: key,
+          field: key,
+        });
       }
-    }
+      return acc;
+    }, []);
   
-    let mainColumns, generateSubTableColumns;
+    // Function to generate sub-table columns dynamically
+    const generateSubTableColumns = (nestedDataArray) => {
+      if (!Array.isArray(nestedDataArray) || nestedDataArray.length === 0) {
+        console.error('Invalid or empty nested data array');
+        return [];
+      }
   
-    if (schemaData && hasSchema) {
-      mainColumns = schemaData.mainColumns;
-      generateSubTableColumns = (key) => schemaData.subTables[key] || [];
-    } else {
-      // Dynamically generate main table columns from the first item, excluding array fields
-      const firstItemKeys = Object.keys(jsonData[0]);
-      mainColumns = firstItemKeys.reduce((acc, key) => {
-        if (!Array.isArray(jsonData[0][key])) {
-          acc.push({ title: key, field: key });
-        }
-        return acc;
-      }, []);
-  
-      // Function to generate sub-table columns dynamically
-      generateSubTableColumns = (nestedDataArray) => {
-        if (!Array.isArray(nestedDataArray) || nestedDataArray.length === 0) {
-          console.error('Invalid or empty nested data array');
-          return [];
-        }
-  
-        const objectKeys = Object.keys(nestedDataArray[0]);
-        return objectKeys.map(key => ({ title: key, field: key }));
-      };
-    }
+      const objectKeys = Object.keys(nestedDataArray[0]);
+      return objectKeys.map(key => ({
+        title: key,
+        field: key,
+      }));
+    };
   
     // Define the main table
     var table = new Tabulator(this.shadowRoot.querySelector("#tabulator"), {
@@ -105,37 +94,30 @@ class TabulatorElement extends LitElement {
       data: jsonData,
       columns: mainColumns,
       rowFormatter: function(row) {
-        Object.keys(row.getData()).forEach(key => {
-          const rowData = row.getData()[key];
-          if (Array.isArray(rowData)) {
+        for (let key in row.getData()) {
+          if (Array.isArray(row.getData()[key])) {
+            console.log("Creating subtable for key:", key, "with data:", row.getData()[key]);
             var holderEl = document.createElement("div");
             var tableEl = document.createElement("div");
-      
-            // Adjust these styles as necessary to ensure correct display
-            holderEl.style.marginTop = "10px";
-            holderEl.style.padding = "10px";
-            holderEl.style.border = "1px solid #ccc";
-            holderEl.style.boxShadow = "0px 0px 5px rgba(0,0,0,0.2)";
-            holderEl.className = 'sub-table-holder'; // Use a class for styling if preferred
-      
-            tableEl.style.width = "100%";
-      
+            holderEl.style.boxSizing = "border-box";
+            holderEl.style.padding = "10px 30px 10px 10px";
+            holderEl.style.borderTop = "1px solid #333";
+            holderEl.style.borderBottom = "1px solid #333";
+            tableEl.style.border = "1px solid #333";
             holderEl.appendChild(tableEl);
-            // Append holderEl to the cell of the specific field, not just the row
-            row.getCell(key).getElement().appendChild(holderEl);
-      
-            new Tabulator(tableEl, {
+            row.getElement().appendChild(holderEl);
+  
+            // Dynamically generate columns for the sub-table
+            var subTable = new Tabulator(tableEl, {
               layout: "fitColumns",
-              data: rowData,
-              columns: generateSubTableColumns(key)
+              data: row.getData()[key],
+              columns: generateSubTableColumns(row.getData()[key])
             });
           }
-        });
+        }
       }
-      
     });
   }
-  
   
 }
 
