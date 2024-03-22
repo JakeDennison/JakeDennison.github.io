@@ -45,7 +45,7 @@ class TabulatorElement extends LitElement {
     styleEl.textContent = tabulatorStyles + tableStyles;
     this.shadowRoot.appendChild(styleEl);
   }
-  
+
   updated(changedProperties) {
     if (changedProperties.has('src') && this.src) {
       this._updateTable();
@@ -59,39 +59,39 @@ class TabulatorElement extends LitElement {
 
     // Iterate over each item in data
     data.forEach(item => {
-        // Iterate over each key in item
-        Object.keys(item).forEach(key => {
-            // Check if the value of the key is an array (nested data)
-            if (Array.isArray(item[key])) {
-                // Define a column for the nested data
-                columns.push({
-                    title: key, // Customize title as needed
-                    field: key, // Field name should match the key
-                });
-            } else {
-                // Define a regular column for non-nested data
-                columns.push({
-                    title: key, // Customize title as needed
-                    field: key // Field name should match the key
-                });
-            }
-        });
+      // Iterate over each key in item
+      Object.keys(item).forEach(key => {
+        // Check if the value of the key is an array (nested data)
+        if (Array.isArray(item[key])) {
+          // Define a column for the nested data
+          columns.push({
+            title: key, // Customize title as needed
+            field: key, // Field name should match the key
+          });
+        } else {
+          // Define a regular column for non-nested data
+          columns.push({
+            title: key, // Customize title as needed
+            field: key // Field name should match the key
+          });
+        }
+      });
     });
 
     return columns;
-}
+  }
 
-_initializeTable() {
+  _initializeTable() {
     const data = JSON.parse(this.src || '[]');
     this.table = new Tabulator(this.shadowRoot.getElementById('tabulator'), {
-        data: data,
-        columns: this._generateColumns(data),
-        layout: "fitColumns",
-        rowFormatter: this._rowFormatter.bind(this) // Bind the rowFormatter function to the current context
+      data: data,
+      columns: this._generateColumns(data),
+      layout: "fitColumns",
+      rowFormatter: this._rowFormatter.bind(this) // Bind the rowFormatter function to the current context
     });
-}
+  }
 
-_rowFormatter(row) {
+  _rowFormatter(row) {
     // Create and style holder elements
     var holderEl = document.createElement("div");
     var tableEl = document.createElement("div");
@@ -108,21 +108,23 @@ _rowFormatter(row) {
     row.getElement().appendChild(holderEl);
 
     var subTable = new Tabulator(tableEl, {
-        layout: "fitColumns",
-        data: row.getData(), // Use row data as nested data
-        columns: this._generateColumns([row.getData()])[0].columns // Generate columns dynamically
+      layout: "fitColumns",
+      data: row.getData(), // Use row data as nested data
+      columns: this._generateColumns([row.getData()])[0].columns // Generate columns dynamically
     });
-}
 
-_updateTable() {
+    return holderEl; // Return the holder element containing the nested table
+  }
+
+  _updateTable() {
     const data = JSON.parse(this.src || '[]');
     this.table.setColumns(this._generateColumns(data)); // Update columns dynamically
     this.table.setData(data); // Update table data
-}
+  }
 
-render() {
+  render() {
     return html`<div id="tabulator"></div>`; // Container for the Tabulator table
-}
+  }
 
 
 }
