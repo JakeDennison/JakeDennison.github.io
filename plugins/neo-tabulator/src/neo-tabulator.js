@@ -67,7 +67,6 @@ class TabulatorElement extends LitElement {
                 columns.push({
                     title: key, // Customize title as needed
                     field: key, // Field name should match the key
-                    formatter: this._generateNestedTableFormatter(key) // Use a custom formatter for nested tables
                 });
             } else {
                 // Define a regular column for non-nested data
@@ -82,53 +81,36 @@ class TabulatorElement extends LitElement {
     return columns;
 }
 
-_generateNestedTableFormatter(key) {
-    return function(cell, formatterParams, onRendered) {
-        const nestedData = cell.getValue();
-        const table = document.createElement('div');
-        table.classList.add('tabulator');
-        table.setAttribute('tabulator-layout', 'fitColumns');
-        
-        // Create header row
-        const headerRow = document.createElement('div');
-        headerRow.classList.add('tabulator-row', 'tabulator-header');
-        const nestedItem = nestedData[0]; // Take the first object in the array as a sample
-        for (const nestedKey in nestedItem) {
-            if (nestedItem.hasOwnProperty(nestedKey)) {
-                const headerCell = document.createElement('div');
-                headerCell.classList.add('tabulator-cell');
-                headerCell.textContent = nestedKey;
-                headerRow.appendChild(headerCell);
-            }
-        }
-        table.appendChild(headerRow);
-
-        // Create data rows
-        nestedData.forEach(nestedItem => {
-            const row = document.createElement('div');
-            row.classList.add('tabulator-row');
-            for (const nestedKey in nestedItem) {
-                if (nestedItem.hasOwnProperty(nestedKey)) {
-                    const cell = document.createElement('div');
-                    cell.classList.add('tabulator-cell');
-                    cell.setAttribute('tabulator-field', nestedKey);
-                    cell.textContent = nestedItem[nestedKey];
-                    row.appendChild(cell);
-                }
-            }
-            table.appendChild(row);
-        });
-
-        return table;
-    };
-}
-
 _initializeTable() {
     const data = JSON.parse(this.src || '[]');
     this.table = new Tabulator(this.shadowRoot.getElementById('tabulator'), {
         data: data,
         columns: this._generateColumns(data),
-        layout: "fitColumns"
+        layout: "fitColumns",
+        rowFormatter: this._rowFormatter.bind(this) // Bind the rowFormatter function to the current context
+    });
+}
+
+_rowFormatter(row) {
+    // Create and style holder elements
+    var holderEl = document.createElement("div");
+    var tableEl = document.createElement("div");
+
+    holderEl.style.boxSizing = "border-box";
+    holderEl.style.padding = "10px 30px 10px 10px";
+    holderEl.style.borderTop = "1px solid #333";
+    holderEl.style.borderBottom = "1px solid #333";
+
+    tableEl.style.border = "1px solid #333";
+
+    holderEl.appendChild(tableEl);
+
+    row.getElement().appendChild(holderEl);
+
+    var subTable = new Tabulator(tableEl, {
+        layout: "fitColumns",
+        data: row.getData(), // Use row data as nested data
+        columns: this._generateColumns([row.getData()])[0].columns // Generate columns dynamically
     });
 }
 
