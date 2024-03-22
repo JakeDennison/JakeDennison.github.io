@@ -56,24 +56,52 @@ class TabulatorElement extends LitElement {
   _generateColumns(data) {
     if (!data || !data.length) return [];
 
-    const columnSet = new Set();
+    const columns = [];
+
+    // Iterate over each item in data
     data.forEach(item => {
-      Object.keys(item).forEach(key => columnSet.add(key));
+      // Iterate over each key in item
+      Object.keys(item).forEach(key => {
+        // Check if the value of the key is an array (nested data)
+        if (Array.isArray(item[key])) {
+          // Define a column for the nested data
+          columns.push({
+            title: key, // Customize title as needed
+            field: key, // Field name should match the key
+            formatter: function(cell, formatterParams, onRendered) {
+              // Create a new table element for the nested data
+              const table = document.createElement('div');
+              const subTable = new Tabulator(table, {
+                layout: "fitColumns",
+                data: cell.getValue(), // Use cell value as data for the nested table
+                columns: Object.keys(cell.getValue()[0]).map(subKey => ({
+                  title: subKey,
+                  field: subKey
+                }))
+              });
+              return table;
+            }
+          });
+        } else {
+          // Define a regular column for non-nested data
+          columns.push({
+            title: key, // Customize title as needed
+            field: key, // Field name should match the key
+            formatter: "plaintext" // Default formatter, adjust as needed
+          });
+        }
+      });
     });
 
-    return Array.from(columnSet).map(key => ({
-      title: key, // Customize title as needed, perhaps a mapping based on key names
-      field: key,
-      formatter: "plaintext", // Default formatter, adjust as needed
-    }));
+    return columns;
   }
 
   _initializeTable() {
     const data = JSON.parse(this.src || '[]');
     this.table = new Tabulator(this.shadowRoot.getElementById('tabulator'), {
-      data: data, // Set initial data
-      columns: this._generateColumns(data), // Generate columns dynamically
-      layout: "fitColumns", // Fit columns to width of table
+      data: data,
+      columns: this._generateColumns(data),
+      layout: "fitColumns",
     });
   }
 
