@@ -49,57 +49,71 @@ class TabulatorElement extends LitElement {
     // Parse src data as JSON
     let jsonData;
     try {
-      jsonData = JSON.parse(this.src);
+        jsonData = JSON.parse(this.src);
     } catch (error) {
-      console.error('Error parsing JSON data:', error);
-      return;
+        console.error('Error parsing JSON data:', error);
+        return;
     }
+
+    // Define table columns
+    const mainColumns = [];
+    const subTableColumns = [];
+
+    // Iterate through the keys of the first object to determine main columns and subtable columns
+    const firstObjectKeys = Object.keys(jsonData[0]);
+    firstObjectKeys.forEach(key => {
+        const column = {
+            title: key,
+            field: key
+        };
+        // Check if the key represents a subtable
+        if (Array.isArray(jsonData[0][key])) {
+            subTableColumns.push(column);
+        } else {
+            mainColumns.push(column);
+        }
+    });
 
     // Define table
     var table = new Tabulator(this.shadowRoot.querySelector("#tabulator"), {
-      height: "311px",
-      layout: "fitColumns",
-      columnDefaults: {
-        resizable: true,
-      },
-      data: jsonData,
-      rowFormatter: function(row) {
-        // Check if nested data exists
-        for (let key in row.getData()) {
-          if (Array.isArray(row.getData()[key])) {
-            // Create and style holder elements
-            var holderEl = document.createElement("div");
-            var tableEl = document.createElement("div");
+        height: "311px",
+        layout: "fitColumns",
+        columnDefaults: {
+            resizable: true,
+        },
+        data: jsonData,
+        columns: mainColumns,
+        rowFormatter: function(row) {
+            // Check if nested data exists
+            for (let key in row.getData()) {
+                if (Array.isArray(row.getData()[key])) {
+                    // Create and style holder elements
+                    var holderEl = document.createElement("div");
+                    var tableEl = document.createElement("div");
 
-            holderEl.style.boxSizing = "border-box";
-            holderEl.style.padding = "10px 30px 10px 10px";
-            holderEl.style.borderTop = "1px solid #333";
-            holderEl.style.borderBottom = "1px solid #333";
+                    holderEl.style.boxSizing = "border-box";
+                    holderEl.style.padding = "10px 30px 10px 10px";
+                    holderEl.style.borderTop = "1px solid #333";
+                    holderEl.style.borderBottom = "1px solid #333";
 
-            tableEl.style.border = "1px solid #333";
+                    tableEl.style.border = "1px solid #333";
 
-            holderEl.appendChild(tableEl);
+                    holderEl.appendChild(tableEl);
 
-            row.getElement().appendChild(holderEl);
+                    row.getElement().appendChild(holderEl);
 
-            // Create sub-table columns dynamically
-            var subTableColumns = [];
-            var nestedItem = row.getData()[key][0];
-            for (var subKey in nestedItem) {
-              subTableColumns.push({ title: subKey, field: subKey });
+                    // Create sub-table
+                    var subTable = new Tabulator(tableEl, {
+                        layout: "fitColumns",
+                        data: row.getData()[key],
+                        columns: subTableColumns
+                    });
+                }
             }
-
-            // Create sub-table
-            var subTable = new Tabulator(tableEl, {
-              layout: "fitColumns",
-              data: row.getData()[key],
-              columns: subTableColumns
-            });
-          }
         }
-      }
     });
-  }
+}
+
 }
 
 customElements.define('neo-tabulator', TabulatorElement);
