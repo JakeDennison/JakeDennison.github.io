@@ -83,7 +83,8 @@ class TabulatorElement extends LitElement {
         rowFormatter: function(row) {
             // Check if nested data exists
             for (let key in row.getData()) {
-                if (Array.isArray(row.getData()[key])) {
+              if (Array.isArray(row.getData()[key])) {
+                  console.log("Creating subtable for key:", key, "with data:", row.getData()[key]);
                     // Create and style holder elements
                     var holderEl = document.createElement("div");
                     var tableEl = document.createElement("div");
