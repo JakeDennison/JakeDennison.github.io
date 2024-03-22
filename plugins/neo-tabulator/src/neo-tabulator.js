@@ -105,24 +105,34 @@ class TabulatorElement extends LitElement {
       data: jsonData,
       columns: mainColumns,
       rowFormatter: function(row) {
-        for (let key in row.getData()) {
-          if (Array.isArray(row.getData()[key])) {
+        Object.keys(row.getData()).forEach(key => {
+          const rowData = row.getData()[key];
+          if (Array.isArray(rowData)) {
             var holderEl = document.createElement("div");
             var tableEl = document.createElement("div");
-            // Styling setup omitted for brevity
-  
+      
+            // Adjust these styles as necessary to ensure correct display
+            holderEl.style.marginTop = "10px";
+            holderEl.style.padding = "10px";
+            holderEl.style.border = "1px solid #ccc";
+            holderEl.style.boxShadow = "0px 0px 5px rgba(0,0,0,0.2)";
+            holderEl.className = 'sub-table-holder'; // Use a class for styling if preferred
+      
+            tableEl.style.width = "100%";
+      
             holderEl.appendChild(tableEl);
-            row.getElement().appendChild(holderEl);
-  
-            // Initialize sub-table with dynamically generated or schema-defined columns
+            // Append holderEl to the cell of the specific field, not just the row
+            row.getCell(key).getElement().appendChild(holderEl);
+      
             new Tabulator(tableEl, {
               layout: "fitColumns",
-              data: row.getData()[key],
-              columns: generateSubTableColumns(key) // Pass the key for schema-based or the whole nested array for dynamic
+              data: rowData,
+              columns: generateSubTableColumns(key)
             });
           }
-        }
+        });
       }
+      
     });
   }
   
