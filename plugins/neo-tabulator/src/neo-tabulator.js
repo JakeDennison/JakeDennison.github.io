@@ -59,84 +59,89 @@ class TabulatorElement extends LitElement {
 
     // Iterate over each item in data
     data.forEach(item => {
-      // Iterate over each key in item
-      Object.keys(item).forEach(key => {
-        // Check if the value of the key is an array (nested data)
-        if (Array.isArray(item[key])) {
-          // Define columns for the nested data
-          const nestedColumns = [];
-          const sampleNestedData = item[key][0]; // Take the first object in the array as a sample
-
-          // Iterate over keys of the nested object
-          for (const nestedKey in sampleNestedData) {
-            if (sampleNestedData.hasOwnProperty(nestedKey)) {
-              // Generate column definition for nested data
-              nestedColumns.push({
-                title: nestedKey, // Customize title as needed
-                field: key + "." + nestedKey, // Field name should match the key
-              });
-            }
-          }
-
-          // Add a column for the nested structure
-          columns.push({
-            title: key, // Customize title as needed
-            field: key, // Field name should match the key
-            columns: nestedColumns,
-            formatter: function(cell, formatterParams, onRendered) {
-              // Create a new table element for the nested data
-              const table = document.createElement('div');
-              table.classList.add('tabulator'); // Add Tabulator class to the nested table
-              table.setAttribute('tabulator-layout', 'fitColumns');
-              // Iterate over nested data and append rows
-              cell.getValue().forEach(nestedItem => {
-                const row = document.createElement('div');
-                row.classList.add('tabulator-row');
-                // Iterate over keys of nested item and append cells
-                Object.keys(nestedItem).forEach(nestedKey => {
-                  const cell = document.createElement('div');
-                  cell.classList.add('tabulator-cell');
-                  cell.setAttribute('tabulator-field', nestedKey);
-                  cell.textContent = nestedItem[nestedKey];
-                  row.appendChild(cell);
+        // Iterate over each key in item
+        Object.keys(item).forEach(key => {
+            // Check if the value of the key is an array (nested data)
+            if (Array.isArray(item[key])) {
+                // Define a column for the nested data
+                columns.push({
+                    title: key, // Customize title as needed
+                    field: key, // Field name should match the key
+                    formatter: this._generateNestedTableFormatter(key) // Use a custom formatter for nested tables
                 });
-                table.appendChild(row);
-              });
-              return table;
+            } else {
+                // Define a regular column for non-nested data
+                columns.push({
+                    title: key, // Customize title as needed
+                    field: key // Field name should match the key
+                });
             }
-          });
-        } else {
-          // Define a regular column for non-nested data
-          columns.push({
-            title: key, // Customize title as needed
-            field: key, // Field name should match the key
-            formatter: "plaintext" // Default formatter, adjust as needed
-          });
-        }
-      });
+        });
     });
 
     return columns;
-  }
+}
 
-  _initializeTable() {
+_generateNestedTableFormatter(key) {
+    return function(cell, formatterParams, onRendered) {
+        const nestedData = cell.getValue();
+        const table = document.createElement('div');
+        table.classList.add('tabulator');
+        table.setAttribute('tabulator-layout', 'fitColumns');
+        
+        // Create header row
+        const headerRow = document.createElement('div');
+        headerRow.classList.add('tabulator-row', 'tabulator-header');
+        const nestedItem = nestedData[0]; // Take the first object in the array as a sample
+        for (const nestedKey in nestedItem) {
+            if (nestedItem.hasOwnProperty(nestedKey)) {
+                const headerCell = document.createElement('div');
+                headerCell.classList.add('tabulator-cell');
+                headerCell.textContent = nestedKey;
+                headerRow.appendChild(headerCell);
+            }
+        }
+        table.appendChild(headerRow);
+
+        // Create data rows
+        nestedData.forEach(nestedItem => {
+            const row = document.createElement('div');
+            row.classList.add('tabulator-row');
+            for (const nestedKey in nestedItem) {
+                if (nestedItem.hasOwnProperty(nestedKey)) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('tabulator-cell');
+                    cell.setAttribute('tabulator-field', nestedKey);
+                    cell.textContent = nestedItem[nestedKey];
+                    row.appendChild(cell);
+                }
+            }
+            table.appendChild(row);
+        });
+
+        return table;
+    };
+}
+
+_initializeTable() {
     const data = JSON.parse(this.src || '[]');
     this.table = new Tabulator(this.shadowRoot.getElementById('tabulator'), {
-      data: data,
-      columns: this._generateColumns(data),
-      layout: "fitColumns",
+        data: data,
+        columns: this._generateColumns(data),
+        layout: "fitColumns"
     });
-  }
+}
 
-  _updateTable() {
+_updateTable() {
     const data = JSON.parse(this.src || '[]');
     this.table.setColumns(this._generateColumns(data)); // Update columns dynamically
     this.table.setData(data); // Update table data
-  }
+}
 
-  render() {
+render() {
     return html`<div id="tabulator"></div>`; // Container for the Tabulator table
-  }
+}
+
 
 }
 
