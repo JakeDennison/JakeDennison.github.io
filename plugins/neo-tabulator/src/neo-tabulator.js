@@ -34,13 +34,12 @@ class TabulatorElement extends LitElement {
     this.src = '';
   }
 
-  connectedCallback() {
-    super.connectedCallback();
+  firstUpdated() {
     this.setupTabulator();
   }
 
   render() {
-    return html`<div id="tabulator"></div>`; 
+    return html`<div id="tabulator"></div>`; // Container for the Tabulator table
   }
 
   setupTabulator() {
@@ -101,7 +100,6 @@ class TabulatorElement extends LitElement {
       }
     });
   }
-
 }
 
 customElements.define('neo-tabulator', TabulatorElement);
