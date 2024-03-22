@@ -32,75 +32,76 @@ class TabulatorElement extends LitElement {
   constructor() {
     super();
     this.src = '';
-    this.table = null; // Will hold the Tabulator instance
-  }
-
-  firstUpdated() {
-    this._initializeTable();
   }
 
   connectedCallback() {
     super.connectedCallback();
-    const styleEl = document.createElement('style');
-    styleEl.textContent = tabulatorStyles + tableStyles;
-    this.shadowRoot.appendChild(styleEl);
-  }
-
-  updated(changedProperties) {
-    if (changedProperties.has('src') && this.src) {
-      this._updateTable();
-    }
+    this.setupTabulator();
   }
 
   render() {
-    return html`<div id="tabulator"></div>`; // Container for the Tabulator table
+    return html`<div id="tabulator"></div>`; 
   }
 
-  _initializeTable() {
-    const data = JSON.parse(this.src || '[]');
-    this.table = new Tabulator(this.shadowRoot.getElementById('tabulator'), {
-      data: data,
+  setupTabulator() {
+    // Check if src data is provided
+    if (!this.src) return;
+
+    // Parse src data as JSON
+    let jsonData;
+    try {
+      jsonData = JSON.parse(this.src);
+    } catch (error) {
+      console.error('Error parsing JSON data:', error);
+      return;
+    }
+
+    // Define table
+    var table = new Tabulator(this.shadowRoot.querySelector("#tabulator"), {
       height: "311px",
       layout: "fitColumns",
-      resizableColumns: false,
-      tooltips: true,
-      columns: Object.keys(data[0]).map(key => ({ title: key, field: key })), // Generate main table columns dynamically
-      rowFormatter: this._rowFormatter.bind(this) // Bind the rowFormatter function to the current context
+      columnDefaults: {
+        resizable: true,
+      },
+      data: jsonData,
+      rowFormatter: function(row) {
+        // Check if nested data exists
+        for (let key in row.getData()) {
+          if (Array.isArray(row.getData()[key])) {
+            // Create and style holder elements
+            var holderEl = document.createElement("div");
+            var tableEl = document.createElement("div");
+
+            holderEl.style.boxSizing = "border-box";
+            holderEl.style.padding = "10px 30px 10px 10px";
+            holderEl.style.borderTop = "1px solid #333";
+            holderEl.style.borderBottom = "1px solid #333";
+
+            tableEl.style.border = "1px solid #333";
+
+            holderEl.appendChild(tableEl);
+
+            row.getElement().appendChild(holderEl);
+
+            // Create sub-table columns dynamically
+            var subTableColumns = [];
+            var nestedItem = row.getData()[key][0];
+            for (var subKey in nestedItem) {
+              subTableColumns.push({ title: subKey, field: subKey });
+            }
+
+            // Create sub-table
+            var subTable = new Tabulator(tableEl, {
+              layout: "fitColumns",
+              data: row.getData()[key],
+              columns: subTableColumns
+            });
+          }
+        }
+      }
     });
   }
 
-  _rowFormatter(row) {
-    var holderEl = document.createElement("div");
-    var tableEl = document.createElement("div");
-    holderEl.appendChild(tableEl);
-    row.getElement().appendChild(holderEl);
-
-    // Check if row data and items are defined
-    if (row.getData() && row.getData().items && Array.isArray(row.getData().items)) {
-        // Iterate over each item in the row data
-        row.getData().items.forEach(item => {
-            var subTableEl = document.createElement("div");
-            holderEl.appendChild(subTableEl);
-
-            var subTable = new Tabulator(subTableEl, {
-                layout: "fitColumns",
-                data: item.subItems || [], // Ensure subItems is an array
-                columns: Object.keys(item.subItems[0] || {}).map(key => ({ title: key, field: key })) // Generate columns dynamically
-            });
-        });
-    } else {
-        console.error("Row data or items are undefined or not an array:", row.getData());
-    }
-
-    return holderEl; // Return the holder element containing the nested table
-}
-
-
-  _updateTable() {
-    const data = JSON.parse(this.src || '[]');
-    this.table.setColumns(Object.keys(data[0]).map(key => ({ title: key, field: key }))); // Update main table columns dynamically
-    this.table.setData(data); // Update table data
-  }
 }
 
 customElements.define('neo-tabulator', TabulatorElement);
