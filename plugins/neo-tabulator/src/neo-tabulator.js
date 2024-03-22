@@ -73,7 +73,10 @@ class TabulatorElement extends LitElement {
 
     new Tabulator(this.shadowRoot.querySelector("#tabulator"), {
       height: "311px",
-      layout: "fitDataFill",
+      layout:"fitColumns",
+      columnDefaults:{
+        resizable:true,
+      },
       data: jsonData,
       columns: columns,
       rowFormatter: (row) => {
