@@ -1,7 +1,7 @@
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { Tabulator } from 'tabulator-tables';
-import tabulatorStyles from 'tabulator-tables/dist/css/tabulator_bootstrap5.min.css';
-import tableStyles from './tableStyles.css';
+import { tabulatorStyles } from './tabulatorStyles.css.js';
+import { tableStyles } from './tableStyles.css.js';
 
 class TabulatorElement extends LitElement {
   static getMetaConfig() {
@@ -27,12 +27,7 @@ class TabulatorElement extends LitElement {
     };
   }
 
-  static get styles() {
-    return css`
-      ${unsafeCSS(tabulatorStyles)}
-      ${unsafeCSS(tableStyles)}
-    `;
-  }
+  static styles = [tabulatorStyles, tableStyles];
 
   constructor() {
     super();
