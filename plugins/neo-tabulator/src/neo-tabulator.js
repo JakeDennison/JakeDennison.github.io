@@ -121,7 +121,7 @@ class TabulatorElement extends LitElement {
     var holderEl = document.createElement("div");
     var tableEl = document.createElement("div");
     holderEl.style.boxSizing = "border-box";
-    holderEl.style.padding = "10px 30px 10px 10px";
+    holderEl.style.padding = "10px";
     holderEl.style.borderTop = "1px solid #333";
     holderEl.style.borderBottom = "1px solid #333";
     tableEl.style.border = "1px solid #333";
