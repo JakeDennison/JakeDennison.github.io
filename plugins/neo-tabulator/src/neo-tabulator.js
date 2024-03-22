@@ -45,72 +45,67 @@ class TabulatorElement extends LitElement {
   setupTabulator() {
     // Check if src data is provided
     if (!this.src) return;
-
+  
     // Parse src data as JSON
     let jsonData;
     try {
-        jsonData = JSON.parse(this.src);
+      jsonData = JSON.parse(this.src);
     } catch (error) {
-        console.error('Error parsing JSON data:', error);
-        return;
+      console.error('Error parsing JSON data:', error);
+      return;
     }
-
-    // Define table columns
+  
+    // Define main table columns as before
     const mainColumns = [];
     const subTableColumns = [];
-
-    // Iterate through the keys of the first object to determine main columns and subtable columns
-    const firstObjectKeys = Object.keys(jsonData[0]);
-    firstObjectKeys.forEach(key => {
-        const column = {
-            title: key,
-            field: key
-        };
-        // Check if the key represents a subtable
-        if (Array.isArray(jsonData[0][key])) {
-            subTableColumns.push(column);
-        } else {
-            mainColumns.push(column);
-        }
-    });
-
-    // Define table
+  
+    // Define the function to generate sub-table columns dynamically
+    const generateSubTableColumns = (nestedDataArray) => {
+      if (!Array.isArray(nestedDataArray) || nestedDataArray.length === 0) {
+        console.error('Invalid or empty nested data array');
+        return [];
+      }
+  
+      // Get keys from the first object in the array to define columns
+      const objectKeys = Object.keys(nestedDataArray[0]);
+      return objectKeys.map(key => ({
+        title: key,
+        field: key,
+      }));
+    };
+  
+    // Main table setup...
     var table = new Tabulator(this.shadowRoot.querySelector("#tabulator"), {
-        height: "311px",
-        layout: "fitColumns",
-        data: jsonData,
-        columns: mainColumns,
-        rowFormatter: function(row) {
-            // Check if nested data exists
+      height: "311px",
+      layout: "fitColumns",
+      data: jsonData,
+      columns: mainColumns,
+      rowFormatter: function(row) {
         for (let key in row.getData()) {
-            if (Array.isArray(row.getData()[key])) {
-                console.log("Creating subtable for key:", key, "with data:", row.getData()[key]);
-                    // Create and style holder elements
-                    var holderEl = document.createElement("div");
-                    var tableEl = document.createElement("div");
-
-                    holderEl.style.boxSizing = "border-box";
-                    holderEl.style.padding = "10px 30px 10px 10px";
-                    holderEl.style.borderTop = "1px solid #333";
-                    holderEl.style.borderBottom = "1px solid #333";
-
-                    tableEl.style.border = "1px solid #333";
-
-                    holderEl.appendChild(tableEl);
-
-                    row.getElement().appendChild(holderEl);
-
-                    // Create sub-table
-                    var subTable = new Tabulator(tableEl, {
-                        layout: "fitColumns",
-                        data: row.getData()[key],
-                        columns: subTableColumns
-                    });
-                }
-            }
+          if (Array.isArray(row.getData()[key])) {
+            console.log("Creating subtable for key:", key, "with data:", row.getData()[key]);
+            var holderEl = document.createElement("div");
+            var tableEl = document.createElement("div");
+            holderEl.style.boxSizing = "border-box";
+            holderEl.style.padding = "10px 30px 10px 10px";
+            holderEl.style.borderTop = "1px solid #333";
+            holderEl.style.borderBottom = "1px solid #333";
+            tableEl.style.border = "1px solid #333";
+            holderEl.appendChild(tableEl);
+            row.getElement().appendChild(holderEl);
+  
+            // Use the dynamic column generation for the sub-table
+            var subTable = new Tabulator(tableEl, {
+              layout: "fitColumns",
+              data: row.getData()[key],
+              columns: generateSubTableColumns(row.getData()[key]) // Dynamically generate columns
+            });
+          }
         }
+      }
     });
-}
+  }
+  
 
 }
 
