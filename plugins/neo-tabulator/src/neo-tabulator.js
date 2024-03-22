@@ -55,18 +55,25 @@ class TabulatorElement extends LitElement {
       return;
     }
   
-    // Define main table columns as before
-    const mainColumns = [];
-    const subTableColumns = [];
+    // Dynamically generate main table columns from the first item, excluding array fields
+    const firstItemKeys = Object.keys(jsonData[0]);
+    const mainColumns = firstItemKeys.reduce((acc, key) => {
+      if (!Array.isArray(jsonData[0][key])) {
+        acc.push({
+          title: key,
+          field: key,
+        });
+      }
+      return acc;
+    }, []);
   
-    // Define the function to generate sub-table columns dynamically
+    // Function to generate sub-table columns dynamically
     const generateSubTableColumns = (nestedDataArray) => {
       if (!Array.isArray(nestedDataArray) || nestedDataArray.length === 0) {
         console.error('Invalid or empty nested data array');
         return [];
       }
   
-      // Get keys from the first object in the array to define columns
       const objectKeys = Object.keys(nestedDataArray[0]);
       return objectKeys.map(key => ({
         title: key,
@@ -74,7 +81,7 @@ class TabulatorElement extends LitElement {
       }));
     };
   
-    // Main table setup...
+    // Define the main table
     var table = new Tabulator(this.shadowRoot.querySelector("#tabulator"), {
       height: "311px",
       layout: "fitColumns",
@@ -94,11 +101,11 @@ class TabulatorElement extends LitElement {
             holderEl.appendChild(tableEl);
             row.getElement().appendChild(holderEl);
   
-            // Use the dynamic column generation for the sub-table
+            // Dynamically generate columns for the sub-table
             var subTable = new Tabulator(tableEl, {
               layout: "fitColumns",
               data: row.getData()[key],
-              columns: generateSubTableColumns(row.getData()[key]) // Dynamically generate columns
+              columns: generateSubTableColumns(row.getData()[key])
             });
           }
         }
@@ -106,7 +113,6 @@ class TabulatorElement extends LitElement {
     });
   }
   
-
 }
 
 customElements.define('neo-tabulator', TabulatorElement);
