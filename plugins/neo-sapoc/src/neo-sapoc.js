@@ -14,44 +14,37 @@ class sapocElement extends LitElement {
         clientid: {
           type: 'string',
           title: 'Client ID',
-          description: 'Provide client ID',
-          required: true
+          description: 'Provide client ID'
         },
         secret: {
           type: 'string',
           title: 'Secret',
-          description: 'Provide Secret',
-          required: true
+          description: 'Provide Secret'
         },
         EmployeeNumber: {
           type: 'string',
           title: 'Employee Number',
-          description: 'Unique identifier for the employee',
-          required: true
+          description: 'Unique identifier for the employee'
         },
         ActionReason: {
           type: 'string',
           title: 'Action reason',
-          description: 'Code representing the reason for the change',
-          required: true
+          description: 'Code representing the reason for the change'
         },
         Operation: {
           type: 'string',
           title: 'Operation',
-          description: 'Operation code to specify update type',
-          required: true
+          description: 'Operation code to specify update type'
         },
         StartDate: {
           type: 'string',
           title: 'Start date',
           description: 'The effective start date of the change - Format as YYYYMMDD e.g. 20240419',
-          required: true
         },
         EmailAddress: {
           type: 'string',
           title: 'Email Address',
-          description: 'New email address of the employee',
-          required: true
+          description: 'New email address of the employee'
         },
       },
       standardProperties: {
@@ -64,6 +57,11 @@ class sapocElement extends LitElement {
   static properties = {
     clientid: '',
     secret: '',
+    EmployeeNumber: '',
+    ActionReason: '',
+    Operation: '',
+    StartDate: '',
+    EmailAddress: '',
   };
 
   static get styles() {
@@ -73,7 +71,7 @@ class sapocElement extends LitElement {
       }
     `;
   }
-  
+
   constructor() {
     super();
     this.clientid = '';
@@ -85,7 +83,10 @@ class sapocElement extends LitElement {
     this.EmailAddress = '';
   }
 
-  render() {''
+  render() {
+    return html`
+    <button type="button" class="btn btn-info">Submit</button>
+  `;
   }
 }
 
