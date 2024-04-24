@@ -134,10 +134,9 @@ class sapocElement extends LitElement {
     }
   }
   
-
   async getAuthToken() {
     const tokenUrl = 'https://prd-dev-nams.authentication.us20.hana.ondemand.com/oauth/token';
-    const credentials = base64Encode(`${this.clientid}:${this.secret}`);
+    const credentials = await this.base64Encode(`${this.clientid}:${this.secret}`);
   
     try {
       const response = await fetch(tokenUrl, {
@@ -160,6 +159,21 @@ class sapocElement extends LitElement {
       return null;
     }
   }
+
+  async base64Encode(str) {
+    const blob = new Blob([str], {type: 'application/octet-stream'});
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result
+          .replace(/^data:.+;base64,/, ''); // Strip the Data URL prefix
+        resolve(base64String);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+  
 }
 
 customElements.define('neo-sapoc', sapocElement);
