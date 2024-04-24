@@ -18,7 +18,7 @@ class sapocElement extends LitElement {
         },
         secret: {
           type: 'string',
-          title: 'Secret',
+          title: 'Secret', 
           description: 'Provide Secret'
         },
         EmployeeNumber: {
@@ -62,6 +62,8 @@ class sapocElement extends LitElement {
     Operation: '',
     StartDate: '',
     EmailAddress: '',
+    apiResponse: { type: String },
+    apiError: { type: String }  
   };
 
   static get styles() {
@@ -81,12 +83,82 @@ class sapocElement extends LitElement {
     this.Operation = '';
     this.StartDate = '';
     this.EmailAddress = '';
+    this.apiResponse = '';
+    this.apiError = '';
   }
 
   render() {
     return html`
-    <button type="button" class="btn btn-info">Submit</button>
-  `;
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <button type="button" class="btn btn-info" @click=${this.handleSubmit}>Submit</button>
+      ${this.apiResponse ? html`<div class="alert alert-success">Response: ${this.apiResponse}</div>` : ''}
+      ${this.apiError ? html`<div class="alert alert-danger">Error: ${this.apiError}</div>` : ''}
+    `;
+  }
+  
+
+  async handleSubmit() {
+    const url = 'https://prd-dev-nams.it-cpi009-rt.cfapps.us20.hana.ondemand.com/http/zhr_inf_employee_actions/change_naw';
+    const data = {
+      ChangeNAW: {
+        NawDetails: {
+          EmployeeNumber: this.EmployeeNumber,
+          ActionReason: this.ActionReason,
+          Operation: this.Operation,
+          StartDate: this.StartDate,
+          EmailAddress: this.EmailAddress,
+        }
+      }
+    };
+  
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await this.getAuthToken()}`
+        },
+        body: JSON.stringify(data)
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Failed to update employee information: ${response.statusText}`);
+      }
+  
+      const responseBody = await response.json();
+      this.apiResponse = JSON.stringify(responseBody, null, 2);
+      this.apiError = '';  // Clear previous errors if the call was successful
+    } catch (error) {
+      this.apiResponse = '';  // Clear previous responses if the call failed
+      this.apiError = error.message;
+    }
+  }
+  
+
+  async getAuthToken() {
+    const tokenUrl = 'https://prd-dev-nams.authentication.us20.hana.ondemand.com/oauth/token';
+    const credentials = base64Encode(`${this.clientid}:${this.secret}`);
+  
+    try {
+      const response = await fetch(tokenUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${credentials}`,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'grant_type=client_credentials'
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to retrieve access token');
+      }
+  
+      const data = await response.json();
+      return data.access_token;
+    } catch (error) {
+      console.error('Error fetching access token:', error);
+      return null;
+    }
   }
 }
 
