@@ -98,25 +98,23 @@ class sapocElement extends LitElement {
   
 
   async handleSubmit() {
-    const url = 'https://prd-dev-nams.prod.apimanagement.us20.hana.ondemand.com/https/changeNaw';
+    const apiUrl = 'https://emea-webinars.workflowcloud.com/api/v1/workflow/published/89b7a400-29cd-4187-b271-cec4fd58c192/instances?token=EqxecSpNmiImHGy7ycYVNNl2rVerRyvyAoEgXXyNW3ICmGlsQIuWDmH4htr3XAeVAvPJdl';
+    
     const data = {
-      ChangeNAW: {
-        NawDetails: {
-          EmployeeNumber: this.EmployeeNumber,
-          ActionReason: this.ActionReason,
-          Operation: this.Operation,
-          StartDate: this.StartDate,
-          EmailAddress: this.EmailAddress,
-        }
+      startData: {
+        se_emailaddress: this.EmailAddress,
+        se_startdate: this.StartDate,
+        se_operation: this.Operation,
+        se_actionreason: this.ActionReason,
+        se_employeenumber: this.EmployeeNumber
       }
     };
-  
+
     try {
-      const response = await fetch(url, {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${await this.getAuthToken()}`
         },
         body: JSON.stringify(data)
       });
@@ -127,53 +125,12 @@ class sapocElement extends LitElement {
   
       const responseBody = await response.json();
       this.apiResponse = JSON.stringify(responseBody, null, 2);
-      this.apiError = '';
+      this.apiError = '';  // Clear previous errors if the call was successful
     } catch (error) {
-      this.apiResponse = '';
+      this.apiResponse = '';  // Clear previous responses if the call failed
       this.apiError = error.message;
     }
   }
-  
-  async getAuthToken() {
-    const tokenUrl = 'https://prd-dev-nams.authentication.us20.hana.ondemand.com/oauth/token';
-    const credentials = await this.base64Encode(`${this.clientid}:${this.secret}`);
-  
-    try {
-      const response = await fetch(tokenUrl, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Basic ${credentials}`,
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'grant_type=client_credentials'
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to retrieve access token');
-      }
-  
-      const data = await response.json();
-      return data.access_token;
-    } catch (error) {
-      console.error('Error fetching access token:', error);
-      return null;
-    }
-  }
-
-  async base64Encode(str) {
-    const blob = new Blob([str], {type: 'application/octet-stream'});
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result
-          .replace(/^data:.+;base64,/, '');
-        resolve(base64String);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  }
-  
 }
 
 customElements.define('neo-sapoc', sapocElement);
