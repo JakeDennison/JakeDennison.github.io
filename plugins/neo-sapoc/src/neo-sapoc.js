@@ -113,6 +113,7 @@ class sapocElement extends LitElement {
       }
   
       const data = await response.json();
+      console.log('Access token:', data.access_token); // Logging the access token
       return data.access_token;
     } catch (error) {
       console.error('Error fetching access token:', error);
