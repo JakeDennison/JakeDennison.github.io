@@ -98,7 +98,7 @@ class sapocElement extends LitElement {
   
 
   async handleSubmit() {
-    const url = 'https://prd-dev-nams.it-cpi009-rt.cfapps.us20.hana.ondemand.com/http/zhr_inf_employee_actions/change_naw';
+    const url = 'https://prd-dev-nams.prod.apimanagement.us20.hana.ondemand.com/https/changeNaw';
     const data = {
       ChangeNAW: {
         NawDetails: {
