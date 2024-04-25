@@ -96,7 +96,30 @@ class sapocElement extends LitElement {
     `;
   }
   
-
+  async getAuthToken() {
+    const tokenUrl = 'https://prd-dev-nams.authentication.us20.hana.ondemand.com/oauth/token';
+  
+    try {
+      const response = await fetch(tokenUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `grant_type=client_credentials&client_id=${encodeURIComponent(this.clientid)}&client_secret=${encodeURIComponent(this.secret)}`
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to retrieve access token');
+      }
+  
+      const data = await response.json();
+      return data.access_token;
+    } catch (error) {
+      console.error('Error fetching access token:', error);
+      return null;
+    }
+  }
+  
   async handleSubmit() {
     const url = 'https://prd-dev-nams.prod.apimanagement.us20.hana.ondemand.com/https/changeNaw';
     const data = {
@@ -112,11 +135,16 @@ class sapocElement extends LitElement {
     };
   
     try {
+      const authToken = await this.getAuthToken();
+      if (!authToken) {
+        throw new Error('Failed to obtain access token');
+      }
+  
       const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${await this.getAuthToken()}`
+          'Authorization': `Bearer ${authToken}`
         },
         body: JSON.stringify(data)
       });
@@ -134,45 +162,6 @@ class sapocElement extends LitElement {
     }
   }
   
-  async getAuthToken() {
-    const tokenUrl = 'https://prd-dev-nams.authentication.us20.hana.ondemand.com/oauth/token';
-    const credentials = await this.base64Encode(`${this.clientid}:${this.secret}`);
-  
-    try {
-      const response = await fetch(tokenUrl, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Basic ${credentials}`,
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'grant_type=client_credentials'
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to retrieve access token');
-      }
-  
-      const data = await response.json();
-      return data.access_token;
-    } catch (error) {
-      console.error('Error fetching access token:', error);
-      return null;
-    }
-  }
-
-  async base64Encode(str) {
-    const blob = new Blob([str], {type: 'application/octet-stream'});
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result
-          .replace(/^data:.+;base64,/, '');
-        resolve(base64String);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  }
   
 }
 
