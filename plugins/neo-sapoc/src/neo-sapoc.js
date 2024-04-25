@@ -115,7 +115,6 @@ class sapocElement extends LitElement {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${await this.getAuthToken()}`
         },
         body: JSON.stringify(data)
       });
