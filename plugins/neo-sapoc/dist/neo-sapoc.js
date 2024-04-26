@@ -4,16 +4,16 @@
         display: block;
       }
       .sapoc-container{
-        font-family: --ntx-form-theme-font-family;
-        font-size: --ntx-form-theme-text-input-size;
+        font-family:  var(--ntx-form-theme-font-family);
+        font-size: var(--ntx-form-theme-text-input-size);
 
       }
       .sapoc-label{
-        font-size: --ntx-form-theme-text-label-size
+        font-size: var(--ntx-form-theme-text-label-size)
 
       }
       .btn-sapoc{
-        background-color: --ntx-form-theme-color-primary;
+        background-color: var(--ntx-form-theme-color-primary);
         color: #FFFFFF;
         border-radius: 4px;
       }
