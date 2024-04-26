@@ -87,9 +87,7 @@ class sapocElement extends LitElement {
         border-radius: 4px;
       }
       .btn-sapoc:hover{
-        background-color: var(--bs-btn-hover-bg);
-        border-color: var(--bs-btn-hover-border-color);
-        color: var(--bs-btn-hover-color);
+        background-color: calc(var(--ntx-form-theme-color-primary) - 10%);
         text-decoration: none;
       }
     `;
