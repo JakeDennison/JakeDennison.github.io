@@ -113,7 +113,7 @@ class sapocElement extends LitElement {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="sapoc-container">
-        <button type="button" class="btn btn-sapoc" @click=${this.handleSubmit} ?disabled=${this.submitting}>Change NAW</button>
+        <button type="button" class="btn btn-sapoc" @click=${this.handleSubmit}>Change NAW</button>
         ${this.submitting ? html`<div class="sapoc-label spinner-border spinner-border-sm mx-2 text-primary" role="status"><span class="visually-hidden">Waiting...</span></div>` : ''}
         ${this.apiResponse ? this.renderApiResponse() : ''}
         ${this.apiError ? html`<div class="sapoc-label alert alert-danger">Error: ${this.apiError}</div>` : ''}
@@ -159,6 +159,7 @@ class sapocElement extends LitElement {
   }
 
   async handleSubmit() {
+    this.submitting = true;
     const url = 'https://prd-dev-nams.prod.apimanagement.us20.hana.ondemand.com/https/changeNaw';
     const data = {
       ChangeNAW: {
