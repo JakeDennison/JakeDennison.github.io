@@ -18,7 +18,7 @@ class sapocElement extends LitElement {
         },
         secret: {
           type: 'string',
-          title: 'Secret', 
+          title: 'Secret',
           description: 'Provide Secret'
         },
         EmployeeNumber: {
@@ -63,13 +63,34 @@ class sapocElement extends LitElement {
     StartDate: '',
     EmailAddress: '',
     apiResponse: { type: String },
-    apiError: { type: String }  
+    apiError: { type: String },
+    submitting: { type: Boolean }
   };
 
   static get styles() {
     return css`
       :host {
         display: block;
+      }
+      .sapoc-container{
+        font-family: --ntx-form-theme-font-family;
+        font-size: --ntx-form-theme-text-input-size;
+
+      }
+      .sapoc-label{
+        font-size: --ntx-form-theme-text-label-size
+
+      }
+      .btn-sapoc{
+        background-color: --ntx-form-theme-color-primary;
+        color: #FFFFFF;
+        border-radius: 4px;
+      }
+      .btn-sapoc:hover{
+        background-color: var(--bs-btn-hover-bg);
+        border-color: var(--bs-btn-hover-border-color);
+        color: var(--bs-btn-hover-color);
+        text-decoration: none;
       }
     `;
   }
@@ -85,20 +106,36 @@ class sapocElement extends LitElement {
     this.EmailAddress = '';
     this.apiResponse = '';
     this.apiError = '';
+    this.submitting = false
   }
 
   render() {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <button type="button" class="btn btn-info" @click=${this.handleSubmit}>Submit</button>
-      ${this.apiResponse ? html`<div class="alert alert-success">Response: ${this.apiResponse}</div>` : ''}
-      ${this.apiError ? html`<div class="alert alert-danger">Error: ${this.apiError}</div>` : ''}
+      <div class="sapoc-container">
+        <button type="button" class="btn btn-sapoc" @click=${this.handleSubmit} ?disabled=${this.submitting}>Submit</button>
+        ${this.submitting ? html`<div class="sapoc-label spinner-border spinner-border-sm mx-2 text-primary" role="status"><span class="visually-hidden">Waiting...</span></div>` : ''}
+        ${this.apiResponse ? this.renderApiResponse() : ''}
+        ${this.apiError ? html`<div class="sapoc-label alert alert-danger">Error: ${this.apiError}</div>` : ''}
+      </div>
     `;
   }
+
+  renderApiResponse() {
+    const responseObj = JSON.parse(this.apiResponse);
+    const messages = responseObj.ChangeNAWResponse.Messages;
   
+    const messageElements = messages.map(message => html`
+      <div class="p-1 my-2 sapoc-label alert alert-success">
+        Number: ${message.Number} Message: ${message.Message}
+      </div>`);
+  
+    return html`${messageElements}`;
+  }
+
   async getAuthToken() {
     const tokenUrl = 'https://prd-dev-nams.authentication.us20.hana.ondemand.com/oauth/token';
-  
+
     try {
       const response = await fetch(tokenUrl, {
         method: 'POST',
@@ -107,11 +144,11 @@ class sapocElement extends LitElement {
         },
         body: `grant_type=client_credentials&client_id=${encodeURIComponent(this.clientid)}&client_secret=${encodeURIComponent(this.secret)}`
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to retrieve access token');
       }
-  
+
       const data = await response.json();
       console.log('Access token:', data.access_token); // Logging the access token
       return data.access_token;
@@ -120,7 +157,7 @@ class sapocElement extends LitElement {
       return null;
     }
   }
-  
+
   async handleSubmit() {
     const url = 'https://prd-dev-nams.prod.apimanagement.us20.hana.ondemand.com/https/changeNaw';
     const data = {
@@ -134,13 +171,13 @@ class sapocElement extends LitElement {
         }
       }
     };
-  
+
     try {
       const authToken = await this.getAuthToken();
       if (!authToken) {
         throw new Error('Failed to obtain access token');
       }
-  
+
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -149,21 +186,23 @@ class sapocElement extends LitElement {
         },
         body: JSON.stringify(data)
       });
-  
+
       if (!response.ok) {
         throw new Error(`Failed to update employee information: ${response.statusText}`);
       }
-  
+
       const responseBody = await response.json();
       this.apiResponse = JSON.stringify(responseBody, null, 2);
       this.apiError = '';
     } catch (error) {
       this.apiResponse = '';
       this.apiError = error.message;
+    } finally {
+      this.submitting = false;
     }
   }
-  
-  
+
+
 }
 
 customElements.define('neo-sapoc', sapocElement);
