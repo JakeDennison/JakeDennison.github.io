@@ -159,6 +159,7 @@ class sapocElement extends LitElement {
 
   async handleSubmit() {
     this.submitting = true;
+    console.log('Origin Domain:', window.location.origin);
     const url = 'https://prd-dev-nams.prod.apimanagement.us20.hana.ondemand.com/https/changeNaw';
     const data = {
       ChangeNAW: {
