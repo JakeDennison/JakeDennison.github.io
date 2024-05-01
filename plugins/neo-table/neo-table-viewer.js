@@ -257,6 +257,7 @@ export class MyTable extends LitElement {
             `;
         } else {
             // Render simple object
+            console.log("nested list detected")
             return html`
                 <ul class="nested-list">
                     ${Object.entries(field).map(([key, value]) => html`
