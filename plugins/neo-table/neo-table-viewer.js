@@ -231,12 +231,27 @@ export class MyTable extends LitElement {
             </table>
         `;
     } else if (typeof field === 'object' && field !== null) {
-        // Check if the object contains nested JSON
-        if (Object.keys(field).some(key => typeof field[key] === 'object' && field[key] !== null)) {
+        // Check if any value in the object is itself an object
+        if (Object.values(field).some(value => typeof value === 'object' && value !== null)) {
             return html`
                 <button @click="${() => this.toggleRow(field)}">Expand</button>
                 <div class="nested-table" style="display: none;">
-                    ${this.renderNestedTable(field)}
+                    ${Object.entries(field).map(([key, value]) => {
+                        if (typeof value === 'object' && value !== null) {
+                            return html`
+                                <table class="table mb-2 p-1">
+                                    <caption>${key}</caption>
+                                    ${this.renderNestedTable(value)}
+                                </table>
+                            `;
+                        } else {
+                            return html`
+                                <ul class="nested-list">
+                                    <li>${key}: ${value !== null ? value : '-'}</li>
+                                </ul>
+                            `;
+                        }
+                    })}
                 </div>
             `;
         } else {
@@ -244,7 +259,7 @@ export class MyTable extends LitElement {
             return html`
                 <ul class="nested-list">
                     ${Object.entries(field).map(([key, value]) => html`
-                        <li>${value !== null ? value : '-'}</li>
+                        <li>${key}: ${value !== null ? value : '-'}</li>
                     `)}
                 </ul>
             `;
