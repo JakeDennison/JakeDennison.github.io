@@ -233,6 +233,7 @@ export class MyTable extends LitElement {
     } else if (typeof field === 'object' && field !== null) {
         // Check if any value in the object is itself an object
         if (Object.values(field).some(value => typeof value === 'object' && value !== null)) {
+          console.log("nested object detected")
             return html`
                 <button @click="${() => this.toggleRow(field)}">Expand</button>
                 <div class="nested-table" style="display: none;">
