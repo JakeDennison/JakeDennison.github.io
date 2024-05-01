@@ -219,65 +219,41 @@ export class MyTable extends LitElement {
 
   renderField(field) {
     if (Array.isArray(field)) {
-      return html`
-        <table class="table mb-2 p-1">
-          <tbody>
-            ${field.map(item => html`
-              <tr>
-                <td>${this.renderField(item)}</td>
-              </tr>
-            `)}
-          </tbody>
-        </table>
-      `;
-    } else if (typeof field === 'object' && field !== null) {
-      // Check if the object contains nested JSON
-      if (Object.values(field).some(value => Array.isArray(value))) {
         return html`
-          ${Object.entries(field).map(([key, value]) => {
-          if (Array.isArray(value)) {
-            return html`
-                <tr>
-                  <td class="nested-table">
-                    <table class="table mb-2 p-1">
-                      <tbody>
+            <table class="table mb-2 p-1">
+                <tbody>
+                    ${field.map(item => html`
                         <tr>
-                          <th>${key}</th>
-                        </tr>
-                        ${value.map(item => html`
-                          <tr>
                             <td>${this.renderField(item)}</td>
-                          </tr>
-                        `)}
-                      </tbody>
-                    </table>
-                  </td>
-                </tr>
-              `;
-          } else {
+                        </tr>
+                    `)}
+                </tbody>
+            </table>
+        `;
+    } else if (typeof field === 'object' && field !== null) {
+        // Check if the object contains nested JSON
+        if (Object.keys(field).some(key => typeof field[key] === 'object' && field[key] !== null)) {
             return html`
-                <tr>
-                  <th>${key}</th>
-                  <td>${this.renderField(value)}</td>
-                </tr>
-              `;
-          }
-        })}
-        `;
-      } else {
-        // Render simple object
-        return html`
-          <ul class="nested-list">
-            ${Object.entries(field).map(([key, value]) => html`
-              <li>${value !== null ? value : '-'}</li>
-            `)}
-          </ul>
-        `;
-      }
+                <button @click="${() => this.toggleRow(field)}">Expand</button>
+                <div class="nested-table" style="display: none;">
+                    ${this.renderNestedTable(field)}
+                </div>
+            `;
+        } else {
+            // Render simple object
+            return html`
+                <ul class="nested-list">
+                    ${Object.entries(field).map(([key, value]) => html`
+                        <li>${value !== null ? value : '-'}</li>
+                    `)}
+                </ul>
+            `;
+        }
     } else {
-      return field !== null ? field : '-';
+        return field !== null ? field : '-';
     }
-  }
+}
+
 
   renderNestedTable(data) {
     return html`
