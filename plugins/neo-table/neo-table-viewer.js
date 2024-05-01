@@ -232,8 +232,9 @@ export class MyTable extends LitElement {
         `;
     } else if (typeof field === 'object' && field !== null) {
         // Check if any value in the object is itself an object
+        console.log("Before checking for nested objects");
         if (Object.values(field).some(value => typeof value === 'object' && value !== null)) {
-          console.log("nested object detected")
+            console.log("nested object detected");
             return html`
                 <button @click="${() => this.toggleRow(field)}">Expand</button>
                 <div class="nested-table" style="display: none;">
@@ -257,7 +258,7 @@ export class MyTable extends LitElement {
             `;
         } else {
             // Render simple object
-            console.log("nested list detected")
+            console.log("nested list detected");
             return html`
                 <ul class="nested-list">
                     ${Object.entries(field).map(([key, value]) => html`
