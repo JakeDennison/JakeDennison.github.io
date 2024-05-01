@@ -145,8 +145,6 @@ export class MyTable extends LitElement {
     return data;
   }
 
-
-
   renameKeys(data) {
     // Parse the JSON string to get the key mappings
     const keyMappings = JSON.parse(this.replaceKeys).keyMappings;
@@ -219,85 +217,64 @@ export class MyTable extends LitElement {
 
   renderField(field) {
     if (Array.isArray(field)) {
-        return html`
-            <table class="table mb-2 p-1">
-                <tbody>
-                    ${field.map(item => html`
-                        <tr>
-                            <td>${this.renderField(item)}</td>
-                        </tr>
-                    `)}
-                </tbody>
-            </table>
-        `;
+      return html`
+        <table class="table mb-2 p-1">
+          <tbody>
+            ${field.map(item => html`
+              <tr>
+                <td>${this.renderField(item)}</td>
+              </tr>
+            `)}
+          </tbody>
+        </table>
+      `;
     } else if (typeof field === 'object' && field !== null) {
-        // Check if any value in the object is itself an object
-        console.log("Before checking for nested objects");
-        if (Object.values(field).some(value => typeof value === 'object' && value !== null)) {
-            console.log("nested object detected");
-            return html`
-                <button @click="${() => this.toggleRow(field)}">Expand</button>
-                <div class="nested-table" style="display: none;">
-                    ${Object.entries(field).map(([key, value]) => {
-                        if (typeof value === 'object' && value !== null) {
-                            return html`
-                                <table class="table mb-2 p-1">
-                                    <caption>${key}</caption>
-                                    ${this.renderNestedTable(value)}
-                                </table>
-                            `;
-                        } else {
-                            return html`
-                                <ul class="nested-list">
-                                    <li>${key}: ${value !== null ? value : '-'}</li>
-                                </ul>
-                            `;
-                        }
-                    })}
-                </div>
-            `;
-        } else {
-            // Render simple object
-            console.log("nested list detected");
-            return html`
-                <ul class="nested-list">
-                    ${Object.entries(field).map(([key, value]) => html`
-                        <li>${key}: ${value !== null ? value : '-'}</li>
-                    `)}
-                </ul>
-            `;
-        }
+      // Check if any value in the object is itself an object
+      if (Object.values(field).some(value => typeof value === 'object' && value !== null)) {
+        return html`
+          <button @click="${() => this.toggleRow(field)}">Expand</button>
+          <div class="nested-table" style="display: none;">
+            ${Object.entries(field).map(([key, value]) => {
+              if (typeof value === 'object' && value !== null) {
+                return html`
+                  <table class="table mb-2 p-1">
+                    <caption>${key}</caption>
+                    ${this.renderField(value)}
+                  </table>
+                `;
+              } else {
+                return html`
+                  <ul class="nested-list">
+                    <li>${key}: ${value !== null ? value : '-'}</li>
+                  </ul>
+                `;
+              }
+            })}
+          </div>
+        `;
+      } else {
+        // Render simple object
+        return html`
+          <ul class="nested-list">
+            ${Object.entries(field).map(([key, value]) => html`
+              <li>${key}: ${value !== null ? value : '-'}</li>
+            `)}
+          </ul>
+        `;
+      }
     } else {
-        return field !== null ? field : '-';
+      return field !== null ? field : '-';
     }
-}
-
-
-  renderNestedTable(data) {
-    return html`
-      <table class="table mb-2 p-1">
-        <tbody>
-          ${Object.entries(data).map(([key, value]) => html`
-            <tr>
-              <th>${key}</th>
-              <td>
-                ${Array.isArray(value) ? this.renderNestedTable(value) : value}
-              </td>
-            </tr>
-          `)}
-        </tbody>
-      </table>
-    `;
   }
-  
+
   render() {
     const data = this.parseDataObject();
-  
+
     // Display error message if present
     if (this.errorMessage) {
       return html`<p class="error-message">${this.errorMessage}</p>`;
     }
-  
+
     if (!data || data.length === 0) {
       return html`
         <div class="alert alert-secondary" role="alert">
@@ -305,24 +282,24 @@ export class MyTable extends LitElement {
         </div>
       `;
     }
-  
+
     const startIndex = (this.currentPage - 1) * parseInt(this.pageItemLimit, 10);
     const endIndex = startIndex + parseInt(this.pageItemLimit, 10);
     const paginatedData = data.slice(startIndex, endIndex);
     const totalPages = Math.ceil(data.length / parseInt(this.pageItemLimit, 10));
     this.totalPages = totalPages; // Assign to component property
-  
+
     // Calculate the range of pages to display
     const maxPagesToShow = 5;
     const pageRange = Math.min(totalPages, maxPagesToShow);
     let startPage = Math.max(1, this.currentPage - Math.floor(pageRange / 2));
     const endPage = Math.min(totalPages, startPage + pageRange - 1);
-  
+
     // Adjust startPage if it exceeds the valid range
     if (endPage - startPage + 1 < pageRange) {
       startPage = Math.max(1, endPage - pageRange + 1);
     }
-  
+
     return html`
       <style>
         .page-txt-link {
@@ -354,7 +331,7 @@ export class MyTable extends LitElement {
               <tr>
                 ${Object.values(row).map(value => html`
                   <td>
-                    ${Array.isArray(value) ? this.renderNestedTable(value) : value}
+                    ${this.renderField(value)}
                   </td>
                 `)}
               </tr>
