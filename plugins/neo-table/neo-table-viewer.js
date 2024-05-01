@@ -239,7 +239,7 @@ export class MyTable extends LitElement {
                 return html`
                   <table class="table mb-2 p-1">
                     <caption>${key}</caption>
-                    ${this.renderField(value)}
+                    ${this.renderNestedTable(value)}
                   </table>
                 `;
               } else {
@@ -266,7 +266,7 @@ export class MyTable extends LitElement {
       return field !== null ? field : '-';
     }
   }
-
+  
   render() {
     const data = this.parseDataObject();
 
