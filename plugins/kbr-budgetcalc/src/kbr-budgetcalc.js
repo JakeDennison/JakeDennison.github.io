@@ -5,7 +5,7 @@ class BudgetCalcElement extends LitElement {
     return {
       dataobj: { type: String },
       mode: { type: String, default: 'New' },
-      listitems: { type: String },
+      listitems: { type: Object },
     };
   }
 
@@ -65,7 +65,7 @@ class BudgetCalcElement extends LitElement {
   constructor() {
     super();
     this.dataobj = '';
-    this.listitems = '[]';
+    this.listitems = [];
   }
 
   render() {
