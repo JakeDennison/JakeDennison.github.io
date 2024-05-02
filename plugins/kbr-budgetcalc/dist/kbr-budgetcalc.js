@@ -45,20 +45,20 @@
           </div>
         </div>
       `))}
-    `}updateStatus(t,e){this.statusColors={...this.statusColors,[t]:{"Not Approved":"bg-danger","Review Required":"bg-warning",Approved:"bg-success"}[e]},this.requestUpdate()}render(){const t=this.listitems.split(",");return T`
+    `}updateStatus(t,e){this.statusColors={...this.statusColors,[t]:{"Not Approved":"border-danger","Review Required":"border-warning",Approved:"border-success"}[e]},this.requestUpdate()}render(){const t=this.listitems.split(",");return T`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
         <h2>Budget Calculator</h2>
         <p>Mode: ${this.mode}</p>
         ${t.map((t=>T`
           <div class="card ${this.statusColors[t]||""}">
-            <div class="card-header">
+            <div class="card-header ${this.statusColors[t]||""}">
               Item: ${t}
             </div>
             <div class="card-body d-flex flex-wrap">
               ${this.createMonthInputs(t)}
             </div>
-            <div class="d-flex justify-content-end card-footer">
+            <div class="d-flex justify-content-end card-footer ${this.statusColors[t]||""}">
               <div class="btn-group" role="group" aria-label="Approval Status">
                 <button type="button" class="btn btn-danger" @click="${()=>this.updateStatus(t,"Not Approved")}">Not Approved</button>
                 <button type="button" class="btn btn-warning" @click="${()=>this.updateStatus(t,"Review Required")}">Review Required</button>

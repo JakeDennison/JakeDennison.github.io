@@ -126,9 +126,9 @@ class BudgetCalcElement extends LitElement {
 
   updateStatus(item, status) {
     const colorMap = {
-      'Not Approved': 'bg-danger',
-      'Review Required': 'bg-warning',
-      'Approved': 'bg-success'
+      'Not Approved': 'border-danger',
+      'Review Required': 'border-warning',
+      'Approved': 'border-success'
     };
     this.statusColors = { ...this.statusColors, [item]: colorMap[status] };
     this.requestUpdate();
@@ -145,13 +145,13 @@ class BudgetCalcElement extends LitElement {
         <p>Mode: ${this.mode}</p>
         ${items.map(item => html`
           <div class="card ${this.statusColors[item] || ''}">
-            <div class="card-header">
+            <div class="card-header ${this.statusColors[item] || ''}">
               Item: ${item}
             </div>
             <div class="card-body d-flex flex-wrap">
               ${this.createMonthInputs(item)}
             </div>
-            <div class="d-flex justify-content-end card-footer">
+            <div class="d-flex justify-content-end card-footer ${this.statusColors[item] || ''}">
               <div class="btn-group" role="group" aria-label="Approval Status">
                 <button type="button" class="btn btn-danger" @click="${() => this.updateStatus(item, 'Not Approved')}">Not Approved</button>
                 <button type="button" class="btn btn-warning" @click="${() => this.updateStatus(item, 'Review Required')}">Review Required</button>
