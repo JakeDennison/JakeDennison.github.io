@@ -110,11 +110,9 @@ class BudgetCalcElement extends LitElement {
             </div>
             <div class="card-body d-flex flex-wrap">
               ${Array.from({ length: 12 }, (_, i) => html`
-                <div class="input-group mb-3 month-input">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">$</span>
-                  </div>
-                  <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                <div class="input-group mb-3 px-1 month-input">
+                <span class="input-group-text">$</span>
+                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
                 </div>
               `)}
             </div>
