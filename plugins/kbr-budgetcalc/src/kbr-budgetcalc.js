@@ -35,22 +35,20 @@ class BudgetCalcElement extends LitElement {
       }
       .comments-control {
         transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, width 0.3s ease;
-        max-height: 0; /* Start with max-height at 0 to hide when not needed */
-        opacity: 0; /* Start with an invisible input */
-        visibility: hidden; /* Hide input initially */
-        overflow: hidden; /* Prevent showing any overflow content */
+        max-height: 0; // Start with max-height at 0 to hide when not needed
+        opacity: 0; // Start with an invisible textarea
+        visibility: hidden; // Hide textarea initially
+        overflow: hidden; // Prevent showing any overflow content
         padding: 0;
-        width: 0; /* Start with no width */
+        width: 0; // Start with no width
       }
       .comments-control.active {
-        max-height: 200px; /* Large enough to accommodate expanded input */
+        max-height: 200px; // Large enough to accommodate expanded textarea
         opacity: 1;
-        visibility: visible; /* Make input visible */
-        padding: .375rem .75rem; /* Standard padding for form control */
-        width: 50%; /* Width of input when active on large screens */
-        margin-top: .25rem
+        visibility: visible; // Make textarea visible
+        padding: .375rem .75rem; // Standard padding for form control
+        width: 100%; // Full width on activation
       }
-
       .btn-group {
           flex: 0 0 100%;
           max-width: 100%;
@@ -165,6 +163,11 @@ class BudgetCalcElement extends LitElement {
     `;
   }
 
+  autoResize(e) {
+    e.target.style.height = 'auto'; // Reset the height
+    e.target.style.height = `${e.target.scrollHeight}px`; // Set to scroll height
+  }
+
   createFooter(item) {
     const statusInfo = this.statusColors[item] || {};
     const showInput = ['Not Approved', 'Review Required'].includes(statusInfo.selectedStatus);
@@ -181,10 +184,13 @@ class BudgetCalcElement extends LitElement {
                   class="${statusInfo.selectedStatus === 'Approved' ? 'btn btn-success' : 'btn btn-outline-success'}"
                   @click="${() => this.updateStatus(item, 'Approved')}">Approved</button>
         </div>
-        <input type="text" class="form-control comments-control ${showInput ? 'active' : ''}" placeholder="Enter comments">
+        <textarea class="form-control comments-control ${showInput ? 'active' : ''}"
+                  placeholder="Enter comments"
+                  @input="${this.autoResize}"
+                  style="height: auto; min-height: 38px;"></textarea>
       </div>
     `;
-  }
+}
 
   updateStatus(item, status) {
     const colorMap = {
