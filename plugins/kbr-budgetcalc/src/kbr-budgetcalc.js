@@ -22,7 +22,9 @@ class BudgetCalcElement extends LitElement {
       }
       .card-footer {
         display: flex;
-        justify-content: space-between;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between; /* Maintain space between on large screens */
         transition: all 0.3s ease; /* Transition for footer layout changes */
       }
       .btn-group {
