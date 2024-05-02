@@ -5,7 +5,7 @@ class BudgetCalcElement extends LitElement {
     return {
       dataobj: { type: String },
       mode: { type: String, default: 'New' },
-      listitems: { type: Object },
+      listitems: { type: String },
     };
   }
 
@@ -29,17 +29,10 @@ class BudgetCalcElement extends LitElement {
       groupName: 'KBR',
       version: '1.0',
       properties: {
-        Listitems: {
+        listitems: {
+          type: 'string',
           title: 'List Items',
-          type: 'object',
-          description: 'List of items to be budgeted',
-          itemname: {
-            name:{
-              type: 'string',
-              description: 'Item name',
-              title: 'Name',
-            }
-          },
+          description: 'List of items to be budgeted (best use output from multi-select control)'
         },
         mode: {
           title: 'Control Mode',
@@ -65,7 +58,7 @@ class BudgetCalcElement extends LitElement {
   constructor() {
     super();
     this.dataobj = '';
-    this.listitems = [];
+    this.listitems = '[]';
   }
 
   render() {
