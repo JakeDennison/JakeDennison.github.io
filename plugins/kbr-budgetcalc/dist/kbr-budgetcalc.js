@@ -82,7 +82,8 @@
       <div class="card-header">
         <div style="float: left;">Item: ${t}</div>
         <div style="float: right;">Total: $${e.toFixed(2)}</div> <!-- Display the total amount formatted to two decimal places -->
-      </div>
+      </div> 
+      
     `}formatCurrency(t,e){const i=parseFloat(t.target.value.replace(/[^\d.-]/g,""));isNaN(i)||(t.target.value=this.numberFormatter.format(i)),this.calculateTotalForItem(e)}calculateTotalForItem(t){return this.itemValues[t]?this.itemValues[t].reduce(((t,e)=>t+(parseFloat(e)||0)),0):0}updateValue(t,e,i){const s=parseFloat(t.target.value.replace(/[^\d.-]/g,""));isNaN(s)||(t.target.value=this.numberFormatter.format(s),this.itemValues[e]=this.itemValues[e]||[],this.itemValues[e][i]=s,this.requestUpdate())}createMonthInputs(t){const e=["January","February","March","April","May","June","July","August","September","October","November","December"];return M`
       ${["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].map(((i,s)=>M`
         <div class="mb-2 px-1 month-input">

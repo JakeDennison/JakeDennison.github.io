@@ -151,7 +151,7 @@ class BudgetCalcElement extends LitElement {
       <div class="card-header">
         <div style="float: left;">Item: ${item}</div>
         <div style="float: right;">Total: $${totalAmount.toFixed(2)}</div> <!-- Display the total amount formatted to two decimal places -->
-      </div>
+      </div> 
     `;
   }
 
