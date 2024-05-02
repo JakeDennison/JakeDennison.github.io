@@ -54,7 +54,7 @@
               `))}
             </div>
             <div class="d-flex justify-content-end card-footer">
-              <div class="form-check">
+              <div class="form-check form-switch">
                 <input type="checkbox" class="form-check-input" id="${t}-approved">
                 <label class="form-check-label" for="${t}-approved">Approved</label>
               </div>

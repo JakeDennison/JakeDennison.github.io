@@ -86,7 +86,7 @@ class BudgetCalcElement extends LitElement {
     super();
     this.dataobj = '';
     this.listitems = '';
-    this.numberFormatter = new Intl.NumberFormat('en-US', {
+        this.numberFormatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 2,
@@ -131,7 +131,7 @@ class BudgetCalcElement extends LitElement {
               `)}
             </div>
             <div class="d-flex justify-content-end card-footer">
-              <div class="form-check">
+              <div class="form-check form-switch">
                 <input type="checkbox" class="form-check-input" id="${item}-approved">
                 <label class="form-check-label" for="${item}-approved">Approved</label>
               </div>
