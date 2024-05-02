@@ -14,12 +14,39 @@ class BudgetCalcElement extends LitElement {
       :host {
         display: block;
         padding: 16px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
+      }
+      .card {
+        margin-bottom: 20px; /* Space between cards */
+      }
+      .input-group {
+        padding-bottom: 10px; /* Space between input groups */
+      }
+      @media (max-width: 576px) { /* Smaller devices */
+        .month-input {
+          flex: 0 0 100%;
+          max-width: 100%;
+        }
+      }
+      @media (min-width: 577px) and (max-width: 768px) { /* Medium devices */
+        .month-input {
+          flex: 0 0 33.33%;
+          max-width: 33.33%;
+        }
+      }
+      @media (min-width: 769px) and (max-width: 992px) { /* Large devices */
+        .month-input {
+          flex: 0 0 25%;
+          max-width: 25%;
+        }
+      }
+      @media (min-width: 993px) { /* Extra large devices */
+        .month-input {
+          flex: 0 0 16.66%;
+          max-width: 16.66%;
+        }
       }
     `;
   }
-
   static getMetaConfig() {
     return {
       controlName: 'kbr-budgetcalc',
@@ -70,39 +97,35 @@ class BudgetCalcElement extends LitElement {
   render() {
     // Split the listitems string by commas to create an array
     const items = this.listitems.split(',');
-    
+
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
         <h2>Budget Calculator</h2>
         <p>Mode: ${this.mode}</p>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Item</th>
-              ${Array.from({ length: 12 }, (_, i) => html`<th>${i + 1}</th>`)}
-              <th>Approved</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${items.map(item => html`
-              <tr>
-                <td>${item}</td>
-                ${Array.from({ length: 12 }, () => html`
-                  <td>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">$</span>
-                      </div>
-                      <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                    </div>
-                  </td>
-                `)}
-                <td><input type="checkbox"></td>
-              </tr>
-            `)}
-          </tbody>
-        </table>
+        ${items.map(item => html`
+          <div class="card">
+            <div class="card-header">
+              Item: ${item}
+            </div>
+            <div class="card-body d-flex flex-wrap">
+              ${Array.from({ length: 12 }, (_, i) => html`
+                <div class="input-group mb-3 month-input">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                  </div>
+                  <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                </div>
+              `)}
+            </div>
+            <div class="card-footer">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="${item}-approved">
+                <label class="form-check-label" for="${item}-approved">Approved</label>
+              </div>
+            </div>
+          </div>
+        `)}
       </div>
     `;
   }
