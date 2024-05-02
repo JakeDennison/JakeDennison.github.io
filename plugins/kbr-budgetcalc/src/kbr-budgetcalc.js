@@ -15,7 +15,28 @@ class BudgetCalcElement extends LitElement {
         display: block;
       }
       .card {
-        margin-bottom: 20px; /* Space between cards */
+      margin-bottom: 20px; /* Space between cards */
+      transition: all 0.3s ease; /* Smooth transition for the card */
+      }
+      .card-footer {
+        display: flex;
+        justify-content: space-between;
+        transition: all 0.3s ease; /* Transition for footer layout changes */
+      }
+      .btn-group {
+        flex-grow: 1; /* Allows the button group to use available space */
+        transition: all 0.3s ease; /* Smooth transitions for button group adjustments */
+      }
+      .form-control {
+        transition: all 0.3s ease; /* Smooth appearance for the input field */
+        width: 0; /* Start width at 0 to hide when not needed */
+        opacity: 0; /* Start with an invisible input */
+        visibility: hidden; /* Hide input initially */
+      }
+      .form-control.active {
+        width: 200px; /* Width when active */
+        opacity: 1;
+        visibility: visible; /* Make input visible */
       }
       .input-group {
         padding-bottom: 10px; /* Space between input groups */
@@ -125,8 +146,9 @@ class BudgetCalcElement extends LitElement {
 
   createFooter(item) {
     const statusInfo = this.statusColors[item] || {};
+    const showInput = ['Not Approved', 'Review Required'].includes(statusInfo.selectedStatus);
     return html`
-      <div class="d-flex justify-content-end card-footer ${statusInfo.borderColor || ''}">
+      <div class="card-footer">
         <div class="btn-group" role="group" aria-label="Approval Status">
           <button type="button"
                   class="${statusInfo.selectedStatus === 'Not Approved' ? 'btn btn-danger' : 'btn btn-outline-danger'}"
@@ -138,6 +160,7 @@ class BudgetCalcElement extends LitElement {
                   class="${statusInfo.selectedStatus === 'Approved' ? 'btn btn-success' : 'btn btn-outline-success'}"
                   @click="${() => this.updateStatus(item, 'Approved')}">Approved</button>
         </div>
+        <input type="text" class="form-control ${showInput ? 'active' : ''}" placeholder="Enter comments">
       </div>
     `;
   }
