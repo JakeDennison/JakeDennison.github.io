@@ -88,7 +88,7 @@ class BudgetCalcElement extends LitElement {
     this.listitems = '';
     this.numberFormatter = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 2
     });
     
   }
@@ -122,10 +122,11 @@ class BudgetCalcElement extends LitElement {
             </div>
             <div class="card-body d-flex flex-wrap">
               ${Array.from({ length: 12 }, (_, i) => html`
-              <div class="input-group mb-3 px-1 month-input">
-                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" @blur="${this.formatCurrency}">
-                <span class="input-group-text">.00</span>
-              </div>
+                <div class="input-group mb-3 px-1 month-input">
+                  <span class="input-group-text">$</span>
+                  <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
+                    @blur="${this.formatCurrency}">
+                </div>
               `)}
             </div>
             <div class="d-flex justify-content-end card-footer">
