@@ -37,34 +37,66 @@ class BudgetCalcElement extends LitElement {
         padding:0;
       }
       .comments-control.active {
-        width: 50%; /* Width when active */
         opacity: 1;
         visibility: visible; /* Make input visible */
         padding: .375rem .75rem;
-        margin-left: .75rem;
+        
       }
       .input-group {
         padding-bottom: 10px; /* Space between input groups */
       }
       @media (max-width: 576px) { /* Smaller devices */
-        .month-input {
+        .btn-group {
           flex: 0 0 100%;
           max-width: 100%;
         }
-      }
+        .comments-control.active {
+          flex: 0 0 100%;
+          max-width: 100%;
+        }
+        .month-input {
+            flex: 0 0 100%;
+            max-width: 100%;
+          }
+        }
       @media (min-width: 577px) and (max-width: 768px) { /* Medium devices */
+        .btn-group {
+          flex: 0 0 100%;
+          max-width: 100%;
+        }
+        .comments-control.active {
+          flex: 0 0 100%;
+          max-width: 100%;
+        }
         .month-input {
           flex: 0 0 50%;
           max-width: 50%;
         }
       }
       @media (min-width: 769px) and (max-width: 992px) { /* Large devices */
+        .btn-group {
+          flex: 0 0 100%;
+          max-width: 100%;
+        }
+        .comments-control.active {
+          flex: 0 0 100%;
+          max-width: 100%;
+        }
         .month-input {
           flex: 0 0 33.33%;
           max-width: 33.33%;
         }
       }
       @media (min-width: 993px) { /* Extra large devices */
+        .btn-group {
+          flex: 0 0 50%;
+          max-width: 50%;
+        }
+        .comments-control.active {
+          margin-left: .75rem;
+          flex: 0 0 50%;
+          max-width: 50%;
+        }  
         .month-input {
           flex: 0 0 25%;
           max-width: 25%;
@@ -169,7 +201,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
-  
+
   updateStatus(item, status) {
     const colorMap = {
       'Not Approved': 'border-danger',
@@ -186,7 +218,7 @@ class BudgetCalcElement extends LitElement {
 
   render() {
     const items = this.listitems.split(',');
-  
+
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
@@ -204,7 +236,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
-  
+
 }
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
