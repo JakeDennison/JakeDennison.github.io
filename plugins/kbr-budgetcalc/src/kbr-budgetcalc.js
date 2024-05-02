@@ -13,6 +13,7 @@ class BudgetCalcElement extends LitElement {
     return css`
       :host {
         display: block;
+        padding: 16px;
       }
       .card {
         margin-bottom: 20px; /* Space between cards */
@@ -30,25 +31,24 @@ class BudgetCalcElement extends LitElement {
         transition: all 0.3s ease; /* Transition for footer layout changes */
       }
       .btn-group {
-        flex-grow: 1; /* Allows the button group to use available space */
-        transition: all 0.3s ease; /* Smooth transitions for button group adjustments */
+        width: 100%; /* Takes full width initially */
+        transition: width 0.3s ease; /* Smooth transitions for width adjustments */
       }
       .comments-control {
-        transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+        transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, width 0.3s ease;
         max-height: 0; /* Start with max-height at 0 to hide when not needed */
         opacity: 0; /* Start with an invisible input */
         visibility: hidden; /* Hide input initially */
         overflow: hidden; /* Prevent showing any overflow content */
         padding: 0;
+        width: 0; /* Start with no width */
       }
       .comments-control.active {
         max-height: 200px; /* Large enough to accommodate expanded input */
         opacity: 1;
         visibility: visible; /* Make input visible */
         padding: .375rem .75rem; /* Standard padding for form control */
-      }
-      .input-group {
-        padding-bottom: 10px; /* Space between input groups */
+        width: 50%; /* Width of input when active on large screens */
       }
       @media (max-width: 992px) { /* Adjustments for smaller devices */
         .card-footer {
@@ -56,27 +56,23 @@ class BudgetCalcElement extends LitElement {
         }
         .btn-group, .comments-control {
           width: 100%; /* Full width for small screens */
-          max-width: 100%; /* Ensure button group and input take full width */
           justify-content: center; /* Center align the content */
+        }
+        .comments-control.active {
+          margin-top: 10px; /* Additional top margin for better spacing */
         }
       }
       @media (min-width: 993px) { /* Adjustments for larger devices */
         .btn-group {
-          flex: 0 0 50%;
-          max-width: 50%;
+          width: 100%; /* Button group takes full width until active */
         }
         .comments-control.active {
-          margin-left: .75rem;
-          flex: 0 0 50%;
-          max-width: 50%;
-        }
-        .month-input {
-          flex: 0 0 25%;
-          max-width: 25%;
+          margin-left: .75rem; /* Margin left for spacing */
         }
       }
     `;
   }
+  
   
   static getMetaConfig() {
     return {
