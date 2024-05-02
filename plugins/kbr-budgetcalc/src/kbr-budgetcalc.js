@@ -17,6 +17,9 @@ class BudgetCalcElement extends LitElement {
       .card {
         margin-bottom: 20px; /* Space between cards */
       }
+      .currency-input {
+        text-align: right;
+      }
       .card-footer {
         display: flex;
         justify-content: space-between;
@@ -37,6 +40,7 @@ class BudgetCalcElement extends LitElement {
         width: 50%; /* Width when active */
         opacity: 1;
         visibility: visible; /* Make input visible */
+        padding: .375rem .75rem;
         margin-left: .75rem;
       }
       .input-group {
@@ -137,7 +141,7 @@ class BudgetCalcElement extends LitElement {
           <label for="${shortMonth}-${item}" class="form-label">${fullMonths[index]}</label>
           <div class="input-group">
             <span class="input-group-text">$</span>
-            <input type="text" class="form-control" id="${shortMonth}-${item}" aria-label="Amount for ${fullMonths[index]}" @blur="${this.formatCurrency}">
+            <input type="text" class="form-control currency-input" id="${shortMonth}-${item}" aria-label="Amount for ${fullMonths[index]}" @blur="${this.formatCurrency}">
             <span class="input-group-text">.00</span>
           </div>
         </div>
