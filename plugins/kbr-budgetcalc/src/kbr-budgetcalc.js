@@ -135,6 +135,7 @@ class BudgetCalcElement extends LitElement {
       maximumFractionDigits: 0
     });
     this.statusColors = {};
+    this.itemValues = {};
   }
 
   updated(changedProperties) {
@@ -143,12 +144,44 @@ class BudgetCalcElement extends LitElement {
     }
   }
 
-  formatCurrency(event) {
+  createHeader(item) {
+    const totalAmount = this.calculateTotalForItem(item); // Calculate the total amount for the item
+  
+    return html`
+      <div class="card-header">
+        <div style="float: left;">Item: ${item}</div>
+        <div style="float: right;">Total: $${totalAmount.toFixed(2)}</div> <!-- Display the total amount formatted to two decimal places -->
+      </div>
+    `;
+  }
+
+  formatCurrency(event, item) {
     const value = parseFloat(event.target.value.replace(/[^\d.-]/g, ''));
     if (!isNaN(value)) {
       event.target.value = this.numberFormatter.format(value);
     }
+    // Add a method to recalculate totals here
+    this.calculateTotalForItem(item);
   }
+  
+  calculateTotalForItem(item) {
+    if (!this.itemValues[item]) {
+      return 0; // If no values have been entered yet
+    }
+    const total = this.itemValues[item].reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
+    return total;
+  }
+  
+  updateValue(event, item, monthIndex) {
+    const value = parseFloat(event.target.value.replace(/[^\d.-]/g, ''));
+    if (!isNaN(value)) {
+      event.target.value = this.numberFormatter.format(value);
+      this.itemValues[item] = this.itemValues[item] || [];
+      this.itemValues[item][monthIndex] = value; // Update the specific month's value
+      this.requestUpdate(); // Trigger update to recalculate totals and update the view
+    }
+  }
+  
 
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -160,7 +193,10 @@ class BudgetCalcElement extends LitElement {
           <label for="${shortMonth}-${item}" class="form-label">${fullMonths[index]}</label>
           <div class="input-group">
             <span class="input-group-text">$</span>
-            <input type="text" class="form-control currency-input" id="${shortMonth}-${item}" aria-label="Amount for ${fullMonths[index]}" @blur="${this.formatCurrency}">
+            <input type="text" class="form-control currency-input" id="${shortMonth}-${item}"
+              aria-label="Amount for ${fullMonths[index]}"
+              @blur="${e => this.updateValue(e, item, index)}"
+              @input="${e => this.updateValue(e, item, index)}">
             <span class="input-group-text">.00</span>
           </div>
         </div>
@@ -220,15 +256,13 @@ class BudgetCalcElement extends LitElement {
 
   render() {
     const items = this.listitems.split(',');
-
+  
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
         ${items.map(item => html`
           <div class="card ${this.statusColors[item]?.borderColor || ''}">
-            <div class="card-header ${this.statusColors[item]?.borderColor || ''}">
-              Item: ${item}
-            </div>
+            ${this.createHeader(item)}
             <div class="card-body d-flex flex-wrap">
               ${this.createMonthInputs(item)}
             </div>
@@ -238,6 +272,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
+  
 
 }
 
