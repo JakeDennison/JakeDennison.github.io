@@ -4,8 +4,7 @@
         display: block;
       }
       .card {
-      margin-bottom: 20px; /* Space between cards */
-      transition: all 0.3s ease; /* Smooth transition for the card */
+        margin-bottom: 20px; /* Space between cards */
       }
       .card-footer {
         display: flex;
@@ -23,7 +22,7 @@
         visibility: hidden; /* Hide input initially */
       }
       .form-control.active {
-        width: 200px; /* Width when active */
+        width: 50%; /* Width when active */
         opacity: 1;
         visibility: visible; /* Make input visible */
       }
