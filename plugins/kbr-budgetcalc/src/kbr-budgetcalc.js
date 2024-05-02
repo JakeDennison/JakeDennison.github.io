@@ -26,16 +26,18 @@ class BudgetCalcElement extends LitElement {
         flex-grow: 1; /* Allows the button group to use available space */
         transition: all 0.3s ease; /* Smooth transitions for button group adjustments */
       }
-      .form-control {
+      .comments-control {
         transition: all 0.3s ease; /* Smooth appearance for the input field */
         width: 0; /* Start width at 0 to hide when not needed */
         opacity: 0; /* Start with an invisible input */
         visibility: hidden; /* Hide input initially */
+        padding:0;
       }
-      .form-control.active {
+      .comments-control.active {
         width: 50%; /* Width when active */
         opacity: 1;
         visibility: visible; /* Make input visible */
+        padding: .375rem .75rem;
       }
       .input-group {
         padding-bottom: 10px; /* Space between input groups */
@@ -159,7 +161,7 @@ class BudgetCalcElement extends LitElement {
                   class="${statusInfo.selectedStatus === 'Approved' ? 'btn btn-success' : 'btn btn-outline-success'}"
                   @click="${() => this.updateStatus(item, 'Approved')}">Approved</button>
         </div>
-        <input type="text" class="form-control ${showInput ? 'active' : ''}" placeholder="Enter comments">
+        <input type="text" class="form-control comments-control ${showInput ? 'active' : ''}" placeholder="Enter comments">
       </div>
     `;
   }
