@@ -123,7 +123,11 @@ class BudgetCalcElement extends LitElement {
       `)}
     `;
   }
-  
+
+  updateStatus(item, status) {
+    console.log(`Status for ${item} updated to ${status}`);
+    // Here you would typically update the status in your state or backend
+  }
 
   render() {
     const items = this.listitems.split(',');
@@ -142,9 +146,10 @@ class BudgetCalcElement extends LitElement {
               ${this.createMonthInputs(item)}
             </div>
             <div class="d-flex justify-content-end card-footer">
-              <div class="form-check form-switch">
-                <input type="checkbox" class="form-check-input" id="approve-${item}">
-                <label class="form-check-label" for="approve-${item}">Approved</label>
+              <div class="btn-group" role="group" aria-label="Approval Status">
+                <button type="button" class="btn btn-danger" @click="${() => this.updateStatus(item, 'Not Approved')}">Not Approved</button>
+                <button type="button" class="btn btn-warning" @click="${() => this.updateStatus(item, 'Review Required')}">Review Required</button>
+                <button type="button" class="btn btn-success" @click="${() => this.updateStatus(item, 'Approved')}">Approved</button>
               </div>
             </div>
           </div>
