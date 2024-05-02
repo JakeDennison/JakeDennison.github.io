@@ -34,5 +34,11 @@
         "cardText": "Link to the help",
         "imageUrl": "https://www.nintex.com/wp-content/uploads/2019/05/nintex-logo-reverse.jpg",
         "link": "https://learn.nintex.com/"
+    },
+    {
+        "cardTitle": "Nintex Help",
+        "cardText": "Link to the help",
+        "imageUrl": "https://www.nintex.com/wp-content/uploads/2019/05/nintex-logo-reverse.jpg",
+        "link": "https://learn.nintex.com/"
     }
 ]
