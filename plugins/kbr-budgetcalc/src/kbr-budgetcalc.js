@@ -112,11 +112,13 @@ class BudgetCalcElement extends LitElement {
   
     return html`
       ${months.map((shortMonth, index) => html`
-        <div class="input-group mb-3 px-1 month-input">
-          <span class="input-group-text">${shortMonth}</span>
-          <span class="input-group-text">$</span>
-          <input type="text" class="form-control" id="${shortMonth}-${item}" aria-label="Amount for ${fullMonths[index]}" @blur="${this.formatCurrency}">
-          <span class="input-group-text">.00</span>
+        <div class="mb-3 px-1 month-input">
+          <label for="${shortMonth}-${item}" class="form-label">${fullMonths[index]}</label>
+          <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input type="text" class="form-control" id="${shortMonth}-${item}" aria-label="Amount for ${fullMonths[index]}" @blur="${this.formatCurrency}">
+            <span class="input-group-text">.00</span>
+          </div>
         </div>
       `)}
     `;
