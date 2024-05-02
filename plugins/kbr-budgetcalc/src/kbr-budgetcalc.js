@@ -47,17 +47,51 @@ class BudgetCalcElement extends LitElement {
       }
     `;
   }
+  static getMetaConfig() {
+    return {
+      controlName: 'kbr-budgetcalc',
+      fallbackDisableSubmit: false,
+      description: 'Yearly budget calculator',
+      iconUrl: "",
+      groupName: 'KBR',
+      version: '1.0',
+      properties: {
+        listitems: {
+          type: 'string',
+          title: 'List Items',
+          description: 'List of items to be budgeted (best use output from multi-select control)'
+        },
+        mode: {
+          title: 'Control Mode',
+          type: 'string',
+          enum: ['New', 'Approve', 'Read-only'],
+          showAsRadio: true,
+          verticalLayout: true,
+          defaultValue: 'New',
+        },
+        dataobj: {
+          type: 'string',
+          title: 'Calculator Data Object',
+          description: 'Leave empty if you are filling from new, enter output from previous calculator if not new'
+        }
+      },
+      standardProperties: {
+        fieldLabel: true,
+        description: true,
+      }
+    };
+  }
 
   constructor() {
     super();
     this.dataobj = '';
-    this.listitems = '';
-    this.numberFormatter = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
+    this.listitems = ''; 
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('listitems')) {
+      console.log('listitems changed:', this.listitems);
+    }
   }
 
   formatCurrency(event) {
