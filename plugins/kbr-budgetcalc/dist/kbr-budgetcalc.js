@@ -31,6 +31,7 @@
         overflow: hidden; /* No content spills */
         padding: 0; /* No internal spacing */
         margin: 0; /* Ensures no external spacing */
+        display: none;
       }
 
       .comments-control.active {
@@ -40,6 +41,7 @@
         width: 100%; /* Full width on active */
         padding: .375rem .75rem; /* Standard padding */
         margin-top: 0.5rem; /* Some top margin if needed */
+        display: flex;
       }
       .btn-group {
           flex: 0 0 100%;
