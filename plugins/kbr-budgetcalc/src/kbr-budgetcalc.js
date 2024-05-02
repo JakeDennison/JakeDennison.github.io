@@ -69,6 +69,7 @@ class BudgetCalcElement extends LitElement {
 
   render() {
     // Parse the listitems JSON string to an array
+    console.log('listitems:', this.listitems);
     const items = JSON.parse(this.listitems || '');
     
     return html`
