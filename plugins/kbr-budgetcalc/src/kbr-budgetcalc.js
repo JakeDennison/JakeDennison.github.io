@@ -112,7 +112,7 @@ class BudgetCalcElement extends LitElement {
   
     return html`
       ${months.map((shortMonth, index) => html`
-        <div class="mb-3 px-1 month-input">
+        <div class="mb-2 px-1 month-input">
           <label for="${shortMonth}-${item}" class="form-label">${fullMonths[index]}</label>
           <div class="input-group">
             <span class="input-group-text">$</span>
@@ -142,7 +142,7 @@ class BudgetCalcElement extends LitElement {
               ${this.createMonthInputs(item)}
             </div>
             <div class="d-flex justify-content-end card-footer">
-              <div class="form-check">
+              <div class="form-check form-switch">
                 <input type="checkbox" class="form-check-input" id="approve-${item}">
                 <label class="form-check-label" for="approve-${item}">Approved</label>
               </div>

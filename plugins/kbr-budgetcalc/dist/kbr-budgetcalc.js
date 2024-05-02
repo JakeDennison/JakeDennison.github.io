@@ -36,7 +36,7 @@
       }
     `}static getMetaConfig(){return{controlName:"kbr-budgetcalc",fallbackDisableSubmit:!1,description:"Yearly budget calculator",iconUrl:"",groupName:"KBR",version:"1.0",properties:{listitems:{type:"string",title:"List Items",description:"List of items to be budgeted (best use output from multi-select control)"},mode:{title:"Control Mode",type:"string",enum:["New","Approve","Read-only"],showAsRadio:!0,verticalLayout:!0,defaultValue:"New"},dataobj:{type:"string",title:"Calculator Data Object",description:"Leave empty if you are filling from new, enter output from previous calculator if not new"}},standardProperties:{fieldLabel:!0,description:!0}}}constructor(){super(),this.dataobj="",this.listitems="",this.numberFormatter=new Intl.NumberFormat("en-US",{minimumFractionDigits:0,maximumFractionDigits:0})}updated(t){t.has("listitems")&&console.log("listitems changed:",this.listitems)}formatCurrency(t){const e=parseFloat(t.target.value.replace(/[^\d.-]/g,""));isNaN(e)||(t.target.value=this.numberFormatter.format(e))}createMonthInputs(t){const e=["January","February","March","April","May","June","July","August","September","October","November","December"];return R`
       ${["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].map(((i,s)=>R`
-        <div class="mb-3 px-1 month-input">
+        <div class="mb-2 px-1 month-input">
           <label for="${i}-${t}" class="form-label">${e[s]}</label>
           <div class="input-group">
             <span class="input-group-text">$</span>
@@ -59,7 +59,7 @@
               ${this.createMonthInputs(t)}
             </div>
             <div class="d-flex justify-content-end card-footer">
-              <div class="form-check">
+              <div class="form-check form-switch">
                 <input type="checkbox" class="form-check-input" id="approve-${t}">
                 <label class="form-check-label" for="approve-${t}">Approved</label>
               </div>
