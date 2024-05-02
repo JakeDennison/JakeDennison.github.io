@@ -90,7 +90,7 @@ class BudgetCalcElement extends LitElement {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     });
-    
+    this.statusColors = {};
   }
 
   updated(changedProperties) {
@@ -109,7 +109,7 @@ class BudgetCalcElement extends LitElement {
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  
+
     return html`
       ${months.map((shortMonth, index) => html`
         <div class="mb-2 px-1 month-input">
@@ -125,20 +125,26 @@ class BudgetCalcElement extends LitElement {
   }
 
   updateStatus(item, status) {
-    console.log(`Status for ${item} updated to ${status}`);
-    // Here you would typically update the status in your state or backend
+    const colorMap = {
+      'Not Approved': 'bg-danger',
+      'Review Required': 'bg-warning',
+      'Approved': 'bg-success'
+    };
+    this.statusColors = { ...this.statusColors, [item]: colorMap[status] };
+    this.requestUpdate();
   }
+
 
   render() {
     const items = this.listitems.split(',');
-  
+
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
         <h2>Budget Calculator</h2>
         <p>Mode: ${this.mode}</p>
         ${items.map(item => html`
-          <div class="card">
+          <div class="card ${this.statusColors[item] || ''}">
             <div class="card-header">
               Item: ${item}
             </div>
@@ -157,7 +163,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
-  
+
 }
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
