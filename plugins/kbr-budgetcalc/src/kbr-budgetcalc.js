@@ -34,21 +34,22 @@ class BudgetCalcElement extends LitElement {
         max-width: 100%;
       }
       .comments-control {
-        transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, width 0.3s ease;
-        max-height: 0; // Start with max-height at 0 to hide when not needed
-        opacity: 0; // Start with an invisible textarea
-        visibility: hidden; // Hide textarea initially
-        overflow: hidden; // Prevent showing any overflow content
-        padding: 0;
-        width: 0; // Start with no width
+        transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease, width 0.3s ease;
+        max-height: 0; /* Start with max-height at 0 to ensure it hides */
+        opacity: 0;
+        visibility: hidden;
+        overflow: hidden;
+        width: 0; /* Ensure it starts with no width */
+        padding: 0; /* No padding when not active */
       }
       .comments-control.active {
-        max-height: 200px; // Large enough to accommodate expanded textarea
+        max-height: 200px; /* Sufficiently large to handle content */
         opacity: 1;
-        visibility: visible; // Make textarea visible
-        padding: .375rem .75rem; // Standard padding for form control
-        width: 100%; // Full width on activation
+        visibility: visible;
+        width: 100%; /* Full width for active state */
+        padding: .375rem .75rem; /* Standard padding for active state */
       }
+
       .btn-group {
           flex: 0 0 100%;
           max-width: 100%;
@@ -164,13 +165,19 @@ class BudgetCalcElement extends LitElement {
   }
 
   autoResize(e) {
-    e.target.style.height = 'auto'; // Reset the height
-    e.target.style.height = `${e.target.scrollHeight}px`; // Set to scroll height
+    if (e.target.classList.contains('active')) {
+      e.target.style.height = 'auto'; // Reset the height
+      e.target.style.height = `${e.target.scrollHeight}px`; // Set to scroll height
+    } else {
+      e.target.style.height = '0'; // Collapse when not active
+    }
   }
+  
 
   createFooter(item) {
     const statusInfo = this.statusColors[item] || {};
     const showInput = ['Not Approved', 'Review Required'].includes(statusInfo.selectedStatus);
+  
     return html`
       <div class="card-footer">
         <div class="btn-group" role="group" aria-label="Approval Status">
@@ -190,7 +197,8 @@ class BudgetCalcElement extends LitElement {
                   style="height: auto; min-height: 38px;"></textarea>
       </div>
     `;
-}
+  }
+  
 
   updateStatus(item, status) {
     const colorMap = {
