@@ -65,7 +65,7 @@ class BudgetCalcElement extends LitElement {
   constructor() {
     super();
     this.dataobj = '';
-    this.listitems.itemname = '[]';
+    this.listitems = '[]';
   }
 
   render() {
