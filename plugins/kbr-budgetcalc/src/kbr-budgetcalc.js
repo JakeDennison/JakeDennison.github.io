@@ -47,50 +47,23 @@ class BudgetCalcElement extends LitElement {
       }
     `;
   }
-  static getMetaConfig() {
-    return {
-      controlName: 'kbr-budgetcalc',
-      fallbackDisableSubmit: false,
-      description: 'Yearly budget calculator',
-      iconUrl: "",
-      groupName: 'KBR',
-      version: '1.0',
-      properties: {
-        listitems: {
-          type: 'string',
-          title: 'List Items',
-          description: 'List of items to be budgeted (best use output from multi-select control)'
-        },
-        mode: {
-          title: 'Control Mode',
-          type: 'string',
-          enum: ['New', 'Approve', 'Read-only'],
-          showAsRadio: true,
-          verticalLayout: true,
-          defaultValue: 'New',
-        },
-        dataobj: {
-          type: 'string',
-          title: 'Calculator Data Object',
-          description: 'Leave empty if you are filling from new, enter output from previous calculator if not new'
-        }
-      },
-      standardProperties: {
-        fieldLabel: true,
-        description: true,
-      }
-    };
-  }
 
   constructor() {
     super();
     this.dataobj = '';
-    this.listitems = ''; 
+    this.listitems = '';
+    this.numberFormatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
   }
 
-  updated(changedProperties) {
-    if (changedProperties.has('listitems')) {
-      console.log('listitems changed:', this.listitems);
+  formatCurrency(event) {
+    const value = parseFloat(event.target.value.replace(/[^\d.-]/g, ''));
+    if (!isNaN(value)) {
+      event.target.value = this.numberFormatter.format(value);
     }
   }
 
@@ -111,12 +84,13 @@ class BudgetCalcElement extends LitElement {
             <div class="card-body d-flex flex-wrap">
               ${Array.from({ length: 12 }, (_, i) => html`
                 <div class="input-group mb-3 px-1 month-input">
-                <span class="input-group-text">$</span>
-                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                  <span class="input-group-text">$</span>
+                  <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
+                    @blur="${this.formatCurrency}">
                 </div>
               `)}
             </div>
-            <div class="card-footer">
+            <div class="d-flex justify-content-end card-footer">
               <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="${item}-approved">
                 <label class="form-check-label" for="${item}-approved">Approved</label>
