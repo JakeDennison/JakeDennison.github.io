@@ -24,8 +24,8 @@ class BudgetCalcElement extends LitElement {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        justify-content: space-between; /* Maintain space between on large screens */
-        transition: all 0.3s ease; /* Transition for footer layout changes */
+        justify-content: space-between;
+        transition: all 0.3s ease;
       }
       .btn-group {
         flex-grow: 1; /* Allows the button group to use available space */
@@ -34,22 +34,24 @@ class BudgetCalcElement extends LitElement {
         max-width: 100%;
       }
       .comments-control {
-        transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease, width 0.3s ease;
-        max-height: 0; /* Start with max-height at 0 to ensure it hides */
-        opacity: 0;
-        visibility: hidden;
-        overflow: hidden;
-        width: 0; /* Ensure it starts with no width */
-        padding: 0; /* No padding when not active */
-      }
-      .comments-control.active {
-        max-height: 200px; /* Sufficiently large to handle content */
-        opacity: 1;
-        visibility: visible;
-        width: 100%; /* Full width for active state */
-        padding: .375rem .75rem; /* Standard padding for active state */
+        transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease, width 0.3s ease, margin 0.3s ease;
+        max-height: 0; /* Ensures it collapses vertically */
+        width: 0; /* Ensures it takes no horizontal space */
+        opacity: 0; /* Fully invisible */
+        visibility: hidden; /* Not visually perceivable */
+        overflow: hidden; /* No content spills */
+        padding: 0; /* No internal spacing */
+        margin: 0; /* Ensures no external spacing */
       }
 
+      .comments-control.active {
+        max-height: 200px; /* Adjust as needed */
+        opacity: 1;
+        visibility: visible;
+        width: 100%; /* Full width on active */
+        padding: .375rem .75rem; /* Standard padding */
+        margin-top: 0.5rem; /* Some top margin if needed */
+      }
       .btn-group {
           flex: 0 0 100%;
           max-width: 100%;
