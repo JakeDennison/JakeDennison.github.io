@@ -41,8 +41,8 @@ class BudgetCalcElement extends LitElement {
       }
       @media (min-width: 993px) { /* Extra large devices */
         .month-input {
-          flex: 0 0 16.66%;
-          max-width: 16.66%;
+          flex: 0 0 25%;
+          max-width: 25%;
         }
       }
     `;
@@ -88,7 +88,7 @@ class BudgetCalcElement extends LitElement {
     this.listitems = '';
     this.numberFormatter = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 0,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 0
     });
     
   }
@@ -106,10 +106,26 @@ class BudgetCalcElement extends LitElement {
     }
   }
 
-  render() {
-    // Split the listitems string by commas to create an array
-    const items = this.listitems.split(',');
+  createMonthInputs(item) {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  
+    return html`
+      ${months.map((shortMonth, index) => html`
+        <div class="input-group mb-3 px-1 month-input">
+          <label for="${shortMonth}-${item}" class="form-label">${shortMonth}</label>
+          <span class="input-group-text">$</span>
+          <input type="text" class="form-control" id="${shortMonth}-${item}" aria-label="Amount for ${fullMonths[index]}" @blur="${this.formatCurrency}">
+          <span class="input-group-text">.00</span>
+        </div>
+      `)}
+    `;
+  }
+  
 
+  render() {
+    const items = this.listitems.split(',');
+  
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
@@ -121,18 +137,12 @@ class BudgetCalcElement extends LitElement {
               Item: ${item}
             </div>
             <div class="card-body d-flex flex-wrap">
-              ${Array.from({ length: 12 }, (_, i) => html`
-                <div class="input-group mb-3 px-1 month-input">
-                  <span class="input-group-text">$</span>
-                  <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
-                    @blur="${this.formatCurrency}">
-                </div>
-              `)}
+              ${this.createMonthInputs(item)}
             </div>
             <div class="d-flex justify-content-end card-footer">
-              <div class="form-check form-switch">
-                <input type="checkbox" class="form-check-input" id="${item}-approved">
-                <label class="form-check-label" for="${item}-approved">Approved</label>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="approve-${item}">
+                <label class="form-check-label" for="approve-${item}">Approved</label>
               </div>
             </div>
           </div>
@@ -140,6 +150,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
+  
 }
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
