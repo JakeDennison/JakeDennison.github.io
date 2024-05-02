@@ -16,13 +16,17 @@ class BudgetCalcElement extends LitElement {
       }
       .card {
         margin-bottom: 20px; /* Space between cards */
+        border: 1px solid transparent; /* Initial border color */
+        transition: border-color 0.3s ease; /* Smooth transition for border color */
       }
       .currency-input {
         text-align: right;
       }
       .card-footer {
         display: flex;
-        justify-content: space-between;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between; /* Maintain space between on large screens */
         transition: all 0.3s ease; /* Transition for footer layout changes */
       }
       .btn-group {
@@ -30,64 +34,33 @@ class BudgetCalcElement extends LitElement {
         transition: all 0.3s ease; /* Smooth transitions for button group adjustments */
       }
       .comments-control {
-        transition: all 0.3s ease; /* Smooth appearance for the input field */
-        width: 0; /* Start width at 0 to hide when not needed */
+        transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+        max-height: 0; /* Start with max-height at 0 to hide when not needed */
         opacity: 0; /* Start with an invisible input */
         visibility: hidden; /* Hide input initially */
-        padding:0;
+        overflow: hidden; /* Prevent showing any overflow content */
+        padding: 0;
       }
       .comments-control.active {
+        max-height: 200px; /* Large enough to accommodate expanded input */
         opacity: 1;
         visibility: visible; /* Make input visible */
-        padding: .375rem .75rem;
-        
+        padding: .375rem .75rem; /* Standard padding for form control */
       }
       .input-group {
         padding-bottom: 10px; /* Space between input groups */
       }
-      @media (max-width: 576px) { /* Smaller devices */
-        .btn-group {
-          flex: 0 0 100%;
-          max-width: 100%;
+      @media (max-width: 992px) { /* Adjustments for smaller devices */
+        .card-footer {
+          flex-direction: column; /* Stack elements vertically */
         }
-        .comments-control.active {
-          flex: 0 0 100%;
-          max-width: 100%;
-        }
-        .month-input {
-            flex: 0 0 100%;
-            max-width: 100%;
-          }
-        }
-      @media (min-width: 577px) and (max-width: 768px) { /* Medium devices */
-        .btn-group {
-          flex: 0 0 100%;
-          max-width: 100%;
-        }
-        .comments-control.active {
-          flex: 0 0 100%;
-          max-width: 100%;
-        }
-        .month-input {
-          flex: 0 0 50%;
-          max-width: 50%;
+        .btn-group, .comments-control {
+          width: 100%; /* Full width for small screens */
+          max-width: 100%; /* Ensure button group and input take full width */
+          justify-content: center; /* Center align the content */
         }
       }
-      @media (min-width: 769px) and (max-width: 992px) { /* Large devices */
-        .btn-group {
-          flex: 0 0 100%;
-          max-width: 100%;
-        }
-        .comments-control.active {
-          flex: 0 0 100%;
-          max-width: 100%;
-        }
-        .month-input {
-          flex: 0 0 33.33%;
-          max-width: 33.33%;
-        }
-      }
-      @media (min-width: 993px) { /* Extra large devices */
+      @media (min-width: 993px) { /* Adjustments for larger devices */
         .btn-group {
           flex: 0 0 50%;
           max-width: 50%;
@@ -96,7 +69,7 @@ class BudgetCalcElement extends LitElement {
           margin-left: .75rem;
           flex: 0 0 50%;
           max-width: 50%;
-        }  
+        }
         .month-input {
           flex: 0 0 25%;
           max-width: 25%;
@@ -104,6 +77,7 @@ class BudgetCalcElement extends LitElement {
       }
     `;
   }
+  
   static getMetaConfig() {
     return {
       controlName: 'kbr-budgetcalc',
@@ -201,7 +175,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
-
+  
   updateStatus(item, status) {
     const colorMap = {
       'Not Approved': 'border-danger',
