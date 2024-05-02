@@ -18,14 +18,14 @@
       }
       @media (min-width: 577px) and (max-width: 768px) { /* Medium devices */
         .month-input {
-          flex: 0 0 33.33%;
-          max-width: 33.33%;
+          flex: 0 0 50%;
+          max-width: 50%;
         }
       }
       @media (min-width: 769px) and (max-width: 992px) { /* Large devices */
         .month-input {
-          flex: 0 0 25%;
-          max-width: 25%;
+          flex: 0 0 33.33%;
+          max-width: 33.33%;
         }
       }
       @media (min-width: 993px) { /* Extra large devices */
@@ -37,7 +37,7 @@
     `}static getMetaConfig(){return{controlName:"kbr-budgetcalc",fallbackDisableSubmit:!1,description:"Yearly budget calculator",iconUrl:"",groupName:"KBR",version:"1.0",properties:{listitems:{type:"string",title:"List Items",description:"List of items to be budgeted (best use output from multi-select control)"},mode:{title:"Control Mode",type:"string",enum:["New","Approve","Read-only"],showAsRadio:!0,verticalLayout:!0,defaultValue:"New"},dataobj:{type:"string",title:"Calculator Data Object",description:"Leave empty if you are filling from new, enter output from previous calculator if not new"}},standardProperties:{fieldLabel:!0,description:!0}}}constructor(){super(),this.dataobj="",this.listitems="",this.numberFormatter=new Intl.NumberFormat("en-US",{minimumFractionDigits:0,maximumFractionDigits:0})}updated(t){t.has("listitems")&&console.log("listitems changed:",this.listitems)}formatCurrency(t){const e=parseFloat(t.target.value.replace(/[^\d.-]/g,""));isNaN(e)||(t.target.value=this.numberFormatter.format(e))}createMonthInputs(t){const e=["January","February","March","April","May","June","July","August","September","October","November","December"];return R`
       ${["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].map(((i,s)=>R`
         <div class="input-group mb-3 px-1 month-input">
-          <label for="${i}-${t}" class="form-label">${i}</label>
+          <span class="input-group-text">${i}</span>
           <span class="input-group-text">$</span>
           <input type="text" class="form-control" id="${i}-${t}" aria-label="Amount for ${e[s]}" @blur="${this.formatCurrency}">
           <span class="input-group-text">.00</span>

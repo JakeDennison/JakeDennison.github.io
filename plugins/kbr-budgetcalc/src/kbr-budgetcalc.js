@@ -29,14 +29,14 @@ class BudgetCalcElement extends LitElement {
       }
       @media (min-width: 577px) and (max-width: 768px) { /* Medium devices */
         .month-input {
-          flex: 0 0 33.33%;
-          max-width: 33.33%;
+          flex: 0 0 50%;
+          max-width: 50%;
         }
       }
       @media (min-width: 769px) and (max-width: 992px) { /* Large devices */
         .month-input {
-          flex: 0 0 25%;
-          max-width: 25%;
+          flex: 0 0 33.33%;
+          max-width: 33.33%;
         }
       }
       @media (min-width: 993px) { /* Extra large devices */
@@ -113,7 +113,7 @@ class BudgetCalcElement extends LitElement {
     return html`
       ${months.map((shortMonth, index) => html`
         <div class="input-group mb-3 px-1 month-input">
-          <label for="${shortMonth}-${item}" class="form-label">${shortMonth}</label>
+          <span class="input-group-text">${shortMonth}</span>
           <span class="input-group-text">$</span>
           <input type="text" class="form-control" id="${shortMonth}-${item}" aria-label="Amount for ${fullMonths[index]}" @blur="${this.formatCurrency}">
           <span class="input-group-text">.00</span>
