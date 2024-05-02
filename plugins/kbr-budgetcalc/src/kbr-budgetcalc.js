@@ -58,12 +58,12 @@ class BudgetCalcElement extends LitElement {
   constructor() {
     super();
     this.dataobj = '';
-    this.listitems = '[]';
+    this.listitems = '[]'; 
   }
 
   render() {
-    // Convert the listitems JSON string to an array
-    const items = JSON.parse(this.listitems);
+    // Parse the listitems JSON string to an array
+    const items = JSON.parse(this.listitems || '[]');
     
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
