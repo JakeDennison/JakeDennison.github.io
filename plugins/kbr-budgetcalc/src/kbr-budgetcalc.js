@@ -33,7 +33,7 @@ class BudgetCalcElement extends LitElement {
           title: 'List Items',
           type: 'object',
           description: 'List of items to be budgeted',
-          name: {
+          itemname: {
             name:{
               type: 'string',
               description: 'Item name',
@@ -65,7 +65,7 @@ class BudgetCalcElement extends LitElement {
   constructor() {
     super();
     this.dataobj = '';
-    this.listitems.name = '[]';
+    this.listitems.itemname = '[]';
   }
 
   render() {
