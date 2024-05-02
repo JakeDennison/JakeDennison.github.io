@@ -13,7 +13,6 @@ class BudgetCalcElement extends LitElement {
     return css`
       :host {
         display: block;
-        padding: 16px;
       }
       .card {
         margin-bottom: 20px; /* Space between cards */
@@ -124,46 +123,60 @@ class BudgetCalcElement extends LitElement {
     `;
   }
 
+  createFooter(item) {
+    const statusInfo = this.statusColors[item] || {};
+    return html`
+      <div class="d-flex justify-content-end card-footer ${statusInfo.borderColor || ''}">
+        <div class="btn-group" role="group" aria-label="Approval Status">
+          <button type="button"
+                  class="${statusInfo.selectedStatus === 'Not Approved' ? 'btn btn-danger' : 'btn btn-outline-danger'}"
+                  @click="${() => this.updateStatus(item, 'Not Approved')}">Not Approved</button>
+          <button type="button"
+                  class="${statusInfo.selectedStatus === 'Review Required' ? 'btn btn-warning' : 'btn btn-outline-warning'}"
+                  @click="${() => this.updateStatus(item, 'Review Required')}">Review Required</button>
+          <button type="button"
+                  class="${statusInfo.selectedStatus === 'Approved' ? 'btn btn-success' : 'btn btn-outline-success'}"
+                  @click="${() => this.updateStatus(item, 'Approved')}">Approved</button>
+        </div>
+      </div>
+    `;
+  }
+  
   updateStatus(item, status) {
     const colorMap = {
       'Not Approved': 'border-danger',
       'Review Required': 'border-warning',
       'Approved': 'border-success'
     };
-    this.statusColors = { ...this.statusColors, [item]: colorMap[status] };
+    // Store both the border color and the selected status
+    this.statusColors[item] = {
+      borderColor: colorMap[status],
+      selectedStatus: status
+    };
     this.requestUpdate();
   }
 
-
   render() {
     const items = this.listitems.split(',');
-
+  
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
-        <h2>Budget Calculator</h2>
-        <p>Mode: ${this.mode}</p>
         ${items.map(item => html`
-          <div class="card ${this.statusColors[item] || ''}">
-            <div class="card-header ${this.statusColors[item] || ''}">
+          <div class="card ${this.statusColors[item]?.borderColor || ''}">
+            <div class="card-header ${this.statusColors[item]?.borderColor || ''}">
               Item: ${item}
             </div>
             <div class="card-body d-flex flex-wrap">
               ${this.createMonthInputs(item)}
             </div>
-            <div class="d-flex justify-content-end card-footer ${this.statusColors[item] || ''}">
-              <div class="btn-group" role="group" aria-label="Approval Status">
-                <button type="button" class="btn btn-danger" @click="${() => this.updateStatus(item, 'Not Approved')}">Not Approved</button>
-                <button type="button" class="btn btn-warning" @click="${() => this.updateStatus(item, 'Review Required')}">Review Required</button>
-                <button type="button" class="btn btn-success" @click="${() => this.updateStatus(item, 'Approved')}">Approved</button>
-              </div>
-            </div>
+            ${this.createFooter(item)}
           </div>
         `)}
       </div>
     `;
   }
-
+  
 }
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
