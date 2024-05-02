@@ -145,13 +145,13 @@ class BudgetCalcElement extends LitElement {
   }
 
   createHeader(item) {
-    const totalAmount = this.calculateTotalForItem(item); // Calculate the total amount for the item
+    const totalAmount = this.calculateTotalForItem(item); // This now returns a formatted string
   
     return html`
       <div class="card-header">
         <div style="float: left;">Item: ${item}</div>
-        <div style="float: right;">Total: $${totalAmount.toFixed(2)}</div> <!-- Display the total amount formatted to two decimal places -->
-      </div> 
+        <div style="float: right;">Total: $${totalAmount}</div> <!-- Display the formatted total amount -->
+      </div>
     `;
   }
 
@@ -163,13 +163,22 @@ class BudgetCalcElement extends LitElement {
     // Add a method to recalculate totals here
     this.calculateTotalForItem(item);
   }
+
+  formatNumber(value) {
+    const numberFormatter = new Intl.NumberFormat('en-US', {
+      style: 'decimal', // Change to 'currency' if you need currency symbol
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    return numberFormatter.format(value);
+  }
   
   calculateTotalForItem(item) {
     if (!this.itemValues[item]) {
-      return 0; // If no values have been entered yet
+      return this.formatNumber(0); // Format zero if no values have been entered yet
     }
     const total = this.itemValues[item].reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
-    return total;
+    return this.formatNumber(total); // Return the formatted total
   }
   
   updateValue(event, item, monthIndex) {
