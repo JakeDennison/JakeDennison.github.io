@@ -34,7 +34,7 @@
           max-width: 16.66%;
         }
       }
-    `}static getMetaConfig(){return{controlName:"kbr-budgetcalc",fallbackDisableSubmit:!1,description:"Yearly budget calculator",iconUrl:"",groupName:"KBR",version:"1.0",properties:{listitems:{type:"string",title:"List Items",description:"List of items to be budgeted (best use output from multi-select control)"},mode:{title:"Control Mode",type:"string",enum:["New","Approve","Read-only"],showAsRadio:!0,verticalLayout:!0,defaultValue:"New"},dataobj:{type:"string",title:"Calculator Data Object",description:"Leave empty if you are filling from new, enter output from previous calculator if not new"}},standardProperties:{fieldLabel:!0,description:!0}}}constructor(){super(),this.dataobj="",this.listitems="",this.numberFormatter=new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",minimumFractionDigits:2,maximumFractionDigits:2})}updated(t){t.has("listitems")&&console.log("listitems changed:",this.listitems)}formatCurrency(t){const e=parseFloat(t.target.value.replace(/[^\d.-]/g,""));isNaN(e)||(t.target.value=this.numberFormatter.format(e))}render(){const t=this.listitems.split(",");return k`
+    `}static getMetaConfig(){return{controlName:"kbr-budgetcalc",fallbackDisableSubmit:!1,description:"Yearly budget calculator",iconUrl:"",groupName:"KBR",version:"1.0",properties:{listitems:{type:"string",title:"List Items",description:"List of items to be budgeted (best use output from multi-select control)"},mode:{title:"Control Mode",type:"string",enum:["New","Approve","Read-only"],showAsRadio:!0,verticalLayout:!0,defaultValue:"New"},dataobj:{type:"string",title:"Calculator Data Object",description:"Leave empty if you are filling from new, enter output from previous calculator if not new"}},standardProperties:{fieldLabel:!0,description:!0}}}constructor(){super(),this.dataobj="",this.listitems="",this.numberFormatter=new Intl.NumberFormat("en-US",{minimumFractionDigits:0,maximumFractionDigits:0})}updated(t){t.has("listitems")&&console.log("listitems changed:",this.listitems)}formatCurrency(t){const e=parseFloat(t.target.value.replace(/[^\d.-]/g,""));isNaN(e)||(t.target.value=this.numberFormatter.format(e))}render(){const t=this.listitems.split(",");return k`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
         <h2>Budget Calculator</h2>
@@ -46,11 +46,10 @@
             </div>
             <div class="card-body d-flex flex-wrap">
               ${Array.from({length:12},((t,e)=>k`
-                <div class="input-group mb-3 px-1 month-input">
-                  <span class="input-group-text">$</span>
-                  <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
-                    @blur="${this.formatCurrency}">
-                </div>
+              <div class="input-group mb-3 px-1 month-input">
+                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" @blur="${this.formatCurrency}">
+                <span class="input-group-text">.00</span>
+              </div>
               `))}
             </div>
             <div class="d-flex justify-content-end card-footer">
