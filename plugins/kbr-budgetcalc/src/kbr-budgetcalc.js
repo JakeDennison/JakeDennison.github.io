@@ -37,7 +37,7 @@ class BudgetCalcElement extends LitElement {
         width: 50%; /* Width when active */
         opacity: 1;
         visibility: visible; /* Make input visible */
-        padding: .375rem .75rem;
+        margin-left: .75rem;
       }
       .input-group {
         padding-bottom: 10px; /* Space between input groups */
