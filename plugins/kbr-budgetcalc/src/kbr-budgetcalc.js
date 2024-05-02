@@ -13,26 +13,23 @@ class BudgetCalcElement extends LitElement {
     return css`
       :host {
         display: block;
-        padding: 16px;
       }
       .card {
         margin-bottom: 20px; /* Space between cards */
-        border: 1px solid transparent; /* Initial border color */
-        transition: border-color 0.3s ease; /* Smooth transition for border color */
       }
       .currency-input {
         text-align: right;
       }
       .card-footer {
         display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between; /* Maintain space between on large screens */
+        justify-content: space-between;
         transition: all 0.3s ease; /* Transition for footer layout changes */
       }
       .btn-group {
-        width: 100%; /* Takes full width initially */
-        transition: width 0.3s ease; /* Smooth transitions for width adjustments */
+        flex-grow: 1; /* Allows the button group to use available space */
+        transition: all 0.3s ease; /* Smooth transitions for button group adjustments */
+        flex: 0 0 100%;
+        max-width: 100%;
       }
       .comments-control {
         transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, width 0.3s ease;
@@ -49,31 +46,46 @@ class BudgetCalcElement extends LitElement {
         visibility: visible; /* Make input visible */
         padding: .375rem .75rem; /* Standard padding for form control */
         width: 50%; /* Width of input when active on large screens */
+        margin-top: .25rem
       }
-      @media (max-width: 992px) { /* Adjustments for smaller devices */
-        .card-footer {
-          flex-direction: column; /* Stack elements vertically */
-        }
-        .btn-group, .comments-control {
-          width: 100%; /* Full width for small screens */
-          justify-content: center; /* Center align the content */
+
+      .btn-group {
+          flex: 0 0 100%;
+          max-width: 100%;
         }
         .comments-control.active {
-          margin-top: 10px; /* Additional top margin for better spacing */
+          flex: 0 0 100%;
+          max-width: 100%;
+        }
+      .input-group {
+        padding-bottom: 10px; /* Space between input groups */
+      }
+      @media (max-width: 576px) { /* Smaller devices */
+        .month-input {
+            flex: 0 0 100%;
+            max-width: 100%;
+          }
+        }
+      @media (min-width: 577px) and (max-width: 768px) { /* Medium devices */
+        .month-input {
+          flex: 0 0 50%;
+          max-width: 50%;
         }
       }
-      @media (min-width: 993px) { /* Adjustments for larger devices */
-        .btn-group {
-          width: 100%; /* Button group takes full width until active */
+      @media (min-width: 769px) and (max-width: 992px) { /* Large devices */
+        .month-input {
+          flex: 0 0 33.33%;
+          max-width: 33.33%;
         }
-        .comments-control.active {
-          margin-left: .75rem; /* Margin left for spacing */
+      }
+      @media (min-width: 993px) { /* Extra large devices */
+        .month-input {
+          flex: 0 0 25%;
+          max-width: 25%;
         }
       }
     `;
   }
-  
-  
   static getMetaConfig() {
     return {
       controlName: 'kbr-budgetcalc',
@@ -171,7 +183,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
-  
+
   updateStatus(item, status) {
     const colorMap = {
       'Not Approved': 'border-danger',
