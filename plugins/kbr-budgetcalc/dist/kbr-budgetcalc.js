@@ -98,7 +98,7 @@
           </div>
         </div>
       `))}
-    `}autoResize(t){t.target.classList.contains("active")?(t.target.style.height="auto",t.target.style.height=`${t.target.scrollHeight}px`):t.target.style.height="0"}createFooter(t){if(!this.review)return"";const e=this.statusColors[t]||{},i=["Rejected","Approved"],s=this.outcomes?this.outcomes.split(",").map((t=>t.trim())).filter(Boolean):i,r=s.length>0?s:i,o="Approved"!==e.selectedStatus;return M`
+    `}autoResize(t){t.target.classList.contains("active")?(t.target.style.height="auto",t.target.style.height=`${t.target.scrollHeight}px`):t.target.style.height="0"}createFooter(t){if(!this.review)return"";const e=this.statusColors[t]||{},i=["Rejected","Approved"],s=this.outcomes?this.outcomes.split(",").map((t=>t.trim())).filter(Boolean):i,r=s.length>0?s:i,o=e.selectedStatus&&"Approved"!==e.selectedStatus;return M`
       <div class="card-footer">
         <div class="btn-group" role="group" aria-label="Approval Status">
           ${r.map((i=>M`
@@ -107,12 +107,14 @@
                     @click="${()=>this.updateStatus(t,i)}">${i}</button>
           `))}
         </div>
-        <textarea class="form-control comments-control ${o?"active":""}"
-                  placeholder="Enter comments"
-                  @input="${this.autoResize}"
-                  style="height: auto; min-height: 38px;"></textarea>
+        ${o?M`
+            <textarea class="form-control comments-control"
+                      placeholder="Enter comments"
+                      @input="${this.autoResize}"
+                      style="height: auto; min-height: 38px;"></textarea>
+        `:""}
       </div>
-    `}updateStatus(t,e){this.statusColors[t]={borderColor:{Approved:"border-success",Rejected:"border-danger"}[e]||"border-secondary",selectedStatus:e},this.requestUpdate()}getButtonClass(t,e){const i="btn";if(e===t)switch(t){case"Approved":return`${i} btn-success`;case"Rejected":return`${i} btn-danger`;default:return`${i} btn-primary`}else switch(t){case"Approved":return`${i} btn-outline-success`;case"Rejected":return`${i} btn-outline-danger`;default:return`${i} btn-outline-primary`}}render(){const t=this.listitems.split(",");return M`
+    `}updateStatus(t,e){this.statusColors[t]={borderColor:{Approved:"border-success",Rejected:"border-danger"}[e]||"border-primary",selectedStatus:e},this.requestUpdate()}getButtonClass(t,e){const i="btn";if(e===t)switch(t){case"Approved":return`${i} btn-success`;case"Rejected":return`${i} btn-danger`;default:return`${i} btn-primary`}else switch(t){case"Approved":return`${i} btn-outline-success`;case"Rejected":return`${i} btn-outline-danger`;default:return`${i} btn-outline-primary`}}render(){const t=this.listitems.split(",");return M`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
         ${t.map((t=>M`

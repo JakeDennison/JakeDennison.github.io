@@ -261,7 +261,9 @@ class BudgetCalcElement extends LitElement {
     const defaultOutcomes = ['Rejected', 'Approved']; // Default outcomes
     const customOutcomes = this.outcomes ? this.outcomes.split(',').map(outcome => outcome.trim()).filter(Boolean) : defaultOutcomes;
     const outcomes = customOutcomes.length > 0 ? customOutcomes : defaultOutcomes;
-    const showInput = statusInfo.selectedStatus !== 'Approved';
+    
+    // Show input only if a status other than 'Approved' is selected
+    const showInput = statusInfo.selectedStatus && statusInfo.selectedStatus !== 'Approved';
 
     return html`
       <div class="card-footer">
@@ -272,25 +274,27 @@ class BudgetCalcElement extends LitElement {
                     @click="${() => this.updateStatus(item, outcome)}">${outcome}</button>
           `)}
         </div>
-        <textarea class="form-control comments-control ${showInput ? 'active' : ''}"
-                  placeholder="Enter comments"
-                  @input="${this.autoResize}"
-                  style="height: auto; min-height: 38px;"></textarea>
+        ${showInput ? html`
+            <textarea class="form-control comments-control"
+                      placeholder="Enter comments"
+                      @input="${this.autoResize}"
+                      style="height: auto; min-height: 38px;"></textarea>
+        ` : ''}
       </div>
     `;
   }
 
   updateStatus(item, status) {
-    // Mapping outcomes to CSS classes if needed
     const colorMap = {
         'Approved': 'border-success',
         'Rejected': 'border-danger'
     };
+    // Update both the border color based on status and the currently selected status
     this.statusColors[item] = {
-        borderColor: colorMap[status] || 'border-secondary', // Default to 'border-secondary' if no specific mapping
+        borderColor: colorMap[status] || 'border-primary', // Use a default if no specific color
         selectedStatus: status
     };
-    this.requestUpdate();
+    this.requestUpdate(); // Trigger a re-render to update the UI
   }
 
   getButtonClass(outcome, selectedStatus) {
