@@ -113,6 +113,11 @@ class BudgetCalcElement extends LitElement {
           verticalLayout: true,
           defaultValue: 'New',
         },
+        outcomes:  {
+          type: 'string',
+          title: 'Custom outcomes',
+          description: 'Enter comma separated values here will replace default outcomes of Approved and Rejected'
+        },
         dataobj: {
           type: 'string',
           title: 'Calculator Data Object',
@@ -136,6 +141,7 @@ class BudgetCalcElement extends LitElement {
     });
     this.statusColors = {};
     this.itemValues = {};
+    this.outcomes = '';
   }
 
   updated(changedProperties) {
@@ -222,23 +228,22 @@ class BudgetCalcElement extends LitElement {
     }
   }
   
-
   createFooter(item) {
     const statusInfo = this.statusColors[item] || {};
-    const showInput = ['Not Approved', 'Review Required'].includes(statusInfo.selectedStatus);
-  
+    const defaultOutcomes = ['Approved', 'Rejected'];
+    const customOutcomes = this.outcomes.split(',').map(outcome => outcome.trim()).filter(Boolean);
+
+    const outcomes = customOutcomes.length > 0 ? customOutcomes : defaultOutcomes;
+    const showInput = outcomes.includes('Rejected') && statusInfo.selectedStatus === 'Rejected';
+
     return html`
       <div class="card-footer">
         <div class="btn-group" role="group" aria-label="Approval Status">
-          <button type="button"
-                  class="${statusInfo.selectedStatus === 'Not Approved' ? 'btn btn-danger' : 'btn btn-outline-danger'}"
-                  @click="${() => this.updateStatus(item, 'Not Approved')}">Not Approved</button>
-          <button type="button"
-                  class="${statusInfo.selectedStatus === 'Review Required' ? 'btn btn-warning' : 'btn btn-outline-warning'}"
-                  @click="${() => this.updateStatus(item, 'Review Required')}">Review Required</button>
-          <button type="button"
-                  class="${statusInfo.selectedStatus === 'Approved' ? 'btn btn-success' : 'btn btn-outline-success'}"
-                  @click="${() => this.updateStatus(item, 'Approved')}">Approved</button>
+          ${outcomes.map(outcome => html`
+            <button type="button"
+                    class="btn ${statusInfo.selectedStatus === outcome ? 'btn-primary' : 'btn-outline-secondary'}"
+                    @click="${() => this.updateStatus(item, outcome)}">${outcome}</button>
+          `)}
         </div>
         <textarea class="form-control comments-control ${showInput ? 'active' : ''}"
                   placeholder="Enter comments"
@@ -246,19 +251,17 @@ class BudgetCalcElement extends LitElement {
                   style="height: auto; min-height: 38px;"></textarea>
       </div>
     `;
-  }
-  
+}
 
   updateStatus(item, status) {
+    // Mapping outcomes to CSS classes if needed
     const colorMap = {
-      'Not Approved': 'border-danger',
-      'Review Required': 'border-warning',
-      'Approved': 'border-success'
+        'Approved': 'border-success',
+        'Rejected': 'border-danger'
     };
-    // Store both the border color and the selected status
     this.statusColors[item] = {
-      borderColor: colorMap[status],
-      selectedStatus: status
+        borderColor: colorMap[status] || 'border-secondary', // Default to 'border-secondary' if no specific mapping
+        selectedStatus: status
     };
     this.requestUpdate();
   }
