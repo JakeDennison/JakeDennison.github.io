@@ -215,6 +215,7 @@ class BudgetCalcElement extends LitElement {
           <div class="input-group">
             <span class="input-group-text">$</span>
             <input type="text" class="form-control currency-input" id="${shortMonth}-${item}"
+              placeholder="0.00"
               aria-label="Amount for ${fullMonths[index]}"
               @blur="${e => this.updateValue(e, item, index)}"
               @input="${e => this.updateValue(e, item, index)}">

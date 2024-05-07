@@ -90,6 +90,7 @@
           <div class="input-group">
             <span class="input-group-text">$</span>
             <input type="text" class="form-control currency-input" id="${s}-${t}"
+              placeholder="0.00"
               aria-label="Amount for ${e[i]}"
               @blur="${e=>this.updateValue(e,t,i)}"
               @input="${e=>this.updateValue(e,t,i)}">
