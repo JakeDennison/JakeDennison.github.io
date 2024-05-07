@@ -105,6 +105,11 @@ class BudgetCalcElement extends LitElement {
           title: 'List Items',
           description: 'List of items to be budgeted (best use output from multi-select control)'
         },
+        itemname: {
+            type: 'string',
+            title: 'Item Name',
+            description: 'Singular Item Name such as Cost Center or Budget Code'
+        },
         mode: {
           title: 'Control Mode',
           type: 'string',
@@ -135,6 +140,7 @@ class BudgetCalcElement extends LitElement {
     super();
     this.dataobj = '';
     this.listitems = '';
+    this.itemname = '';
     this.numberFormatter = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
@@ -154,8 +160,8 @@ class BudgetCalcElement extends LitElement {
     const totalAmount = this.calculateTotalForItem(item); // This now returns a formatted string
     return html`
       <div class="card-header">
-        <div style="float: left;" class="badge rounded-pill bg-secondary">Item: ${item}</div>
-        <div style="float: right;" class="badge rounded-pill bg-primary">Total: $${totalAmount}</div>
+        <div style="float: left;" class="badge fs-6 bg-secondary">${this.itemname}: ${item}</div>
+        <div style="float: right;" class="badge fs-6 rounded-pill bg-primary">Total: $${totalAmount}</div>
       </div>
     `;
   }
@@ -228,7 +234,7 @@ class BudgetCalcElement extends LitElement {
   
   createFooter(item) {
     const statusInfo = this.statusColors[item] || {};
-    const defaultOutcomes = ['Approved', 'Rejected'];
+    const defaultOutcomes = ['Rejected', 'Approved']; // Reorder as needed
     const customOutcomes = this.outcomes.split(',').map(outcome => outcome.trim()).filter(Boolean);
 
     const outcomes = customOutcomes.length > 0 ? customOutcomes : defaultOutcomes;
@@ -239,7 +245,7 @@ class BudgetCalcElement extends LitElement {
         <div class="btn-group" role="group" aria-label="Approval Status">
           ${outcomes.map(outcome => html`
             <button type="button"
-                    class="btn ${statusInfo.selectedStatus === outcome ? 'btn-primary' : 'btn-outline-secondary'}"
+                    class="${this.getButtonClass(outcome, statusInfo.selectedStatus)}"
                     @click="${() => this.updateStatus(item, outcome)}">${outcome}</button>
           `)}
         </div>
@@ -249,7 +255,7 @@ class BudgetCalcElement extends LitElement {
                   style="height: auto; min-height: 38px;"></textarea>
       </div>
     `;
-}
+  } 
 
   updateStatus(item, status) {
     // Mapping outcomes to CSS classes if needed
@@ -262,6 +268,19 @@ class BudgetCalcElement extends LitElement {
         selectedStatus: status
     };
     this.requestUpdate();
+  }
+
+  getButtonClass(outcome, selectedStatus) {
+    if (outcome === 'Approved' && selectedStatus === 'Approved') {
+        return 'btn btn-success'; // Green for approved
+    } else if (outcome === 'Rejected' && selectedStatus === 'Rejected') {
+        return 'btn btn-danger'; // Red for rejected
+    } else if (outcome === 'Approved') {
+        return 'btn btn-outline-success'; // Outline when not selected
+    } else if (outcome === 'Rejected') {
+        return 'btn btn-outline-danger'; // Outline when not selected
+    }
+    return 'btn btn-outline-secondary'; // Default for other custom statuses
   }
 
   render() {
