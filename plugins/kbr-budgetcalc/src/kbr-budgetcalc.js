@@ -127,7 +127,7 @@ class BudgetCalcElement extends LitElement {
           type: 'string',
           title: 'Outcomes',
           description: 'Comma separated values for the outcomes',
-          defaultValue: 'Approved, Rejected'
+          defaultValue: 'Rejected, Approved'
         },
         dataobj: {
           type: 'string',
@@ -155,7 +155,7 @@ class BudgetCalcElement extends LitElement {
     });
     this.statusColors = {};
     this.itemValues = {};
-    this.outcomes = 'Approved, Rejected';
+    this.outcomes = 'Rejected, Approved';
   }
 
   updated(changedProperties) {
@@ -254,12 +254,15 @@ class BudgetCalcElement extends LitElement {
   
   createFooter(item) {
     if (!this.review) {
-        return ''; // No footer if review mode is false
+        return ''; // Do not render the footer if review mode is false
     }
 
     const statusInfo = this.statusColors[item] || {};
-    const outcomes = this.getOutcomes(); // Helper to handle outcomes
-    // Check that a status is selected and it's not 'Approved'
+    const defaultOutcomes = ['Rejected', 'Approved']; // Default outcomes
+    const customOutcomes = this.outcomes ? this.outcomes.split(',').map(outcome => outcome.trim()).filter(Boolean) : defaultOutcomes;
+    const outcomes = customOutcomes.length > 0 ? customOutcomes : defaultOutcomes;
+    
+    // Only show the input if a status other than 'Approved' is actively selected
     const showInput = statusInfo.selectedStatus && statusInfo.selectedStatus !== 'Approved';
 
     return html`
@@ -271,7 +274,7 @@ class BudgetCalcElement extends LitElement {
                     @click="${() => this.updateStatus(item, outcome)}">${outcome}</button>
           `)}
         </div>
-        ${showInput ? html`
+        ${showInput ? html`  <!-- Check here: This condition will now correctly show or hide the textarea -->
             <textarea class="form-control comments-control"
                       placeholder="Enter comments"
                       @input="${this.autoResize}"
@@ -279,7 +282,8 @@ class BudgetCalcElement extends LitElement {
         ` : ''}
       </div>
     `;
-  }
+}
+
 
   getOutcomes() {
       const defaultOutcomes = ['Rejected', 'Approved'];
@@ -288,12 +292,11 @@ class BudgetCalcElement extends LitElement {
   }
 
   updateStatus(item, status) {
-    // Ensure this function is correctly updating the state
     this.statusColors[item] = {
         borderColor: this.getBorderColor(status),
         selectedStatus: status
     };
-    this.requestUpdate(); // Trigger update to re-render the component
+    this.requestUpdate();  // Ensures the UI updates to reflect the new status
   }
 
   getBorderColor(status) {
