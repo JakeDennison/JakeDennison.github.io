@@ -113,7 +113,7 @@ class BudgetCalcElement extends LitElement {
         mode: {
           title: 'Control Mode',
           type: 'string',
-          enum: ['New', 'Approve', 'Read-only'],
+          enum: ['New', 'Review', 'Read-only'],
           showAsRadio: true,
           verticalLayout: true,
           defaultValue: 'New',
@@ -157,11 +157,11 @@ class BudgetCalcElement extends LitElement {
   }
 
   createHeader(item) {
-    const itemnaming = this.itemname.length > 0 ? this.itemname : "Item";
+    const itemnaming = this.itemname.length > 0 ? this.itemname : "Item:";
     const totalAmount = this.calculateTotalForItem(item);
     return html`
       <div class="card-header">
-        <div style="float: left;" class="badge fs-6 bg-dark">${itemnaming}: ${item}</div>
+        <div style="float: left;" class="badge fs-6 bg-dark">${itemnaming} ${item}</div>
         <div style="float: right;" class="badge fs-6 rounded-pill bg-primary">Total: $${totalAmount}</div>
       </div>
     `;
