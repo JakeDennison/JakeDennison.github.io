@@ -254,15 +254,12 @@ class BudgetCalcElement extends LitElement {
   
   createFooter(item) {
     if (!this.review) {
-        return ''; // Do not render the footer if review mode is false
+        return ''; // No footer if review mode is false
     }
 
     const statusInfo = this.statusColors[item] || {};
-    const defaultOutcomes = ['Rejected', 'Approved']; // Default outcomes
-    const customOutcomes = this.outcomes ? this.outcomes.split(',').map(outcome => outcome.trim()).filter(Boolean) : defaultOutcomes;
-    const outcomes = customOutcomes.length > 0 ? customOutcomes : defaultOutcomes;
-    
-    // Show input only if a status other than 'Approved' is selected
+    const outcomes = this.getOutcomes(); // Helper to handle outcomes
+    // Check that a status is selected and it's not 'Approved'
     const showInput = statusInfo.selectedStatus && statusInfo.selectedStatus !== 'Approved';
 
     return html`
@@ -284,17 +281,28 @@ class BudgetCalcElement extends LitElement {
     `;
   }
 
+  getOutcomes() {
+      const defaultOutcomes = ['Rejected', 'Approved'];
+      const customOutcomes = this.outcomes ? this.outcomes.split(',').map(o => o.trim()).filter(Boolean) : [];
+      return customOutcomes.length > 0 ? customOutcomes : defaultOutcomes;
+  }
+
   updateStatus(item, status) {
-    const colorMap = {
-        'Approved': 'border-success',
-        'Rejected': 'border-danger'
-    };
-    // Update both the border color based on status and the currently selected status
+    // Ensure this function is correctly updating the state
     this.statusColors[item] = {
-        borderColor: colorMap[status] || 'border-primary', // Use a default if no specific color
+        borderColor: this.getBorderColor(status),
         selectedStatus: status
     };
-    this.requestUpdate(); // Trigger a re-render to update the UI
+    this.requestUpdate(); // Trigger update to re-render the component
+  }
+
+  getBorderColor(status) {
+      const colorMap = {
+          'Approved': 'border-success',
+          'Rejected': 'border-danger',
+          default: 'border-primary'
+      };
+      return colorMap[status] || colorMap.default;
   }
 
   getButtonClass(outcome, selectedStatus) {
