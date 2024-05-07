@@ -116,7 +116,7 @@ class BudgetCalcElement extends LitElement {
           enum: ['Edit','Read-only'],
           showAsRadio: true,
           verticalLayout: true,
-          defaultValue: 'New',
+          defaultValue: 'Edit',
         },
         review: {
           title: 'Enable Review Mode',
