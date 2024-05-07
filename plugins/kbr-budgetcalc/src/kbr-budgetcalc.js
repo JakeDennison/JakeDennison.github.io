@@ -155,7 +155,7 @@ class BudgetCalcElement extends LitElement {
     });
     this.statusColors = {};
     this.itemValues = {};
-    this.outcomes = 'Rejected, Approved';
+    this.outcomes = '';
   }
 
   updated(changedProperties) {
@@ -252,51 +252,40 @@ class BudgetCalcElement extends LitElement {
     }
   }
   
-  createFooter(item) {
-    if (!this.review) {
-        return ''; // Do not render the footer if review mode is false
-    }
+  get processedOutcomes() {
+    const defaultOutcomes = ['Rejected', 'Approved'];
+    const customOutcomes = this.outcomes.split(',').map(outcome => outcome.trim());
+    return customOutcomes.length ? customOutcomes : defaultOutcomes;
+  }
 
-    const statusInfo = this.statusColors[item] || {};
-    const defaultOutcomes = ['Rejected', 'Approved']; // Default outcomes
-    const customOutcomes = this.outcomes ? this.outcomes.split(',').map(outcome => outcome.trim()).filter(Boolean) : defaultOutcomes;
-    const outcomes = customOutcomes.length > 0 ? customOutcomes : defaultOutcomes;
-    
-    // Only show the input if a status other than 'Approved' is actively selected
-    const showInput = statusInfo.selectedStatus && statusInfo.selectedStatus !== 'Approved';
+  createFooter(item) {
+    const statusInfo = this.statusColors[item] || {selectedStatus: 'Rejected'}; // Default to 'Rejected'
+    const showInput = statusInfo.selectedStatus !== 'Approved'; // Show input unless 'Approved'
 
     return html`
       <div class="card-footer">
         <div class="btn-group" role="group" aria-label="Approval Status">
-          ${outcomes.map(outcome => html`
+          ${this.processedOutcomes.map(outcome => html`
             <button type="button"
                     class="${this.getButtonClass(outcome, statusInfo.selectedStatus)}"
                     @click="${() => this.updateStatus(item, outcome)}">${outcome}</button>
           `)}
         </div>
-        ${showInput ? html`  <!-- Check here: This condition will now correctly show or hide the textarea -->
-            <textarea class="form-control comments-control"
-                      placeholder="Enter comments"
-                      @input="${this.autoResize}"
-                      style="height: auto; min-height: 38px;"></textarea>
+        ${showInput ? html`
+          <textarea class="form-control comments-control"
+                    placeholder="Enter comments"
+                    @input="${this.autoResize}"
+                    style="height: auto; min-height: 38px;"></textarea>
         ` : ''}
       </div>
     `;
-}
-
-
-  getOutcomes() {
-      const defaultOutcomes = ['Rejected', 'Approved'];
-      const customOutcomes = this.outcomes ? this.outcomes.split(',').map(o => o.trim()).filter(Boolean) : [];
-      return customOutcomes.length > 0 ? customOutcomes : defaultOutcomes;
   }
 
   updateStatus(item, status) {
     this.statusColors[item] = {
-        borderColor: this.getBorderColor(status),
         selectedStatus: status
     };
-    this.requestUpdate();  // Ensures the UI updates to reflect the new status
+    this.requestUpdate();  // Update to reflect changes
   }
 
   getBorderColor(status) {
@@ -310,29 +299,15 @@ class BudgetCalcElement extends LitElement {
 
   getButtonClass(outcome, selectedStatus) {
     const baseClass = 'btn';
-    if (selectedStatus === outcome) {
-        // Use more distinct styles for selected status
-        switch (outcome) {
-            case 'Approved':
-                return `${baseClass} btn-success`; // Green for approved
-            case 'Rejected':
-                return `${baseClass} btn-danger`; // Red for rejected
-            default:
-                return `${baseClass} btn-primary`; // Use primary color for other selected custom statuses
-        }
-    } else {
-        // Use outline styles for non-selected status
-        switch (outcome) {
-            case 'Approved':
-                return `${baseClass} btn-outline-success`;
-            case 'Rejected':
-                return `${baseClass} btn-outline-danger`;
-            default:
-                return `${baseClass} btn-outline-primary`;
-        }
+    switch (outcome) {
+        case 'Approved':
+            return `${baseClass} ${selectedStatus === outcome ? 'btn-success' : 'btn-outline-success'}`;
+        case 'Rejected':
+            return `${baseClass} ${selectedStatus === outcome ? 'btn-danger' : 'btn-outline-danger'}`;
+        default:
+            return `${baseClass} ${selectedStatus === outcome ? 'btn-primary' : 'btn-outline-primary'}`;
     }
   }
-
 
   render() {
     const items = this.listitems.split(',');
