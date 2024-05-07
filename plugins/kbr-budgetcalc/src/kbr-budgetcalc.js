@@ -167,15 +167,15 @@ class BudgetCalcElement extends LitElement {
     `;
   }
 
-  formatCurrency(event) {
+  formatCurrency(event, item) {
     const value = parseFloat(event.target.value.replace(/[^\d.-]/g, ''));
     if (!isNaN(value)) {
-      event.target.value = value.toFixed(2); // Format as decimal with two places
-    } else {
-      event.target.value = ''; // Clear input if invalid
+      event.target.value = this.numberFormatter.format(value);
     }
+    // Add a method to recalculate totals here
+    this.calculateTotalForItem(item);
   }
-  
+
   formatNumber(value) {
     const numberFormatter = new Intl.NumberFormat('en-US', {
       style: 'decimal', // Change to 'currency' if you need currency symbol
@@ -193,18 +193,16 @@ class BudgetCalcElement extends LitElement {
     return this.formatNumber(total); // Return the formatted total
   }
   
-  updateValue(event, item, index) {
-    const value = event.target.value.replace(/[^\d.-]/g, ''); // Remove non-numeric characters
-    if (value === '') {
-      event.target.value = ''; // Keep empty if no input
-    } else {
-      const numericValue = parseFloat(value);
-      if (!isNaN(numericValue)) {
-        event.target.value = numericValue.toFixed(2); // Format only if valid number
-      }
+  updateValue(event, item, monthIndex) {
+    const value = parseFloat(event.target.value.replace(/[^\d.-]/g, ''));
+    if (!isNaN(value)) {
+      event.target.value = this.numberFormatter.format(value);
+      this.itemValues[item] = this.itemValues[item] || [];
+      this.itemValues[item][monthIndex] = value; // Update the specific month's value
+      this.requestUpdate(); // Trigger update to recalculate totals and update the view
     }
-    // Update the state/store for the item value
   }
+  
 
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -217,10 +215,9 @@ class BudgetCalcElement extends LitElement {
           <div class="input-group">
             <span class="input-group-text">$</span>
             <input type="text" class="form-control currency-input" id="${shortMonth}-${item}"
-            placeholder="0.00"
-            aria-label="Amount for ${fullMonths[index]}"
-            @blur="${e => this.updateValue(e, item, index)}"
-            @input="${e => this.updateValue(e, item, index)}">
+              aria-label="Amount for ${fullMonths[index]}"
+              @blur="${e => this.updateValue(e, item, index)}"
+              @input="${e => this.updateValue(e, item, index)}">
           </div>
         </div>
       `)}
