@@ -187,29 +187,29 @@ class BudgetCalcElement extends LitElement {
   
   calculateTotalForItem(item) {
     if (!this.itemValues[item]) {
-      return this.formatNumber(0); // Format zero if no values have been entered yet
+        return this.formatNumber(0); // Format zero if no values have been entered yet
     }
     const total = this.itemValues[item].reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
     return this.formatNumber(total); // Return the formatted total
   }
-  
+
   updateValue(event, item, monthIndex) {
     const rawValue = event.target.value.replace(/[^\d.-]/g, ''); // Strip non-numeric characters
     const value = parseFloat(rawValue);
     if (!isNaN(value)) {
         this.itemValues[item] = this.itemValues[item] || [];
         this.itemValues[item][monthIndex] = value; // Update the specific month's value
+        this.requestUpdate(); // Ensures the component knows to update
     } else if (rawValue === '') {
         this.itemValues[item][monthIndex] = 0; // Reset to zero if cleared
+        this.requestUpdate(); // Ensures the component knows to update
     }
-    // Do not format here, let the user input freely
-}
+  }
 
-formatInput(event) {
-    const value = parseFloat(event.target.value);
-    event.target.value = isNaN(value) ? '' : this.numberFormatter.format(value);
-}
-
+  formatInput(event) {
+      const value = parseFloat(event.target.value);
+      event.target.value = isNaN(value) ? '' : this.numberFormatter.format(value);
+  }
 
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
