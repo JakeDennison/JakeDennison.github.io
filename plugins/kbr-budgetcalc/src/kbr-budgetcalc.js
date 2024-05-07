@@ -125,8 +125,9 @@ class BudgetCalcElement extends LitElement {
         },
         outcomes:  {
           type: 'string',
-          title: 'Custom outcomes',
-          description: 'Enter comma separated values here will replace default outcomes of Approved and Rejected'
+          title: 'Outcomes',
+          description: 'Comma separated values for the outcomes',
+          defaultValue: 'Approved, Rejected'
         },
         dataobj: {
           type: 'string',
@@ -154,7 +155,7 @@ class BudgetCalcElement extends LitElement {
     });
     this.statusColors = {};
     this.itemValues = {};
-    this.outcomes = '';
+    this.outcomes = 'Approved, Rejected';
   }
 
   updated(changedProperties) {
@@ -257,7 +258,9 @@ class BudgetCalcElement extends LitElement {
     }
 
     const statusInfo = this.statusColors[item] || {};
-    const outcomes = this.outcomes.split(',').map(outcome => outcome.trim()).filter(Boolean);
+    const defaultOutcomes = ['Rejected', 'Approved']; // Default outcomes
+    const customOutcomes = this.outcomes ? this.outcomes.split(',').map(outcome => outcome.trim()).filter(Boolean) : defaultOutcomes;
+    const outcomes = customOutcomes.length > 0 ? customOutcomes : defaultOutcomes;
     const showInput = outcomes.includes('Rejected') && statusInfo.selectedStatus === 'Rejected';
 
     return html`
