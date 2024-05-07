@@ -161,7 +161,7 @@ class BudgetCalcElement extends LitElement {
     const totalAmount = this.calculateTotalForItem(item);
     return html`
       <div class="card-header">
-        <div style="float: left;" class="badge fs-6 bg-secondary">${itemnaming}: ${item}</div>
+        <div style="float: left;" class="badge fs-6 bg-dark">${itemnaming}: ${item}</div>
         <div style="float: right;" class="badge fs-6 rounded-pill bg-primary">Total: $${totalAmount}</div>
       </div>
     `;
