@@ -194,15 +194,22 @@ class BudgetCalcElement extends LitElement {
   }
   
   updateValue(event, item, monthIndex) {
-    const value = parseFloat(event.target.value.replace(/[^\d.-]/g, ''));
+    const rawValue = event.target.value.replace(/[^\d.-]/g, ''); // Strip non-numeric characters
+    const value = parseFloat(rawValue);
     if (!isNaN(value)) {
-      event.target.value = this.numberFormatter.format(value);
-      this.itemValues[item] = this.itemValues[item] || [];
-      this.itemValues[item][monthIndex] = value; // Update the specific month's value
-      this.requestUpdate(); // Trigger update to recalculate totals and update the view
+        this.itemValues[item] = this.itemValues[item] || [];
+        this.itemValues[item][monthIndex] = value; // Update the specific month's value
+    } else if (rawValue === '') {
+        this.itemValues[item][monthIndex] = 0; // Reset to zero if cleared
     }
-  }
-  
+    // Do not format here, let the user input freely
+}
+
+formatInput(event) {
+    const value = parseFloat(event.target.value);
+    event.target.value = isNaN(value) ? '' : this.numberFormatter.format(value);
+}
+
 
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -216,7 +223,8 @@ class BudgetCalcElement extends LitElement {
             <span class="input-group-text">$</span>
             <input type="text" class="form-control currency-input" id="${shortMonth}-${item}"
               aria-label="Amount for ${fullMonths[index]}"
-              @blur="${e => this.updateValue(e, item, index)}"
+              placeholder="0.00"
+              @blur="${e => this.formatInput(e)}"
               @input="${e => this.updateValue(e, item, index)}">
           </div>
         </div>
