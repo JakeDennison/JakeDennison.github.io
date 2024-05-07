@@ -261,7 +261,7 @@ class BudgetCalcElement extends LitElement {
     const defaultOutcomes = ['Rejected', 'Approved']; // Default outcomes
     const customOutcomes = this.outcomes ? this.outcomes.split(',').map(outcome => outcome.trim()).filter(Boolean) : defaultOutcomes;
     const outcomes = customOutcomes.length > 0 ? customOutcomes : defaultOutcomes;
-    const showInput = outcomes.includes('Rejected') && statusInfo.selectedStatus === 'Rejected';
+    const showInput = statusInfo.selectedStatus !== 'Approved';
 
     return html`
       <div class="card-footer">
@@ -278,8 +278,7 @@ class BudgetCalcElement extends LitElement {
                   style="height: auto; min-height: 38px;"></textarea>
       </div>
     `;
-}
-
+  }
 
   updateStatus(item, status) {
     // Mapping outcomes to CSS classes if needed
@@ -295,17 +294,30 @@ class BudgetCalcElement extends LitElement {
   }
 
   getButtonClass(outcome, selectedStatus) {
-    if (outcome === 'Approved' && selectedStatus === 'Approved') {
-        return 'btn btn-success'; // Green for approved
-    } else if (outcome === 'Rejected' && selectedStatus === 'Rejected') {
-        return 'btn btn-danger'; // Red for rejected
-    } else if (outcome === 'Approved') {
-        return 'btn btn-outline-success'; // Outline when not selected
-    } else if (outcome === 'Rejected') {
-        return 'btn btn-outline-danger'; // Outline when not selected
+    const baseClass = 'btn';
+    if (selectedStatus === outcome) {
+        // Use more distinct styles for selected status
+        switch (outcome) {
+            case 'Approved':
+                return `${baseClass} btn-success`; // Green for approved
+            case 'Rejected':
+                return `${baseClass} btn-danger`; // Red for rejected
+            default:
+                return `${baseClass} btn-primary`; // Use primary color for other selected custom statuses
+        }
+    } else {
+        // Use outline styles for non-selected status
+        switch (outcome) {
+            case 'Approved':
+                return `${baseClass} btn-outline-success`;
+            case 'Rejected':
+                return `${baseClass} btn-outline-danger`;
+            default:
+                return `${baseClass} btn-outline-primary`;
+        }
     }
-    return 'btn btn-outline-secondary'; // Default for other custom statuses
   }
+
 
   render() {
     const items = this.listitems.split(',');
