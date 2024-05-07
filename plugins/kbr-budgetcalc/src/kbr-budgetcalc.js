@@ -113,10 +113,15 @@ class BudgetCalcElement extends LitElement {
         mode: {
           title: 'Control Mode',
           type: 'string',
-          enum: ['New', 'Review', 'Read-only'],
+          enum: ['Edit','Read-only'],
           showAsRadio: true,
           verticalLayout: true,
           defaultValue: 'New',
+        },
+        review: {
+          title: 'Enable Review Mode',
+          type: 'boolean',
+          defaultValue: false,
         },
         outcomes:  {
           type: 'string',
@@ -141,6 +146,8 @@ class BudgetCalcElement extends LitElement {
     this.dataobj = '';
     this.listitems = '';
     this.itemname = '';
+    this.mode = 'Edit';
+    this.review = false;
     this.numberFormatter = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
@@ -214,6 +221,7 @@ class BudgetCalcElement extends LitElement {
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const isReadOnly = this.mode === 'Read-only';
 
     return html`
       ${months.map((shortMonth, index) => html`
@@ -223,6 +231,7 @@ class BudgetCalcElement extends LitElement {
             <span class="input-group-text">$</span>
             <input type="text" class="form-control currency-input" id="${shortMonth}-${item}"
               aria-label="Amount for ${fullMonths[index]}"
+              ?disabled="${isReadOnly}"  // Conditionally disable based on mode
               placeholder="0.00"
               @blur="${e => this.formatInput(e)}"
               @input="${e => this.updateValue(e, item, index)}">
@@ -230,7 +239,8 @@ class BudgetCalcElement extends LitElement {
         </div>
       `)}
     `;
-  }
+}
+
 
   autoResize(e) {
     if (e.target.classList.contains('active')) {
@@ -242,11 +252,12 @@ class BudgetCalcElement extends LitElement {
   }
   
   createFooter(item) {
-    const statusInfo = this.statusColors[item] || {};
-    const defaultOutcomes = ['Rejected', 'Approved']; // Reorder as needed
-    const customOutcomes = this.outcomes.split(',').map(outcome => outcome.trim()).filter(Boolean);
+    if (!this.review) {
+        return ''; // Do not render the footer if review mode is false
+    }
 
-    const outcomes = customOutcomes.length > 0 ? customOutcomes : defaultOutcomes;
+    const statusInfo = this.statusColors[item] || {};
+    const outcomes = this.outcomes.split(',').map(outcome => outcome.trim()).filter(Boolean);
     const showInput = outcomes.includes('Rejected') && statusInfo.selectedStatus === 'Rejected';
 
     return html`
@@ -264,7 +275,8 @@ class BudgetCalcElement extends LitElement {
                   style="height: auto; min-height: 38px;"></textarea>
       </div>
     `;
-  } 
+}
+
 
   updateStatus(item, status) {
     // Mapping outcomes to CSS classes if needed
