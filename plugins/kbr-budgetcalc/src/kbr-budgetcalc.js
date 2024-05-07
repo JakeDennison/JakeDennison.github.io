@@ -157,10 +157,11 @@ class BudgetCalcElement extends LitElement {
   }
 
   createHeader(item) {
-    const totalAmount = this.calculateTotalForItem(item); // This now returns a formatted string
+    const itemnaming = this.itemname.length > 0 ? this.itemname : "Item";
+    const totalAmount = this.calculateTotalForItem(item);
     return html`
       <div class="card-header">
-        <div style="float: left;" class="badge fs-6 bg-secondary">${this.itemname}: ${item}</div>
+        <div style="float: left;" class="badge fs-6 bg-secondary">${itemnaming}: ${item}</div>
         <div style="float: right;" class="badge fs-6 rounded-pill bg-primary">Total: $${totalAmount}</div>
       </div>
     `;
