@@ -136,8 +136,8 @@ class BudgetCalcElement extends LitElement {
     this.dataobj = '';
     this.listitems = '';
     this.numberFormatter = new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
     });
     this.statusColors = {};
     this.itemValues = {};
@@ -152,11 +152,10 @@ class BudgetCalcElement extends LitElement {
 
   createHeader(item) {
     const totalAmount = this.calculateTotalForItem(item); // This now returns a formatted string
-  
     return html`
       <div class="card-header">
-        <div style="float: left;">Item: ${item}</div>
-        <div style="float: right;">Total: $${totalAmount}</div> <!-- Display the formatted total amount -->
+        <div style="float: left;" class="badge rounded-pill bg-secondary">Item: ${item}</div>
+        <div style="float: right;" class="badge rounded-pill bg-primary">Total: $${totalAmount}</div>
       </div>
     `;
   }
@@ -212,7 +211,6 @@ class BudgetCalcElement extends LitElement {
               aria-label="Amount for ${fullMonths[index]}"
               @blur="${e => this.updateValue(e, item, index)}"
               @input="${e => this.updateValue(e, item, index)}">
-            <span class="input-group-text">.00</span>
           </div>
         </div>
       `)}
