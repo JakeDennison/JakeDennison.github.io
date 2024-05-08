@@ -123,7 +123,7 @@ class BudgetCalcElement extends LitElement {
           description: 'Leave empty if you are filling from new, enter output from previous calculator if not new',
           properties: {
             budgetItems: {
-              type: 'array',
+              type: 'object',
               title: 'Budget Items',
               isValueField: true,
               items: {
@@ -213,7 +213,7 @@ class BudgetCalcElement extends LitElement {
       bubbles: true,
       cancelable: false,
       composed: true,
-      detail: e.target.value,
+      detail: this.dataobj,
     };
     const event = new CustomEvent('ntx-value-change', args);
     this.dispatchEvent(event);
@@ -232,12 +232,12 @@ class BudgetCalcElement extends LitElement {
   updateItemValuesFromDataObj() {
     if (this.dataobj && this.dataobj.budgetItems) {
       this.itemValues = {};
-      this.dataobj.budgetItems.forEach(item => {
-        this.itemValues[item.itemName] = Object.values(item.monthlyValues);
-      });
+      for (const item in this.dataobj.budgetItems) {
+        this.itemValues[item] = Object.values(this.dataobj.budgetItems[item].monthlyValues);
+      }
     }
   }
-
+  
   createHeader(item) {
     const itemnaming = this.itemname.length > 0 ? this.itemname : "Item:";
     const totalAmount = this.calculateTotalForItem(item);
@@ -279,25 +279,35 @@ class BudgetCalcElement extends LitElement {
   }
 
   updateDataObj(item) {
-    const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
-    if (existingItem) {
-      const monthlyValues = [
-        'January', 'February', 'March', 'April', 'May', 'June', 'July',
-        'August', 'September', 'October', 'November', 'December'
-      ].reduce((acc, month, index) => {
-        acc[month] = this.itemValues[item][index] || 0;
-        return acc;
-      }, {});
-      existingItem.monthlyValues = monthlyValues;
-      existingItem.total = this.itemValues[item].reduce((acc, val) => acc + val, 0);
-      existingItem.lastUpdated = new Date().toISOString();
+    const monthlyValues = [
+      'January', 'February', 'March', 'April', 'May', 'June', 'July',
+      'August', 'September', 'October', 'November', 'December'
+    ].reduce((acc, month, index) => {
+      acc[month] = this.itemValues[item][index] || 0;
+      return acc;
+    }, {});
+    
+    if (this.dataobj.budgetItems[item]) {
+      this.dataobj.budgetItems[item].monthlyValues = monthlyValues;
+      this.dataobj.budgetItems[item].total = this.itemValues[item].reduce((acc, val) => acc + val, 0);
+      this.dataobj.budgetItems[item].lastUpdated = new Date().toISOString();
+    } else {
+      this.dataobj.budgetItems[item] = {
+        itemName: item,
+        monthlyValues: monthlyValues,
+        total: this.itemValues[item].reduce((acc, val) => acc + val, 0),
+        outcome: '',
+        notes: '',
+        approver: '',
+        lastUpdated: new Date().toISOString()
+      };
     }
   }
-
+  
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
+    const existingItem = this.dataobj.budgetItems[item];
   
     return html`
       ${months.map((shortMonth, index) => html`
@@ -316,8 +326,7 @@ class BudgetCalcElement extends LitElement {
         </div>
       `)}
     `;
-  }
-  
+  }  
 
   formatInput(event) {
     const value = parseFloat(event.target.value);
@@ -394,12 +403,12 @@ class BudgetCalcElement extends LitElement {
 
   render() {
     const items = this.listitems.split(',').map(item => item.trim());
-
+  
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
         ${items.map(item => {
-          const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
+          const existingItem = this.dataobj.budgetItems[item];
           return html`
             <div class="card ${this.statusColors[item]?.borderColor || ''}">
               ${this.createHeader(item)}
@@ -413,6 +422,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
+  
 }
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
