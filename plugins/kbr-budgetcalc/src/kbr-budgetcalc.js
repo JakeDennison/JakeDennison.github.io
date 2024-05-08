@@ -206,6 +206,7 @@ class BudgetCalcElement extends LitElement {
     });
     this.statusColors = {};
     this.itemValues = {};
+    console.log('Data object on load:', this.dataobj);
   }  
 
   updated(changedProperties) {
@@ -454,7 +455,7 @@ class BudgetCalcElement extends LitElement {
 
   render() {
     const items = this.listitems.split(',').map(item => item.trim());
-    console.log('Data object on load:', this.dataobj);
+    console.log('Data object on render:', this.dataobj);
   
     // Ensure dataobj and dataobj.budgetItems are defined
     if (!this.dataobj || !Array.isArray(this.dataobj.budgetItems)) {
