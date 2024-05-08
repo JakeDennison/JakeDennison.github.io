@@ -453,7 +453,7 @@ class BudgetCalcElement extends LitElement {
 
   render() {
     const items = this.listitems.split(',').map(item => item.trim());
-  
+    console.log(this.dataobj)
     // Ensure dataobj and dataobj.budgetItems are defined
     if (!this.dataobj || !Array.isArray(this.dataobj.budgetItems)) {
       return html`<div>Error: dataobj is not properly initialized.</div>`;
