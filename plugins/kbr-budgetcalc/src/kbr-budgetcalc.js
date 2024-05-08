@@ -121,11 +121,11 @@ class BudgetCalcElement extends LitElement {
           title: 'Calculator Data Object',
           required: false,
           description: 'Leave empty if you are filling from new, enter output from previous calculator if not new',
+          isValueField: true,
           properties: {
             budgetItems: {
               type: 'object',
               title: 'Budget Items',
-              isValueField: true,
               items: {
                 type: 'object',
                 properties: {
@@ -206,6 +206,7 @@ class BudgetCalcElement extends LitElement {
     });
     this.statusColors = {};
     this.itemValues = {};
+    this.onChange();
   }
 
   onChange(e) {
