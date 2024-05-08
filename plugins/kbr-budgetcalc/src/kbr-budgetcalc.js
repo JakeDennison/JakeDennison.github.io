@@ -3,7 +3,7 @@ import { LitElement, html, css } from 'lit';
 class BudgetCalcElement extends LitElement {
   static get properties() {
     return {
-      dataobj: { type: String },
+      dataobj: { type: Object },
       listitems: { type: String },
       itemname: { type: String },
       review: { type: Boolean, default: false },
@@ -117,10 +117,72 @@ class BudgetCalcElement extends LitElement {
           defaultValue: false,
         },
         dataobj: {
-          type: 'string',
-          title: 'Calculator Data',
+          type: 'object',
+          title: 'Calculator Data Object',
+          required: false,
           description: 'Leave empty if you are filling from new, enter output from previous calculator if not new',
-          isValueField: true
+          isValueField: true,
+          properties: {
+            budgetItems: {
+              type: 'object',
+              title: 'Budget Items',
+              items: {
+                type: 'object',
+                properties: {
+                  itemName: {
+                    type: 'string',
+                    title: 'Item Name',
+                    description: 'Name of the budget item'
+                  },
+                  monthlyValues: {
+                    type: 'object',
+                    title: 'Monthly Values',
+                    properties: {
+                      January: { type: 'number', title: 'January' },
+                      February: { type: 'number', title: 'February' },
+                      March: { type: 'number', title: 'March' },
+                      April: { type: 'number', title: 'April' },
+                      May: { type: 'number', title: 'May' },
+                      June: { type: 'number', title: 'June' },
+                      July: { type: 'number', title: 'July' },
+                      August: { type: 'number', title: 'August' },
+                      September: { type: 'number', title: 'September' },
+                      October: { type: 'number', title: 'October' },
+                      November: { type: 'number', title: 'November' },
+                      December: { type: 'number', title: 'December' }
+                    }
+                  },
+                  total: {
+                    type: 'number',
+                    title: 'Total',
+                    description: 'Total amount for the budget item'
+                  },
+                  outcome: {
+                    type: 'string',
+                    title: 'Outcome',
+                    enum: ['Approved', 'Rejected'],
+                    description: 'Approval outcome of the budget item'
+                  },
+                  notes: {
+                    type: 'string',
+                    title: 'Notes',
+                    description: 'Additional notes or comments'
+                  },
+                  approver: {
+                    type: 'string',
+                    title: 'Approver Email',
+                    description: 'Email of the approver'
+                  },
+                  lastUpdated: {
+                    type: 'string',
+                    title: 'Last Updated',
+                    description: 'Date and time when the item was last updated',
+                    format: 'date-time'
+                  }
+                }
+              }
+            }
+          }
         }
       },
       events: ["ntx-value-change"],
@@ -134,7 +196,7 @@ class BudgetCalcElement extends LitElement {
 
   constructor() {
     super();
-    this.dataobj = '';
+    this.dataobj = { budgetItems: [] };
     this.listitems = '';
     this.itemname = '';
     this.review = false;
@@ -144,6 +206,8 @@ class BudgetCalcElement extends LitElement {
     });
     this.statusColors = {};
     this.itemValues = {};
+    console.log(this.dataobj)
+    console.log(this.listitems)
   }
 
   onChange(e) {
@@ -168,20 +232,13 @@ class BudgetCalcElement extends LitElement {
   }
 
   updateItemValuesFromDataObj() {
-    if (this.dataobj) {
-      try {
-        const data = JSON.parse(this.dataobj);
-        this.itemValues = {};
-        if (data.budgetItems) {
-          data.budgetItems.forEach(item => {
-            this.itemValues[item.itemName] = Object.values(item.monthlyValues);
-          });
-        }
-      } catch (e) {
-        console.error('Invalid JSON in dataobj:', e);
+    if (this.dataobj && this.dataobj.budgetItems) {
+      this.itemValues = {};
+      for (const item in this.dataobj.budgetItems) {
+        this.itemValues[item] = Object.values(this.dataobj.budgetItems[item].monthlyValues);
       }
     }
-  }
+  }  
     
   createHeader(item) {
     const itemnaming = this.itemname.length > 0 ? this.itemname : "Item:";
@@ -224,30 +281,26 @@ class BudgetCalcElement extends LitElement {
   }
   
   updateDataObj(item) {
-    let data = {};
-    if (this.dataobj) {
-      data = JSON.parse(this.dataobj);
-    }
-    if (!data.budgetItems) {
-      data.budgetItems = [];
+    if (!this.dataobj.budgetItems) {
+      this.dataobj.budgetItems = {};
     }
   
     const monthlyValues = [
       'January', 'February', 'March', 'April', 'May', 'June', 'July',
       'August', 'September', 'October', 'November', 'December'
     ].reduce((acc, month, index) => {
-      acc[month] = this.itemValues[item][index] || 0;
+      if (this.itemValues[item][index] !== null) {
+        acc[month] = this.itemValues[item][index] || 0;
+      }
       return acc;
     }, {});
   
-    const existingItem = data.budgetItems.find(budgetItem => budgetItem.itemName === item);
-  
-    if (existingItem) {
-      existingItem.monthlyValues = monthlyValues;
-      existingItem.total = Object.values(monthlyValues).reduce((acc, val) => acc + val, 0);
-      existingItem.lastUpdated = new Date().toISOString();
+    if (this.dataobj.budgetItems[item]) {
+      this.dataobj.budgetItems[item].monthlyValues = monthlyValues;
+      this.dataobj.budgetItems[item].total = Object.values(monthlyValues).reduce((acc, val) => acc + val, 0);
+      this.dataobj.budgetItems[item].lastUpdated = new Date().toISOString();
     } else {
-      data.budgetItems.push({
+      this.dataobj.budgetItems[item] = {
         itemName: item,
         monthlyValues: monthlyValues,
         total: Object.values(monthlyValues).reduce((acc, val) => acc + val, 0),
@@ -255,19 +308,14 @@ class BudgetCalcElement extends LitElement {
         notes: '',
         approver: '',
         lastUpdated: new Date().toISOString()
-      });
+      };
     }
-  
-    this.dataobj = JSON.stringify(data);
-    this.onChange({ target: { value: this.dataobj } });
-  }
-  
+  }  
   
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const data = JSON.parse(this.dataobj);
-    const existingItem = data.budgetItems.find(budgetItem => budgetItem.itemName === item);
+    const existingItem = this.dataobj && this.dataobj.budgetItems ? this.dataobj.budgetItems[item] : undefined;
   
     return html`
       ${months.map((shortMonth, index) => html`
@@ -280,13 +328,13 @@ class BudgetCalcElement extends LitElement {
               ?disabled="${this.readOnly}"
               placeholder="0.00"
               .value="${existingItem && existingItem.monthlyValues[fullMonths[index]] !== undefined ? this.formatNumber(existingItem.monthlyValues[fullMonths[index]]) : ''}"
-              @blur="${e => { this.formatInput(e); this.updateValue(e, item, index); }}">
+              @blur="${e => { this.formatInput(e); this.updateValue(e, item, index); this.onChange(e); }}">
           </div>
         </div>
       `)}
     `;
   }
-  
+
   formatInput(event) {
     const value = parseFloat(event.target.value);
     event.target.value = isNaN(value) ? '' : this.numberFormatter.format(value);
@@ -363,36 +411,11 @@ class BudgetCalcElement extends LitElement {
   render() {
     const items = this.listitems.split(',').map(item => item.trim());
   
-    if (!this.dataobj) {
-      this.dataobj = JSON.stringify({ budgetItems: [] });
-    }
-  
-    const data = JSON.parse(this.dataobj);
-  
-    items.forEach(item => {
-      if (!data.budgetItems.find(budgetItem => budgetItem.itemName === item)) {
-        data.budgetItems.push({
-          itemName: item,
-          monthlyValues: {
-            January: 0.00, February: 0.00, March: 0.00, April: 0.00, May: 0.00,
-            June: 0.00, July: 0.00, August: 0.00, September: 0.00, October: 0.00,
-            November: 0.00, December: 0.00
-          },
-          total: 0.00,
-          outcome: '',
-          notes: '',
-          approver: '',
-          lastUpdated: ''
-        });
-      }
-    });
-  
-    this.dataobj = JSON.stringify(data);
-  
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
         ${items.map(item => {
+          const existingItem = this.dataobj && this.dataobj.budgetItems ? this.dataobj.budgetItems[item] : undefined;
           return html`
             <div class="card ${this.statusColors[item]?.borderColor || ''}">
               ${this.createHeader(item)}
@@ -406,7 +429,6 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
-  
   
 }
 
