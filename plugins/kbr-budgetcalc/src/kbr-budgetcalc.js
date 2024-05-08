@@ -123,12 +123,6 @@ class BudgetCalcElement extends LitElement {
           type: 'boolean',
           defaultValue: false,
         },
-        outcomes:  {
-          type: 'string',
-          title: 'Outcomes',
-          description: 'Comma separated values for the outcomes',
-          defaultValue: 'Approved, Rejected'
-        },
         dataobj: {
           type: 'string',
           title: 'Calculator Data Object',
@@ -155,7 +149,6 @@ class BudgetCalcElement extends LitElement {
     });
     this.statusColors = {};
     this.itemValues = {};
-    this.outcomes = 'Approved, Rejected';
   }
 
   updated(changedProperties) {
@@ -163,6 +156,8 @@ class BudgetCalcElement extends LitElement {
       console.log('listitems changed:', this.listitems);
     }
   }
+
+  //HEADER
 
   createHeader(item) {
     const itemnaming = this.itemname.length > 0 ? this.itemname : "Item:";
@@ -214,6 +209,8 @@ class BudgetCalcElement extends LitElement {
     }
   }
 
+  //BODY
+
   formatInput(event) {
       const value = parseFloat(event.target.value);
       event.target.value = isNaN(value) ? '' : this.numberFormatter.format(value);
@@ -240,8 +237,7 @@ class BudgetCalcElement extends LitElement {
         </div>
       `)}
     `;
-}
-
+  }
 
   autoResize(e) {
     if (e.target.classList.contains('active')) {
@@ -252,19 +248,19 @@ class BudgetCalcElement extends LitElement {
     }
   }
   
+  //FOOTER
+
   createFooter(item) {
     if (!this.review) {
-        return ''; // Do not render the footer if review mode is false
+      return ''; // Do not render the footer if review mode is false
     }
-
-    const statusInfo = this.statusColors[item] || {};
-    const defaultOutcomes = ['Rejected', 'Approved']; // Default outcomes
-    const customOutcomes = this.outcomes ? this.outcomes.split(',').map(outcome => outcome.trim()).filter(Boolean) : defaultOutcomes;
-    const outcomes = customOutcomes.length > 0 ? customOutcomes : defaultOutcomes;
-    
-    // Show input only if a status other than 'Approved' is selected
-    const showInput = statusInfo.selectedStatus && statusInfo.selectedStatus !== 'Approved';
-
+  
+    const statusInfo = this.statusColors[item] || { selectedStatus: '' };
+    const outcomes = ['Rejected', 'Approved']; // Fixed outcomes
+  
+    // Show input only if the selected status is 'Rejected'
+    const showInput = statusInfo.selectedStatus === 'Rejected';
+  
     return html`
       <div class="card-footer">
         <div class="btn-group" role="group" aria-label="Approval Status">
@@ -275,54 +271,53 @@ class BudgetCalcElement extends LitElement {
           `)}
         </div>
         ${showInput ? html`
-            <textarea class="form-control comments-control"
-                      placeholder="Enter comments"
-                      @input="${this.autoResize}"
-                      style="height: auto; min-height: 38px;"></textarea>
+          <textarea class="form-control comments-control active"
+                    placeholder="Enter comments"
+                    @input="${this.autoResize}"
+                    style="height: auto; min-height: 38px;"></textarea>
         ` : ''}
       </div>
     `;
   }
-
+  
   updateStatus(item, status) {
     const colorMap = {
-        'Approved': 'border-success',
-        'Rejected': 'border-danger'
+      'Approved': 'border-success',
+      'Rejected': 'border-danger'
     };
     // Update both the border color based on status and the currently selected status
     this.statusColors[item] = {
-        borderColor: colorMap[status] || 'border-primary', // Use a default if no specific color
-        selectedStatus: status
+      borderColor: colorMap[status] || 'border-primary', // Use a default if no specific color
+      selectedStatus: status
     };
     this.requestUpdate(); // Trigger a re-render to update the UI
-}
-
-
+  }
+  
   getButtonClass(outcome, selectedStatus) {
     const baseClass = 'btn';
     if (selectedStatus === outcome) {
-        // Use more distinct styles for selected status
-        switch (outcome) {
-            case 'Approved':
-                return `${baseClass} btn-success`; // Green for approved
-            case 'Rejected':
-                return `${baseClass} btn-danger`; // Red for rejected
-            default:
-                return `${baseClass} btn-primary`; // Use primary color for other selected custom statuses
-        }
+      // Use more distinct styles for selected status
+      switch (outcome) {
+        case 'Approved':
+          return `${baseClass} btn-success`; // Green for approved
+        case 'Rejected':
+          return `${baseClass} btn-danger`; // Red for rejected
+        default:
+          return `${baseClass} btn-primary`; // Use primary color for other selected custom statuses
+      }
     } else {
-        // Use outline styles for non-selected status
-        switch (outcome) {
-            case 'Approved':
-                return `${baseClass} btn-outline-success`;
-            case 'Rejected':
-                return `${baseClass} btn-outline-danger`;
-            default:
-                return `${baseClass} btn-outline-primary`;
-        }
+      // Use outline styles for non-selected status
+      switch (outcome) {
+        case 'Approved':
+          return `${baseClass} btn-outline-success`;
+        case 'Rejected':
+          return `${baseClass} btn-outline-danger`;
+        default:
+          return `${baseClass} btn-outline-primary`;
+      }
     }
   }
-
+  
 
   render() {
     const items = this.listitems.split(',');
