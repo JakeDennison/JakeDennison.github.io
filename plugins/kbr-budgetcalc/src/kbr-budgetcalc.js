@@ -206,7 +206,8 @@ class BudgetCalcElement extends LitElement {
     });
     this.statusColors = {};
     this.itemValues = {};
-    this.onChange();
+    console.log(this.dataobj)
+    console.log(this.listitems)
   }
 
   onChange(e) {
@@ -424,7 +425,6 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
-  
 }
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
