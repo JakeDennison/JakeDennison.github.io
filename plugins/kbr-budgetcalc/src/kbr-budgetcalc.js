@@ -6,6 +6,9 @@ class BudgetCalcElement extends LitElement {
       dataobj: { type: String },
       mode: { type: String, default: 'New' },
       listitems: { type: String },
+      itemname: { type: String },
+      review: { type: Boolean, default: false },
+      currentuser: { type: String },
     };
   }
 
@@ -15,7 +18,7 @@ class BudgetCalcElement extends LitElement {
         display: block;
       }
       .card {
-        margin-bottom: 20px; /* Space between cards */
+        margin-bottom: 20px;
       }
       .currency-input {
         text-align: right;
@@ -28,62 +31,53 @@ class BudgetCalcElement extends LitElement {
         transition: all 0.3s ease;
       }
       .btn-group {
-        flex-grow: 1; /* Allows the button group to use available space */
-        transition: all 0.3s ease; /* Smooth transitions for button group adjustments */
+        flex-grow: 1;
+        transition: all 0.3s ease;
         flex: 0 0 100%;
         max-width: 100%;
       }
       .comments-control {
         transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease, width 0.3s ease, margin 0.3s ease;
-        max-height: 0; /* Ensures it collapses vertically */
-        width: 0; /* Ensures it takes no horizontal space */
-        opacity: 0; /* Fully invisible */
-        visibility: hidden; /* Not visually perceivable */
-        overflow: hidden; /* No content spills */
-        padding: 0; /* No internal spacing */
-        margin: 0; /* Ensures no external spacing */
+        max-height: 0;
+        width: 0;
+        opacity: 0;
+        visibility: hidden;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
         display: none;
       }
-
       .comments-control.active {
-        max-height: 200px; /* Adjust as needed */
+        max-height: 200px;
         opacity: 1;
         visibility: visible;
-        width: 100%; /* Full width on active */
-        padding: .375rem .75rem; /* Standard padding */
-        margin-top: 0.5rem; /* Some top margin if needed */
+        width: 100%;
+        padding: .375rem .75rem;
+        margin-top: 0.5rem;
         display: flex;
       }
-      .btn-group {
-          flex: 0 0 100%;
-          max-width: 100%;
-        }
-        .comments-control.active {
-          flex: 0 0 100%;
-          max-width: 100%;
-        }
       .input-group {
-        padding-bottom: 10px; /* Space between input groups */
+        padding-bottom: 10px;
       }
-      @media (max-width: 576px) { /* Smaller devices */
+      @media (max-width: 576px) {
         .month-input {
-            flex: 0 0 100%;
-            max-width: 100%;
-          }
+          flex: 0 0 100%;
+          max-width: 100%;
         }
-      @media (min-width: 577px) and (max-width: 768px) { /* Medium devices */
+      }
+      @media (min-width: 577px) and (max-width: 768px) {
         .month-input {
           flex: 0 0 50%;
           max-width: 50%;
         }
       }
-      @media (min-width: 769px) and (max-width: 992px) { /* Large devices */
+      @media (min-width: 769px) and (max-width: 992px) {
         .month-input {
           flex: 0 0 33.33%;
           max-width: 33.33%;
         }
       }
-      @media (min-width: 993px) { /* Extra large devices */
+      @media (min-width: 993px) {
         .month-input {
           flex: 0 0 25%;
           max-width: 25%;
@@ -91,6 +85,7 @@ class BudgetCalcElement extends LitElement {
       }
     `;
   }
+
   static getMetaConfig() {
     return {
       controlName: 'kbr-budgetcalc',
@@ -211,13 +206,12 @@ class BudgetCalcElement extends LitElement {
     this.itemValues = {};
   }
 
+
   updated(changedProperties) {
     if (changedProperties.has('listitems')) {
       console.log('listitems changed:', this.listitems);
     }
   }
-
-  //HEADER
 
   createHeader(item) {
     const itemnaming = this.itemname.length > 0 ? this.itemname : "Item:";
@@ -235,45 +229,27 @@ class BudgetCalcElement extends LitElement {
     if (!isNaN(value)) {
       event.target.value = this.numberFormatter.format(value);
     }
-    // Add a method to recalculate totals here
     this.calculateTotalForItem(item);
   }
 
   formatNumber(value) {
-    const numberFormatter = new Intl.NumberFormat('en-US', {
-      style: 'decimal', // Change to 'currency' if you need currency symbol
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
-    return numberFormatter.format(value);
+    return this.numberFormatter.format(value);
   }
-  
+
   calculateTotalForItem(item) {
     if (!this.itemValues[item]) {
-        return this.formatNumber(0); // Format zero if no values have been entered yet
+      return this.formatNumber(0);
     }
     const total = this.itemValues[item].reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
-    return this.formatNumber(total); // Return the formatted total
+    return this.formatNumber(total);
   }
 
   updateValue(event, item, monthIndex) {
-    const rawValue = event.target.value.replace(/[^\d.-]/g, ''); // Strip non-numeric characters
+    const rawValue = event.target.value.replace(/[^\d.-]/g, '');
     const value = parseFloat(rawValue);
-    if (!isNaN(value)) {
-        this.itemValues[item] = this.itemValues[item] || [];
-        this.itemValues[item][monthIndex] = value; // Update the specific month's value
-        this.requestUpdate(); // Ensures the component knows to update
-    } else if (rawValue === '') {
-        this.itemValues[item][monthIndex] = 0; // Reset to zero if cleared
-        this.requestUpdate(); // Ensures the component knows to update
-    }
-  }
-
-  //BODY
-
-  formatInput(event) {
-      const value = parseFloat(event.target.value);
-      event.target.value = isNaN(value) ? '' : this.numberFormatter.format(value);
+    this.itemValues[item] = this.itemValues[item] || [];
+    this.itemValues[item][monthIndex] = isNaN(value) ? 0 : value;
+    this.requestUpdate();
   }
 
   createMonthInputs(item) {
@@ -298,28 +274,25 @@ class BudgetCalcElement extends LitElement {
     `;
   }
 
-  autoResize(e) {
-    if (e.target.classList.contains('active')) {
-      e.target.style.height = 'auto'; // Reset the height
-      e.target.style.height = `${e.target.scrollHeight}px`; // Set to scroll height
-    } else {
-      e.target.style.height = '0'; // Collapse when not active
-    }
+  formatInput(event) {
+    const value = parseFloat(event.target.value);
+    event.target.value = isNaN(value) ? '' : this.numberFormatter.format(value);
   }
-  
-  //FOOTER
+
+  autoResize(e) {
+    e.target.style.height = e.target.classList.contains('active') ? 'auto' : '0';
+    e.target.style.height = `${e.target.scrollHeight}px`;
+  }
 
   createFooter(item) {
     if (!this.review) {
-      return ''; // Do not render the footer if review mode is false
+      return '';
     }
-  
+
     const statusInfo = this.statusColors[item] || { selectedStatus: '' };
-    const outcomes = ['Rejected', 'Approved']; // Fixed outcomes
-  
-    // Show input only if the selected status is 'Rejected'
+    const outcomes = ['Rejected', 'Approved'];
     const showInput = statusInfo.selectedStatus === 'Rejected';
-  
+
     return html`
       <div class="card-footer">
         <div class="btn-group" role="group" aria-label="Approval Status">
@@ -338,49 +311,30 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
-  
+
   updateStatus(item, status) {
     const colorMap = {
       'Approved': 'border-success',
       'Rejected': 'border-danger'
     };
-    // Update both the border color based on status and the currently selected status
     this.statusColors[item] = {
-      borderColor: colorMap[status] || 'border-primary', // Use a default if no specific color
+      borderColor: colorMap[status] || 'border-primary',
       selectedStatus: status
     };
-    this.requestUpdate(); // Trigger a re-render to update the UI
+    this.requestUpdate();
   }
-  
+
   getButtonClass(outcome, selectedStatus) {
     const baseClass = 'btn';
     if (selectedStatus === outcome) {
-      // Use more distinct styles for selected status
-      switch (outcome) {
-        case 'Approved':
-          return `${baseClass} btn-success`; // Green for approved
-        case 'Rejected':
-          return `${baseClass} btn-danger`; // Red for rejected
-        default:
-          return `${baseClass} btn-primary`; // Use primary color for other selected custom statuses
-      }
-    } else {
-      // Use outline styles for non-selected status
-      switch (outcome) {
-        case 'Approved':
-          return `${baseClass} btn-outline-success`;
-        case 'Rejected':
-          return `${baseClass} btn-outline-danger`;
-        default:
-          return `${baseClass} btn-outline-primary`;
-      }
+      return outcome === 'Approved' ? `${baseClass} btn-success` : `${baseClass} btn-danger`;
     }
+    return outcome === 'Approved' ? `${baseClass} btn-outline-success` : `${baseClass} btn-outline-danger`;
   }
-  
 
   render() {
     const items = this.listitems.split(',');
-  
+
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
@@ -396,8 +350,6 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
-  
-
 }
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
