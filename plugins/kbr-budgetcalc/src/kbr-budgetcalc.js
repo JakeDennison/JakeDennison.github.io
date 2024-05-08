@@ -231,8 +231,11 @@ class BudgetCalcElement extends LitElement {
     // Filter and update existing items in dataobj
     const filteredDataObj = listItemsArray.map(itemName => {
       if (dataObjMap.has(itemName)) {
-        return dataObjMap.get(itemName);
+        const existingItem = dataObjMap.get(itemName);
+        this.itemValues[itemName] = Object.values(existingItem.monthlyValues);
+        return existingItem;
       } else {
+        this.itemValues[itemName] = new Array(12).fill(0); // Initialize itemValues if not present in dataobj
         return {
           itemName: itemName,
           monthlyValues: {
@@ -256,6 +259,7 @@ class BudgetCalcElement extends LitElement {
     this.onChange();
   }
   
+  
   onChange(e) {
     const args = {
       bubbles: true,
@@ -276,7 +280,7 @@ class BudgetCalcElement extends LitElement {
       this.onChange(); // Call onChange to ensure the event is dispatched on load
     }
   }
-  
+    
   createHeader(item) {
     const itemnaming = this.itemname.length > 0 ? this.itemname : "Item:";
     const totalAmount = this.calculateTotalForItem(item);
