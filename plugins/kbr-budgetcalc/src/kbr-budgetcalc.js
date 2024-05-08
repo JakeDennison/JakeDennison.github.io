@@ -119,70 +119,8 @@ class BudgetCalcElement extends LitElement {
         dataobj: {
           type: 'object',
           title: 'Calculator Data Object',
-          required: false,
           description: 'Leave empty if you are filling from new, enter output from previous calculator if not new',
-          isValueField: true,
-          properties: {
-            budgetItems: {
-              type: 'object',
-              title: 'Budget Items',
-              items: {
-                type: 'object',
-                properties: {
-                  itemName: {
-                    type: 'string',
-                    title: 'Item Name',
-                    description: 'Name of the budget item'
-                  },
-                  monthlyValues: {
-                    type: 'object',
-                    title: 'Monthly Values',
-                    properties: {
-                      January: { type: 'number', title: 'January' },
-                      February: { type: 'number', title: 'February' },
-                      March: { type: 'number', title: 'March' },
-                      April: { type: 'number', title: 'April' },
-                      May: { type: 'number', title: 'May' },
-                      June: { type: 'number', title: 'June' },
-                      July: { type: 'number', title: 'July' },
-                      August: { type: 'number', title: 'August' },
-                      September: { type: 'number', title: 'September' },
-                      October: { type: 'number', title: 'October' },
-                      November: { type: 'number', title: 'November' },
-                      December: { type: 'number', title: 'December' }
-                    }
-                  },
-                  total: {
-                    type: 'number',
-                    title: 'Total',
-                    description: 'Total amount for the budget item'
-                  },
-                  outcome: {
-                    type: 'string',
-                    title: 'Outcome',
-                    enum: ['Approved', 'Rejected'],
-                    description: 'Approval outcome of the budget item'
-                  },
-                  notes: {
-                    type: 'string',
-                    title: 'Notes',
-                    description: 'Additional notes or comments'
-                  },
-                  approver: {
-                    type: 'string',
-                    title: 'Approver Email',
-                    description: 'Email of the approver'
-                  },
-                  lastUpdated: {
-                    type: 'string',
-                    title: 'Last Updated',
-                    description: 'Date and time when the item was last updated',
-                    format: 'date-time'
-                  }
-                }
-              }
-            }
-          }
+          isValueField: true
         }
       },
       events: ["ntx-value-change"],
