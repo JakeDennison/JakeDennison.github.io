@@ -255,10 +255,11 @@ class BudgetCalcElement extends LitElement {
     // Assign the filtered and updated dataobj back
     this.dataobj.budgetItems = filteredDataObj;
   
+    console.log('Data object after sync:', this.dataobj);
+  
     // Dispatch event to update dataobj
     this.onChange();
   }
-  
   
   onChange(e) {
     const args = {
@@ -453,7 +454,8 @@ class BudgetCalcElement extends LitElement {
 
   render() {
     const items = this.listitems.split(',').map(item => item.trim());
-    console.log('Data object on load' + this.dataobj)
+    console.log('Data object on load:', this.dataobj);
+  
     // Ensure dataobj and dataobj.budgetItems are defined
     if (!this.dataobj || !Array.isArray(this.dataobj.budgetItems)) {
       return html`<div>Error: dataobj is not properly initialized.</div>`;
@@ -477,6 +479,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
+  
   
 }
 
