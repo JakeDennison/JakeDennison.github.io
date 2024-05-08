@@ -4,7 +4,6 @@ class BudgetCalcElement extends LitElement {
   static get properties() {
     return {
       dataobj: { type: Object },
-      mode: { type: String, default: 'New' },
       listitems: { type: String },
       itemname: { type: String },
       review: { type: Boolean, default: false },
@@ -98,7 +97,8 @@ class BudgetCalcElement extends LitElement {
         listitems: {
           type: 'string',
           title: 'List Items',
-          description: 'List of items to be budgeted (best use output from multi-select control)'
+          description: 'List of items to be budgeted (best use output from multi-select control)',
+          required: true
         },
         itemname: {
             type: 'string',
@@ -119,6 +119,7 @@ class BudgetCalcElement extends LitElement {
         dataobj: {
           type: 'object',
           title: 'Calculator Data Object',
+          required: false,
           description: 'Leave empty if you are filling from new, enter output from previous calculator if not new',
           properties: {
             budgetItems: {
@@ -275,9 +276,7 @@ class BudgetCalcElement extends LitElement {
     this.itemValues[item][monthIndex] = isNaN(value) ? 0 : value;
     this.updateDataObj(item);
     this.requestUpdate();
-    this.onChange(event);
   }
-  
 
   updateDataObj(item) {
     const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
@@ -299,7 +298,7 @@ class BudgetCalcElement extends LitElement {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
-
+  
     return html`
       ${months.map((shortMonth, index) => html`
         <div class="mb-2 px-1 month-input">
@@ -311,13 +310,14 @@ class BudgetCalcElement extends LitElement {
               ?disabled="${this.readOnly}"
               placeholder="0.00"
               .value="${existingItem ? this.formatNumber(existingItem.monthlyValues[fullMonths[index]]) : ''}"
-              @blur="${e => this.formatInput(e)}"
-              @input="${e => this.updateValue(e, item, index)}">
+              @blur="${e => { this.formatInput(e); this.updateValue(e, item, index); this.onChange(e); }}"
+              @input="${e => this.formatCurrency(e, item)}">
           </div>
         </div>
       `)}
     `;
   }
+  
 
   formatInput(event) {
     const value = parseFloat(event.target.value);
@@ -357,16 +357,6 @@ class BudgetCalcElement extends LitElement {
     `;
   }
 
-  updateComments(event, item) {
-    const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
-    if (existingItem) {
-      existingItem.notes = event.target.value;
-      existingItem.lastUpdated = new Date().toISOString();
-    }
-    this.onChange(event);
-  }
-  
-
   updateStatus(item, status) {
     const colorMap = {
       'Approved': 'border-success',
@@ -382,9 +372,17 @@ class BudgetCalcElement extends LitElement {
       existingItem.lastUpdated = new Date().toISOString();
     }
     this.requestUpdate();
-    this.onChange(new CustomEvent('change', { target: { value: this.dataobj } }));
+    this.onChange(new CustomEvent('change', { target: { value: this.dataobj } })); // Dispatch event here
   }
   
+  updateComments(event, item) {
+    const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
+    if (existingItem) {
+      existingItem.notes = event.target.value;
+      existingItem.lastUpdated = new Date().toISOString();
+    }
+    this.onChange(event); // Dispatch event here
+  }
 
   getButtonClass(outcome, selectedStatus) {
     const baseClass = 'btn';
