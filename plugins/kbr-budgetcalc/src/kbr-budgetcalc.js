@@ -3,7 +3,7 @@ import { LitElement, html, css } from 'lit';
 class BudgetCalcElement extends LitElement {
   static get properties() {
     return {
-      dataobj: { type: String },
+      dataobj: { type: Object },
       mode: { type: String, default: 'New' },
       listitems: { type: String },
       itemname: { type: String },
@@ -184,6 +184,7 @@ class BudgetCalcElement extends LitElement {
           }
         }
       },
+      events: ["ntx-value-change"],
       standardProperties: {
         fieldLabel: true,
         description: true,
@@ -194,7 +195,7 @@ class BudgetCalcElement extends LitElement {
 
   constructor() {
     super();
-    this.dataobj = '';
+    this.dataobj = { budgetItems: [] };
     this.listitems = '';
     this.itemname = '';
     this.review = false;
@@ -206,10 +207,33 @@ class BudgetCalcElement extends LitElement {
     this.itemValues = {};
   }
 
+  onChange(e) {
+    const args = {
+      bubbles: true,
+      cancelable: false,
+      composed: true,
+      detail: e.target.value,
+    };
+    const event = new CustomEvent('ntx-value-change', args);
+    this.dispatchEvent(event);
+  }
 
   updated(changedProperties) {
     if (changedProperties.has('listitems')) {
       console.log('listitems changed:', this.listitems);
+      this.updateItemValuesFromDataObj();
+    }
+    if (changedProperties.has('dataobj')) {
+      this.updateItemValuesFromDataObj();
+    }
+  }
+
+  updateItemValuesFromDataObj() {
+    if (this.dataobj && this.dataobj.budgetItems) {
+      this.itemValues = {};
+      this.dataobj.budgetItems.forEach(item => {
+        this.itemValues[item.itemName] = Object.values(item.monthlyValues);
+      });
     }
   }
 
@@ -249,12 +273,32 @@ class BudgetCalcElement extends LitElement {
     const value = parseFloat(rawValue);
     this.itemValues[item] = this.itemValues[item] || [];
     this.itemValues[item][monthIndex] = isNaN(value) ? 0 : value;
+    this.updateDataObj(item);
     this.requestUpdate();
+    this.onChange(event);
+  }
+  
+
+  updateDataObj(item) {
+    const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
+    if (existingItem) {
+      const monthlyValues = [
+        'January', 'February', 'March', 'April', 'May', 'June', 'July',
+        'August', 'September', 'October', 'November', 'December'
+      ].reduce((acc, month, index) => {
+        acc[month] = this.itemValues[item][index] || 0;
+        return acc;
+      }, {});
+      existingItem.monthlyValues = monthlyValues;
+      existingItem.total = this.itemValues[item].reduce((acc, val) => acc + val, 0);
+      existingItem.lastUpdated = new Date().toISOString();
+    }
   }
 
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
 
     return html`
       ${months.map((shortMonth, index) => html`
@@ -266,6 +310,7 @@ class BudgetCalcElement extends LitElement {
               aria-label="Amount for ${fullMonths[index]}"
               ?disabled="${this.readOnly}"
               placeholder="0.00"
+              .value="${existingItem ? this.formatNumber(existingItem.monthlyValues[fullMonths[index]]) : ''}"
               @blur="${e => this.formatInput(e)}"
               @input="${e => this.updateValue(e, item, index)}">
           </div>
@@ -305,12 +350,22 @@ class BudgetCalcElement extends LitElement {
         ${showInput ? html`
           <textarea class="form-control comments-control active"
                     placeholder="Enter comments"
-                    @input="${this.autoResize}"
+                    @input="${e => this.updateComments(e, item)}"
                     style="height: auto; min-height: 38px;"></textarea>
         ` : ''}
       </div>
     `;
   }
+
+  updateComments(event, item) {
+    const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
+    if (existingItem) {
+      existingItem.notes = event.target.value;
+      existingItem.lastUpdated = new Date().toISOString();
+    }
+    this.onChange(event);
+  }
+  
 
   updateStatus(item, status) {
     const colorMap = {
@@ -321,8 +376,15 @@ class BudgetCalcElement extends LitElement {
       borderColor: colorMap[status] || 'border-primary',
       selectedStatus: status
     };
+    const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
+    if (existingItem) {
+      existingItem.outcome = status;
+      existingItem.lastUpdated = new Date().toISOString();
+    }
     this.requestUpdate();
+    this.onChange(new CustomEvent('change', { target: { value: this.dataobj } }));
   }
+  
 
   getButtonClass(outcome, selectedStatus) {
     const baseClass = 'btn';
@@ -333,20 +395,23 @@ class BudgetCalcElement extends LitElement {
   }
 
   render() {
-    const items = this.listitems.split(',');
+    const items = this.listitems.split(',').map(item => item.trim());
 
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
-        ${items.map(item => html`
-          <div class="card ${this.statusColors[item]?.borderColor || ''}">
-            ${this.createHeader(item)}
-            <div class="card-body d-flex flex-wrap">
-              ${this.createMonthInputs(item)}
+        ${items.map(item => {
+          const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
+          return html`
+            <div class="card ${this.statusColors[item]?.borderColor || ''}">
+              ${this.createHeader(item)}
+              <div class="card-body d-flex flex-wrap">
+                ${this.createMonthInputs(item)}
+              </div>
+              ${this.createFooter(item)}
             </div>
-            ${this.createFooter(item)}
-          </div>
-        `)}
+          `;
+        })}
       </div>
     `;
   }
