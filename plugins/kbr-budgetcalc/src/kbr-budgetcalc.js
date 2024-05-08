@@ -110,13 +110,11 @@ class BudgetCalcElement extends LitElement {
             title: 'Item Name',
             description: 'Singular Item Name such as Cost Center or Budget Code'
         },
-        mode: {
-          title: 'Control Mode',
+        currentuser: {
           type: 'string',
-          enum: ['Edit','Read-only'],
-          showAsRadio: true,
-          verticalLayout: true,
-          defaultValue: 'Edit',
+          title: 'Context current user email',
+          description: 'Please enter the context current user email',
+          required: true
         },
         review: {
           title: 'Enable Review Mode',
@@ -132,6 +130,7 @@ class BudgetCalcElement extends LitElement {
       standardProperties: {
         fieldLabel: true,
         description: true,
+        readOnly: true,
       }
     };
   }
@@ -141,7 +140,6 @@ class BudgetCalcElement extends LitElement {
     this.dataobj = '';
     this.listitems = '';
     this.itemname = '';
-    this.mode = 'Edit';
     this.review = false;
     this.numberFormatter = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 2,
@@ -219,7 +217,6 @@ class BudgetCalcElement extends LitElement {
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const isReadOnly = this.mode === 'Read-only';
 
     return html`
       ${months.map((shortMonth, index) => html`
@@ -229,7 +226,7 @@ class BudgetCalcElement extends LitElement {
             <span class="input-group-text">$</span>
             <input type="text" class="form-control currency-input" id="${shortMonth}-${item}"
               aria-label="Amount for ${fullMonths[index]}"
-              ?disabled="${isReadOnly}"  // Conditionally disable based on mode
+              ?disabled="${this.readOnly}"
               placeholder="0.00"
               @blur="${e => this.formatInput(e)}"
               @input="${e => this.updateValue(e, item, index)}">
