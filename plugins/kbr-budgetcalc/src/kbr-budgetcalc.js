@@ -206,10 +206,8 @@ class BudgetCalcElement extends LitElement {
     });
     this.statusColors = {};
     this.itemValues = {};
-    console.log(this.dataobj)
-    console.log(this.listitems)
   }
-
+  
   onChange(e) {
     const args = {
       bubbles: true,
@@ -239,7 +237,7 @@ class BudgetCalcElement extends LitElement {
       });
       this.onChange(); // Call onChange to ensure the event is dispatched on load
     }
-  }
+  }  
   
   createHeader(item) {
     const itemnaming = this.itemname.length > 0 ? this.itemname : "Item:";
@@ -281,7 +279,6 @@ class BudgetCalcElement extends LitElement {
     this.requestUpdate();
   }
   
-  
   updateDataObj(item) {
     if (!Array.isArray(this.dataobj.budgetItems)) {
       this.dataobj.budgetItems = [];
@@ -315,7 +312,6 @@ class BudgetCalcElement extends LitElement {
   
     this.onChange(); // Ensure the change event is dispatched
   }
-  
   
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -395,7 +391,7 @@ class BudgetCalcElement extends LitElement {
     }
     this.requestUpdate();
     this.onChange(); // Dispatch event here
-  }
+  }  
   
   updateComments(event, item) {
     const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
@@ -416,7 +412,11 @@ class BudgetCalcElement extends LitElement {
 
   render() {
     const items = this.listitems.split(',').map(item => item.trim());
-
+  
+    if (!Array.isArray(this.dataobj.budgetItems)) {
+      this.dataobj.budgetItems = [];
+    }
+  
     items.forEach(item => {
       if (!this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item)) {
         this.dataobj.budgetItems.push({
@@ -434,9 +434,9 @@ class BudgetCalcElement extends LitElement {
         });
       }
     });
-
+  
     this.onChange(); // Ensure the change event is dispatched when new items are added
-
+  
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
@@ -454,8 +454,6 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
-
-  
   
 }
 
