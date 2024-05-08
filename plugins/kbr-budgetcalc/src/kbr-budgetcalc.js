@@ -206,7 +206,7 @@ class BudgetCalcElement extends LitElement {
     });
     this.statusColors = {};
     this.itemValues = {};
-  }
+  }  
 
   updated(changedProperties) {
     if (changedProperties.has('listitems') || changedProperties.has('dataobj')) {
@@ -216,15 +216,18 @@ class BudgetCalcElement extends LitElement {
 
   syncDataObjWithListItems() {
     const listItemsArray = this.listitems.split(',').map(item => item.trim());
-    
+  
     // Initialize dataobj if empty
+    if (!this.dataobj) {
+      this.dataobj = { budgetItems: [] };
+    }
     if (!Array.isArray(this.dataobj.budgetItems)) {
       this.dataobj.budgetItems = [];
     }
-
+  
     // Create a map for easy lookup
     const dataObjMap = new Map(this.dataobj.budgetItems.map(item => [item.itemName, item]));
-
+  
     // Filter and update existing items in dataobj
     const filteredDataObj = listItemsArray.map(itemName => {
       if (dataObjMap.has(itemName)) {
@@ -245,10 +248,10 @@ class BudgetCalcElement extends LitElement {
         };
       }
     });
-
+  
     // Assign the filtered and updated dataobj back
     this.dataobj.budgetItems = filteredDataObj;
-
+  
     // Dispatch event to update dataobj
     this.onChange();
   }
@@ -446,7 +449,12 @@ class BudgetCalcElement extends LitElement {
 
   render() {
     const items = this.listitems.split(',').map(item => item.trim());
-
+  
+    // Ensure dataobj and dataobj.budgetItems are defined
+    if (!this.dataobj || !Array.isArray(this.dataobj.budgetItems)) {
+      return html`<div>Error: dataobj is not properly initialized.</div>`;
+    }
+  
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
@@ -465,6 +473,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
+  
 }
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
