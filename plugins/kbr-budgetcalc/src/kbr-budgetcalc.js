@@ -237,7 +237,7 @@ class BudgetCalcElement extends LitElement {
       }
     }
   }
-  
+    
   createHeader(item) {
     const itemnaming = this.itemname.length > 0 ? this.itemname : "Item:";
     const totalAmount = this.calculateTotalForItem(item);
@@ -271,31 +271,33 @@ class BudgetCalcElement extends LitElement {
 
   updateValue(event, item, monthIndex) {
     const rawValue = event.target.value.replace(/[^\d.-]/g, '');
-    const value = parseFloat(rawValue);
+    const value = rawValue === '' ? null : parseFloat(rawValue); // Store null if input is empty
     this.itemValues[item] = this.itemValues[item] || [];
-    this.itemValues[item][monthIndex] = isNaN(value) ? 0 : value;
+    this.itemValues[item][monthIndex] = value === null ? null : (isNaN(value) ? 0 : value);
     this.updateDataObj(item);
     this.requestUpdate();
   }
-
+  
   updateDataObj(item) {
     const monthlyValues = [
       'January', 'February', 'March', 'April', 'May', 'June', 'July',
       'August', 'September', 'October', 'November', 'December'
     ].reduce((acc, month, index) => {
-      acc[month] = this.itemValues[item][index] || 0;
+      if (this.itemValues[item][index] !== null) {
+        acc[month] = this.itemValues[item][index] || 0;
+      }
       return acc;
     }, {});
-    
+  
     if (this.dataobj.budgetItems[item]) {
       this.dataobj.budgetItems[item].monthlyValues = monthlyValues;
-      this.dataobj.budgetItems[item].total = this.itemValues[item].reduce((acc, val) => acc + val, 0);
+      this.dataobj.budgetItems[item].total = Object.values(monthlyValues).reduce((acc, val) => acc + val, 0);
       this.dataobj.budgetItems[item].lastUpdated = new Date().toISOString();
     } else {
       this.dataobj.budgetItems[item] = {
         itemName: item,
         monthlyValues: monthlyValues,
-        total: this.itemValues[item].reduce((acc, val) => acc + val, 0),
+        total: Object.values(monthlyValues).reduce((acc, val) => acc + val, 0),
         outcome: '',
         notes: '',
         approver: '',
@@ -319,7 +321,7 @@ class BudgetCalcElement extends LitElement {
               aria-label="Amount for ${fullMonths[index]}"
               ?disabled="${this.readOnly}"
               placeholder="0.00"
-              .value="${existingItem ? this.formatNumber(existingItem.monthlyValues[fullMonths[index]]) : ''}"
+              .value="${existingItem && existingItem.monthlyValues[fullMonths[index]] !== undefined ? this.formatNumber(existingItem.monthlyValues[fullMonths[index]]) : ''}"
               @blur="${e => { this.formatInput(e); this.updateValue(e, item, index); this.onChange(e); }}">
           </div>
         </div>
@@ -374,24 +376,24 @@ class BudgetCalcElement extends LitElement {
       borderColor: colorMap[status] || 'border-primary',
       selectedStatus: status
     };
-    const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
+    const existingItem = this.dataobj.budgetItems[item];
     if (existingItem) {
       existingItem.outcome = status;
       existingItem.lastUpdated = new Date().toISOString();
     }
     this.requestUpdate();
     this.onChange(new CustomEvent('change', { target: { value: this.dataobj } })); // Dispatch event here
-  }
+  }  
   
   updateComments(event, item) {
-    const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
+    const existingItem = this.dataobj.budgetItems[item];
     if (existingItem) {
       existingItem.notes = event.target.value;
       existingItem.lastUpdated = new Date().toISOString();
     }
     this.onChange(event); // Dispatch event here
   }
-
+  
   getButtonClass(outcome, selectedStatus) {
     const baseClass = 'btn';
     if (selectedStatus === outcome) {
