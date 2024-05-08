@@ -196,7 +196,7 @@ class BudgetCalcElement extends LitElement {
 
   constructor() {
     super();
-    this.dataobj = {};
+    this.dataobj = { budgetItems: [] };
     this.listitems = '';
     this.itemname = '';
     this.review = false;
@@ -206,9 +206,14 @@ class BudgetCalcElement extends LitElement {
     });
     this.statusColors = {};
     this.itemValues = {};
-    console.log('Data object on load:', this.dataobj);
-  }  
+    console.log('Constructor dataobj:', this.dataobj);
+  }
 
+  firstUpdated() {
+    console.log('First updated dataobj:', this.dataobj);
+    this.syncDataObjWithListItems();
+  }
+  
   updated(changedProperties) {
     if (changedProperties.has('listitems') || changedProperties.has('dataobj')) {
       this.syncDataObjWithListItems();
@@ -455,7 +460,7 @@ class BudgetCalcElement extends LitElement {
 
   render() {
     const items = this.listitems.split(',').map(item => item.trim());
-    console.log('Data object on render:', this.dataobj);
+    console.log('Render dataobj:', this.dataobj);
   
     // Ensure dataobj and dataobj.budgetItems are defined
     if (!this.dataobj || !Array.isArray(this.dataobj.budgetItems)) {
@@ -480,7 +485,6 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
-  
   
 }
 
