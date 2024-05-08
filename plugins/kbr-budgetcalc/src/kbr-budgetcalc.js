@@ -238,7 +238,7 @@ class BudgetCalcElement extends LitElement {
         this.itemValues[item] = Object.values(this.dataobj.budgetItems[item].monthlyValues);
       }
     }
-  }
+  }  
     
   createHeader(item) {
     const itemnaming = this.itemname.length > 0 ? this.itemname : "Item:";
@@ -281,6 +281,10 @@ class BudgetCalcElement extends LitElement {
   }
   
   updateDataObj(item) {
+    if (!this.dataobj.budgetItems) {
+      this.dataobj.budgetItems = {};
+    }
+  
     const monthlyValues = [
       'January', 'February', 'March', 'April', 'May', 'June', 'July',
       'August', 'September', 'October', 'November', 'December'
@@ -306,12 +310,12 @@ class BudgetCalcElement extends LitElement {
         lastUpdated: new Date().toISOString()
       };
     }
-  }
+  }  
   
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const existingItem = this.dataobj.budgetItems[item];
+    const existingItem = this.dataobj && this.dataobj.budgetItems ? this.dataobj.budgetItems[item] : undefined;
   
     return html`
       ${months.map((shortMonth, index) => html`
@@ -329,7 +333,7 @@ class BudgetCalcElement extends LitElement {
         </div>
       `)}
     `;
-  }  
+  }
 
   formatInput(event) {
     const value = parseFloat(event.target.value);
@@ -411,7 +415,7 @@ class BudgetCalcElement extends LitElement {
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
         ${items.map(item => {
-          const existingItem = this.dataobj.budgetItems[item];
+          const existingItem = this.dataobj && this.dataobj.budgetItems ? this.dataobj.budgetItems[item] : undefined;
           return html`
             <div class="card ${this.statusColors[item]?.borderColor || ''}">
               ${this.createHeader(item)}
@@ -425,6 +429,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
+  
 }
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
