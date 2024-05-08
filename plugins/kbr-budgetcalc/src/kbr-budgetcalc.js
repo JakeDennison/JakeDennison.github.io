@@ -320,8 +320,7 @@ class BudgetCalcElement extends LitElement {
               ?disabled="${this.readOnly}"
               placeholder="0.00"
               .value="${existingItem ? this.formatNumber(existingItem.monthlyValues[fullMonths[index]]) : ''}"
-              @blur="${e => { this.formatInput(e); this.updateValue(e, item, index); this.onChange(e); }}"
-              @input="${e => this.formatCurrency(e, item)}">
+              @blur="${e => { this.formatInput(e); this.updateValue(e, item, index); this.onChange(e); }}">
           </div>
         </div>
       `)}
