@@ -120,7 +120,6 @@ class BudgetCalcElement extends LitElement {
           type: 'object',
           title: 'Calculator Data Object',
           description: 'Leave empty if you are filling from new, enter output from previous calculator if not new',
-          isValueField: true
         }
       },
       events: ["ntx-value-change"],
