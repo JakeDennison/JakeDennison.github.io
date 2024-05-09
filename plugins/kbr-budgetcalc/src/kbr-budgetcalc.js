@@ -5,6 +5,7 @@ class BudgetCalcElement extends LitElement {
     return {
       dataobj: { type: Object },
       listitems: { type: String },
+      inputjson: { type: String },
       itemname: { type: String },
       review: { type: Boolean, default: false },
       currentuser: { type: String },
