@@ -207,11 +207,10 @@ class BudgetCalcElement extends LitElement {
     });
     this.statusColors = {};
     this.itemValues = {};
-    console.log('Constructor inputJSON:', this.inputjson);
   }
   
   firstUpdated() {
-    console.log('First updated dataobj:', this.dataobj);
+    console.log('Constructor inputJSON:', this.inputjson);
     this.initializeFromInputJson();
     this.syncDataObjWithListItems();
   }
