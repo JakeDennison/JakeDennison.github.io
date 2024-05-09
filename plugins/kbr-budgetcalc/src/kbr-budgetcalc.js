@@ -207,7 +207,7 @@ class BudgetCalcElement extends LitElement {
     });
     this.statusColors = {};
     this.itemValues = {};
-    console.log('Constructor dataobj:', this.dataobj);
+    console.log('Constructor inputJSON:', this.inputjson);
   }
   
   firstUpdated() {
@@ -234,7 +234,7 @@ class BudgetCalcElement extends LitElement {
   
   
   updated(changedProperties) {
-    if (changedProperties.has('listitems') || changedProperties.has('dataobj')) {
+    if (changedProperties.has('listitems') || changedProperties.has('inputjson')) {
       this.syncDataObjWithListItems();
     }
   }
