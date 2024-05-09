@@ -8,6 +8,7 @@ class BudgetCalcElement extends LitElement {
       itemname: { type: String },
       review: { type: Boolean, default: false },
       currentuser: { type: String },
+      dataobj: { type: Object },
     };
   }
   
