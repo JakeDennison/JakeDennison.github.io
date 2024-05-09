@@ -332,6 +332,32 @@ class BudgetCalcElement extends LitElement {
     }
   }
 
+  calculateTotalForItem(item) {
+    if (!this.itemValues[item]) {
+      return this.formatNumber(0);
+    }
+    const total = this.itemValues[item].reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
+    return this.formatNumber(total);
+  }
+
+  formatInput(event) {
+    const value = parseFloat(event.target.value);
+    event.target.value = isNaN(value) ? '' : this.numberFormatter.format(value);
+  }
+
+  autoResize(e) {
+    e.target.style.height = e.target.classList.contains('active') ? 'auto' : '0';
+    e.target.style.height = `${e.target.scrollHeight}px`;
+  }
+
+  getButtonClass(outcome, selectedStatus) {
+    const baseClass = 'btn';
+    if (selectedStatus === outcome) {
+      return outcome === 'Approved' ? `${baseClass} btn-success` : `${baseClass} btn-danger`;
+    }
+    return outcome === 'Approved' ? `${baseClass} btn-outline-success` : `${baseClass} btn-outline-danger`;
+  }
+
   render() {
     const items = this.listitems.split(',').map(item => item.trim());
   
