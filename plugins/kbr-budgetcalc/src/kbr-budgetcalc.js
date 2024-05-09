@@ -4,7 +4,6 @@ class BudgetCalcElement extends LitElement {
 
   static get properties() {
     return {
-      dataobj: { type: Object, attribute: 'dataobj' }, // Add this line
       listitems: { type: String },
       itemname: { type: String },
       review: { type: Boolean, default: false },
@@ -197,6 +196,7 @@ class BudgetCalcElement extends LitElement {
 
   constructor() {
     super();
+    this.listitems = {};
     this.listitems = '';
     this.itemname = '';
     this.review = false;
