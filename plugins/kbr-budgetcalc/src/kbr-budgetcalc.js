@@ -211,42 +211,45 @@ class BudgetCalcElement extends LitElement {
     }
   }
 
-syncDataWithInput() {
-  const items = this.listitems.split(',').map(item => item.trim());
-
-  if (this.inputjson && this.inputjson.trim() !== '') {
-    const parsedJson = JSON.parse(this.inputjson);
-
-    if (parsedJson.budgetItems) {
-      this.dataobj.budgetItems = parsedJson.budgetItems.filter(item => items.includes(item.itemName));
-
-      items.forEach(itemName => {
-        if (!this.dataobj.budgetItems.some(item => item.itemName === itemName)) {
-          this.dataobj.budgetItems.push({
-            itemName: itemName,
-            monthlyValues: this.initializeMonthlyValues(),
-            total: 0,
-            outcome: "",
-            notes: "",
-            approver: "",
-            lastUpdated: ""
-          });
-        }
-      });
+  syncDataWithInput() {
+    const items = this.listitems.split(',').map(item => item.trim());
+  
+    if (this.inputjson && this.inputjson.trim() !== '') {
+      const parsedJson = JSON.parse(this.inputjson);
+  
+      if (parsedJson.budgetItems) {
+        this.dataobj = {
+          budgetItems: parsedJson.budgetItems.filter(item => items.includes(item.itemName))
+        };
+  
+        items.forEach(itemName => {
+          if (!this.dataobj.budgetItems.some(item => item.itemName === itemName)) {
+            this.dataobj.budgetItems.push({
+              itemName: itemName,
+              monthlyValues: this.initializeMonthlyValues(),
+              total: 0,
+              outcome: "",
+              notes: "",
+              approver: "",
+              lastUpdated: ""
+            });
+          }
+        });
+      }
+    } else {
+      this.dataobj = {
+        budgetItems: items.map(itemName => ({
+          itemName: itemName,
+          monthlyValues: this.initializeMonthlyValues(),
+          total: 0,
+          outcome: "",
+          notes: "",
+          approver: "",
+          lastUpdated: ""
+        }))
+      };
     }
-  } else {
-    this.dataobj.budgetItems = items.map(itemName => ({
-      itemName: itemName,
-      monthlyValues: this.initializeMonthlyValues(),
-      total: 0,
-      outcome: "",
-      notes: "",
-      approver: "",
-      lastUpdated: ""
-    }));
   }
-}
-
 
   initializeMonthlyValues() {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
