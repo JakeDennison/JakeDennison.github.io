@@ -196,7 +196,7 @@ class BudgetCalcElement extends LitElement {
 
   constructor() {
     super();
-    this.dataobj = { budgetItems: [] };
+    this.dataobj = {};
     this.listitems = '';
     this.itemname = '';
     this.review = false;
@@ -223,10 +223,6 @@ class BudgetCalcElement extends LitElement {
   syncDataObjWithListItems() {
     const listItemsArray = this.listitems.split(',').map(item => item.trim());
   
-    // Initialize dataobj if empty
-    if (!this.dataobj) {
-      this.dataobj = { budgetItems: [] };
-    }
     if (!Array.isArray(this.dataobj.budgetItems)) {
       this.dataobj.budgetItems = [];
     }
@@ -262,9 +258,7 @@ class BudgetCalcElement extends LitElement {
     this.dataobj.budgetItems = filteredDataObj;
   
     console.log('Data object after sync:', this.dataobj);
-  
-    // Dispatch event to update dataobj
-    this.onChange();
+
   }
   
   onChange(e) {
@@ -284,7 +278,6 @@ class BudgetCalcElement extends LitElement {
       this.dataobj.budgetItems.forEach(item => {
         this.itemValues[item.itemName] = Object.values(item.monthlyValues);
       });
-      this.onChange(); // Call onChange to ensure the event is dispatched on load
     }
   }
     
@@ -325,6 +318,7 @@ class BudgetCalcElement extends LitElement {
     this.itemValues[item] = this.itemValues[item] || [];
     this.itemValues[item][monthIndex] = value === null ? null : (isNaN(value) ? 0 : value);
     this.updateDataObj(item);
+    this.onChange();
     this.requestUpdate();
   }
   
@@ -358,8 +352,6 @@ class BudgetCalcElement extends LitElement {
         lastUpdated: new Date().toISOString()
       });
     }
-
-    this.onChange(); // Ensure the change event is dispatched
   }
   
   createMonthInputs(item) {
@@ -438,7 +430,6 @@ class BudgetCalcElement extends LitElement {
       existingItem.lastUpdated = new Date().toISOString();
     }
     this.requestUpdate();
-    this.onChange(); // Dispatch event here
   }
   
   updateComments(event, item) {
@@ -447,7 +438,6 @@ class BudgetCalcElement extends LitElement {
       existingItem.notes = event.target.value;
       existingItem.lastUpdated = new Date().toISOString();
     }
-    this.onChange(); // Dispatch event here
   }
 
   getButtonClass(outcome, selectedStatus) {
