@@ -334,6 +334,15 @@ class BudgetCalcElement extends LitElement {
     }
   }
 
+  updateValue(event, item, monthIndex) {
+    const rawValue = event.target.value.replace(/[^\d.-]/g, '');
+    const value = rawValue === '' ? null : parseFloat(rawValue); // Store null if input is empty
+    this.itemValues[item] = this.itemValues[item] || [];
+    this.itemValues[item][monthIndex] = value === null ? null : (isNaN(value) ? 0 : value);
+    this.updateDataObj(item);
+    this.requestUpdate();
+  }
+
   calculateTotalForItem(item) {
     if (!this.itemValues[item]) {
       return this.formatNumber(0);
