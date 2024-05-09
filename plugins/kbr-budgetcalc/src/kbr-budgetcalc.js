@@ -371,8 +371,10 @@ class BudgetCalcElement extends LitElement {
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
-
+    
+    // Use itemValues instead of dataobj
+    const itemMonthlyValues = this.itemValues[item] || new Array(12).fill(0);
+  
     return html`
       ${months.map((shortMonth, index) => html`
         <div class="mb-2 px-1 month-input">
@@ -383,13 +385,14 @@ class BudgetCalcElement extends LitElement {
               aria-label="Amount for ${fullMonths[index]}"
               ?disabled="${this.readOnly}"
               placeholder="0.00"
-              .value="${existingItem && existingItem.monthlyValues[fullMonths[index]] !== undefined ? this.formatNumber(existingItem.monthlyValues[fullMonths[index]]) : ''}"
+              .value="${this.formatNumber(itemMonthlyValues[index])}"
               @blur="${e => { this.formatInput(e); this.updateValue(e, item, index); }}">
           </div>
         </div>
       `)}
     `;
   }
+  
   
   formatInput(event) {
     const value = parseFloat(event.target.value);
