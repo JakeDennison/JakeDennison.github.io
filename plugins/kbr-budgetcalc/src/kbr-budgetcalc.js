@@ -200,11 +200,15 @@ class BudgetCalcElement extends LitElement {
     super();
     this.listitems = '';
     this.itemname = '';
-    this.currentuser = '';
     this.review = false;
     this.inputjson = '';
     this.dataobj = { budgetItems: [] };
-    this.itemValues = {}
+    this.numberFormatter = new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    this.statusColors = {};
+    this.itemValues = {};
   }
 
   updated(changedProperties) {
@@ -350,7 +354,19 @@ class BudgetCalcElement extends LitElement {
     const total = this.itemValues[item].reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
     return this.formatNumber(total);
   }
+
+  formatNumber(value) {
+    return this.numberFormatter.format(value);
+  }
   
+  formatCurrency(event, item) {
+    const value = parseFloat(event.target.value.replace(/[^\d.-]/g, ''));
+    if (!isNaN(value)) {
+      event.target.value = this.numberFormatter.format(value);
+    }
+    this.calculateTotalForItem(item);
+  }
+
   formatInput(event) {
     const value = parseFloat(event.target.value.replace(/[^\d.-]/g, ''));
     event.target.value = isNaN(value) ? '' : this.numberFormatter.format(value);
