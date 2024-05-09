@@ -274,7 +274,6 @@ class BudgetCalcElement extends LitElement {
     console.log('Data object after sync:', this.dataobj);
   }
   
-  
   onChange(e) {
     const args = {
       bubbles: true,
@@ -284,15 +283,6 @@ class BudgetCalcElement extends LitElement {
     };
     const event = new CustomEvent('ntx-value-change', args);
     this.dispatchEvent(event);
-  }
-
-  updateItemValuesFromDataObj() {
-    if (this.dataobj && Array.isArray(this.dataobj.budgetItems)) {
-      this.itemValues = {};
-      this.dataobj.budgetItems.forEach(item => {
-        this.itemValues[item.itemName] = Object.values(item.monthlyValues);
-      });
-    }
   }
     
   createHeader(item) {
@@ -332,7 +322,6 @@ class BudgetCalcElement extends LitElement {
     this.itemValues[item] = this.itemValues[item] || [];
     this.itemValues[item][monthIndex] = value === null ? null : (isNaN(value) ? 0 : value);
     this.updateDataObj(item);
-    this.onChange();
     this.requestUpdate();
   }
   
@@ -366,6 +355,7 @@ class BudgetCalcElement extends LitElement {
         lastUpdated: new Date().toISOString()
       });
     }
+    this.onChange();
   }
     
   createMonthInputs(item) {
@@ -444,6 +434,7 @@ class BudgetCalcElement extends LitElement {
       existingItem.outcome = status;
       existingItem.lastUpdated = new Date().toISOString();
     }
+    this.onChange();
     this.requestUpdate();
   }
   
@@ -453,6 +444,7 @@ class BudgetCalcElement extends LitElement {
       existingItem.notes = event.target.value;
       existingItem.lastUpdated = new Date().toISOString();
     }
+    this.onChange();
   }
 
   getButtonClass(outcome, selectedStatus) {
