@@ -452,16 +452,13 @@ class BudgetCalcElement extends LitElement {
     const items = this.listitems.split(',').map(item => item.trim());
     console.log('Render dataobj:', this.dataobj);
   
-    // Ensure dataobj and dataobj.budgetItems are defined
-    if (!this.dataobj || !Array.isArray(this.dataobj.budgetItems)) {
-      return html`<div>Error: dataobj is not properly initialized.</div>`;
-    }
-  
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
         ${items.map(item => {
-          const budgetItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
+          const budgetItem = this.dataobj && Array.isArray(this.dataobj.budgetItems)
+            ? this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item) || {}
+            : {};
           return html`
             <div class="card ${this.statusColors[item]?.borderColor || ''}">
               ${this.createHeader(item)}
