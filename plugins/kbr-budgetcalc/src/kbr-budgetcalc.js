@@ -114,9 +114,15 @@ class BudgetCalcElement extends LitElement {
           type: 'boolean',
           defaultValue: false,
         },
+        inputjson: {
+          type: 'string',
+          title: 'Input JSON',
+          description: 'Enter the JSON from previous object here as a string',
+        },
         dataobj: {
           type: 'object',
-          title: 'Calculator Data Object',
+          title: 'Object Output',
+          description: 'this is for output only you do not need to use it',
           isValueField: true,
           properties: {
             budgetItems: {
@@ -193,6 +199,8 @@ class BudgetCalcElement extends LitElement {
     this.listitems = '';
     this.itemname = '';
     this.review = false;
+    this.inputjson = '';
+    this.dataobj = { budgetItems: [] };
     this.numberFormatter = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
@@ -200,12 +208,30 @@ class BudgetCalcElement extends LitElement {
     this.statusColors = {};
     this.itemValues = {};
     console.log('Constructor dataobj:', this.dataobj);
-}
-
+  }
+  
   firstUpdated() {
     console.log('First updated dataobj:', this.dataobj);
+    this.initializeFromInputJson();
     this.syncDataObjWithListItems();
   }
+  
+  initializeFromInputJson() {
+    if (this.inputjson) {
+      try {
+        const parsedData = JSON.parse(this.inputjson);
+        if (parsedData && Array.isArray(parsedData.budgetItems)) {
+          parsedData.budgetItems.forEach(item => {
+            this.itemValues[item.itemName] = Object.values(item.monthlyValues);
+          });
+          console.log('Parsed inputjson:', parsedData);
+        }
+      } catch (error) {
+        console.error('Failed to parse inputjson:', error);
+      }
+    }
+  }
+  
   
   updated(changedProperties) {
     if (changedProperties.has('listitems') || changedProperties.has('dataobj')) {
@@ -216,53 +242,34 @@ class BudgetCalcElement extends LitElement {
   syncDataObjWithListItems() {
     const listItemsArray = this.listitems.split(',').map(item => item.trim());
   
-    // Initialize dataobj if it is not an object
     if (!this.dataobj || typeof this.dataobj !== 'object') {
       this.dataobj = { budgetItems: [] };
     }
   
-    // Ensure dataobj.budgetItems is an array
     if (!Array.isArray(this.dataobj.budgetItems)) {
       this.dataobj.budgetItems = [];
     }
   
-    // Create a map for easy lookup
     const dataObjMap = new Map(this.dataobj.budgetItems.map(item => [item.itemName, item]));
   
-    // Check if dataobj is empty
-    if (this.dataobj.budgetItems.length === 0) {
-      // Initialize itemValues for each list item
-      listItemsArray.forEach(itemName => {
-        this.itemValues[itemName] = new Array(12).fill(0);
-      });
-    } else {
-      // Filter and update existing items in dataobj
-      const filteredDataObj = listItemsArray.map(itemName => {
-        if (dataObjMap.has(itemName)) {
-          const existingItem = dataObjMap.get(itemName);
-          this.itemValues[itemName] = Object.values(existingItem.monthlyValues);
-          return existingItem;
-        } else {
-          this.itemValues[itemName] = new Array(12).fill(0); // Initialize itemValues if not present in dataobj
-          return {
-            itemName: itemName,
-            monthlyValues: {
-              January: 0.00, February: 0.00, March: 0.00, April: 0.00, May: 0.00,
-              June: 0.00, July: 0.00, August: 0.00, September: 0.00, October: 0.00,
-              November: 0.00, December: 0.00
-            },
-            total: 0.00,
-            outcome: '',
-            notes: '',
-            approver: '',
-            lastUpdated: ''
-          };
-        }
-      });
-  
-      // Assign the filtered and updated dataobj back
-      this.dataobj.budgetItems = filteredDataObj;
-    }
+    listItemsArray.forEach(itemName => {
+      if (!dataObjMap.has(itemName)) {
+        this.itemValues[itemName] = this.itemValues[itemName] || new Array(12).fill(0);
+        this.dataobj.budgetItems.push({
+          itemName: itemName,
+          monthlyValues: {
+            January: 0.00, February: 0.00, March: 0.00, April: 0.00, May: 0.00,
+            June: 0.00, July: 0.00, August: 0.00, September: 0.00, October: 0.00,
+            November: 0.00, December: 0.00
+          },
+          total: 0.00,
+          outcome: '',
+          notes: '',
+          approver: '',
+          lastUpdated: ''
+        });
+      }
+    });
   
     console.log('Data object after sync:', this.dataobj);
   }
@@ -360,12 +367,11 @@ class BudgetCalcElement extends LitElement {
       });
     }
   }
-  
+    
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    
-    // Use itemValues instead of dataobj
+  
     const itemMonthlyValues = this.itemValues[item] || new Array(12).fill(0);
   
     return html`
@@ -385,7 +391,6 @@ class BudgetCalcElement extends LitElement {
       `)}
     `;
   }
-  
   
   formatInput(event) {
     const value = parseFloat(event.target.value);
@@ -466,9 +471,6 @@ class BudgetCalcElement extends LitElement {
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
         ${items.map(item => {
-          const budgetItem = this.dataobj && Array.isArray(this.dataobj.budgetItems)
-            ? this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item) || {}
-            : {};
           return html`
             <div class="card ${this.statusColors[item]?.borderColor || ''}">
               ${this.createHeader(item)}
@@ -481,7 +483,7 @@ class BudgetCalcElement extends LitElement {
         })}
       </div>
     `;
-  }
+  }  
   
 }
 
