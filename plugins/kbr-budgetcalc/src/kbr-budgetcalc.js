@@ -1,16 +1,17 @@
 import { LitElement, html, css } from 'lit';
 
 class BudgetCalcElement extends LitElement {
+
   static get properties() {
     return {
-      dataobj: { type: Object },
+      dataobj: { type: Object, attribute: 'dataobj' }, // Add this line
       listitems: { type: String },
       itemname: { type: String },
       review: { type: Boolean, default: false },
       currentuser: { type: String },
     };
   }
-
+  
   static get styles() {
     return css`
       :host {
@@ -196,7 +197,6 @@ class BudgetCalcElement extends LitElement {
 
   constructor() {
     super();
-    this.dataobj = {};
     this.listitems = '';
     this.itemname = '';
     this.review = false;
@@ -207,7 +207,7 @@ class BudgetCalcElement extends LitElement {
     this.statusColors = {};
     this.itemValues = {};
     console.log('Constructor dataobj:', this.dataobj);
-  }
+}
 
   firstUpdated() {
     console.log('First updated dataobj:', this.dataobj);
