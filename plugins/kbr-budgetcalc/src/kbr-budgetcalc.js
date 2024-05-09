@@ -338,6 +338,30 @@ class BudgetCalcElement extends LitElement {
     }
   }
 
+  createMonthInputs(item) {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  
+    const itemMonthlyValues = this.itemValues[item] || new Array(12).fill(0);
+  
+    return html`
+      ${months.map((shortMonth, index) => html`
+        <div class="mb-2 px-1 month-input">
+          <label for="${shortMonth}-${item}" class="form-label">${fullMonths[index]}</label>
+          <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input type="text" class="form-control currency-input" id="${shortMonth}-${item}"
+              aria-label="Amount for ${fullMonths[index]}"
+              ?disabled="${this.readOnly}"
+              placeholder="0.00"
+              .value="${this.formatNumber(itemMonthlyValues[index])}"
+              @blur="${e => { this.formatInput(e); this.updateValue(e, item, index); }}">
+          </div>
+        </div>
+      `)}
+    `;
+  }
+
   updateValue(event, item, monthIndex) {
     const rawValue = event.target.value.replace(/[^\d.-]/g, '');
     const value = rawValue === '' ? null : parseFloat(rawValue); // Store null if input is empty
