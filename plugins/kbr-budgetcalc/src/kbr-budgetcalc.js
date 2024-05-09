@@ -210,26 +210,30 @@ class BudgetCalcElement extends LitElement {
       this.syncDataWithInput();
     }
   }
-
+  
   syncDataWithInput() {
-    const listItemsArray = this.listitems.split(',').map(item => item.trim());
-    const parsedData = this.inputjson ? JSON.parse(this.inputjson) : { budgetItems: [] };
-
-    this.dataobj.budgetItems = parsedData.budgetItems.filter(item => listItemsArray.includes(item.itemName));
-    listItemsArray.forEach(itemName => {
-      if (!this.dataobj.budgetItems.some(item => item.itemName === itemName)) {
-        this.dataobj.budgetItems.push({
-          itemName: itemName,
-          monthlyValues: this.initializeMonthlyValues(),
-          total: 0.00,
-          outcome: '',
-          notes: '',
-          approver: '',
-          lastUpdated: ''
-        });
-      }
-    });
+    const items = this.listitems.split(',').map(item => item.trim());
+    const parsedJson = this.inputjson && this.inputjson.trim() !== '' ? JSON.parse(this.inputjson) : { budgetItems: [] };
+    
+    if (parsedJson.budgetItems) {
+      this.dataobj.budgetItems = parsedJson.budgetItems.filter(item => items.includes(item.itemName));
+  
+      items.forEach(itemName => {
+        if (!this.dataobj.budgetItems.some(item => item.itemName === itemName)) {
+          this.dataobj.budgetItems.push({
+            itemName: itemName,
+            monthlyValues: this.initializeMonthlyValues(),
+            total: 0,
+            outcome: "",
+            notes: "",
+            approver: "",
+            lastUpdated: ""
+          });
+        }
+      });
+    }
   }
+  
 
   initializeMonthlyValues() {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
