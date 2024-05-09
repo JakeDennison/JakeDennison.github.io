@@ -235,6 +235,7 @@ class BudgetCalcElement extends LitElement {
   
   updated(changedProperties) {
     if (changedProperties.has('listitems') || changedProperties.has('inputjson')) {
+      console.log('updated inputJSON:', this.inputjson);
       this.syncDataObjWithListItems();
     }
   }
