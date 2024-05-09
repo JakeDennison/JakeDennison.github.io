@@ -97,8 +97,7 @@ class BudgetCalcElement extends LitElement {
         listitems: {
           type: 'string',
           title: 'List Items',
-          description: 'List of items to be budgeted (best use output from multi-select control)',
-          required: true
+          description: 'List of items to be budgeted',
         },
         itemname: {
             type: 'string',
@@ -109,7 +108,6 @@ class BudgetCalcElement extends LitElement {
           type: 'string',
           title: 'Context current user email',
           description: 'Please enter the context current user email',
-          required: true
         },
         review: {
           title: 'Enable Review Mode',
@@ -119,8 +117,6 @@ class BudgetCalcElement extends LitElement {
         dataobj: {
           type: 'object',
           title: 'Calculator Data Object',
-          required: false,
-          description: 'Leave empty if you are filling from new, enter output from previous calculator if not new',
           isValueField: true,
           properties: {
             budgetItems: {
