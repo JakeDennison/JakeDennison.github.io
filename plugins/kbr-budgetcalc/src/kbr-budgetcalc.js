@@ -3,12 +3,12 @@ import { LitElement, html, css } from 'lit';
 class BudgetCalcElement extends LitElement {
   static get properties() {
     return {
-      dataobj: { type: Object },
       listitems: { type: String },
-      inputjson: { type: String },
       itemname: { type: String },
-      review: { type: Boolean, default: false },
       currentuser: { type: String },
+      review: { type: Boolean },
+      inputjson: { type: String },
+      dataobj: { type: Object }
     };
   }
 
@@ -199,70 +199,28 @@ class BudgetCalcElement extends LitElement {
     super();
     this.listitems = '';
     this.itemname = '';
+    this.currentuser = '';
     this.review = false;
     this.inputjson = '';
     this.dataobj = { budgetItems: [] };
-    this.numberFormatter = new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
-    this.statusColors = {};
-    this.itemValues = {};
   }
-  
-  firstUpdated() {
-    console.log('Constructor inputJSON:', this.inputjson);
-    this.initializeFromInputJson();
-    this.syncDataObjWithListItems();
-  }
-  
-  initializeFromInputJson() {
-    if (this.inputjson) {
-      try {
-        const parsedData = JSON.parse(this.inputjson);
-        if (parsedData && Array.isArray(parsedData.budgetItems)) {
-          parsedData.budgetItems.forEach(item => {
-            this.itemValues[item.itemName] = Object.values(item.monthlyValues);
-          });
-          console.log('Parsed inputjson:', parsedData);
-        }
-      } catch (error) {
-        console.error('Failed to parse inputjson:', error);
-      }
-    }
-  }
-  
-  
+
   updated(changedProperties) {
     if (changedProperties.has('listitems') || changedProperties.has('inputjson')) {
-      console.log('updated inputJSON:', this.inputjson);
-      this.syncDataObjWithListItems();
+      this.syncDataWithInput();
     }
   }
 
-  syncDataObjWithListItems() {
+  syncDataWithInput() {
     const listItemsArray = this.listitems.split(',').map(item => item.trim());
-  
-    if (!this.dataobj || typeof this.dataobj !== 'object') {
-      this.dataobj = { budgetItems: [] };
-    }
-  
-    if (!Array.isArray(this.dataobj.budgetItems)) {
-      this.dataobj.budgetItems = [];
-    }
-  
-    const dataObjMap = new Map(this.dataobj.budgetItems.map(item => [item.itemName, item]));
-  
+    const parsedData = this.inputjson ? JSON.parse(this.inputjson) : { budgetItems: [] };
+
+    this.dataobj.budgetItems = parsedData.budgetItems.filter(item => listItemsArray.includes(item.itemName));
     listItemsArray.forEach(itemName => {
-      if (!dataObjMap.has(itemName)) {
-        this.itemValues[itemName] = this.itemValues[itemName] || new Array(12).fill(0);
+      if (!this.dataobj.budgetItems.some(item => item.itemName === itemName)) {
         this.dataobj.budgetItems.push({
           itemName: itemName,
-          monthlyValues: {
-            January: 0.00, February: 0.00, March: 0.00, April: 0.00, May: 0.00,
-            June: 0.00, July: 0.00, August: 0.00, September: 0.00, October: 0.00,
-            November: 0.00, December: 0.00
-          },
+          monthlyValues: this.initializeMonthlyValues(),
           total: 0.00,
           outcome: '',
           notes: '',
@@ -271,213 +229,109 @@ class BudgetCalcElement extends LitElement {
         });
       }
     });
-  
-    console.log('Data object after sync:', this.dataobj);
   }
-  
-  onChange(e) {
-    const args = {
+
+  initializeMonthlyValues() {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return months.reduce((acc, month) => {
+      acc[month] = 0.00;
+      return acc;
+    }, {});
+  }
+
+  updateDataObj() {
+    this.dataobj.lastUpdated = new Date().toISOString();
+    const event = new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: false,
       composed: true,
-      detail: this.dataobj,
-    };
-    const event = new CustomEvent('ntx-value-change', args);
+      detail: this.dataobj
+    });
     this.dispatchEvent(event);
   }
-    
+
+  handleValueChange(itemName, month, value) {
+    const item = this.dataobj.budgetItems.find(item => item.itemName === itemName);
+    if (item) {
+      item.monthlyValues[month] = value;
+      item.total = Object.values(item.monthlyValues).reduce((acc, val) => acc + val, 0);
+      item.lastUpdated = new Date().toISOString();
+      this.updateDataObj();
+    }
+  }
+
+  handleApprovalStatusChange(itemName, status) {
+    const item = this.dataobj.budgetItems.find(item => item.itemName === itemName);
+    if (item) {
+      item.outcome = status;
+      item.lastUpdated = new Date().toISOString();
+      this.updateDataObj();
+    }
+  }
+
+  handleCommentsChange(itemName, comments) {
+    const item = this.dataobj.budgetItems.find(item => item.itemName === itemName);
+    if (item) {
+      item.notes = comments;
+      item.lastUpdated = new Date().toISOString();
+      this.updateDataObj();
+    }
+  }
+
   createHeader(item) {
-    const itemnaming = this.itemname.length > 0 ? this.itemname : "Item:";
-    const totalAmount = this.calculateTotalForItem(item);
     return html`
       <div class="card-header">
-        <div style="float: left;" class="badge fs-6 bg-dark">${itemnaming} ${item}</div>
-        <div style="float: right;" class="badge fs-6 rounded-pill bg-primary">Total: $${totalAmount}</div>
+        <div class="badge fs-6 bg-dark">${this.itemname ? this.itemname : 'Item'}: ${item}</div>
+        <div class="badge fs-6 rounded-pill bg-primary">Total: $${this.calculateTotalForItem(item)}</div>
       </div>
     `;
   }
 
-  formatCurrency(event, item) {
-    const value = parseFloat(event.target.value.replace(/[^\d.-]/g, ''));
-    if (!isNaN(value)) {
-      event.target.value = this.numberFormatter.format(value);
-    }
-    this.calculateTotalForItem(item);
-  }
-
-  formatNumber(value) {
-    return this.numberFormatter.format(value);
-  }
-
-  calculateTotalForItem(item) {
-    if (!this.itemValues[item]) {
-      return this.formatNumber(0);
-    }
-    const total = this.itemValues[item].reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
-    return this.formatNumber(total);
-  }
-
-  updateValue(event, item, monthIndex) {
-    const rawValue = event.target.value.replace(/[^\d.-]/g, '');
-    const value = rawValue === '' ? null : parseFloat(rawValue); // Store null if input is empty
-    this.itemValues[item] = this.itemValues[item] || [];
-    this.itemValues[item][monthIndex] = value === null ? null : (isNaN(value) ? 0 : value);
-    this.updateDataObj(item);
-    this.requestUpdate();
-  }
-  
-  updateDataObj(item) {
-    if (!Array.isArray(this.dataobj.budgetItems)) {
-      this.dataobj.budgetItems = [];
-    }
-  
-    const monthlyValues = [
-      'January', 'February', 'March', 'April', 'May', 'June', 'July',
-      'August', 'September', 'October', 'November', 'December'
-    ].reduce((acc, month, index) => {
-      acc[month] = this.itemValues[item][index] || 0;
-      return acc;
-    }, {});
-  
-    const existingItemIndex = this.dataobj.budgetItems.findIndex(budgetItem => budgetItem.itemName === item);
-  
-    if (existingItemIndex !== -1) {
-      this.dataobj.budgetItems[existingItemIndex].monthlyValues = monthlyValues;
-      this.dataobj.budgetItems[existingItemIndex].total = Object.values(monthlyValues).reduce((acc, val) => acc + val, 0);
-      this.dataobj.budgetItems[existingItemIndex].lastUpdated = new Date().toISOString();
-    } else {
-      this.dataobj.budgetItems.push({
-        itemName: item,
-        monthlyValues: monthlyValues,
-        total: Object.values(monthlyValues).reduce((acc, val) => acc + val, 0),
-        outcome: '',
-        notes: '',
-        approver: '',
-        lastUpdated: new Date().toISOString()
-      });
-    }
-    this.onChange();
-  }
-    
-  createMonthInputs(item) {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  
-    const itemMonthlyValues = this.itemValues[item] || new Array(12).fill(0);
-  
+  createBody(item) {
     return html`
-      ${months.map((shortMonth, index) => html`
-        <div class="mb-2 px-1 month-input">
-          <label for="${shortMonth}-${item}" class="form-label">${fullMonths[index]}</label>
-          <div class="input-group">
-            <span class="input-group-text">$</span>
-            <input type="text" class="form-control currency-input" id="${shortMonth}-${item}"
-              aria-label="Amount for ${fullMonths[index]}"
-              ?disabled="${this.readOnly}"
-              placeholder="0.00"
-              .value="${this.formatNumber(itemMonthlyValues[index])}"
-              @blur="${e => { this.formatInput(e); this.updateValue(e, item, index); }}">
-          </div>
-        </div>
-      `)}
+      <div class="card-body d-flex flex-wrap">
+        ${this.createMonthInputs(item)}
+      </div>
     `;
-  }
-  
-  formatInput(event) {
-    const value = parseFloat(event.target.value);
-    event.target.value = isNaN(value) ? '' : this.numberFormatter.format(value);
-  }
-
-  autoResize(e) {
-    e.target.style.height = e.target.classList.contains('active') ? 'auto' : '0';
-    e.target.style.height = `${e.target.scrollHeight}px`;
   }
 
   createFooter(item) {
-    if (!this.review) {
-      return '';
-    }
-
-    const statusInfo = this.statusColors[item] || { selectedStatus: '' };
-    const outcomes = ['Rejected', 'Approved'];
-    const showInput = statusInfo.selectedStatus === 'Rejected';
-
-    return html`
-      <div class="card-footer">
-        <div class="btn-group" role="group" aria-label="Approval Status">
-          ${outcomes.map(outcome => html`
-            <button type="button"
-                    class="${this.getButtonClass(outcome, statusInfo.selectedStatus)}"
-                    @click="${() => this.updateStatus(item, outcome)}">${outcome}</button>
-          `)}
+    if (this.review) {
+      return html`
+        <div class="card-footer">
+          <select @change="${() => this.handleApprovalStatusChange(item, event.target.value)}">
+            <option value="">Select Approval Status</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+          <textarea @input="${() => this.handleCommentsChange(item, event.target.value)}"></textarea>
         </div>
-        ${showInput ? html`
-          <textarea class="form-control comments-control active"
-                    placeholder="Enter comments"
-                    @input="${e => this.updateComments(e, item)}"
-                    style="height: auto; min-height: 38px;"></textarea>
-        ` : ''}
-      </div>
-    `;
-  }
-
-  updateStatus(item, status) {
-    const colorMap = {
-      'Approved': 'border-success',
-      'Rejected': 'border-danger'
-    };
-    this.statusColors[item] = {
-      borderColor: colorMap[status] || 'border-primary',
-      selectedStatus: status
-    };
-    const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
-    if (existingItem) {
-      existingItem.outcome = status;
-      existingItem.lastUpdated = new Date().toISOString();
+      `;
+    } else {
+      return html``;
     }
-    this.onChange();
-    this.requestUpdate();
-  }
-  
-  updateComments(event, item) {
-    const existingItem = this.dataobj.budgetItems.find(budgetItem => budgetItem.itemName === item);
-    if (existingItem) {
-      existingItem.notes = event.target.value;
-      existingItem.lastUpdated = new Date().toISOString();
-    }
-    this.onChange();
-  }
-
-  getButtonClass(outcome, selectedStatus) {
-    const baseClass = 'btn';
-    if (selectedStatus === outcome) {
-      return outcome === 'Approved' ? `${baseClass} btn-success` : `${baseClass} btn-danger`;
-    }
-    return outcome === 'Approved' ? `${baseClass} btn-outline-success` : `${baseClass} btn-outline-danger`;
   }
 
   render() {
     const items = this.listitems.split(',').map(item => item.trim());
-    console.log('Render dataobj:', this.dataobj);
-  
+
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
         ${items.map(item => {
-          return html`
-            <div class="card ${this.statusColors[item]?.borderColor || ''}">
+          const currentItem = this.dataobj.budgetItems.find(i => i.itemName === item);
+          return currentItem ? html`
+            <div class="card">
               ${this.createHeader(item)}
-              <div class="card-body d-flex flex-wrap">
-                ${this.createMonthInputs(item)}
-              </div>
+              ${this.createBody(item)}
               ${this.createFooter(item)}
             </div>
-          `;
+          ` : '';
         })}
       </div>
     `;
-  }  
-  
+  }
 }
+
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
