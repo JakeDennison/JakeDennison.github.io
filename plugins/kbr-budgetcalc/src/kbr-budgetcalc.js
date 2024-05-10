@@ -9,7 +9,8 @@ class BudgetCalcElement extends LitElement {
       reviewmode: { type: Boolean },
       inputobj: { type: Object },
       outputobj: { type: Object },
-      itemValues: { type: Object }
+      itemValues: { type: Object },
+      statusColors: { type: Object }
     };
   }
 
@@ -178,6 +179,7 @@ class BudgetCalcElement extends LitElement {
     this.inputobj = {};
     this.outputobj = {};
     this.itemValues = {};
+    this.statusColors = {};
     this.numberFormatter = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
