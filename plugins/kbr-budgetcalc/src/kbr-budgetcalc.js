@@ -259,6 +259,19 @@ class BudgetCalcElement extends LitElement {
     }
   }
 
+  autoResize(e) {
+    e.target.style.height = e.target.classList.contains('active') ? 'auto' : '0';
+    e.target.style.height = `${e.target.scrollHeight}px`;
+  }
+  
+  getButtonClass(outcome, selectedStatus) {
+    const baseClass = 'btn';
+    if (selectedStatus === outcome) {
+      return outcome === 'Approved' ? `${baseClass} btn-success` : `${baseClass} btn-danger`;
+    }
+    return outcome === 'Approved' ? `${baseClass} btn-outline-success` : `${baseClass} btn-outline-danger`;
+  }
+
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
