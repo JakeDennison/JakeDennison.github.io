@@ -13,7 +13,7 @@ class BudgetCalcElement extends LitElement {
       statusColors: { type: Object }
     };
   }
-
+  
   static getMetaConfig() {
     return {
       controlName: 'kbr-budgetcalc',
@@ -44,9 +44,9 @@ class BudgetCalcElement extends LitElement {
           defaultValue: false,
         },
         inputobj: {
-          type: 'string',
-          title: 'Input JSON',
-          description: 'Enter the JSON from previous object here as a string',
+          type: 'object',
+          title: 'Input Object',
+          description: 'Enter the object from previous control here',
         },
         outputobj: {
           type: 'object',
@@ -88,15 +88,15 @@ class BudgetCalcElement extends LitElement {
                     title: 'Total',
                     description: 'Total amount for the budget item'
                   },
-                  outcome: {
+                  approval: {
                     type: 'string',
-                    title: 'Outcome',
-                    description: 'Approval outcome of the budget item'
+                    title: 'Approval Status',
+                    description: 'Approval status of the budget item'
                   },
-                  notes: {
+                  comments: {
                     type: 'string',
-                    title: 'Notes',
-                    description: 'Additional notes or comments'
+                    title: 'Comments',
+                    description: 'Additional comments or notes'
                   },
                   approver: {
                     type: 'string',
