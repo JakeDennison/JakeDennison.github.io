@@ -306,12 +306,20 @@ class BudgetCalcElement extends LitElement {
   }
 
   handleApprovalStatusChange(item, value) {
-    // Handle approval status change
+    if (!this.outputobj.budgetItems) {
+      this.outputobj.budgetItems = [];
+    }
+    const budgetItem = this.outputobj.budgetItems.find(i => i.itemName === item) || {};
+    budgetItem.outcome = value;
     this.updateOutputObj();
   }
 
   handleCommentsChange(item, value) {
-    // Handle comments change
+    if (!this.outputobj.budgetItems) {
+      this.outputobj.budgetItems = [];
+    }
+    const budgetItem = this.outputobj.budgetItems.find(i => i.itemName === item) || {};
+    budgetItem.notes = value;
     this.updateOutputObj();
   }
 
@@ -320,9 +328,9 @@ class BudgetCalcElement extends LitElement {
       itemName: item,
       monthlyValues: this.itemValues[item],
       total: Object.values(this.itemValues[item]).reduce((acc, val) => acc + (parseFloat(val) || 0), 0),
-      outcome: '', // Add logic to fetch outcome
-      notes: '', // Add logic to fetch notes
-      approver: this.currentuser, // Add logic to fetch approver
+      outcome: this.outputobj.budgetItems.find(i => i.itemName === item)?.outcome || '', // Fetch existing outcome or set empty string
+      notes: this.outputobj.budgetItems.find(i => i.itemName === item)?.notes || '', // Fetch existing notes or set empty string
+      approver: '', // Add logic to fetch approver if needed
       lastUpdated: new Date().toISOString()
     }));
 
