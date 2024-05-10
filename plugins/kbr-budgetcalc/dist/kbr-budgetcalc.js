@@ -43,7 +43,7 @@
           max-width: 25%;
         }
       }
-    `}constructor(){super(),this.listitems="",this.itemname="",this.reviewmode=!1,this.inputobj={},this.outputobj={},this.itemValues={},this.numberFormatter=new Intl.NumberFormat("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}initializeMonthlyValues(){return["January","February","March","April","May","June","July","August","September","October","November","December"].reduce(((t,e)=>(t[e]=0,t)),{})}createHeader(t){return j`
+    `}constructor(){super(),this.listitems="",this.itemname="",this.reviewmode=!1,this.inputobj={},this.outputobj={},this.itemValues={},this.numberFormatter=new Intl.NumberFormat("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}initializeMonthlyValues(){return["January","February","March","April","May","June","July","August","September","October","November","December"].reduce(((t,e)=>(t[e]=null,t)),{})}createHeader(t){return j`
       <div class="card-header">
         <div class="badge fs-6 bg-dark">${this.itemname?this.itemname:"Item"}: ${t}</div>
         <div class="badge fs-6 rounded-pill bg-primary">Total: $${this.calculateTotalForItem(t)}</div>
@@ -71,12 +71,12 @@
               aria-label="Amount for ${e[r]}"
               ?disabled="${this.readOnly}"
               placeholder="0.00"
-              .value="${this.formatNumber(i[e[r]])}"
-              @blur="${i=>this.handleValueChange(t,e[r],parseFloat(i.target.value.replace(/[^\d.-]/g,""))||0)}">
+              .value="${null!==i[e[r]]?this.formatNumber(i[e[r]]):""}"
+              @blur="${i=>this.handleValueChange(t,e[r],parseFloat(i.target.value.replace(/[^\d.-]/g,""))||null)}">
           </div>
         </div>
       `))}
-    `}handleValueChange(t,e,i){this.itemValues[t]||(this.itemValues[t]=this.initializeMonthlyValues()),this.itemValues[t][e]=i,this.requestUpdate()}handleApprovalStatusChange(t,e){}handleCommentsChange(t,e){}calculateTotalForItem(t){if(!this.itemValues[t])return this.formatNumber(0);const e=Object.values(this.itemValues[t]).reduce(((t,e)=>t+(parseFloat(e)||0)),0);return this.formatNumber(e)}formatNumber(t){return this.numberFormatter.format(t)}render(){return j`
+    `}handleValueChange(t,e,i){this.itemValues[t]||(this.itemValues[t]=this.initializeMonthlyValues()),this.itemValues[t][e]=i,this.requestUpdate()}handleApprovalStatusChange(t,e){}handleCommentsChange(t,e){}calculateTotalForItem(t){if(!this.itemValues[t])return this.formatNumber(0);const e=Object.values(this.itemValues[t]).filter((t=>null!==t)).reduce(((t,e)=>t+(parseFloat(e)||0)),0);return this.formatNumber(e)}formatNumber(t){return this.numberFormatter.format(t)}render(){return j`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
         ${this.listitems.split(",").map((t=>j`

@@ -187,11 +187,11 @@ class BudgetCalcElement extends LitElement {
   initializeMonthlyValues() {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     return months.reduce((acc, month) => {
-      acc[month] = 0.00;
+      acc[month] = null;
       return acc;
     }, {});
   }
-
+  
   createHeader(item) {
     return html`
       <div class="card-header">
@@ -229,9 +229,9 @@ class BudgetCalcElement extends LitElement {
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
+  
     const itemMonthlyValues = this.itemValues[item] || this.initializeMonthlyValues();
-
+  
     return html`
       ${months.map((shortMonth, index) => html`
         <div class="mb-2 px-1 month-input">
@@ -242,14 +242,14 @@ class BudgetCalcElement extends LitElement {
               aria-label="Amount for ${fullMonths[index]}"
               ?disabled="${this.readOnly}"
               placeholder="0.00"
-              .value="${this.formatNumber(itemMonthlyValues[fullMonths[index]])}"
-              @blur="${e => this.handleValueChange(item, fullMonths[index], parseFloat(e.target.value.replace(/[^\d.-]/g, '')) || 0)}">
+              .value="${itemMonthlyValues[fullMonths[index]] !== null ? this.formatNumber(itemMonthlyValues[fullMonths[index]]) : ''}"
+              @blur="${e => this.handleValueChange(item, fullMonths[index], parseFloat(e.target.value.replace(/[^\d.-]/g, '')) || null)}">
           </div>
         </div>
       `)}
     `;
   }
-
+  
   handleValueChange(item, month, value) {
     if (!this.itemValues[item]) {
       this.itemValues[item] = this.initializeMonthlyValues();
@@ -257,7 +257,7 @@ class BudgetCalcElement extends LitElement {
     this.itemValues[item][month] = value;
     this.requestUpdate();
   }
-
+  
   handleApprovalStatusChange(item, value) {
     // Handle approval status change logic
   }
@@ -270,9 +270,12 @@ class BudgetCalcElement extends LitElement {
     if (!this.itemValues[item]) {
       return this.formatNumber(0);
     }
-    const total = Object.values(this.itemValues[item]).reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
+    const total = Object.values(this.itemValues[item])
+      .filter(val => val !== null)
+      .reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
     return this.formatNumber(total);
   }
+  
 
   formatNumber(value) {
     return this.numberFormatter.format(value);
