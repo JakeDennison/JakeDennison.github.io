@@ -6,9 +6,10 @@ class BudgetCalcElement extends LitElement {
       listitems: { type: String },
       itemname: { type: String },
       currentuser: { type: String },
-      review: { type: Boolean },
+      reviewmode: { type: Boolean },
       inputjson: { type: String },
-      dataobj: { type: Object },
+      inputobj: { type: Object },
+      outputobj: { type: Object },
       itemValues: { type: Object }
     };
   }
@@ -111,20 +112,20 @@ class BudgetCalcElement extends LitElement {
           title: 'Context current user email',
           description: 'Please enter the context current user email',
         },
-        review: {
+        reviewmode: {
           title: 'Enable Review Mode',
           type: 'boolean',
           defaultValue: false,
         },
-        inputjson: {
-          type: 'string',
-          title: 'Input JSON',
-          description: 'Enter the JSON from previous object here as a string',
+        inputobj: {
+          type: 'object',
+          title: 'Input Object',
+          description: 'Enter the object from previous control here',
         },
-        dataobj: {
+        outputobj: {
           type: 'object',
           title: 'Object Output',
-          description: 'this is for output only you do not need to use it',
+          description: 'This is for output only you do not need to use it',
           isValueField: true,
           properties: {
             budgetItems: {
@@ -200,9 +201,9 @@ class BudgetCalcElement extends LitElement {
     super();
     this.listitems = '';
     this.itemname = '';
-    this.review = false;
-    this.inputjson = '';
-    this.dataobj = { budgetItems: [] };
+    this.reviewmode = false;
+    this.inputobj = {};
+    this.outputobj = {};
     this.numberFormatter = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
@@ -211,225 +212,45 @@ class BudgetCalcElement extends LitElement {
     this.itemValues = {};
   }
 
-  updated(changedProperties) {
-    if (changedProperties.has('listitems') || changedProperties.has('inputjson')) {
-      this.syncDataWithInput();
-    }
-  }
-
-  syncDataWithInput() {
-    const items = this.listitems.split(',').map(item => item.trim());
-  
-    if (this.inputjson && this.inputjson.trim() !== '') {
-      const parsedJson = JSON.parse(this.inputjson);
-  
-      if (parsedJson.budgetItems) {
-        this.dataobj = {
-          budgetItems: parsedJson.budgetItems.filter(item => items.includes(item.itemName))
-        };
-  
-        items.forEach(itemName => {
-          if (!this.dataobj.budgetItems.some(item => item.itemName === itemName)) {
-            this.dataobj.budgetItems.push({
-              itemName: itemName,
-              monthlyValues: this.initializeMonthlyValues(),
-              total: 0,
-              outcome: "",
-              notes: "",
-              approver: "",
-              lastUpdated: ""
-            });
-          }
-        });
-      }
-    } else {
-      this.dataobj = {
-        budgetItems: items.map(itemName => ({
-          itemName: itemName,
-          monthlyValues: this.initializeMonthlyValues(),
-          total: 0,
-          outcome: "",
-          notes: "",
-          approver: "",
-          lastUpdated: ""
-        }))
-      };
-    }
-  }
-
-  initializeMonthlyValues() {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    return months.reduce((acc, month) => {
-      acc[month] = 0.00;
-      return acc;
-    }, {});
-  }
-
-  updateDataObj() {
-    this.dataobj.lastUpdated = new Date().toISOString();
-    const event = new CustomEvent('ntx-value-change', {
-      bubbles: true,
-      cancelable: false,
-      composed: true,
-      detail: this.dataobj
-    });
-    this.dispatchEvent(event);
-  }
-
-  handleValueChange(itemName, month, value) {
-    const item = this.dataobj.budgetItems.find(item => item.itemName === itemName);
-    if (item) {
-      item.monthlyValues[month] = value;
-      item.total = Object.values(item.monthlyValues).reduce((acc, val) => acc + val, 0);
-      item.lastUpdated = new Date().toISOString();
-      this.updateDataObj();
-    }
-  }
-
-  handleApprovalStatusChange(itemName, status) {
-    const item = this.dataobj.budgetItems.find(item => item.itemName === itemName);
-    if (item) {
-      item.outcome = status;
-      item.lastUpdated = new Date().toISOString();
-      this.updateDataObj();
-    }
-  }
-
-  handleCommentsChange(itemName, comments) {
-    const item = this.dataobj.budgetItems.find(item => item.itemName === itemName);
-    if (item) {
-      item.notes = comments;
-      item.lastUpdated = new Date().toISOString();
-      this.updateDataObj();
-    }
-  }
-
-  createHeader(item) {
+  render() {
     return html`
-      <div class="card-header">
-        <div class="badge fs-6 bg-dark">${this.itemname ? this.itemname : 'Item'}: ${item}</div>
-        <div class="badge fs-6 rounded-pill bg-primary">Total: $${this.calculateTotalForItem(item)}</div>
-      </div>
-    `;
-  }
-
-  createBody(item) {
-    return html`
-      <div class="card-body d-flex flex-wrap">
-        ${this.createMonthInputs(item)}
-      </div>
-    `;
-  }
-
-  createFooter(item) {
-    if (this.review) {
-      return html`
-        <div class="card-footer">
-          <select @change="${() => this.handleApprovalStatusChange(item, event.target.value)}">
-            <option value="">Select Approval Status</option>
-            <option value="Approved">Approved</option>
-            <option value="Rejected">Rejected</option>
-          </select>
-          <textarea @input="${() => this.handleCommentsChange(item, event.target.value)}"></textarea>
-        </div>
-      `;
-    } else {
-      return html``;
-    }
-  }
-
-  createMonthInputs(item) {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  
-    const itemMonthlyValues = this.itemValues[item] || new Array(12).fill(0);
-  
-    return html`
-      ${months.map((shortMonth, index) => html`
-        <div class="mb-2 px-1 month-input">
-          <label for="${shortMonth}-${item}" class="form-label">${fullMonths[index]}</label>
-          <div class="input-group">
-            <span class="input-group-text">$</span>
-            <input type="text" class="form-control currency-input" id="${shortMonth}-${item}"
-              aria-label="Amount for ${fullMonths[index]}"
-              ?disabled="${this.readOnly}"
-              placeholder="0.00"
-              .value="${this.formatNumber(itemMonthlyValues[index])}"
-              @blur="${e => { this.formatInput(e); this.updateValue(e, item, index); }}">
+      <div>
+        <h2>Yearly Budget Calculator</h2>
+        ${this.listitems.split(',').map((item) => html`
+          <div class="card">
+            <div class="card-header">
+              ${item.trim()}
+            </div>
+            <div class="card-body">
+              ${['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map(month => html`
+                <div class="input-group month-input">
+                  <label for="${item}-${month}">${month}</label>
+                  <input type="number" id="${item}-${month}" @input="${e => this._handleInput(e, item, month)}" class="currency-input">
+                </div>
+              `)}
+            </div>
+            <div class="card-footer">
+              Total: ${this._calculateTotal(item)}
+            </div>
           </div>
-        </div>
-      `)}
+        `)}
+      </div>
     `;
   }
 
-  updateValue(event, item, monthIndex) {
-    const rawValue = event.target.value.replace(/[^\d.-]/g, '');
-    const value = rawValue === '' ? null : parseFloat(rawValue); // Store null if input is empty
-    this.itemValues[item] = this.itemValues[item] || [];
-    this.itemValues[item][monthIndex] = value === null ? null : (isNaN(value) ? 0 : value);
-    this.updateDataObj(item);
+  _handleInput(e, item, month) {
+    if (!this.itemValues[item]) {
+      this.itemValues[item] = {};
+    }
+    this.itemValues[item][month] = parseFloat(e.target.value) || 0;
     this.requestUpdate();
   }
 
-  calculateTotalForItem(item) {
-    if (!this.itemValues[item]) {
-      return this.formatNumber(0);
-    }
-    const total = this.itemValues[item].reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
-    return this.formatNumber(total);
+  _calculateTotal(item) {
+    if (!this.itemValues[item]) return '0.00';
+    const total = Object.values(this.itemValues[item]).reduce((acc, value) => acc + value, 0);
+    return this.numberFormatter.format(total);
   }
-
-  formatNumber(value) {
-    return this.numberFormatter.format(value);
-  }
-  
-  formatCurrency(event, item) {
-    const value = parseFloat(event.target.value.replace(/[^\d.-]/g, ''));
-    if (!isNaN(value)) {
-      event.target.value = this.numberFormatter.format(value);
-    }
-    this.calculateTotalForItem(item);
-  }
-
-  formatInput(event) {
-    const value = parseFloat(event.target.value.replace(/[^\d.-]/g, ''));
-    event.target.value = isNaN(value) ? '' : this.numberFormatter.format(value);
-  }
-  
-  autoResize(e) {
-    e.target.style.height = e.target.classList.contains('active') ? 'auto' : '0';
-    e.target.style.height = `${e.target.scrollHeight}px`;
-  }
-  
-  getButtonClass(outcome, selectedStatus) {
-    const baseClass = 'btn';
-    if (selectedStatus === outcome) {
-      return outcome === 'Approved' ? `${baseClass} btn-success` : `${baseClass} btn-danger`;
-    }
-    return outcome === 'Approved' ? `${baseClass} btn-outline-success` : `${baseClass} btn-outline-danger`;
-  }
-  
-  render() {
-    const items = this.listitems.split(',').map(item => item.trim());
-  
-    return html`
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <div>
-        ${items.map(item => {
-          const currentItem = this.dataobj && this.dataobj.budgetItems ? this.dataobj.budgetItems.find(i => i.itemName === item) : null;
-          return currentItem ? html`
-            <div class="card">
-              ${this.createHeader(item)}
-              ${this.createBody(item)}
-              ${this.createFooter(item)}
-            </div>
-          ` : '';
-        })}
-      </div>
-    `;
-  }
-  
 }
-
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
