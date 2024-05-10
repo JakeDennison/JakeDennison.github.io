@@ -321,7 +321,7 @@ class BudgetCalcElement extends LitElement {
           ` : ''}
         </div>
       `;
-    } else if (!this.reviewmode && comments) {
+    } else if (!this.reviewmode) {
       return html`
         <div class="card-footer">
           <div class="comments-area">
