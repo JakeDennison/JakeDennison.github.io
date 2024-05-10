@@ -99,20 +99,26 @@
             `))}
           </div>
           ${i?H`
+          <div class="" role="group" aria-label="Comments Area">
             <label for="${r}" class="form-label">Comments:</label>
             <textarea id="${r}" class="form-control comments-control active"
                       placeholder="Enter comments"
                       @blur="${e=>this.handleCommentsChange(t,e.target.value)}"
                       @input="${this.autoResize}"
-                      style="height: auto; min-height: 38px;"></textarea>
+                      style="height: auto; min-height: 38px;">
+            </textarea>
+            </div>
           `:""}
+          
         </div>
       `:!this.reviewmode&&this.readOnly&&s?H`
         <div class="card-footer">
+        <div class="" role="group" aria-label="Comments Area">
           <label for="${r}" class="form-label">Comments:</label>
           <textarea id="${r}" class="form-control comments-control active"
                     ?disabled="${this.readOnly}"
                     style="height: auto; min-height: 38px;">${s}</textarea>
+        </div>
         </div>
       `:""}autoResize(t){t.target.style.height="auto",t.target.style.height=`${t.target.scrollHeight}px`}getButtonClass(t,e){const i="btn";return e===t?"Approved"===t?`${i} btn-success`:`${i} btn-danger`:"Approved"===t?`${i} btn-outline-success`:`${i} btn-outline-danger`}createMonthInputs(t){const e=["January","February","March","April","May","June","July","August","September","October","November","December"],i=this.itemValues[t]||this.initializeMonthlyValues();return H`
       ${["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].map(((s,r)=>H`

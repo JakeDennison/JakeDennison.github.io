@@ -305,22 +305,28 @@ class BudgetCalcElement extends LitElement {
             `)}
           </div>
           ${showInput ? html`
+          <div class="" role="group" aria-label="Comments Area">
             <label for="${textareaId}" class="form-label">Comments:</label>
             <textarea id="${textareaId}" class="form-control comments-control active"
                       placeholder="Enter comments"
                       @blur="${e => this.handleCommentsChange(item, e.target.value)}"
                       @input="${this.autoResize}"
-                      style="height: auto; min-height: 38px;"></textarea>
+                      style="height: auto; min-height: 38px;">
+            </textarea>
+            </div>
           ` : ''}
+          
         </div>
       `;
     } else if (!this.reviewmode && this.readOnly && comments) {
       return html`
         <div class="card-footer">
+        <div class="" role="group" aria-label="Comments Area">
           <label for="${textareaId}" class="form-label">Comments:</label>
           <textarea id="${textareaId}" class="form-control comments-control active"
                     ?disabled="${this.readOnly}"
                     style="height: auto; min-height: 38px;">${comments}</textarea>
+        </div>
         </div>
       `;
     } else {
