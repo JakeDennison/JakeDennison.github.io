@@ -312,7 +312,7 @@ class BudgetCalcElement extends LitElement {
           ` : ''}
         </div>
       `;
-    } else if (this.readOnly && comments) {
+    } else if (!this.reviewmode && this.readOnly && comments) {
       return html`
         <div class="card-footer">
           <textarea class="form-control comments-control active"
