@@ -288,32 +288,41 @@ class BudgetCalcElement extends LitElement {
   }
 
   createFooter(item) {
-    if (!this.reviewmode) {
-      return '';
-    }
-  
     const statusInfo = this.statusColors[item] || { selectedStatus: '' };
     const outcomes = ['Rejected', 'Approved'];
     const showInput = statusInfo.selectedStatus === 'Rejected';
+    const comments = this.itemValues[item]?.comments || '';
   
-    return html`
-      <div class="card-footer">
-        <div class="btn-group" role="group" aria-label="Approval Status">
-          ${outcomes.map(outcome => html`
-            <button type="button"
-                    class="${this.getButtonClass(outcome, statusInfo.selectedStatus)}"
-                    @click="${() => this.handleApprovalStatusChange(item, outcome)}">${outcome}</button>
-          `)}
+    if (this.reviewmode) {
+      return html`
+        <div class="card-footer">
+          <div class="btn-group" role="group" aria-label="Approval Status">
+            ${outcomes.map(outcome => html`
+              <button type="button"
+                      class="${this.getButtonClass(outcome, statusInfo.selectedStatus)}"
+                      @click="${() => this.handleApprovalStatusChange(item, outcome)}">${outcome}</button>
+            `)}
+          </div>
+          ${showInput ? html`
+            <textarea class="form-control comments-control active"
+                      placeholder="Enter comments"
+                      @input="${e => this.handleCommentsChange(item, e.target.value)}"
+                      @input="${this.autoResize}"
+                      style="height: auto; min-height: 38px;"></textarea>
+          ` : ''}
         </div>
-        ${showInput ? html`
+      `;
+    } else if (this.readOnly && comments) {
+      return html`
+        <div class="card-footer">
           <textarea class="form-control comments-control active"
-                    placeholder="Enter comments"
-                    @blur="${e => this.handleCommentsChange(item, e.target.value)}"
-                    @input="${this.autoResize}"
-                    style="height: auto; min-height: 38px;"></textarea>
-        ` : ''}
-      </div>
-    `;
+                    ?disabled="${this.readOnly}"
+                    style="height: auto; min-height: 38px;">${comments}</textarea>
+        </div>
+      `;
+    } else {
+      return '';
+    }
   }
   
   autoResize(e) {
