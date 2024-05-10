@@ -351,12 +351,12 @@ class BudgetCalcElement extends LitElement {
     if (this.reviewmode) {
       return html`
         <div class="card-footer">
-          <select @change="${e => this.handleApprovalStatusChange(item, e.target.value)}">
+          <select @blur="${e => this.handleApprovalStatusChange(item, e.target.value)}">
             <option value="">Select Approval Status</option>
             <option value="Approved">Approved</option>
             <option value="Rejected">Rejected</option>
           </select>
-          <textarea @input="${e => this.handleCommentsChange(item, e.target.value)}"></textarea>
+          <textarea @blur="${e => this.handleCommentsChange(item, e.target.value)}"></textarea>
         </div>
       `;
     } else {

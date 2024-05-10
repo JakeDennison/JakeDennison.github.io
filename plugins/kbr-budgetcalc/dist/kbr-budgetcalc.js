@@ -80,12 +80,12 @@
       </div>
     `}createFooter(t){return this.reviewmode?V`
         <div class="card-footer">
-          <select @change="${e=>this.handleApprovalStatusChange(t,e.target.value)}">
+          <select @blur="${e=>this.handleApprovalStatusChange(t,e.target.value)}">
             <option value="">Select Approval Status</option>
             <option value="Approved">Approved</option>
             <option value="Rejected">Rejected</option>
           </select>
-          <textarea @input="${e=>this.handleCommentsChange(t,e.target.value)}"></textarea>
+          <textarea @blur="${e=>this.handleCommentsChange(t,e.target.value)}"></textarea>
         </div>
       `:V``}createMonthInputs(t){const e=["January","February","March","April","May","June","July","August","September","October","November","December"],i=this.itemValues[t]||this.initializeMonthlyValues();return V`
       ${["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].map(((s,n)=>V`
