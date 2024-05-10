@@ -19,7 +19,7 @@ class BudgetCalcElement extends LitElement {
       controlName: 'kbr-budgetcalc',
       fallbackDisableSubmit: false,
       description: 'Yearly budget calculator',
-      iconUrl: "",
+      iconUrl: "repeating-section",
       groupName: 'KBR',
       version: '1.0',
       properties: {
@@ -176,7 +176,6 @@ class BudgetCalcElement extends LitElement {
         visibility: visible;
         width: 100%;
         padding: .375rem .75rem;
-        margin-top: 0.5rem;
         display: block;
       }
       .input-group {
