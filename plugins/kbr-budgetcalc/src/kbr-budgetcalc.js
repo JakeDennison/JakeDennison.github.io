@@ -203,7 +203,7 @@ class BudgetCalcElement extends LitElement {
     this.itemname = '';
     this.reviewmode = false;
     this.inputobj = {};
-    this.outputobj = {};
+    this.outputobj = { budgetItems: [] };
     this.numberFormatter = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
@@ -301,15 +301,38 @@ class BudgetCalcElement extends LitElement {
     }
     const value = parseFloat(event.target.value.replace(/[^\d.-]/g, ''));
     this.itemValues[item][month] = isNaN(value) ? 0 : value;
+    this.updateOutputObj();
     this.requestUpdate();
   }
 
   handleApprovalStatusChange(item, value) {
     // Handle approval status change
+    this.updateOutputObj();
   }
 
   handleCommentsChange(item, value) {
     // Handle comments change
+    this.updateOutputObj();
+  }
+
+  updateOutputObj() {
+    this.outputobj.budgetItems = Object.keys(this.itemValues).map(item => ({
+      itemName: item,
+      monthlyValues: this.itemValues[item],
+      total: Object.values(this.itemValues[item]).reduce((acc, val) => acc + (parseFloat(val) || 0), 0),
+      outcome: '', // Add logic to fetch outcome
+      notes: '', // Add logic to fetch notes
+      approver: this.currentuser, // Add logic to fetch approver
+      lastUpdated: new Date().toISOString()
+    }));
+
+    const event = new CustomEvent('ntx-value-change', {
+      bubbles: true,
+      cancelable: false,
+      composed: true,
+      detail: this.outputobj
+    });
+    this.dispatchEvent(event);
   }
 
   render() {
