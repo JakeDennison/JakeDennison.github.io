@@ -184,6 +184,39 @@ class BudgetCalcElement extends LitElement {
     });
   }
 
+  updated(changedProperties) {
+    if (changedProperties.has('listitems') || changedProperties.has('inputobj')) {
+      this.syncDataWithInput();
+    }
+  }
+
+  syncDataWithInput() {
+    const items = this.listitems.split(',').map(item => item.trim());
+  
+    items.forEach(itemName => {
+      const existingItem = this.inputobj.budgetItems?.find(budgetItem => budgetItem.itemName === itemName);
+      if (existingItem) {
+        this.itemValues[itemName] = {
+          ...this.initializeMonthlyValues(),
+          ...existingItem.monthlyValues,
+          approval: existingItem.approval,
+          comments: existingItem.comments,
+        };
+      } else {
+        this.itemValues[itemName] = this.initializeMonthlyValues();
+      }
+    });
+  
+    // Remove items that are no longer in listitems
+    Object.keys(this.itemValues).forEach(itemName => {
+      if (!items.includes(itemName)) {
+        delete this.itemValues[itemName];
+      }
+    });
+  
+    this.requestUpdate();
+  }
+  
   initializeMonthlyValues() {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     return months.reduce((acc, month) => {
@@ -266,7 +299,7 @@ class BudgetCalcElement extends LitElement {
     if (!this.itemValues[item].approval) {
       this.itemValues[item].approval = {};
     }
-    this.itemValues[item].approval.status = value;
+    this.itemValues[item].approval = value;
     this.updateOutputObject();
     this.requestUpdate();
   }
@@ -278,7 +311,7 @@ class BudgetCalcElement extends LitElement {
     if (!this.itemValues[item].comments) {
       this.itemValues[item].comments = {};
     }
-    this.itemValues[item].comments.note = value;
+    this.itemValues[item].comments = value;
     this.updateOutputObject();
     this.requestUpdate();
   }
@@ -331,7 +364,7 @@ class BudgetCalcElement extends LitElement {
         `)}
       </div>
     `;
-  }
+  }  
 }
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
