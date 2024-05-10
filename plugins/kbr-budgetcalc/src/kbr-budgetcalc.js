@@ -243,21 +243,32 @@ class BudgetCalcElement extends LitElement {
   }
 
   createFooter(item) {
-    if (this.reviewmode) {
-      return html`
-        <div class="card-footer">
-          <select @blur="${e => this.handleApprovalStatusChange(item, e.target.value)}">
-            <option value="">Select Approval Status</option>
-            <option value="Approved">Approved</option>
-            <option value="Rejected">Rejected</option>
-          </select>
-          <textarea @blur="${e => this.handleCommentsChange(item, e.target.value)}"></textarea>
-        </div>
-      `;
-    } else {
-      return html``;
+    if (!this.reviewmode) {
+      return '';
     }
-  }
+  
+    const statusInfo = this.statusColors[item] || { selectedStatus: '' };
+    const outcomes = ['Rejected', 'Approved'];
+    const showInput = statusInfo.selectedStatus === 'Rejected';
+  
+    return html`
+      <div class="card-footer">
+        <div class="btn-group" role="group" aria-label="Approval Status">
+          ${outcomes.map(outcome => html`
+            <button type="button"
+                    class="${this.getButtonClass(outcome, statusInfo.selectedStatus)}"
+                    @click="${() => this.handleApprovalStatusChange(item, outcome)}">${outcome}</button>
+          `)}
+        </div>
+        ${showInput ? html`
+          <textarea class="form-control comments-control active"
+                    placeholder="Enter comments"
+                    @input="${e => this.handleCommentsChange(item, e.target.value)}"
+                    style="height: auto; min-height: 38px;"></textarea>
+        ` : ''}
+      </div>
+    `;
+  }  
 
   autoResize(e) {
     e.target.style.height = e.target.classList.contains('active') ? 'auto' : '0';
@@ -306,25 +317,32 @@ class BudgetCalcElement extends LitElement {
   }
 
   handleApprovalStatusChange(item, value) {
+    const colorMap = {
+      'Approved': 'border-success',
+      'Rejected': 'border-danger'
+    };
+    this.statusColors[item] = {
+      borderColor: colorMap[value] || 'border-primary',
+      selectedStatus: value
+    };
+  
     if (!this.itemValues[item]) {
       this.itemValues[item] = this.initializeMonthlyValues();
     }
-    if (!this.itemValues[item].approval) {
-      this.itemValues[item].approval = {};
-    }
     this.itemValues[item].approval = value;
+    this.itemValues[item].lastUpdated = new Date().toISOString();
+  
     this.updateOutputObject();
     this.requestUpdate();
   }
-
+  
   handleCommentsChange(item, value) {
     if (!this.itemValues[item]) {
       this.itemValues[item] = this.initializeMonthlyValues();
     }
-    if (!this.itemValues[item].comments) {
-      this.itemValues[item].comments = {};
-    }
     this.itemValues[item].comments = value;
+    this.itemValues[item].lastUpdated = new Date().toISOString();
+  
     this.updateOutputObject();
     this.requestUpdate();
   }
@@ -350,6 +368,14 @@ class BudgetCalcElement extends LitElement {
     this.dispatchEvent(event);
   }
 
+  getButtonClass(outcome, selectedStatus) {
+    const baseClass = 'btn';
+    if (selectedStatus === outcome) {
+      return outcome === 'Approved' ? `${baseClass} btn-success` : `${baseClass} btn-danger`;
+    }
+    return outcome === 'Approved' ? `${baseClass} btn-outline-success` : `${baseClass} btn-outline-danger`;
+  }
+  
   calculateTotalForItem(item) {
     if (!this.itemValues[item]) {
       return this.formatNumber(0);
