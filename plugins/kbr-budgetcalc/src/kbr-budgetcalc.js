@@ -292,6 +292,7 @@ class BudgetCalcElement extends LitElement {
     const outcomes = ['Rejected', 'Approved'];
     const showInput = statusInfo.selectedStatus === 'Rejected';
     const comments = this.itemValues[item]?.comments || '';
+    const textareaId = `comments-${item}`;
   
     if (this.reviewmode) {
       return html`
@@ -304,9 +305,10 @@ class BudgetCalcElement extends LitElement {
             `)}
           </div>
           ${showInput ? html`
-            <textarea class="form-control comments-control active"
+            <label for="${textareaId}" class="form-label">Comments:</label>
+            <textarea id="${textareaId}" class="form-control comments-control active"
                       placeholder="Enter comments"
-                      @input="${e => this.handleCommentsChange(item, e.target.value)}"
+                      @blur="${e => this.handleCommentsChange(item, e.target.value)}"
                       @input="${this.autoResize}"
                       style="height: auto; min-height: 38px;"></textarea>
           ` : ''}
@@ -315,7 +317,8 @@ class BudgetCalcElement extends LitElement {
     } else if (!this.reviewmode && this.readOnly && comments) {
       return html`
         <div class="card-footer">
-          <textarea class="form-control comments-control active"
+          <label for="${textareaId}" class="form-label">Comments:</label>
+          <textarea id="${textareaId}" class="form-control comments-control active"
                     ?disabled="${this.readOnly}"
                     style="height: auto; min-height: 38px;">${comments}</textarea>
         </div>
