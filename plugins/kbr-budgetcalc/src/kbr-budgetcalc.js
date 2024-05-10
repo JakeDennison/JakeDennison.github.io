@@ -141,6 +141,30 @@ class BudgetCalcElement extends LitElement {
         justify-content: space-between;
         transition: all 0.3s ease;
       }
+      .btn-group {
+        flex-grow: 1;
+        transition: all 0.3s ease;
+      }
+      .comments-control {
+        transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease, width 0.3s ease, margin 0.3s ease;
+        max-height: 0;
+        width: 0;
+        opacity: 0;
+        visibility: hidden;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+        display: none;
+      }
+      .comments-control.active {
+        max-height: 200px;
+        opacity: 1;
+        visibility: visible;
+        width: 100%;
+        padding: .375rem .75rem;
+        margin-top: 0.5rem;
+        display: flex;
+      }
       .input-group {
         padding-bottom: 10px;
       }
@@ -170,6 +194,7 @@ class BudgetCalcElement extends LitElement {
       }
     `;
   }
+  
 
   constructor() {
     super();
@@ -266,14 +291,15 @@ class BudgetCalcElement extends LitElement {
           <textarea class="form-control comments-control active"
                     placeholder="Enter comments"
                     @input="${e => this.handleCommentsChange(item, e.target.value)}"
+                    @input="${this.autoResize}"
                     style="height: auto; min-height: 38px;"></textarea>
         ` : ''}
       </div>
     `;
-  }  
-
+  }
+  
   autoResize(e) {
-    e.target.style.height = e.target.classList.contains('active') ? 'auto' : '0';
+    e.target.style.height = 'auto';
     e.target.style.height = `${e.target.scrollHeight}px`;
   }
   
