@@ -136,8 +136,7 @@ class BudgetCalcElement extends LitElement {
                 properties: {
                   itemName: {
                     type: 'string',
-                    title: 'Item Name',
-                    description: 'Name of the budget item'
+                    title: 'Item Name'
                   },
                   monthlyValues: {
                     type: 'object',
@@ -159,28 +158,23 @@ class BudgetCalcElement extends LitElement {
                   },
                   total: {
                     type: 'number',
-                    title: 'Total',
-                    description: 'Total amount for the budget item'
+                    title: 'Total'
                   },
                   outcome: {
                     type: 'string',
-                    title: 'Outcome',
-                    description: 'Approval outcome of the budget item'
+                    title: 'Outcome'
                   },
                   notes: {
                     type: 'string',
-                    title: 'Notes',
-                    description: 'Additional notes or comments'
+                    title: 'Notes'
                   },
                   approver: {
                     type: 'string',
-                    title: 'Approver Email',
-                    description: 'Email of the approver'
+                    title: 'Approver Email'
                   },
                   lastUpdated: {
                     type: 'string',
-                    title: 'Last Updated',
-                    description: 'Date and time when the item was last updated',
+                    title: 'Last Updated'
                   }
                 }
               }
