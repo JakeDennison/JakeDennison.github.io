@@ -295,7 +295,7 @@ class BudgetCalcElement extends LitElement {
   createFooter(item) {
     const statusInfo = this.statusColors[item] || { selectedStatus: '' };
     const outcomes = ['Rejected', 'Approved'];
-    const showInput = statusInfo.selectedStatus === 'Rejected';
+    const hasOutcome = statusInfo.selectedStatus !== '';
     const comments = this.itemValues[item]?.comments || '';
     const textareaId = `comments-${item}`;
   
@@ -309,7 +309,7 @@ class BudgetCalcElement extends LitElement {
                       @click="${() => this.handleApprovalStatusChange(item, outcome)}">${outcome}</button>
             `)}
           </div>
-          ${showInput ? html`
+          ${hasOutcome ? html`
           <div class="comments-area">
             <label for="${textareaId}" class="form-label">Comments:</label>
             <textarea id="${textareaId}" class="form-control comments-control active"
@@ -321,7 +321,7 @@ class BudgetCalcElement extends LitElement {
           ` : ''}
         </div>
       `;
-    } else if (!this.reviewmode && this.readOnly && comments) {
+    } else if (!this.reviewmode && comments) {
       return html`
         <div class="card-footer">
           <div class="comments-area">
@@ -336,7 +336,6 @@ class BudgetCalcElement extends LitElement {
       return '';
     }
   }
-  
   
   autoResize(e) {
     e.target.style.height = 'auto';
