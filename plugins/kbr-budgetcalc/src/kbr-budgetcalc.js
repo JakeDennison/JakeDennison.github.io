@@ -7,7 +7,6 @@ class BudgetCalcElement extends LitElement {
       itemname: { type: String },
       currentuser: { type: String },
       reviewmode: { type: Boolean },
-      inputjson: { type: String },
       inputobj: { type: Object },
       outputobj: { type: Object },
       itemValues: { type: Object }
@@ -31,32 +30,6 @@ class BudgetCalcElement extends LitElement {
         align-items: center;
         justify-content: space-between;
         transition: all 0.3s ease;
-      }
-      .btn-group {
-        flex-grow: 1;
-        transition: all 0.3s ease;
-        flex: 0 0 100%;
-        max-width: 100%;
-      }
-      .comments-control {
-        transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease, width 0.3s ease, margin 0.3s ease;
-        max-height: 0;
-        width: 0;
-        opacity: 0;
-        visibility: hidden;
-        overflow: hidden;
-        padding: 0;
-        margin: 0;
-        display: none;
-      }
-      .comments-control.active {
-        max-height: 200px;
-        opacity: 1;
-        visibility: visible;
-        width: 100%;
-        padding: .375rem .75rem;
-        margin-top: 0.5rem;
-        display: flex;
       }
       .input-group {
         padding-bottom: 10px;
@@ -88,129 +61,18 @@ class BudgetCalcElement extends LitElement {
     `;
   }
 
-  static getMetaConfig() {
-    return {
-      controlName: 'kbr-budgetcalc',
-      fallbackDisableSubmit: false,
-      description: 'Yearly budget calculator',
-      iconUrl: "",
-      groupName: 'KBR',
-      version: '1.0',
-      properties: {
-        listitems: {
-          type: 'string',
-          title: 'List Items',
-          description: 'List of items to be budgeted',
-        },
-        itemname: {
-            type: 'string',
-            title: 'Item Name',
-            description: 'Singular Item Name such as Cost Center or Budget Code'
-        },
-        currentuser: {
-          type: 'string',
-          title: 'Context current user email',
-          description: 'Please enter the context current user email',
-        },
-        reviewmode: {
-          title: 'Enable Review Mode',
-          type: 'boolean',
-          defaultValue: false,
-        },
-        inputobj: {
-          type: 'object',
-          title: 'Input Object',
-          description: 'Enter the object from previous control here',
-        },
-        outputobj: {
-          type: 'object',
-          title: 'Object Output',
-          description: 'This is for output only you do not need to use it',
-          isValueField: true,
-          properties: {
-            budgetItems: {
-              type: 'array',
-              title: 'Budget Items',
-              items: {
-                type: 'object',
-                properties: {
-                  itemName: {
-                    type: 'string',
-                    title: 'Item Name',
-                    description: 'Name of the budget item'
-                  },
-                  monthlyValues: {
-                    type: 'object',
-                    title: 'Monthly Values',
-                    properties: {
-                      January: { type: 'number', title: 'January' },
-                      February: { type: 'number', title: 'February' },
-                      March: { type: 'number', title: 'March' },
-                      April: { type: 'number', title: 'April' },
-                      May: { type: 'number', title: 'May' },
-                      June: { type: 'number', title: 'June' },
-                      July: { type: 'number', title: 'July' },
-                      August: { type: 'number', title: 'August' },
-                      September: { type: 'number', title: 'September' },
-                      October: { type: 'number', title: 'October' },
-                      November: { type: 'number', title: 'November' },
-                      December: { type: 'number', title: 'December' }
-                    }
-                  },
-                  total: {
-                    type: 'number',
-                    title: 'Total',
-                    description: 'Total amount for the budget item'
-                  },
-                  outcome: {
-                    type: 'string',
-                    title: 'Outcome',
-                    description: 'Approval outcome of the budget item'
-                  },
-                  notes: {
-                    type: 'string',
-                    title: 'Notes',
-                    description: 'Additional notes or comments'
-                  },
-                  approver: {
-                    type: 'string',
-                    title: 'Approver Email',
-                    description: 'Email of the approver'
-                  },
-                  lastUpdated: {
-                    type: 'string',
-                    title: 'Last Updated',
-                    description: 'Date and time when the item was last updated',
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      events: ["ntx-value-change"],
-      standardProperties: {
-        fieldLabel: true,
-        description: true,
-        readOnly: true,
-      }
-    };
-  }
-
   constructor() {
     super();
     this.listitems = '';
     this.itemname = '';
     this.reviewmode = false;
-    this.inputjson = '';
     this.inputobj = {};
-    this.outputobj = { budgetItems: [] };
+    this.outputobj = {};
+    this.itemValues = {};
     this.numberFormatter = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });
-    this.statusColors = {};
-    this.itemValues = {};
   }
 
   initializeMonthlyValues() {
@@ -219,115 +81,6 @@ class BudgetCalcElement extends LitElement {
       acc[month] = 0.00;
       return acc;
     }, {});
-  }
-
-  updated(changedProperties) {
-    if (changedProperties.has('listitems') || changedProperties.has('inputjson')) {
-      this.syncDataWithInput();
-    }
-  }
-
-  syncDataWithInput() {
-    const items = this.listitems.split(',').map(item => item.trim());
-
-    if (this.inputjson && this.inputjson.trim() !== '') {
-      const parsedJson = JSON.parse(this.inputjson);
-
-      if (parsedJson.budgetItems) {
-        this.outputobj = {
-          budgetItems: parsedJson.budgetItems.filter(item => items.includes(item.itemName))
-        };
-
-        items.forEach(itemName => {
-          if (!this.outputobj.budgetItems.some(item => item.itemName === itemName)) {
-            this.outputobj.budgetItems.push({
-              itemName: itemName,
-              monthlyValues: this.initializeMonthlyValues(),
-              total: 0,
-              outcome: "",
-              notes: "",
-              approver: "",
-              lastUpdated: ""
-            });
-          }
-        });
-      }
-    } else {
-      this.outputobj = {
-        budgetItems: items.map(itemName => ({
-          itemName: itemName,
-          monthlyValues: this.initializeMonthlyValues(),
-          total: 0,
-          outcome: "",
-          notes: "",
-          approver: "",
-          lastUpdated: ""
-        }))
-      };
-    }
-
-    // Initialize itemValues for each item if not already initialized
-    items.forEach(itemName => {
-      if (!this.itemValues[itemName]) {
-        this.itemValues[itemName] = this.initializeMonthlyValues();
-      }
-    });
-
-    // Ensure the output object is up-to-date
-    this.updateOutputObj();
-  }
-
-  updateOutputObj() {
-    this.outputobj.budgetItems = Object.keys(this.itemValues).map(itemName => {
-      const budgetItem = this.outputobj.budgetItems.find(i => i.itemName === itemName) || {
-        itemName: itemName,
-        monthlyValues: this.initializeMonthlyValues(),
-        total: 0,
-        outcome: "",
-        notes: "",
-        approver: "",
-        lastUpdated: ""
-      };
-      return {
-        ...budgetItem,
-        monthlyValues: this.itemValues[itemName] || budgetItem.monthlyValues,
-        total: Object.values(this.itemValues[itemName] || budgetItem.monthlyValues).reduce((acc, val) => acc + (parseFloat(val) || 0), 0),
-        lastUpdated: new Date().toISOString()
-      };
-    });
-
-    const event = new CustomEvent('ntx-value-change', {
-      bubbles: true,
-      cancelable: false,
-      composed: true,
-      detail: this.outputobj
-    });
-    this.dispatchEvent(event);
-  }
-
-  handleValueChange(itemName, month, value) {
-    this.itemValues[itemName] = this.itemValues[itemName] || this.initializeMonthlyValues();
-    this.itemValues[itemName][month] = value;
-    this.updateOutputObj();
-    this.requestUpdate();
-  }
-
-  handleApprovalStatusChange(itemName, status) {
-    const item = this.outputobj.budgetItems.find(i => i.itemName === itemName);
-    if (item) {
-      item.outcome = status;
-      item.lastUpdated = new Date().toISOString();
-      this.updateOutputObj();
-    }
-  }
-
-  handleCommentsChange(itemName, comments) {
-    const item = this.outputobj.budgetItems.find(i => i.itemName === itemName);
-    if (item) {
-      item.notes = comments;
-      item.lastUpdated = new Date().toISOString();
-      this.updateOutputObj();
-    }
   }
 
   createHeader(item) {
@@ -386,6 +139,22 @@ class BudgetCalcElement extends LitElement {
         </div>
       `)}
     `;
+  }
+
+  handleValueChange(item, month, value) {
+    if (!this.itemValues[item]) {
+      this.itemValues[item] = this.initializeMonthlyValues();
+    }
+    this.itemValues[item][month] = value;
+    this.requestUpdate();
+  }
+
+  handleApprovalStatusChange(item, value) {
+    // Handle approval status change logic
+  }
+
+  handleCommentsChange(item, value) {
+    // Handle comments change logic
   }
 
   calculateTotalForItem(item) {
