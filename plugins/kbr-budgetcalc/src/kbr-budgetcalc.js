@@ -103,9 +103,9 @@ class BudgetCalcElement extends LitElement {
           description: 'List of items to be budgeted',
         },
         itemname: {
-            type: 'string',
-            title: 'Item Name',
-            description: 'Singular Item Name such as Cost Center or Budget Code'
+          type: 'string',
+          title: 'Item Name',
+          description: 'Singular Item Name such as Cost Center or Budget Code'
         },
         currentuser: {
           type: 'string',
@@ -241,12 +241,12 @@ class BudgetCalcElement extends LitElement {
     if (this.reviewmode) {
       return html`
         <div class="card-footer">
-          <select @change="${(e) => this.handleApprovalStatusChange(item, e.target.value)}">
+          <select @blur="${(e) => this.handleApprovalStatusChange(item, e.target.value)}">
             <option value="">Select Approval Status</option>
             <option value="Approved">Approved</option>
             <option value="Rejected">Rejected</option>
           </select>
-          <textarea @input="${(e) => this.handleCommentsChange(item, e.target.value)}"></textarea>
+          <textarea @blur="${(e) => this.handleCommentsChange(item, e.target.value)}"></textarea>
         </div>
       `;
     } else {
@@ -306,33 +306,38 @@ class BudgetCalcElement extends LitElement {
   }
 
   handleApprovalStatusChange(item, value) {
-    if (!this.outputobj.budgetItems) {
-      this.outputobj.budgetItems = [];
+    let budgetItem = this.outputobj.budgetItems.find(i => i.itemName === item);
+    if (!budgetItem) {
+      budgetItem = { itemName: item, monthlyValues: this.initializeMonthlyValues(), outcome: '', notes: '', approver: '', lastUpdated: '' };
+      this.outputobj.budgetItems.push(budgetItem);
     }
-    const budgetItem = this.outputobj.budgetItems.find(i => i.itemName === item) || {};
     budgetItem.outcome = value;
     this.updateOutputObj();
   }
 
   handleCommentsChange(item, value) {
-    if (!this.outputobj.budgetItems) {
-      this.outputobj.budgetItems = [];
+    let budgetItem = this.outputobj.budgetItems.find(i => i.itemName === item);
+    if (!budgetItem) {
+      budgetItem = { itemName: item, monthlyValues: this.initializeMonthlyValues(), outcome: '', notes: '', approver: '', lastUpdated: '' };
+      this.outputobj.budgetItems.push(budgetItem);
     }
-    const budgetItem = this.outputobj.budgetItems.find(i => i.itemName === item) || {};
     budgetItem.notes = value;
     this.updateOutputObj();
   }
 
   updateOutputObj() {
-    this.outputobj.budgetItems = Object.keys(this.itemValues).map(item => ({
-      itemName: item,
-      monthlyValues: this.itemValues[item],
-      total: Object.values(this.itemValues[item]).reduce((acc, val) => acc + (parseFloat(val) || 0), 0),
-      outcome: this.outputobj.budgetItems.find(i => i.itemName === item)?.outcome || '', // Fetch existing outcome or set empty string
-      notes: this.outputobj.budgetItems.find(i => i.itemName === item)?.notes || '', // Fetch existing notes or set empty string
-      approver: '', // Add logic to fetch approver if needed
-      lastUpdated: new Date().toISOString()
-    }));
+    this.outputobj.budgetItems = Object.keys(this.itemValues).map(item => {
+      let budgetItem = this.outputobj.budgetItems.find(i => i.itemName === item) || { itemName: item, outcome: '', notes: '', approver: '' };
+      return {
+        itemName: item,
+        monthlyValues: this.itemValues[item],
+        total: Object.values(this.itemValues[item]).reduce((acc, val) => acc + (parseFloat(val) || 0), 0),
+        outcome: budgetItem.outcome,
+        notes: budgetItem.notes,
+        approver: budgetItem.approver,
+        lastUpdated: new Date().toISOString()
+      };
+    });
 
     const event = new CustomEvent('ntx-value-change', {
       bubbles: true,
