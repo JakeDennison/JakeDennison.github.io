@@ -28,9 +28,9 @@ class BudgetCalcElement extends LitElement {
           description: 'List of items to be budgeted',
         },
         itemname: {
-            type: 'string',
-            title: 'Item Name',
-            description: 'Singular Item Name such as Cost Center or Budget Code'
+          type: 'string',
+          title: 'Item Name',
+          description: 'Singular Item Name such as Cost Center or Budget Code'
         },
         currentuser: {
           type: 'string',
@@ -191,7 +191,7 @@ class BudgetCalcElement extends LitElement {
       return acc;
     }, {});
   }
-  
+
   createHeader(item) {
     return html`
       <div class="card-header">
@@ -229,9 +229,9 @@ class BudgetCalcElement extends LitElement {
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  
+
     const itemMonthlyValues = this.itemValues[item] || this.initializeMonthlyValues();
-  
+
     return html`
       ${months.map((shortMonth, index) => html`
         <div class="mb-2 px-1 month-input">
@@ -249,21 +249,59 @@ class BudgetCalcElement extends LitElement {
       `)}
     `;
   }
-  
+
   handleValueChange(item, month, value) {
     if (!this.itemValues[item]) {
       this.itemValues[item] = this.initializeMonthlyValues();
     }
     this.itemValues[item][month] = value;
+    this.updateOutputObject();
     this.requestUpdate();
   }
-  
+
   handleApprovalStatusChange(item, value) {
-    // Handle approval status change logic
+    if (!this.itemValues[item]) {
+      this.itemValues[item] = this.initializeMonthlyValues();
+    }
+    if (!this.itemValues[item].approval) {
+      this.itemValues[item].approval = {};
+    }
+    this.itemValues[item].approval.status = value;
+    this.updateOutputObject();
+    this.requestUpdate();
   }
 
   handleCommentsChange(item, value) {
-    // Handle comments change logic
+    if (!this.itemValues[item]) {
+      this.itemValues[item] = this.initializeMonthlyValues();
+    }
+    if (!this.itemValues[item].comments) {
+      this.itemValues[item].comments = {};
+    }
+    this.itemValues[item].comments.note = value;
+    this.updateOutputObject();
+    this.requestUpdate();
+  }
+
+  updateOutputObject() {
+    this.outputobj = {
+      budgetItems: Object.keys(this.itemValues).map(item => ({
+        itemName: item,
+        monthlyValues: this.itemValues[item],
+        total: this.calculateTotalForItem(item),
+        approval: this.itemValues[item].approval || '',
+        comments: this.itemValues[item].comments || '',
+        lastUpdated: new Date().toISOString()
+      }))
+    };
+  
+    const event = new CustomEvent('ntx-value-change', {
+      bubbles: true,
+      cancelable: false,
+      composed: true,
+      detail: this.outputobj
+    });
+    this.dispatchEvent(event);
   }
 
   calculateTotalForItem(item) {
@@ -271,11 +309,10 @@ class BudgetCalcElement extends LitElement {
       return this.formatNumber(0);
     }
     const total = Object.values(this.itemValues[item])
-      .filter(val => val !== null)
+      .filter(val => val !== null && typeof val === 'number')
       .reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
     return this.formatNumber(total);
   }
-  
 
   formatNumber(value) {
     return this.numberFormatter.format(value);
