@@ -202,6 +202,7 @@ class BudgetCalcElement extends LitElement {
     this.listitems = '';
     this.itemname = '';
     this.reviewmode = false;
+    this.inputjson = '';
     this.inputobj = {};
     this.outputobj = { budgetItems: [] };
     this.numberFormatter = new Intl.NumberFormat('en-US', {
@@ -264,6 +265,16 @@ class BudgetCalcElement extends LitElement {
         }))
       };
     }
+
+    // Initialize itemValues for each item if not already initialized
+    items.forEach(itemName => {
+      if (!this.itemValues[itemName]) {
+        this.itemValues[itemName] = this.initializeMonthlyValues();
+      }
+    });
+
+    // Ensure the output object is up-to-date
+    this.updateOutputObj();
   }
 
   updateOutputObj() {
