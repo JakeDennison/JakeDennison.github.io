@@ -126,60 +126,7 @@ class BudgetCalcElement extends LitElement {
           type: 'object',
           title: 'Object Output',
           description: 'This is for output only you do not need to use it',
-          isValueField: true,
-          properties: {
-            budgetItems: {
-              type: 'array',
-              title: 'Budget Items',
-              items: {
-                type: 'object',
-                properties: {
-                  itemName: {
-                    type: 'string',
-                    title: 'Item Name'
-                  },
-                  monthlyValues: {
-                    type: 'object',
-                    title: 'Monthly Values',
-                    properties: {
-                      January: { type: 'number', title: 'January' },
-                      February: { type: 'number', title: 'February' },
-                      March: { type: 'number', title: 'March' },
-                      April: { type: 'number', title: 'April' },
-                      May: { type: 'number', title: 'May' },
-                      June: { type: 'number', title: 'June' },
-                      July: { type: 'number', title: 'July' },
-                      August: { type: 'number', title: 'August' },
-                      September: { type: 'number', title: 'September' },
-                      October: { type: 'number', title: 'October' },
-                      November: { type: 'number', title: 'November' },
-                      December: { type: 'number', title: 'December' }
-                    }
-                  },
-                  total: {
-                    type: 'number',
-                    title: 'Total'
-                  },
-                  outcome: {
-                    type: 'string',
-                    title: 'Outcome'
-                  },
-                  notes: {
-                    type: 'string',
-                    title: 'Notes'
-                  },
-                  approver: {
-                    type: 'string',
-                    title: 'Approver Email'
-                  },
-                  lastUpdated: {
-                    type: 'string',
-                    title: 'Last Updated'
-                  }
-                }
-              }
-            }
-          }
+          isValueField: true
         }
       },
       events: ["ntx-value-change"],
