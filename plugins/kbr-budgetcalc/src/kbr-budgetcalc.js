@@ -308,7 +308,7 @@ class BudgetCalcElement extends LitElement {
         ${showInput ? html`
           <textarea class="form-control comments-control active"
                     placeholder="Enter comments"
-                    @input="${e => this.handleCommentsChange(item, e.target.value)}"
+                    @blur="${e => this.handleCommentsChange(item, e.target.value)}"
                     @input="${this.autoResize}"
                     style="height: auto; min-height: 38px;"></textarea>
         ` : ''}
