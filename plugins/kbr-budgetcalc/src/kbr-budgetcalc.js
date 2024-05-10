@@ -134,6 +134,14 @@ class BudgetCalcElement extends LitElement {
       .currency-input {
         text-align: right;
       }
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .badge {
+        margin: 0 0.25rem;
+      }
       .card-footer {
         display: flex;
         flex-wrap: wrap;
@@ -193,8 +201,7 @@ class BudgetCalcElement extends LitElement {
         }
       }
     `;
-  }
-  
+  }  
 
   constructor() {
     super();
@@ -253,13 +260,24 @@ class BudgetCalcElement extends LitElement {
   }
 
   createHeader(item) {
+    const approvalStatus = this.itemValues[item]?.approval;
+    const statusBadge = approvalStatus ? 
+      html`<div class="badge fs-6 rounded-pill ${approvalStatus === 'Approved' ? 'bg-success' : 'bg-danger'}">${approvalStatus}</div>` : 
+      '';
+  
     return html`
-      <div class="card-header">
-        <div class="badge fs-6 bg-dark">${this.itemname ? this.itemname : 'Item'}: ${item}</div>
-        <div class="badge fs-6 rounded-pill bg-primary">Total: $${this.calculateTotalForItem(item)}</div>
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div>
+          <div class="badge fs-6 bg-dark">${this.itemname ? this.itemname : 'Item'}: ${item}</div>
+        </div>
+        <div>
+          ${statusBadge}
+          <div class="badge fs-6 rounded-pill bg-primary">Total: $${this.calculateTotalForItem(item)}</div>
+        </div>
       </div>
     `;
   }
+  
 
   createBody(item) {
     return html`
