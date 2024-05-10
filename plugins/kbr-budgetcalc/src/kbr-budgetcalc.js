@@ -317,8 +317,7 @@ class BudgetCalcElement extends LitElement {
                       placeholder="Enter comments"
                       @blur="${e => this.handleCommentsChange(item, e.target.value)}"
                       @input="${this.autoResize}"
-                      style="height: auto; min-height: 38px;">
-            </textarea>
+                      style="height: auto; min-height: 38px;"></textarea>
           </div>
           ` : ''}
         </div>
@@ -338,6 +337,7 @@ class BudgetCalcElement extends LitElement {
       return '';
     }
   }
+  
   
   autoResize(e) {
     e.target.style.height = 'auto';

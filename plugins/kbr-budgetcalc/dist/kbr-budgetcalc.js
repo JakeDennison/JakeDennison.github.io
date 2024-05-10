@@ -111,8 +111,7 @@
                       placeholder="Enter comments"
                       @blur="${e=>this.handleCommentsChange(t,e.target.value)}"
                       @input="${this.autoResize}"
-                      style="height: auto; min-height: 38px;">
-            </textarea>
+                      style="height: auto; min-height: 38px;"></textarea>
           </div>
           `:""}
         </div>
