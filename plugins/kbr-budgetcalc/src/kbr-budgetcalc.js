@@ -126,7 +126,66 @@ class BudgetCalcElement extends LitElement {
           type: 'object',
           title: 'Object Output',
           description: 'This is for output only you do not need to use it',
-          isValueField: true
+          isValueField: true,
+          properties: {
+            budgetItems: {
+              type: 'array',
+              title: 'Budget Items',
+              items: {
+                type: 'object',
+                properties: {
+                  itemName: {
+                    type: 'string',
+                    title: 'Item Name',
+                    description: 'Name of the budget item'
+                  },
+                  monthlyValues: {
+                    type: 'object',
+                    title: 'Monthly Values',
+                    properties: {
+                      January: { type: 'number', title: 'January' },
+                      February: { type: 'number', title: 'February' },
+                      March: { type: 'number', title: 'March' },
+                      April: { type: 'number', title: 'April' },
+                      May: { type: 'number', title: 'May' },
+                      June: { type: 'number', title: 'June' },
+                      July: { type: 'number', title: 'July' },
+                      August: { type: 'number', title: 'August' },
+                      September: { type: 'number', title: 'September' },
+                      October: { type: 'number', title: 'October' },
+                      November: { type: 'number', title: 'November' },
+                      December: { type: 'number', title: 'December' }
+                    }
+                  },
+                  total: {
+                    type: 'number',
+                    title: 'Total',
+                    description: 'Total amount for the budget item'
+                  },
+                  outcome: {
+                    type: 'string',
+                    title: 'Outcome',
+                    description: 'Approval outcome of the budget item'
+                  },
+                  notes: {
+                    type: 'string',
+                    title: 'Notes',
+                    description: 'Additional notes or comments'
+                  },
+                  approver: {
+                    type: 'string',
+                    title: 'Approver Email',
+                    description: 'Email of the approver'
+                  },
+                  lastUpdated: {
+                    type: 'string',
+                    title: 'Last Updated',
+                    description: 'Date and time when the item was last updated',
+                  }
+                }
+              }
+            }
+          }
         }
       },
       events: ["ntx-value-change"],
@@ -153,44 +212,119 @@ class BudgetCalcElement extends LitElement {
     this.itemValues = {};
   }
 
-  render() {
+  initializeMonthlyValues() {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return months.reduce((acc, month) => {
+      acc[month] = 0.00;
+      return acc;
+    }, {});
+  }
+
+  createHeader(item) {
     return html`
-      <div>
-        <h2>Yearly Budget Calculator</h2>
-        ${this.listitems.split(',').map((item) => html`
-          <div class="card">
-            <div class="card-header">
-              ${item.trim()}
-            </div>
-            <div class="card-body">
-              ${['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map(month => html`
-                <div class="input-group month-input">
-                  <label for="${item}-${month}">${month}</label>
-                  <input type="number" id="${item}-${month}" @input="${e => this._handleInput(e, item, month)}" class="currency-input">
-                </div>
-              `)}
-            </div>
-            <div class="card-footer">
-              Total: ${this._calculateTotal(item)}
-            </div>
-          </div>
-        `)}
+      <div class="card-header">
+        <div class="badge fs-6 bg-dark">${this.itemname ? this.itemname : 'Item'}: ${item}</div>
+        <div class="badge fs-6 rounded-pill bg-primary">Total: $${this.calculateTotalForItem(item)}</div>
       </div>
     `;
   }
 
-  _handleInput(e, item, month) {
-    if (!this.itemValues[item]) {
-      this.itemValues[item] = {};
+  createBody(item) {
+    return html`
+      <div class="card-body d-flex flex-wrap">
+        ${this.createMonthInputs(item)}
+      </div>
+    `;
+  }
+
+  createFooter(item) {
+    if (this.reviewmode) {
+      return html`
+        <div class="card-footer">
+          <select @change="${(e) => this.handleApprovalStatusChange(item, e.target.value)}">
+            <option value="">Select Approval Status</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+          <textarea @input="${(e) => this.handleCommentsChange(item, e.target.value)}"></textarea>
+        </div>
+      `;
+    } else {
+      return html``;
     }
-    this.itemValues[item][month] = parseFloat(e.target.value) || 0;
+  }
+
+  createMonthInputs(item) {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  
+    const itemMonthlyValues = this.itemValues[item] || this.initializeMonthlyValues();
+  
+    return html`
+      ${months.map((shortMonth, index) => html`
+        <div class="mb-2 px-1 month-input">
+          <label for="${shortMonth}-${item}" class="form-label">${fullMonths[index]}</label>
+          <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input type="text" class="form-control currency-input" id="${shortMonth}-${item}"
+              aria-label="Amount for ${fullMonths[index]}"
+              ?disabled="${this.readOnly}"
+              placeholder="0.00"
+              .value="${this.formatNumber(itemMonthlyValues[fullMonths[index]])}"
+              @blur="${e => { this.formatInput(e); this.updateValue(e, item, fullMonths[index]); }}">
+          </div>
+        </div>
+      `)}
+    `;
+  }
+
+  calculateTotalForItem(item) {
+    if (!this.itemValues[item]) {
+      return this.formatNumber(0);
+    }
+    const total = Object.values(this.itemValues[item]).reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
+    return this.formatNumber(total);
+  }
+
+  formatNumber(value) {
+    return this.numberFormatter.format(value);
+  }
+  
+  formatInput(event) {
+    const value = parseFloat(event.target.value.replace(/[^\d.-]/g, ''));
+    event.target.value = isNaN(value) ? '' : this.numberFormatter.format(value);
+  }
+  
+  updateValue(event, item, month) {
+    if (!this.itemValues[item]) {
+      this.itemValues[item] = this.initializeMonthlyValues();
+    }
+    const value = parseFloat(event.target.value.replace(/[^\d.-]/g, ''));
+    this.itemValues[item][month] = isNaN(value) ? 0 : value;
     this.requestUpdate();
   }
 
-  _calculateTotal(item) {
-    if (!this.itemValues[item]) return '0.00';
-    const total = Object.values(this.itemValues[item]).reduce((acc, value) => acc + value, 0);
-    return this.numberFormatter.format(total);
+  handleApprovalStatusChange(item, value) {
+    // Handle approval status change
+  }
+
+  handleCommentsChange(item, value) {
+    // Handle comments change
+  }
+
+  render() {
+    return html`
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <div>
+        ${this.listitems.split(',').map((item) => html`
+          <div class="card">
+            ${this.createHeader(item)}
+            ${this.createBody(item)}
+            ${this.createFooter(item)}
+          </div>
+        `)}
+      </div>
+    `;
   }
 }
 
