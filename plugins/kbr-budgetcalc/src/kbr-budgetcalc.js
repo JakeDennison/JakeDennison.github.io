@@ -145,13 +145,19 @@ class BudgetCalcElement extends LitElement {
       .card-footer {
         display: flex;
         flex-wrap: wrap;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
         transition: all 0.3s ease;
       }
       .btn-group {
         flex-grow: 1;
         transition: all 0.3s ease;
+        display: flex;
+        justify-content: space-between;
+      }
+      .comments-area {
+        width: 100%;
+        margin-top: 10px;
       }
       .comments-control {
         transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease, width 0.3s ease, margin 0.3s ease;
@@ -171,7 +177,7 @@ class BudgetCalcElement extends LitElement {
         width: 100%;
         padding: .375rem .75rem;
         margin-top: 0.5rem;
-        display: flex;
+        display: block;
       }
       .input-group {
         padding-bottom: 10px;
@@ -305,7 +311,7 @@ class BudgetCalcElement extends LitElement {
             `)}
           </div>
           ${showInput ? html`
-          <div class="" role="group" aria-label="Comments Area">
+          <div class="comments-area">
             <label for="${textareaId}" class="form-label">Comments:</label>
             <textarea id="${textareaId}" class="form-control comments-control active"
                       placeholder="Enter comments"
@@ -313,20 +319,19 @@ class BudgetCalcElement extends LitElement {
                       @input="${this.autoResize}"
                       style="height: auto; min-height: 38px;">
             </textarea>
-            </div>
+          </div>
           ` : ''}
-          
         </div>
       `;
     } else if (!this.reviewmode && this.readOnly && comments) {
       return html`
         <div class="card-footer">
-        <div class="" role="group" aria-label="Comments Area">
-          <label for="${textareaId}" class="form-label">Comments:</label>
-          <textarea id="${textareaId}" class="form-control comments-control active"
-                    ?disabled="${this.readOnly}"
-                    style="height: auto; min-height: 38px;">${comments}</textarea>
-        </div>
+          <div class="comments-area">
+            <label for="${textareaId}" class="form-label">Comments:</label>
+            <textarea id="${textareaId}" class="form-control comments-control active"
+                      ?disabled="${this.readOnly}"
+                      style="height: auto; min-height: 38px;">${comments}</textarea>
+          </div>
         </div>
       `;
     } else {
