@@ -268,20 +268,17 @@ class BudgetCalcElement extends LitElement {
   syncDataWithInput() {
     const items = this.listitems.split(',').map(item => item.trim());
   
-    // Add new items to itemValues without resetting existing entries
     items.forEach(itemName => {
-      if (!this.itemValues[itemName]) {
-        const existingItem = this.inputobj.budgetItems?.find(budgetItem => budgetItem.itemName === itemName);
-        if (existingItem) {
-          this.itemValues[itemName] = {
-            ...this.initializeMonthlyValues(),
-            ...existingItem.monthlyValues,
-            approval: existingItem.approval,
-            comments: existingItem.comments,
-          };
-        } else {
-          this.itemValues[itemName] = this.initializeMonthlyValues();
-        }
+      const existingItem = this.inputobj.budgetItems?.find(budgetItem => budgetItem.itemName === itemName);
+      if (existingItem) {
+        this.itemValues[itemName] = {
+          ...this.initializeMonthlyValues(),
+          ...existingItem.monthlyValues,
+          approval: existingItem.approval,
+          comments: existingItem.comments,
+        };
+      } else {
+        this.itemValues[itemName] = this.initializeMonthlyValues();
       }
     });
   
@@ -294,7 +291,6 @@ class BudgetCalcElement extends LitElement {
   
     this.requestUpdate();
   }
-  
   
   initializeMonthlyValues() {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
