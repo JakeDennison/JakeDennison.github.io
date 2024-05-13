@@ -281,8 +281,11 @@ class BudgetCalcElement extends LitElement {
           this.itemValues[itemName] = {
             ...this.initializeMonthlyValues(),
             ...existingItem.monthlyValues,
-            approval: existingItem.approval,
-            comments: existingItem.comments,
+            status: existingItem.status || '',
+            comment: existingItem.comment || '',
+            contextuser: existingItem.contextuser || '',
+            lastUpdated: existingItem.lastUpdated || '',
+            history: existingItem.history || [],
             displayed: true
           };
         } else {
@@ -299,7 +302,6 @@ class BudgetCalcElement extends LitElement {
   
     this.requestUpdate();
   }
-  
   
   initializeMonthlyValues() {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -413,6 +415,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
+  
   
   autoResize(e) {
     e.target.style.height = 'auto';
