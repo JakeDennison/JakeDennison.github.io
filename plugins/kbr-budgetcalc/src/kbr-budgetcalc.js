@@ -268,43 +268,27 @@ class BudgetCalcElement extends LitElement {
   syncDataWithInput() {
     const items = this.listitems.split(',').map(item => item.trim());
   
-    // Mark all items as not displayed initially
-    Object.keys(this.itemValues).forEach(itemName => {
-      this.itemValues[itemName].displayed = false;
-    });
-  
     // Add new items to itemValues without resetting existing entries
     items.forEach(itemName => {
-      const existingItem = this.inputobj.budgetItems?.find(budgetItem => budgetItem.itemName === itemName);
-  
-      if (existingItem) {
-        if (!this.itemValues[itemName]) {
-          // Initialize item if it doesn't exist
-          this.itemValues[itemName] = this.initializeMonthlyValues();
-        }
-  
-        // Update item values from inputobj
-        this.itemValues[itemName] = {
-          ...this.itemValues[itemName],
-          ...existingItem.monthlyValues,
-          status: existingItem.status || '',
-          comment: existingItem.comment || '',
-          contextuser: existingItem.contextuser || '',
-          lastUpdated: existingItem.lastUpdated || '',
-          history: existingItem.history || [],
-          displayed: true
-        };
-      } else {
-        // If item is not in inputobj, ensure it is marked as displayed if it already exists
-        if (this.itemValues[itemName]) {
-          this.itemValues[itemName].displayed = true;
-        } else {
-          // Initialize a new item if it doesn't exist
+      if (!this.itemValues[itemName]) {
+        const existingItem = this.inputobj.budgetItems?.find(budgetItem => budgetItem.itemName === itemName);
+        if (existingItem) {
           this.itemValues[itemName] = {
             ...this.initializeMonthlyValues(),
-            displayed: true
+            ...existingItem.monthlyValues,
+            approval: existingItem.approval,
+            comments: existingItem.comments,
           };
+        } else {
+          this.itemValues[itemName] = this.initializeMonthlyValues();
         }
+      }
+    });
+  
+    // Remove items that are no longer in listitems
+    Object.keys(this.itemValues).forEach(itemName => {
+      if (!items.includes(itemName)) {
+        delete this.itemValues[itemName];
       }
     });
   
@@ -317,16 +301,8 @@ class BudgetCalcElement extends LitElement {
     return months.reduce((acc, month) => {
       acc[month] = null;
       return acc;
-    }, {
-      status: '',
-      comment: '',
-      contextuser: '',
-      lastUpdated: '',
-      history: [],
-      displayed: false
-    });
+    }, {});
   }
-  
 
   createHeader(item) {
     const approvalStatus = this.itemValues[item]?.approval;
@@ -434,6 +410,7 @@ class BudgetCalcElement extends LitElement {
   }
   
   
+    
   autoResize(e) {
     e.target.style.height = 'auto';
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -446,6 +423,11 @@ class BudgetCalcElement extends LitElement {
     }
     return outcome === 'Approved' ? `${baseClass} btn-outline-success` : `${baseClass} btn-outline-danger`;
   }
+
+  toggleSortOrder(item) {
+    this.itemValues[item].sortDescending = !this.itemValues[item].sortDescending;
+    this.requestUpdate();
+  }  
 
   toggleHistory(item) {
     this.itemValues[item].showAllHistory = !this.itemValues[item].showAllHistory;
@@ -541,18 +523,16 @@ class BudgetCalcElement extends LitElement {
   
   updateOutputObject() {
     this.outputobj = {
-      budgetItems: Object.keys(this.itemValues)
-        .filter(item => this.itemValues[item].displayed)
-        .map(item => ({
-          itemName: item,
-          monthlyValues: this.itemValues[item],
-          total: this.calculateTotalForItem(item),
-          status: this.itemValues[item].status || '',
-          comment: this.itemValues[item].comment || '',
-          contextuser: this.currentuser,
-          lastUpdated: new Date().toISOString(),
-          history: this.itemValues[item].history || []
-        }))
+      budgetItems: Object.keys(this.itemValues).map(item => ({
+        itemName: item,
+        monthlyValues: this.itemValues[item],
+        total: this.calculateTotalForItem(item),
+        status: this.itemValues[item].status || '',
+        comment: this.itemValues[item].comment || '',
+        contextuser: this.currentuser,
+        lastUpdated: new Date().toISOString(),
+        history: this.itemValues[item].history || []
+      }))
     };
   
     const event = new CustomEvent('ntx-value-change', {
@@ -563,7 +543,7 @@ class BudgetCalcElement extends LitElement {
     });
     this.dispatchEvent(event);
   }
-      
+    
   getButtonClass(outcome, selectedStatus) {
     const baseClass = 'btn';
     if (selectedStatus === outcome) {
@@ -590,17 +570,16 @@ class BudgetCalcElement extends LitElement {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
-        ${this.listitems.split(',').map(item => item.trim()).map(item => this.itemValues[item]?.displayed ? html`
+        ${this.listitems.split(',').map((item) => html`
           <div class="card">
             ${this.createHeader(item)}
             ${this.createBody(item)}
             ${this.createFooter(item)}
           </div>
-        ` : '')}
+        `)}
       </div>
     `;
-  }
-    
+  }  
 }
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
