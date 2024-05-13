@@ -204,10 +204,14 @@ class BudgetCalcElement extends LitElement {
         visibility: visible;
         width: 100%;
         padding: .375rem .75rem;
+        margin-top: 0.5rem;
         display: block;
       }
       .input-group {
         padding-bottom: 10px;
+      }
+      .history-area .card {
+        width: 100%;
       }
       @media (max-width: 576px) {
         .month-input {
@@ -234,7 +238,7 @@ class BudgetCalcElement extends LitElement {
         }
       }
     `;
-  }  
+  }
 
   constructor() {
     super();
@@ -357,16 +361,29 @@ class BudgetCalcElement extends LitElement {
         ${history.length ? html`
         <div class="history-area mt-3">
           <h5>History</h5>
-          ${history.slice(0, showAllHistory ? history.length : 1).map(entry => html`
-          <div class="card mb-2">
-            <div class="card-body">
-              <p><strong>Status:</strong> ${entry.status}</p>
-              <p><strong>Comment:</strong> ${entry.comment}</p>
-              <p><strong>Context User:</strong> ${entry.contextuser}</p>
-              <p><strong>Log Time:</strong> ${entry.logtime}</p>
-            </div>
-          </div>
-          `)}
+          ${history.slice(0, showAllHistory ? history.length : 1).map(entry => {
+            const formattedDate = new Date(entry.logtime).toLocaleString('en-GB', { 
+              day: 'numeric', 
+              month: 'short', 
+              year: 'numeric', 
+              hour: '2-digit', 
+              minute: '2-digit' 
+            });
+            return html`
+              <div class="card mb-2 w-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <div class="badge fs-6 rounded-pill ${entry.status === 'Approved' ? 'bg-success' : 'bg-danger'}">${entry.status}</div>
+                  <div class="badge fs-6 bg-dark">${entry.contextuser}</div>
+                  <div class="badge fs-6 rounded-pill bg-primary">${formattedDate}</div>
+                </div>
+                <div class="card-body">
+                  <blockquote class="blockquote mb-0">
+                    <p>${entry.comment}</p>
+                  </blockquote>
+                </div>
+              </div>
+            `;
+          })}
           ${history.length > 1 ? html`
           <button type="button" class="btn btn-link"
                   @click="${() => this.toggleHistory(item)}">
@@ -378,6 +395,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
+  
   
   autoResize(e) {
     e.target.style.height = 'auto';
@@ -397,7 +415,6 @@ class BudgetCalcElement extends LitElement {
     this.requestUpdate();
   }
   
-
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
