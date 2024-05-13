@@ -167,9 +167,25 @@ class BudgetCalcElement extends LitElement {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        padding: 0.5rem;
       }
       .badge {
         margin: 0 0.25rem;
+      }
+      .badge-container {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .badge-left {
+        margin-right: auto;
+      }
+      .badge-center {
+        margin: 0 auto;
+      }
+      .badge-right {
+        margin-left: auto;
       }
       .card-footer {
         display: flex;
@@ -229,6 +245,7 @@ class BudgetCalcElement extends LitElement {
       }
     `;
   }
+  
   
   constructor() {
     super();
@@ -342,7 +359,7 @@ class BudgetCalcElement extends LitElement {
         ${!this.reviewmode && comments ? html`
         <div class="comments-area mt-2">
           <label for="${textareaId}-latest" class="form-label">Latest Comment:</label>
-          <textarea id="${textareaId}-latest" class="form-control comments-control active"
+          <textarea id="${textareaId}-latest}" class="form-control comments-control active"
                     ?disabled="${this.readOnly}"
                     style="height: auto; min-height: 38px;">${comments}</textarea>
         </div>` : ''}
@@ -358,11 +375,11 @@ class BudgetCalcElement extends LitElement {
               minute: '2-digit' 
             });
             return html`
-              <div class="card mb-2">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                  <div class="badge fs-6 rounded-pill ${entry.status === 'Approved' ? 'bg-success' : 'bg-danger'}">${entry.status}</div>
-                  <div class="badge fs-6 bg-dark">${entry.contextuser}</div>
-                  <div class="badge fs-6 rounded-pill bg-primary">${formattedDate}</div>
+              <div class="card mb-1">
+                <div class="card-header badge-container">
+                  <div class="badge fs-6 rounded-pill ${entry.status === 'Approved' ? 'bg-success' : 'bg-danger'} badge-left">${entry.status}</div>
+                  <div class="badge fs-6 bg-dark badge-center">${entry.contextuser}</div>
+                  <div class="badge fs-6 rounded-pill bg-primary badge-right">${formattedDate}</div>
                 </div>
                 <div class="card-body">
                   <blockquote class="blockquote mb-0">
@@ -383,7 +400,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
-  
+    
   autoResize(e) {
     e.target.style.height = 'auto';
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -478,8 +495,8 @@ class BudgetCalcElement extends LitElement {
       this.updateOutputObject();
       this.requestUpdate();
     }
-  }  
-    
+  }
+  
   updateOutputObject() {
     this.outputobj = {
       budgetItems: Object.keys(this.itemValues).map(item => ({
