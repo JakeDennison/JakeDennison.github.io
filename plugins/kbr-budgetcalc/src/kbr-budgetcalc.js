@@ -88,17 +88,18 @@ class BudgetCalcElement extends LitElement {
                     title: 'Total',
                     description: 'Total amount for the budget item'
                   },
-                  approval: {
+                  status: {
                     type: 'string',
                     title: 'Approval Status',
+                    enum: ['Rejected', 'Approved', ''],
                     description: 'Approval status of the budget item'
                   },
-                  comments: {
+                  comment: {
                     type: 'string',
-                    title: 'Comments',
-                    description: 'Additional comments or notes'
+                    title: 'Latest Comment',
+                    description: 'Last recorded comments or notes'
                   },
-                  approver: {
+                  contextuser: {
                     type: 'string',
                     title: 'Approver Email',
                     description: 'Email of the approver'
@@ -107,7 +108,34 @@ class BudgetCalcElement extends LitElement {
                     type: 'string',
                     title: 'Last Updated',
                     description: 'Date and time when the item was last updated',
-                  }
+                  },
+                  history: {
+                    type: 'object',
+                    title: 'History',
+                    properties: {
+                      status: {
+                        type: 'string',
+                        title: 'Approval Status',
+                        enum: ['Rejected', 'Approved', ''],
+                        description: 'Approval status of the budget item'
+                      },
+                      comment: {
+                        type: 'string',
+                        title: 'Comment',
+                        description: 'Last recorded comments or notes'
+                      },
+                      contextuser: {
+                        type: 'string',
+                        title: 'Context user',
+                        description: 'Email of the approver'
+                      },
+                      logtime: {
+                        type: 'string',
+                        title: 'Log time',
+                        description: 'Date and time when the item was last updated',
+                      }
+                    }
+                  },
                 }
               }
             }
@@ -295,48 +323,40 @@ class BudgetCalcElement extends LitElement {
   createFooter(item) {
     const statusInfo = this.statusColors[item] || { selectedStatus: '' };
     const outcomes = ['Rejected', 'Approved'];
-    const hasOutcome = statusInfo.selectedStatus !== '';
-    const comments = this.itemValues[item]?.comments || '';
+    const comments = this.itemValues[item]?.comment || '';
     const textareaId = `comments-${item}`;
   
-    if (this.reviewmode) {
-      return html`
-        <div class="card-footer">
-          <div class="btn-group" role="group" aria-label="Approval Status">
-            ${outcomes.map(outcome => html`
-              <button type="button"
-                      class="${this.getButtonClass(outcome, statusInfo.selectedStatus)}"
-                      @click="${() => this.handleApprovalStatusChange(item, outcome)}">${outcome}</button>
-            `)}
-          </div>
-          ${hasOutcome ? html`
-          <div class="comments-area">
-            <label for="${textareaId}" class="form-label">Comments:</label>
-            <textarea id="${textareaId}" class="form-control comments-control active"
-                      placeholder="Enter comments"
-                      @blur="${e => this.handleCommentsChange(item, e.target.value)}"
-                      @input="${this.autoResize}"
-                      style="height: auto; min-height: 38px;"></textarea>
-          </div>
-          ` : ''}
+    return html`
+      <div class="card-footer">
+        ${this.reviewmode ? html`
+        <div class="btn-group" role="group" aria-label="Approval Status">
+          ${outcomes.map(outcome => html`
+            <button type="button"
+                    class="${this.getButtonClass(outcome, statusInfo.selectedStatus)}"
+                    @click="${() => this.handleApprovalStatusChange(item, outcome)}">${outcome}</button>
+          `)}
+        </div>` : ''}
+        <div class="comments-area">
+          <label for="${textareaId}" class="form-label">Comments:</label>
+          <textarea id="${textareaId}" class="form-control comments-control active"
+                    placeholder="Enter comments"
+                    @input="${this.autoResize}"
+                    style="height: auto; min-height: 38px;"></textarea>
+          <button type="button" class="btn btn-primary mt-2"
+                  @click="${() => this.handleSaveComment(item)}">Save</button>
         </div>
-      `;
-    } else if (!this.reviewmode) {
-      return html`
-        <div class="card-footer">
-          <div class="comments-area">
-            <label for="${textareaId}" class="form-label">Comments:</label>
-            <textarea id="${textareaId}" class="form-control comments-control active"
-                      ?disabled="${this.readOnly}"
-                      style="height: auto; min-height: 38px;">${comments}</textarea>
-          </div>
-        </div>
-      `;
-    } else {
-      return '';
-    }
+        ${!this.reviewmode && comments ? html`
+        <div class="comments-area mt-2">
+          <label for="${textareaId}-latest" class="form-label">Latest Comment:</label>
+          <textarea id="${textareaId}-latest" class="form-control comments-control active"
+                    ?disabled="${this.readOnly}"
+                    style="height: auto; min-height: 38px;">${comments}</textarea>
+        </div>` : ''}
+      </div>
+    `;
   }
   
+    
   autoResize(e) {
     e.target.style.height = 'auto';
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -396,33 +416,50 @@ class BudgetCalcElement extends LitElement {
     if (!this.itemValues[item]) {
       this.itemValues[item] = this.initializeMonthlyValues();
     }
-    this.itemValues[item].approval = value;
+    this.itemValues[item].status = value;
     this.itemValues[item].lastUpdated = new Date().toISOString();
   
     this.updateOutputObject();
     this.requestUpdate();
   }
   
-  handleCommentsChange(item, value) {
-    if (!this.itemValues[item]) {
-      this.itemValues[item] = this.initializeMonthlyValues();
+  handleSaveComment(item) {
+    const textarea = this.shadowRoot.getElementById(`comments-${item}`);
+    const comment = textarea.value.trim();
+  
+    if (comment) {
+      const newHistoryEntry = {
+        status: this.itemValues[item].status || '',
+        comment,
+        contextuser: this.currentuser,
+        logtime: new Date().toISOString()
+      };
+  
+      if (!this.itemValues[item].history) {
+        this.itemValues[item].history = [];
+      }
+  
+      this.itemValues[item].history.push(newHistoryEntry);
+      this.itemValues[item].comment = comment; // Update latest comment
+  
+      textarea.value = ''; // Clear textarea
+      this.updateOutputObject();
+      this.requestUpdate();
     }
-    this.itemValues[item].comments = value;
-    this.itemValues[item].lastUpdated = new Date().toISOString();
-  
-    this.updateOutputObject();
-    this.requestUpdate();
   }
-
+  
+    
   updateOutputObject() {
     this.outputobj = {
       budgetItems: Object.keys(this.itemValues).map(item => ({
         itemName: item,
         monthlyValues: this.itemValues[item],
         total: this.calculateTotalForItem(item),
-        approval: this.itemValues[item].approval || '',
-        comments: this.itemValues[item].comments || '',
-        lastUpdated: new Date().toISOString()
+        status: this.itemValues[item].status || '',
+        comment: this.itemValues[item].comment || '',
+        contextuser: this.currentuser,
+        lastUpdated: new Date().toISOString(),
+        history: this.itemValues[item].history || []
       }))
     };
   
@@ -434,7 +471,7 @@ class BudgetCalcElement extends LitElement {
     });
     this.dispatchEvent(event);
   }
-
+    
   getButtonClass(outcome, selectedStatus) {
     const baseClass = 'btn';
     if (selectedStatus === outcome) {
