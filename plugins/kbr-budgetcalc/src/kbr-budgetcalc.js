@@ -275,41 +275,58 @@ class BudgetCalcElement extends LitElement {
   
     // Add new items to itemValues without resetting existing entries
     items.forEach(itemName => {
-      if (!this.itemValues[itemName]) {
-        const existingItem = this.inputobj.budgetItems?.find(budgetItem => budgetItem.itemName === itemName);
-        if (existingItem) {
-          this.itemValues[itemName] = {
-            ...this.initializeMonthlyValues(),
-            ...existingItem.monthlyValues,
-            status: existingItem.status || '',
-            comment: existingItem.comment || '',
-            contextuser: existingItem.contextuser || '',
-            lastUpdated: existingItem.lastUpdated || '',
-            history: existingItem.history || [],
-            displayed: true
-          };
+      const existingItem = this.inputobj.budgetItems?.find(budgetItem => budgetItem.itemName === itemName);
+  
+      if (existingItem) {
+        if (!this.itemValues[itemName]) {
+          // Initialize item if it doesn't exist
+          this.itemValues[itemName] = this.initializeMonthlyValues();
+        }
+  
+        // Update item values from inputobj
+        this.itemValues[itemName] = {
+          ...this.itemValues[itemName],
+          ...existingItem.monthlyValues,
+          status: existingItem.status || '',
+          comment: existingItem.comment || '',
+          contextuser: existingItem.contextuser || '',
+          lastUpdated: existingItem.lastUpdated || '',
+          history: existingItem.history || [],
+          displayed: true
+        };
+      } else {
+        // If item is not in inputobj, ensure it is marked as displayed if it already exists
+        if (this.itemValues[itemName]) {
+          this.itemValues[itemName].displayed = true;
         } else {
+          // Initialize a new item if it doesn't exist
           this.itemValues[itemName] = {
             ...this.initializeMonthlyValues(),
             displayed: true
           };
         }
-      } else {
-        // Mark existing items as displayed
-        this.itemValues[itemName].displayed = true;
       }
     });
   
     this.requestUpdate();
   }
   
+  
   initializeMonthlyValues() {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     return months.reduce((acc, month) => {
       acc[month] = null;
       return acc;
-    }, {});
+    }, {
+      status: '',
+      comment: '',
+      contextuser: '',
+      lastUpdated: '',
+      history: [],
+      displayed: false
+    });
   }
+  
 
   createHeader(item) {
     const approvalStatus = this.itemValues[item]?.approval;
@@ -546,7 +563,7 @@ class BudgetCalcElement extends LitElement {
     });
     this.dispatchEvent(event);
   }
-    
+      
   getButtonClass(outcome, selectedStatus) {
     const baseClass = 'btn';
     if (selectedStatus === outcome) {
@@ -583,7 +600,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
-  
+    
 }
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
