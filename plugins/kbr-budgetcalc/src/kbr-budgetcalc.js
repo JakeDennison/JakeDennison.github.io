@@ -171,6 +171,9 @@ class BudgetCalcElement extends LitElement {
         border-bottom-left-radius: 0.25rem;
         border-bottom-right-radius: 0.25rem;
       }
+      .card-single {
+        border-radius: 0.25rem;
+      }
       .currency-input {
         text-align: right;
       }
@@ -213,6 +216,9 @@ class BudgetCalcElement extends LitElement {
         width: 100%;
         margin-bottom: 0.5rem;
       }
+      .history-area.mt-3 {
+        width: 100%;
+      }
       @media (max-width: 576px) {
         .month-input {
           flex: 0 0 100%;
@@ -239,6 +245,7 @@ class BudgetCalcElement extends LitElement {
       }
     `;
   }
+  
   
   constructor() {
     super();
@@ -357,9 +364,9 @@ class BudgetCalcElement extends LitElement {
                     style="height: auto; min-height: 38px;">${comments}</textarea>
         </div>` : ''}
         ${history.length ? html`
-        <div class="history-area mt-3">
+        <div class="history-area mt-3 w-100">
           <h5>History</h5>
-          ${history.slice(0, showAllHistory ? history.length : 1).map(entry => {
+          ${history.slice(0, showAllHistory ? history.length : 1).map((entry, index) => {
             const formattedDate = new Date(entry.logtime).toLocaleString('en-GB', { 
               day: 'numeric', 
               month: 'short', 
@@ -367,8 +374,12 @@ class BudgetCalcElement extends LitElement {
               hour: '2-digit', 
               minute: '2-digit' 
             });
+            const isSingle = history.length === 1;
+            const isFirst = index === 0;
+            const isLast = index === history.length - 1;
+            const cardClass = isSingle ? 'card-single' : isFirst ? 'card-first' : isLast ? 'card-last' : 'card';
             return html`
-              <div class="card mb-2">
+              <div class="${cardClass} mb-2">
                 <div class="card-header d-flex justify-content-between align-items-center">
                   <div class="badge fs-6 rounded-pill ${entry.status === 'Approved' ? 'bg-success' : 'bg-danger'}">${entry.status}</div>
                   <div class="badge fs-6 bg-dark">${entry.contextuser}</div>
@@ -394,7 +405,6 @@ class BudgetCalcElement extends LitElement {
     `;
   }
   
-  
   autoResize(e) {
     e.target.style.height = 'auto';
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -412,7 +422,7 @@ class BudgetCalcElement extends LitElement {
     this.itemValues[item].showAllHistory = !this.itemValues[item].showAllHistory;
     this.requestUpdate();
   }
-  
+    
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

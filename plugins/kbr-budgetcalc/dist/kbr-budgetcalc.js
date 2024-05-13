@@ -18,6 +18,9 @@
         border-bottom-left-radius: 0.25rem;
         border-bottom-right-radius: 0.25rem;
       }
+      .card-single {
+        border-radius: 0.25rem;
+      }
       .currency-input {
         text-align: right;
       }
@@ -59,6 +62,9 @@
       .history-area .card {
         width: 100%;
         margin-bottom: 0.5rem;
+      }
+      .history-area.mt-3 {
+        width: 100%;
       }
       @media (max-width: 576px) {
         .month-input {
@@ -123,14 +129,14 @@
                     style="height: auto; min-height: 38px;">${s}</textarea>
         </div>`:""}
         ${r.length?P`
-        <div class="history-area mt-3">
+        <div class="history-area mt-3 w-100">
           <h5>History</h5>
-          ${r.slice(0,n?r.length:1).map((t=>{const e=new Date(t.logtime).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});return P`
-              <div class="card mb-2">
+          ${r.slice(0,n?r.length:1).map(((t,e)=>{const s=new Date(t.logtime).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}),i=1===r.length,n=0===e,o=e===r.length-1;return P`
+              <div class="${i?"card-single":n?"card-first":o?"card-last":"card"} mb-2">
                 <div class="card-header d-flex justify-content-between align-items-center">
                   <div class="badge fs-6 rounded-pill ${"Approved"===t.status?"bg-success":"bg-danger"}">${t.status}</div>
                   <div class="badge fs-6 bg-dark">${t.contextuser}</div>
-                  <div class="badge fs-6 rounded-pill bg-primary">${e}</div>
+                  <div class="badge fs-6 rounded-pill bg-primary">${s}</div>
                 </div>
                 <div class="card-body">
                   <blockquote class="blockquote mb-0">
