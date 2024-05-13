@@ -181,29 +181,38 @@ class BudgetCalcElement extends LitElement {
   syncDataWithInput() {
     const items = this.listitems.split(',').map(item => item.trim());
   
-    items.forEach(itemName => {
-      const existingItem = this.inputobj.budgetItems?.find(budgetItem => budgetItem.itemName === itemName);
-      if (existingItem) {
-        this.itemValues[itemName] = {
-          ...this.initializeMonthlyValues(),
-          ...existingItem.monthlyValues,
-          approval: existingItem.approval,
-          comments: existingItem.comments,
-        };
-      } else {
-        this.itemValues[itemName] = this.initializeMonthlyValues();
-      }
+    // Mark all items as not displayed initially
+    Object.keys(this.itemValues).forEach(itemName => {
+      this.itemValues[itemName].displayed = false;
     });
   
-    // Remove items that are no longer in listitems
-    Object.keys(this.itemValues).forEach(itemName => {
-      if (!items.includes(itemName)) {
-        delete this.itemValues[itemName];
+    // Add new items to itemValues without resetting existing entries
+    items.forEach(itemName => {
+      if (!this.itemValues[itemName]) {
+        const existingItem = this.inputobj.budgetItems?.find(budgetItem => budgetItem.itemName === itemName);
+        if (existingItem) {
+          this.itemValues[itemName] = {
+            ...this.initializeMonthlyValues(),
+            ...existingItem.monthlyValues,
+            approval: existingItem.approval,
+            comments: existingItem.comments,
+            displayed: true
+          };
+        } else {
+          this.itemValues[itemName] = {
+            ...this.initializeMonthlyValues(),
+            displayed: true
+          };
+        }
+      } else {
+        // Mark existing items as displayed
+        this.itemValues[itemName].displayed = true;
       }
     });
   
     this.requestUpdate();
   }
+  
   
   initializeMonthlyValues() {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -427,19 +436,20 @@ class BudgetCalcElement extends LitElement {
     }
   }
   
-  
   updateOutputObject() {
     this.outputobj = {
-      budgetItems: Object.keys(this.itemValues).map(item => ({
-        itemName: item,
-        monthlyValues: this.itemValues[item],
-        total: this.calculateTotalForItem(item),
-        status: this.itemValues[item].status || '',
-        comment: this.itemValues[item].comment || '',
-        contextuser: this.currentuser,
-        lastUpdated: new Date().toISOString(),
-        history: this.itemValues[item].history || []
-      }))
+      budgetItems: Object.keys(this.itemValues)
+        .filter(item => this.itemValues[item].displayed)
+        .map(item => ({
+          itemName: item,
+          monthlyValues: this.itemValues[item],
+          total: this.calculateTotalForItem(item),
+          status: this.itemValues[item].status || '',
+          comment: this.itemValues[item].comment || '',
+          contextuser: this.currentuser,
+          lastUpdated: new Date().toISOString(),
+          history: this.itemValues[item].history || []
+        }))
     };
   
     const event = new CustomEvent('ntx-value-change', {
