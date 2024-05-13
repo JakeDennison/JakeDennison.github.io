@@ -19,7 +19,7 @@ class BudgetCalcElement extends LitElement {
       controlName: 'kbr-budgetcalc',
       fallbackDisableSubmit: false,
       description: 'Yearly budget calculator',
-      iconUrl: "",
+      iconUrl: "repeating-section",
       groupName: 'KBR',
       version: '1.0',
       properties: {
@@ -29,26 +29,26 @@ class BudgetCalcElement extends LitElement {
           description: 'List of items to be budgeted',
         },
         itemname: {
-            type: 'string',
-            title: 'Item Name',
-            description: 'Singular Item Name such as Cost Center or Budget Code'
+          type: 'string',
+          title: 'Item Name',
+          description: 'Singular Item Name such as Cost Center or Budget Code'
         },
         currentuser: {
           type: 'string',
           title: 'Context current user email',
           description: 'Please enter the context current user email',
         },
-        review: {
+        reviewmode: {
           title: 'Enable Review Mode',
           type: 'boolean',
           defaultValue: false,
         },
-        inputjson: {
-          type: 'string',
-          title: 'Input JSON',
-          description: 'Enter the JSON from previous object here as a string',
+        inputobj: {
+          type: 'object',
+          title: 'Input Object',
+          description: 'Enter the object from previous control here',
         },
-        dataobj: {
+        outputobj: {
           type: 'object',
           title: 'Object Output',
           description: 'this is for output only you do not need to use it',
@@ -427,11 +427,6 @@ class BudgetCalcElement extends LitElement {
     return outcome === 'Approved' ? `${baseClass} btn-outline-success` : `${baseClass} btn-outline-danger`;
   }
 
-  toggleSortOrder(item) {
-    this.itemValues[item].sortDescending = !this.itemValues[item].sortDescending;
-    this.requestUpdate();
-  }
-  
   toggleHistory(item) {
     this.itemValues[item].showAllHistory = !this.itemValues[item].showAllHistory;
     this.requestUpdate();
@@ -523,6 +518,7 @@ class BudgetCalcElement extends LitElement {
     }
   }
   
+  
   updateOutputObject() {
     this.outputobj = {
       budgetItems: Object.keys(this.itemValues)
@@ -574,16 +570,17 @@ class BudgetCalcElement extends LitElement {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div>
-        ${this.listitems.split(',').map((item) => html`
+        ${this.listitems.split(',').map(item => item.trim()).map(item => this.itemValues[item]?.displayed ? html`
           <div class="card">
             ${this.createHeader(item)}
             ${this.createBody(item)}
             ${this.createFooter(item)}
           </div>
-        `)}
+        ` : '')}
       </div>
     `;
-  }  
+  }
+  
 }
 
 customElements.define('kbr-budgetcalc', BudgetCalcElement);
