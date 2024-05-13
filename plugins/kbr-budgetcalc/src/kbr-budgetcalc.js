@@ -157,7 +157,19 @@ class BudgetCalcElement extends LitElement {
         display: block;
       }
       .card {
-        margin-bottom: 20px;
+        margin-bottom: 0;
+        width: 100%;
+      }
+      .card:not(:first-child):not(:last-child) {
+        border-radius: 0;
+      }
+      .card:first-child {
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+      }
+      .card:last-child {
+        border-bottom-left-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
       }
       .currency-input {
         text-align: right;
@@ -188,20 +200,7 @@ class BudgetCalcElement extends LitElement {
         margin-top: 10px;
       }
       .comments-control {
-        transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease, width 0.3s ease, margin 0.3s ease;
-        max-height: 0;
-        width: 0;
-        opacity: 0;
-        visibility: hidden;
-        overflow: hidden;
-        padding: 0;
-        margin: 0;
-        display: none;
-      }
-      .comments-control.active {
-        max-height: 200px;
-        opacity: 1;
-        visibility: visible;
+        max-height: none;
         width: 100%;
         padding: .375rem .75rem;
         margin-top: 0.5rem;
@@ -212,6 +211,7 @@ class BudgetCalcElement extends LitElement {
       }
       .history-area .card {
         width: 100%;
+        margin-bottom: 0.5rem;
       }
       @media (max-width: 576px) {
         .month-input {
@@ -239,7 +239,7 @@ class BudgetCalcElement extends LitElement {
       }
     `;
   }
-
+  
   constructor() {
     super();
     this.listitems = '';
@@ -345,9 +345,7 @@ class BudgetCalcElement extends LitElement {
         <div class="comments-area">
           <label for="${textareaId}" class="form-label">Comments:</label>
           <textarea id="${textareaId}" class="form-control comments-control active"
-                    placeholder="Enter comments"
-                    @input="${this.autoResize}"
-                    style="height: auto; min-height: 38px;"></textarea>
+                    placeholder="Enter comments"></textarea>
           <button type="button" class="btn btn-primary mt-2"
                   @click="${() => this.handleSaveComment(item)}">Save</button>
         </div>
@@ -370,7 +368,7 @@ class BudgetCalcElement extends LitElement {
               minute: '2-digit' 
             });
             return html`
-              <div class="card mb-2 w-100">
+              <div class="card mb-2">
                 <div class="card-header d-flex justify-content-between align-items-center">
                   <div class="badge fs-6 rounded-pill ${entry.status === 'Approved' ? 'bg-success' : 'bg-danger'}">${entry.status}</div>
                   <div class="badge fs-6 bg-dark">${entry.contextuser}</div>
