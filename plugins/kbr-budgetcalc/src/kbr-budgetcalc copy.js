@@ -161,17 +161,18 @@ class BudgetCalcElement extends LitElement {
                     title: 'Total',
                     description: 'Total amount for the budget item'
                   },
-                  outcome: {
+                  status: {
                     type: 'string',
-                    title: 'Outcome',
-                    description: 'Approval outcome of the budget item'
+                    title: 'Approval Status',
+                    enum: ['Rejected', 'Approved', ''],
+                    description: 'Approval status of the budget item'
                   },
-                  notes: {
+                  comment: {
                     type: 'string',
-                    title: 'Notes',
-                    description: 'Additional notes or comments'
+                    title: 'Latest Comment',
+                    description: 'Last recorded comments or notes'
                   },
-                  approver: {
+                  contextuser: {
                     type: 'string',
                     title: 'Approver Email',
                     description: 'Email of the approver'
@@ -180,7 +181,34 @@ class BudgetCalcElement extends LitElement {
                     type: 'string',
                     title: 'Last Updated',
                     description: 'Date and time when the item was last updated',
-                  }
+                  },
+                  history: {
+                    type: 'object',
+                    title: 'History',
+                    properties: {
+                      status: {
+                        type: 'string',
+                        title: 'Approval Status',
+                        enum: ['Rejected', 'Approved', ''],
+                        description: 'Approval status of the budget item'
+                      },
+                      comment: {
+                        type: 'string',
+                        title: 'Comment',
+                        description: 'Last recorded comments or notes'
+                      },
+                      contextuser: {
+                        type: 'string',
+                        title: 'Context user',
+                        description: 'Email of the approver'
+                      },
+                      logtime: {
+                        type: 'string',
+                        title: 'Log time',
+                        description: 'Date and time when the item was last updated',
+                      }
+                    }
+                  },
                 }
               }
             }

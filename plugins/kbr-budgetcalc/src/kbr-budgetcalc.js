@@ -52,94 +52,7 @@ class BudgetCalcElement extends LitElement {
           type: 'object',
           title: 'Object Output',
           description: 'this is for output only you do not need to use it',
-          isValueField: true,
-          properties: {
-            budgetItems: {
-              type: 'array',
-              title: 'Budget Items',
-              items: {
-                type: 'object',
-                properties: {
-                  itemName: {
-                    type: 'string',
-                    title: 'Item Name',
-                    description: 'Name of the budget item'
-                  },
-                  monthlyValues: {
-                    type: 'object',
-                    title: 'Monthly Values',
-                    properties: {
-                      January: { type: 'number', title: 'January' },
-                      February: { type: 'number', title: 'February' },
-                      March: { type: 'number', title: 'March' },
-                      April: { type: 'number', title: 'April' },
-                      May: { type: 'number', title: 'May' },
-                      June: { type: 'number', title: 'June' },
-                      July: { type: 'number', title: 'July' },
-                      August: { type: 'number', title: 'August' },
-                      September: { type: 'number', title: 'September' },
-                      October: { type: 'number', title: 'October' },
-                      November: { type: 'number', title: 'November' },
-                      December: { type: 'number', title: 'December' }
-                    }
-                  },
-                  total: {
-                    type: 'number',
-                    title: 'Total',
-                    description: 'Total amount for the budget item'
-                  },
-                  status: {
-                    type: 'string',
-                    title: 'Approval Status',
-                    enum: ['Rejected', 'Approved', ''],
-                    description: 'Approval status of the budget item'
-                  },
-                  comment: {
-                    type: 'string',
-                    title: 'Latest Comment',
-                    description: 'Last recorded comments or notes'
-                  },
-                  contextuser: {
-                    type: 'string',
-                    title: 'Approver Email',
-                    description: 'Email of the approver'
-                  },
-                  lastUpdated: {
-                    type: 'string',
-                    title: 'Last Updated',
-                    description: 'Date and time when the item was last updated',
-                  },
-                  history: {
-                    type: 'object',
-                    title: 'History',
-                    properties: {
-                      status: {
-                        type: 'string',
-                        title: 'Approval Status',
-                        enum: ['Rejected', 'Approved', ''],
-                        description: 'Approval status of the budget item'
-                      },
-                      comment: {
-                        type: 'string',
-                        title: 'Comment',
-                        description: 'Last recorded comments or notes'
-                      },
-                      contextuser: {
-                        type: 'string',
-                        title: 'Context user',
-                        description: 'Email of the approver'
-                      },
-                      logtime: {
-                        type: 'string',
-                        title: 'Log time',
-                        description: 'Date and time when the item was last updated',
-                      }
-                    }
-                  },
-                }
-              }
-            }
-          }
+          isValueField: true
         }
       },
       events: ["ntx-value-change"],
@@ -335,6 +248,13 @@ class BudgetCalcElement extends LitElement {
     const textareaId = `comments-${item}`;
     const history = this.itemValues[item]?.history || [];
     const showAllHistory = this.itemValues[item]?.showAllHistory || false;
+    const sortDescending = this.itemValues[item]?.sortDescending ?? true; // Default to newest at the top
+  
+    const sortedHistory = [...history].sort((a, b) => {
+      return sortDescending
+        ? new Date(b.logtime) - new Date(a.logtime)
+        : new Date(a.logtime) - new Date(b.logtime);
+    });
   
     return html`
       <div class="card-footer">
@@ -356,7 +276,7 @@ class BudgetCalcElement extends LitElement {
         ${history.length ? html`
         <div class="history-area mt-3 w-100">
           <label class="form-label">History:</label>
-          ${history.slice(0, showAllHistory ? history.length : 1).map(entry => {
+          ${sortedHistory.slice(0, showAllHistory ? sortedHistory.length : 1).map(entry => {
             const formattedDate = new Date(entry.logtime).toLocaleString('en-GB', { 
               day: 'numeric', 
               month: 'short', 
@@ -381,10 +301,16 @@ class BudgetCalcElement extends LitElement {
             `;
           })}
           ${history.length > 1 ? html`
-          <button type="button" class="btn btn-link"
-                  @click="${() => this.toggleHistory(item)}">
-            ${showAllHistory ? 'Show Less' : 'Show All History'}
-          </button>
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <button type="button" class="btn btn-link"
+                    @click="${() => this.toggleHistory(item)}">
+              ${showAllHistory ? 'Show Less' : 'Show All History'}
+            </button>
+            <button type="button" class="btn btn-link"
+                    @click="${() => this.toggleSortOrder(item)}">
+              Sort by: ${sortDescending ? 'Oldest First' : 'Newest First'}
+            </button>
+          </div>
           ` : ''}
         </div>
         ` : ''}
@@ -405,6 +331,11 @@ class BudgetCalcElement extends LitElement {
     return outcome === 'Approved' ? `${baseClass} btn-outline-success` : `${baseClass} btn-outline-danger`;
   }
 
+  toggleSortOrder(item) {
+    this.itemValues[item].sortDescending = !this.itemValues[item].sortDescending;
+    this.requestUpdate();
+  }
+  
   toggleHistory(item) {
     this.itemValues[item].showAllHistory = !this.itemValues[item].showAllHistory;
     this.requestUpdate();
