@@ -157,19 +157,8 @@ class BudgetCalcElement extends LitElement {
         display: block;
       }
       .card {
-        margin-bottom: 0;
+        margin-bottom: 0.5rem;
         width: 100%;
-      }
-      .card:not(:first-child):not(:last-child) {
-        border-radius: 0;
-      }
-      .card:first-child {
-        border-top-left-radius: 0.25rem;
-        border-top-right-radius: 0.25rem;
-      }
-      .card:last-child {
-        border-bottom-left-radius: 0.25rem;
-        border-bottom-right-radius: 0.25rem;
       }
       .currency-input {
         text-align: right;
@@ -210,6 +199,9 @@ class BudgetCalcElement extends LitElement {
       .history-area .card {
         width: 100%;
         margin-bottom: 0.5rem;
+      }
+      .history-area.mt-3 {
+        width: 100%;
       }
       @media (max-width: 576px) {
         .month-input {
@@ -357,7 +349,7 @@ class BudgetCalcElement extends LitElement {
         ${history.length ? html`
         <div class="history-area mt-3 w-100">
           <h5>History</h5>
-          ${history.slice(0, showAllHistory ? history.length : 1).map((entry, index) => {
+          ${history.slice(0, showAllHistory ? history.length : 1).map(entry => {
             const formattedDate = new Date(entry.logtime).toLocaleString('en-GB', { 
               day: 'numeric', 
               month: 'short', 
@@ -365,19 +357,17 @@ class BudgetCalcElement extends LitElement {
               hour: '2-digit', 
               minute: '2-digit' 
             });
-            const isSingle = history.length === 1;
-            const isFirst = index === 0;
-            const isLast = index === history.length - 1;
-            const cardClass = isSingle ? 'card-single' : isFirst ? 'card-first' : isLast ? 'card-last' : 'card';
             return html`
-              <div class="${cardClass} mb-0">
+              <div class="card mb-2">
                 <div class="card-header d-flex justify-content-between align-items-center">
                   <div class="badge fs-6 rounded-pill ${entry.status === 'Approved' ? 'bg-success' : 'bg-danger'}">${entry.status}</div>
                   <div class="badge fs-6 bg-dark">${entry.contextuser}</div>
                   <div class="badge fs-6 rounded-pill bg-primary">${formattedDate}</div>
                 </div>
                 <div class="card-body">
+                  <blockquote class="blockquote mb-0">
                     <p>${entry.comment}</p>
+                  </blockquote>
                 </div>
               </div>
             `;
