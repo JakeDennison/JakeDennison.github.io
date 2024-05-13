@@ -171,9 +171,6 @@ class BudgetCalcElement extends LitElement {
         border-bottom-left-radius: 0.25rem;
         border-bottom-right-radius: 0.25rem;
       }
-      .card-single {
-        border-radius: 0.25rem;
-      }
       .currency-input {
         text-align: right;
       }
@@ -190,11 +187,9 @@ class BudgetCalcElement extends LitElement {
         flex-wrap: wrap;
         align-items: flex-start;
         justify-content: space-between;
-        transition: all 0.3s ease;
       }
       .btn-group {
         flex-grow: 1;
-        transition: all 0.3s ease;
         display: flex;
         justify-content: space-between;
       }
@@ -215,9 +210,6 @@ class BudgetCalcElement extends LitElement {
       .history-area .card {
         width: 100%;
         margin-bottom: 0.5rem;
-      }
-      .history-area.mt-3 {
-        width: 100%;
       }
       @media (max-width: 576px) {
         .month-input {
@@ -245,7 +237,6 @@ class BudgetCalcElement extends LitElement {
       }
     `;
   }
-  
   
   constructor() {
     super();
@@ -379,16 +370,14 @@ class BudgetCalcElement extends LitElement {
             const isLast = index === history.length - 1;
             const cardClass = isSingle ? 'card-single' : isFirst ? 'card-first' : isLast ? 'card-last' : 'card';
             return html`
-              <div class="${cardClass} mb-2">
+              <div class="${cardClass} mb-0">
                 <div class="card-header d-flex justify-content-between align-items-center">
                   <div class="badge fs-6 rounded-pill ${entry.status === 'Approved' ? 'bg-success' : 'bg-danger'}">${entry.status}</div>
                   <div class="badge fs-6 bg-dark">${entry.contextuser}</div>
                   <div class="badge fs-6 rounded-pill bg-primary">${formattedDate}</div>
                 </div>
                 <div class="card-body">
-                  <blockquote class="blockquote mb-0">
                     <p>${entry.comment}</p>
-                  </blockquote>
                 </div>
               </div>
             `;
