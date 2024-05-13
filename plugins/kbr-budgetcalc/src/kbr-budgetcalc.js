@@ -325,6 +325,8 @@ class BudgetCalcElement extends LitElement {
     const outcomes = ['Rejected', 'Approved'];
     const comments = this.itemValues[item]?.comment || '';
     const textareaId = `comments-${item}`;
+    const history = this.itemValues[item]?.history || [];
+    const showAllHistory = this.itemValues[item]?.showAllHistory || false;
   
     return html`
       <div class="card-footer">
@@ -352,11 +354,31 @@ class BudgetCalcElement extends LitElement {
                     ?disabled="${this.readOnly}"
                     style="height: auto; min-height: 38px;">${comments}</textarea>
         </div>` : ''}
+        ${history.length ? html`
+        <div class="history-area mt-3">
+          <h5>History</h5>
+          ${history.slice(0, showAllHistory ? history.length : 1).map(entry => html`
+          <div class="card mb-2">
+            <div class="card-body">
+              <p><strong>Status:</strong> ${entry.status}</p>
+              <p><strong>Comment:</strong> ${entry.comment}</p>
+              <p><strong>Context User:</strong> ${entry.contextuser}</p>
+              <p><strong>Log Time:</strong> ${entry.logtime}</p>
+            </div>
+          </div>
+          `)}
+          ${history.length > 1 ? html`
+          <button type="button" class="btn btn-link"
+                  @click="${() => this.toggleHistory(item)}">
+            ${showAllHistory ? 'Show Less' : 'Show All History'}
+          </button>
+          ` : ''}
+        </div>
+        ` : ''}
       </div>
     `;
   }
   
-    
   autoResize(e) {
     e.target.style.height = 'auto';
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -369,6 +391,12 @@ class BudgetCalcElement extends LitElement {
     }
     return outcome === 'Approved' ? `${baseClass} btn-outline-success` : `${baseClass} btn-outline-danger`;
   }
+
+  toggleHistory(item) {
+    this.itemValues[item].showAllHistory = !this.itemValues[item].showAllHistory;
+    this.requestUpdate();
+  }
+  
 
   createMonthInputs(item) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -446,8 +474,7 @@ class BudgetCalcElement extends LitElement {
       this.updateOutputObject();
       this.requestUpdate();
     }
-  }
-  
+  }  
     
   updateOutputObject() {
     this.outputobj = {
