@@ -362,7 +362,7 @@ class BudgetCalcElement extends LitElement {
         </div>` : ''}
         ${history.length ? html`
         <div class="history-area mt-3 w-100">
-          <h5>History</h5>
+          <label class="form-label">History:</label>
           ${history.slice(0, showAllHistory ? history.length : 1).map(entry => {
             const formattedDate = new Date(entry.logtime).toLocaleString('en-GB', { 
               day: 'numeric', 
@@ -371,17 +371,18 @@ class BudgetCalcElement extends LitElement {
               hour: '2-digit', 
               minute: '2-digit' 
             });
+            const statusBadgeClass = entry.status === 'Approved' ? 'bg-success' 
+                                  : entry.status === 'Rejected' ? 'bg-danger' 
+                                  : 'bg-info';
             return html`
               <div class="card mb-1">
                 <div class="card-header">
-                  <div class="badge fs-6 rounded-pill ${entry.status === 'Approved' ? 'bg-success' : 'bg-danger'} badge-left">${entry.status}</div>
+                  <div class="badge fs-6 rounded-pill ${statusBadgeClass} badge-left">${entry.status}</div>
                   <div class="badge fs-6 bg-dark badge-center">${entry.contextuser}</div>
                   <div class="badge fs-6 rounded-pill bg-primary badge-right">${formattedDate}</div>
                 </div>
                 <div class="card-body">
-                  <blockquote class="blockquote mb-0">
-                    <p>${entry.comment}</p>
-                  </blockquote>
+                    ${entry.comment}
                 </div>
               </div>
             `;
@@ -397,7 +398,7 @@ class BudgetCalcElement extends LitElement {
       </div>
     `;
   }
-    
+  
   autoResize(e) {
     e.target.style.height = 'auto';
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -475,7 +476,7 @@ class BudgetCalcElement extends LitElement {
   
     if (comment) {
       const newHistoryEntry = {
-        status: this.itemValues[item].status || '',
+        status: '',
         comment,
         contextuser: this.currentuser,
         logtime: new Date().toISOString()
@@ -483,6 +484,14 @@ class BudgetCalcElement extends LitElement {
   
       if (!this.itemValues[item].history) {
         this.itemValues[item].history = [];
+      }
+  
+      const lastEntry = this.itemValues[item].history[this.itemValues[item].history.length - 1];
+  
+      if (this.itemValues[item].status !== lastEntry?.status) {
+        newHistoryEntry.status = this.itemValues[item].status || '';
+      } else {
+        newHistoryEntry.status = 'Update';
       }
   
       this.itemValues[item].history.push(newHistoryEntry);
@@ -493,6 +502,7 @@ class BudgetCalcElement extends LitElement {
       this.requestUpdate();
     }
   }
+  
   
   updateOutputObject() {
     this.outputobj = {
