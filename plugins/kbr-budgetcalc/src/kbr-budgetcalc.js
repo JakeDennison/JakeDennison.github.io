@@ -353,13 +353,6 @@ class BudgetCalcElement extends LitElement {
           <button type="button" class="btn btn-primary mt-2"
                   @click="${() => this.handleSaveComment(item)}">Save</button>
         </div>
-        ${!this.reviewmode && comments ? html`
-        <div class="comments-area mt-2">
-          <label for="${textareaId}-latest" class="form-label">Latest Comment:</label>
-          <textarea id="${textareaId}-latest" class="form-control comments-control active"
-                    ?disabled="${this.readOnly}"
-                    style="height: auto; min-height: 38px;">${comments}</textarea>
-        </div>` : ''}
         ${history.length ? html`
         <div class="history-area mt-3 w-100">
           <label class="form-label">History:</label>

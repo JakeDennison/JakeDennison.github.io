@@ -101,7 +101,7 @@
       <div class="card-body d-flex flex-wrap">
         ${this.createMonthInputs(t)}
       </div>
-    `}createFooter(t){const e=this.statusColors[t]||{selectedStatus:""},s=this.itemValues[t]?.comment||"",i=`comments-${t}`,r=this.itemValues[t]?.history||[],n=this.itemValues[t]?.showAllHistory||!1;return P`
+    `}createFooter(t){const e=this.statusColors[t]||{selectedStatus:""},s=(this.itemValues[t]?.comment,`comments-${t}`),i=this.itemValues[t]?.history||[],r=this.itemValues[t]?.showAllHistory||!1;return P`
       <div class="card-footer">
         ${this.reviewmode?P`
         <div class="btn-group" role="group" aria-label="Approval Status">
@@ -112,23 +112,16 @@
           `))}
         </div>`:""}
         <div class="comments-area">
-          <label for="${i}" class="form-label">Comments:</label>
-          <textarea id="${i}" class="form-control comments-control active"
+          <label for="${s}" class="form-label">Comments:</label>
+          <textarea id="${s}" class="form-control comments-control active"
                     placeholder="Enter comments"></textarea>
           <button type="button" class="btn btn-primary mt-2"
                   @click="${()=>this.handleSaveComment(t)}">Save</button>
         </div>
-        ${!this.reviewmode&&s?P`
-        <div class="comments-area mt-2">
-          <label for="${i}-latest" class="form-label">Latest Comment:</label>
-          <textarea id="${i}-latest" class="form-control comments-control active"
-                    ?disabled="${this.readOnly}"
-                    style="height: auto; min-height: 38px;">${s}</textarea>
-        </div>`:""}
-        ${r.length?P`
+        ${i.length?P`
         <div class="history-area mt-3 w-100">
           <label class="form-label">History:</label>
-          ${r.slice(0,n?r.length:1).map((t=>{const e=new Date(t.logtime).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}),s="Approved"===t.status?"bg-success":"Rejected"===t.status?"bg-danger":"bg-info";return P`
+          ${i.slice(0,r?i.length:1).map((t=>{const e=new Date(t.logtime).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}),s="Approved"===t.status?"bg-success":"Rejected"===t.status?"bg-danger":"bg-info";return P`
               <div class="card mb-1">
                 <div class="card-header">
                   <div class="badge fs-6 rounded-pill ${s} badge-left">${t.status}</div>
@@ -140,10 +133,10 @@
                 </div>
               </div>
             `}))}
-          ${r.length>1?P`
+          ${i.length>1?P`
           <button type="button" class="btn btn-link"
                   @click="${()=>this.toggleHistory(t)}">
-            ${n?"Show Less":"Show All History"}
+            ${r?"Show Less":"Show All History"}
           </button>
           `:""}
         </div>
