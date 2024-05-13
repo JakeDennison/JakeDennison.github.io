@@ -164,28 +164,25 @@ class BudgetCalcElement extends LitElement {
         text-align: right;
       }
       .card-header {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
         align-items: center;
         padding: 0.5rem;
       }
       .badge {
         margin: 0 0.25rem;
       }
-      .badge-container {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        align-items: center;
-      }
       .badge-left {
-        margin-right: auto;
+        grid-column: 1;
+        justify-self: start;
       }
       .badge-center {
-        margin: 0 auto;
+        grid-column: 2;
+        justify-self: center;
       }
       .badge-right {
-        margin-left: auto;
+        grid-column: 3;
+        justify-self: end;
       }
       .card-footer {
         display: flex;
@@ -359,7 +356,7 @@ class BudgetCalcElement extends LitElement {
         ${!this.reviewmode && comments ? html`
         <div class="comments-area mt-2">
           <label for="${textareaId}-latest" class="form-label">Latest Comment:</label>
-          <textarea id="${textareaId}-latest}" class="form-control comments-control active"
+          <textarea id="${textareaId}-latest" class="form-control comments-control active"
                     ?disabled="${this.readOnly}"
                     style="height: auto; min-height: 38px;">${comments}</textarea>
         </div>` : ''}
@@ -376,7 +373,7 @@ class BudgetCalcElement extends LitElement {
             });
             return html`
               <div class="card mb-1">
-                <div class="card-header badge-container">
+                <div class="card-header">
                   <div class="badge fs-6 rounded-pill ${entry.status === 'Approved' ? 'bg-success' : 'bg-danger'} badge-left">${entry.status}</div>
                   <div class="badge fs-6 bg-dark badge-center">${entry.contextuser}</div>
                   <div class="badge fs-6 rounded-pill bg-primary badge-right">${formattedDate}</div>
