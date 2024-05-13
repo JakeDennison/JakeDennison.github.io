@@ -19,7 +19,7 @@ class BudgetCalcElement extends LitElement {
       controlName: 'kbr-budgetcalc',
       fallbackDisableSubmit: false,
       description: 'Yearly budget calculator',
-      iconUrl: "repeating-section",
+      iconUrl: "",
       groupName: 'KBR',
       version: '1.0',
       properties: {
@@ -29,30 +29,117 @@ class BudgetCalcElement extends LitElement {
           description: 'List of items to be budgeted',
         },
         itemname: {
-          type: 'string',
-          title: 'Item Name',
-          description: 'Singular Item Name such as Cost Center or Budget Code'
+            type: 'string',
+            title: 'Item Name',
+            description: 'Singular Item Name such as Cost Center or Budget Code'
         },
         currentuser: {
           type: 'string',
           title: 'Context current user email',
           description: 'Please enter the context current user email',
         },
-        reviewmode: {
+        review: {
           title: 'Enable Review Mode',
           type: 'boolean',
           defaultValue: false,
         },
-        inputobj: {
-          type: 'object',
-          title: 'Input Object',
-          description: 'Enter the object from previous control here',
+        inputjson: {
+          type: 'string',
+          title: 'Input JSON',
+          description: 'Enter the JSON from previous object here as a string',
         },
-        outputobj: {
+        dataobj: {
           type: 'object',
           title: 'Object Output',
           description: 'this is for output only you do not need to use it',
-          isValueField: true
+          isValueField: true,
+          properties: {
+            budgetItems: {
+              type: 'array',
+              title: 'Budget Items',
+              items: {
+                type: 'object',
+                properties: {
+                  itemName: {
+                    type: 'string',
+                    title: 'Item Name',
+                    description: 'Name of the budget item'
+                  },
+                  monthlyValues: {
+                    type: 'object',
+                    title: 'Monthly Values',
+                    properties: {
+                      January: { type: 'number', title: 'January' },
+                      February: { type: 'number', title: 'February' },
+                      March: { type: 'number', title: 'March' },
+                      April: { type: 'number', title: 'April' },
+                      May: { type: 'number', title: 'May' },
+                      June: { type: 'number', title: 'June' },
+                      July: { type: 'number', title: 'July' },
+                      August: { type: 'number', title: 'August' },
+                      September: { type: 'number', title: 'September' },
+                      October: { type: 'number', title: 'October' },
+                      November: { type: 'number', title: 'November' },
+                      December: { type: 'number', title: 'December' }
+                    }
+                  },
+                  total: {
+                    type: 'number',
+                    title: 'Total',
+                    description: 'Total amount for the budget item'
+                  },
+                  status: {
+                    type: 'string',
+                    title: 'Approval Status',
+                    enum: ['Rejected', 'Approved', ''],
+                    description: 'Approval status of the budget item'
+                  },
+                  comment: {
+                    type: 'string',
+                    title: 'Latest Comment',
+                    description: 'Last recorded comments or notes'
+                  },
+                  contextuser: {
+                    type: 'string',
+                    title: 'Approver Email',
+                    description: 'Email of the approver'
+                  },
+                  lastUpdated: {
+                    type: 'string',
+                    title: 'Last Updated',
+                    description: 'Date and time when the item was last updated',
+                  },
+                  history: {
+                    type: 'object',
+                    title: 'History',
+                    properties: {
+                      status: {
+                        type: 'string',
+                        title: 'Approval Status',
+                        enum: ['Rejected', 'Approved', ''],
+                        description: 'Approval status of the budget item'
+                      },
+                      comment: {
+                        type: 'string',
+                        title: 'Comment',
+                        description: 'Last recorded comments or notes'
+                      },
+                      contextuser: {
+                        type: 'string',
+                        title: 'Context user',
+                        description: 'Email of the approver'
+                      },
+                      logtime: {
+                        type: 'string',
+                        title: 'Log time',
+                        description: 'Date and time when the item was last updated',
+                      }
+                    }
+                  },
+                }
+              }
+            }
+          }
         }
       },
       events: ["ntx-value-change"],
