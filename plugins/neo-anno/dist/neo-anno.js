@@ -6,9 +6,12 @@
       img {
         max-width: 100%;
       }
-    `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png"}firstUpdated(){this.shadowRoot.getElementById("annotateButton").addEventListener("click",(()=>this.setupMarker()))}setupMarker(){const t=this.shadowRoot.querySelector("img"),e=new te(t);e.addEventListener("render",(t=>{this.image=t,this.requestUpdate()})),e.settings.displayMode="popup",e.settings.defaultMarkerTypeName="FrameMarker",e.show()}render(){if(!this.src)return O`<p>No image found</p>`;const t=this.image?this.image:this.src;return O`
+      button {
+        margin-top: 10px;
+      }
+    `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png"}firstUpdated(){this._annotateButton=this.shadowRoot.getElementById("annotateButton"),this._annotateButton.addEventListener("click",this.setupMarker.bind(this))}disconnectedCallback(){super.disconnectedCallback(),this._annotateButton&&this._annotateButton.removeEventListener("click",this.setupMarker.bind(this))}setupMarker(){const t=this.shadowRoot.querySelector("img"),e=new te(t);e.addEventListener("render",(t=>{this.image=t,this.requestUpdate()})),e.settings.displayMode="popup",e.settings.defaultMarkerTypeName="FrameMarker",e.show()}render(){const t=this.image||this.src;return O`
       <div class="image-container">
-        <img src="${t}"/>
+        <img src="${t}" alt="Annotatable image"/>
       </div>
-      <button id="annotateButton">Annotate</button>
+      <button id="annotateButton" aria-label="Annotate image">Annotate</button>
     `}})})();

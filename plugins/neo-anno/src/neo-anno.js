@@ -45,6 +45,9 @@ class AnnoElement extends LitElement {
       img {
         max-width: 100%;
       }
+      button {
+        margin-top: 10px;
+      }
     `;
   }
 
@@ -54,7 +57,15 @@ class AnnoElement extends LitElement {
   }
 
   firstUpdated() {
-    this.shadowRoot.getElementById('annotateButton').addEventListener('click', () => this.setupMarker());
+    this._annotateButton = this.shadowRoot.getElementById('annotateButton');
+    this._annotateButton.addEventListener('click', this.setupMarker.bind(this));
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this._annotateButton) {
+      this._annotateButton.removeEventListener('click', this.setupMarker.bind(this));
+    }
   }
 
   setupMarker() {
@@ -72,21 +83,15 @@ class AnnoElement extends LitElement {
   }
   
   render() {
-    if (!this.src) {
-      return html`<p>No image found</p>`;
-    }
-    
-    const imgSrc = this.image ? this.image : this.src;
+    const imgSrc = this.image || this.src;
     
     return html`
       <div class="image-container">
-        <img src="${imgSrc}"/>
+        <img src="${imgSrc}" alt="Annotatable image"/>
       </div>
-      <button id="annotateButton">Annotate</button>
+      <button id="annotateButton" aria-label="Annotate image">Annotate</button>
     `;
   }
-  
-
 }
 
 customElements.define('neo-anno', AnnoElement);
