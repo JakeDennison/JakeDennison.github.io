@@ -2,7 +2,10 @@
   "name": "neo-anno",
   "version": "1.0.0",
   "description": "NAC Image Annotation",
-  "files": ["dist", "index.html"],
+  "files": [
+    "dist",
+    "index.html"
+  ],
   "main": "neo-anno.js",
   "scripts": {
     "build": "webpack && npm run copy-image",
@@ -23,8 +26,8 @@
   },
   "homepage": "https://github.com/JSDenintex/JSDenintex.github.io#readme",
   "dependencies": {
+    "fabric": "^5.3.0",
     "lit": "^2.6.1",
-    "markerjs2": "^2.28.1",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
   },

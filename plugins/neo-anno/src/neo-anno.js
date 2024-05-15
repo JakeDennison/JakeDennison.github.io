@@ -1,5 +1,5 @@
 import { html, LitElement, css } from 'lit';
-import { FrameMarker, MarkerArea } from 'markerjs2';
+import { fabric } from 'fabric';
 
 class AnnoElement extends LitElement {
   static getMetaConfig() {
@@ -43,8 +43,8 @@ class AnnoElement extends LitElement {
         position: relative;
         display: inline-block;
       }
-      img {
-        max-width: 100%;
+      canvas {
+        border: 1px solid black;
       }
     `;
   }
@@ -54,36 +54,38 @@ class AnnoElement extends LitElement {
     this.src = 'https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png';
   }
 
-  createRenderRoot() {
-    return this; // Disable shadow DOM
-  }
-
   firstUpdated() {
-    this.setupMarker();
+    this.setupCanvas();
   }
 
-  setupMarker() {
-    const img = this.querySelector('img');
-    const markerArea = new MarkerArea(img);
+  setupCanvas() {
+    const canvasElement = this.shadowRoot.getElementById('canvas');
+    const canvas = new fabric.Canvas(canvasElement);
 
-    markerArea.addEventListener('render', (dataUrl) => {
-      this.image = dataUrl;
-      this.requestUpdate();
+    fabric.Image.fromURL(this.src, (img) => {
+      canvas.setWidth(img.width);
+      canvas.setHeight(img.height);
+      canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
     });
 
-    // Set display mode to inline
-    markerArea.settings.displayMode = 'inline';
-    markerArea.settings.defaultMarkerTypeName = 'FrameMarker';
+    this.canvas = canvas;
 
-    markerArea.show();
+    // Add simple drawing capabilities
+    canvas.isDrawingMode = true;
+    canvas.freeDrawingBrush.color = "red";
+    canvas.freeDrawingBrush.width = 5;
+
+    // Save canvas state
+    canvas.on('path:created', () => {
+      this.image = canvas.toDataURL();
+      this.requestUpdate();
+    });
   }
 
   render() {
-    const imgSrc = this.image || this.src;
-
     return html`
       <div class="image-container">
-        <img src="${imgSrc}" alt="Annotatable image"/>
+        <canvas id="canvas"></canvas>
       </div>
     `;
   }
