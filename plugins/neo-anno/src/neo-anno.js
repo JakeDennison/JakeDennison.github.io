@@ -46,6 +46,7 @@ class AnnoElement extends LitElement {
         padding: 5px;
         cursor: pointer;
         transition: border-color 0.3s;
+        width: 100%; /* Ensure the container takes up the full width */
       }
       .image-container:hover {
         border-color: #333;
@@ -53,6 +54,10 @@ class AnnoElement extends LitElement {
       img, .placeholder {
         max-width: 100%;
         display: block;
+      }
+      .placeholder {
+        width: 100%; /* Ensure the SVG takes up the full width of the container */
+        height: auto;
       }
       .tooltip {
         text-align: center;
@@ -103,7 +108,7 @@ class AnnoElement extends LitElement {
         ${imgSrc
           ? html`<img src="${imgSrc}" alt="Annotatable image" crossorigin="anonymous" />`
           : html`
-            <svg class="placeholder" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+            <svg class="placeholder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
               <rect width="100%" height="100%" fill="#ccc" />
               <text x="50%" y="50%" text-anchor="middle" fill="#666" font-size="20" font-family="Arial" dy=".3em">No Image</text>
             </svg>
