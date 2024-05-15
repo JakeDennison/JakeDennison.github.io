@@ -7,12 +7,7 @@
       img {
         max-width: 100%;
       }
-      .annotation-canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
-    `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png"}firstUpdated(){this.setupMarker()}setupMarker(){const t=this.shadowRoot.querySelector("img"),e=this.shadowRoot.querySelector(".image-container"),i=new te(t);i.addEventListener("render",(t=>{this.image=t,this.requestUpdate()})),i.settings.displayMode="inline",i.settings.defaultMarkerTypeName="FrameMarker",i.host=e,i.show()}render(){const t=this.image||this.src;return O`
+    `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png"}createRenderRoot(){return this}firstUpdated(){this.setupMarker()}setupMarker(){const t=this.querySelector("img"),e=new te(t);e.addEventListener("render",(t=>{this.image=t,this.requestUpdate()})),e.settings.displayMode="inline",e.settings.defaultMarkerTypeName="FrameMarker",e.show()}render(){const t=this.image||this.src;return O`
       <div class="image-container">
         <img src="${t}" alt="Annotatable image"/>
       </div>

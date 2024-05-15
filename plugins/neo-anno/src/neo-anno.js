@@ -46,11 +46,6 @@ class AnnoElement extends LitElement {
       img {
         max-width: 100%;
       }
-      .annotation-canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
     `;
   }
 
@@ -59,13 +54,16 @@ class AnnoElement extends LitElement {
     this.src = 'https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png';
   }
 
+  createRenderRoot() {
+    return this; // Disable shadow DOM
+  }
+
   firstUpdated() {
     this.setupMarker();
   }
 
   setupMarker() {
-    const img = this.shadowRoot.querySelector('img');
-    const container = this.shadowRoot.querySelector('.image-container');
+    const img = this.querySelector('img');
     const markerArea = new MarkerArea(img);
 
     markerArea.addEventListener('render', (dataUrl) => {
@@ -73,10 +71,9 @@ class AnnoElement extends LitElement {
       this.requestUpdate();
     });
 
-    // Set display mode to inline and host to container
+    // Set display mode to inline
     markerArea.settings.displayMode = 'inline';
     markerArea.settings.defaultMarkerTypeName = 'FrameMarker';
-    markerArea.host = container; // Ensure the marker area is rendered inside the container
 
     markerArea.show();
   }
