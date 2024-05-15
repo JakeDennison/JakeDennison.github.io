@@ -98,7 +98,7 @@ class AnnoElement extends LitElement {
 
     return html`
       <div class="image-container">
-        <img src="${imgSrc}" width="100%" alt="Annotatable image" />
+        <img src="${imgSrc}" alt="Annotatable image" crossorigin="anonymous" />
       </div>
       <div class="tooltip">Click the image to start annotation</div>
     `;
