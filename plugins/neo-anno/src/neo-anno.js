@@ -46,7 +46,7 @@ class AnnoElement extends LitElement {
         padding: 5px;
         cursor: pointer;
         transition: border-color 0.3s;
-        width: 100%; /* Ensure the container takes up the full width */
+        width: calc(100% - 15px); /* Subtract 30px from the full width */
       }
       .image-container:hover {
         border-color: #333;
