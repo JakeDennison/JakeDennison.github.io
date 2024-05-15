@@ -46,9 +46,6 @@ class AnnoElement extends LitElement {
       img {
         max-width: 100%;
       }
-      button {
-        margin-top: 10px;
-      }
     `;
   }
 
@@ -58,15 +55,7 @@ class AnnoElement extends LitElement {
   }
 
   firstUpdated() {
-    this._annotateButton = this.shadowRoot.getElementById('annotateButton');
-    this._annotateButton.addEventListener('click', this.setupMarker.bind(this));
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    if (this._annotateButton) {
-      this._annotateButton.removeEventListener('click', this.setupMarker.bind(this));
-    }
+    this.setupMarker();
   }
 
   setupMarker() {
@@ -91,7 +80,6 @@ class AnnoElement extends LitElement {
       <div class="image-container">
         <img src="${imgSrc}" alt="Annotatable image"/>
       </div>
-      <button id="annotateButton" aria-label="Annotate image">Annotate</button>
     `;
   }
 }

@@ -7,12 +7,8 @@
       img {
         max-width: 100%;
       }
-      button {
-        margin-top: 10px;
-      }
-    `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png"}firstUpdated(){this._annotateButton=this.shadowRoot.getElementById("annotateButton"),this._annotateButton.addEventListener("click",this.setupMarker.bind(this))}disconnectedCallback(){super.disconnectedCallback(),this._annotateButton&&this._annotateButton.removeEventListener("click",this.setupMarker.bind(this))}setupMarker(){const t=this.shadowRoot.querySelector("img"),e=new te(t);e.addEventListener("render",(t=>{this.image=t,this.requestUpdate()})),e.settings.displayMode="inline",e.settings.defaultMarkerTypeName="FrameMarker",e.show()}render(){const t=this.image||this.src;return O`
+    `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png"}firstUpdated(){this.setupMarker()}setupMarker(){const t=this.shadowRoot.querySelector("img"),e=new te(t);e.addEventListener("render",(t=>{this.image=t,this.requestUpdate()})),e.settings.displayMode="inline",e.settings.defaultMarkerTypeName="FrameMarker",e.show()}render(){const t=this.image||this.src;return O`
       <div class="image-container">
         <img src="${t}" alt="Annotatable image"/>
       </div>
-      <button id="annotateButton" aria-label="Annotate image">Annotate</button>
     `}})})();
