@@ -46,6 +46,11 @@ class AnnoElement extends LitElement {
       img {
         max-width: 100%;
       }
+      .annotation-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
     `;
   }
 
@@ -61,21 +66,28 @@ class AnnoElement extends LitElement {
   setupMarker() {
     const img = this.shadowRoot.querySelector('img');
     const markerArea = new MarkerArea(img);
-    
+
     markerArea.addEventListener('render', (dataUrl) => {
       this.image = dataUrl;
       this.requestUpdate();
     });
 
-    // Set display mode to inline
+    // Ensure the marker area uses inline display mode
     markerArea.settings.displayMode = 'inline';
     markerArea.settings.defaultMarkerTypeName = 'FrameMarker';
+
+    // Append the marker area to the shadow root
+    markerArea.addRenderEventListener(() => {
+      this.shadowRoot.appendChild(markerArea.renderElement);
+      markerArea.renderElement.classList.add('annotation-canvas');
+    });
+
     markerArea.show();
   }
-  
+
   render() {
     const imgSrc = this.image || this.src;
-    
+
     return html`
       <div class="image-container">
         <img src="${imgSrc}" alt="Annotatable image"/>
