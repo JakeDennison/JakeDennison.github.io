@@ -21,7 +21,7 @@
         font-size: 14px;
         margin-top: 5px;
       }
-    `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png"}firstUpdated(){this.shadowRoot.querySelector(".image-container").addEventListener("click",(()=>this.setupMarker()))}setupMarker(){const t=this.shadowRoot.querySelector("img"),e=new ee(t);e.addEventListener("render",(t=>{this.image=t,this.requestUpdate(),this.dispatchEvent(new CustomEvent("ntx-value-change",{detail:t,bubbles:!0,cancelable:!1,composed:!0}))})),e.settings.displayMode="popup",e.settings.defaultMarkerTypeName="FrameMarker",e.show()}render(){const t=this.image||this.src;return O`
+    `}constructor(){super(),this.src="https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png"}firstUpdated(){this.shadowRoot.querySelector(".image-container").addEventListener("click",(()=>this.setupMarker()))}setupMarker(){const t=this.shadowRoot.querySelector("img"),e=new ee(t);e.addEventListener("render",(t=>{const e=t.dataUrl;this.image=e,this.requestUpdate(),this.dispatchEvent(new CustomEvent("ntx-value-change",{detail:e,bubbles:!0,cancelable:!1,composed:!0}))})),e.settings.displayMode="popup",e.settings.defaultMarkerTypeName="FrameMarker",e.show()}render(){const t=this.image||this.src;return O`
       <div class="image-container">
         <img src="${t}" alt="Annotatable image" crossorigin="anonymous" />
       </div>

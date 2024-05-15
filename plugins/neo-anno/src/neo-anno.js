@@ -77,7 +77,8 @@ class AnnoElement extends LitElement {
     const img = this.shadowRoot.querySelector('img');
     const markerArea = new MarkerArea(img);
 
-    markerArea.addEventListener('render', (dataUrl) => {
+    markerArea.addEventListener('render', (event) => {
+      const dataUrl = event.dataUrl;
       this.image = dataUrl;
       this.requestUpdate();
       this.dispatchEvent(new CustomEvent('ntx-value-change', {
