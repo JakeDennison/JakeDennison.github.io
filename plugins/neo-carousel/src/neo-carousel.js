@@ -1,4 +1,4 @@
-import { html, css, LitElement } from 'lit';
+import { html, LitElement, css } from 'lit';
 
 class CarouselElement extends LitElement {
   static getMetaConfig() {
@@ -47,19 +47,6 @@ class CarouselElement extends LitElement {
     };
   }
 
-  static get styles() {
-    return css`
-      .carousel-inner {
-        height: var(--carousel-height, 500px);
-        background-color: var(--carousel-bg-color, #808080);
-      }
-      .carousel-item img {
-        height: 100%;
-        object-fit: contain; /* Ensure image fits without distorting aspect ratio */
-      }
-    `;
-  }
-
   constructor() {
     super();
     this.images = '';
@@ -84,10 +71,6 @@ class CarouselElement extends LitElement {
     script.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js';
     document.head.appendChild(script);
 
-    // Set custom properties for height and background color
-    this.style.setProperty('height', `${this.height}px`);
-    this.style.setProperty('backgroundcolor', this.backgroundColor);
-
     // Set the transition interval
     const carouselElement = this.querySelector('#carouselExampleIndicators');
     if (carouselElement) {
@@ -103,6 +86,24 @@ class CarouselElement extends LitElement {
     this.imageList = this.images.split(';').filter(image => image.trim() !== '');
 
     return html`
+      <style>
+        .carousel-inner {
+          height: ${this.height}px;
+          background-color: ${this.backgroundColor};
+          display: flex;
+          align-items: center;
+        }
+        .carousel-item {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+        }
+        .carousel-item img {
+          max-height: 100%;
+          object-fit: contain;
+        }
+      </style>
       <div id="carouselExampleIndicators" class="carousel slide" data-bs-theme="dark" data-bs-ride="carousel">
         <div class="carousel-indicators">
           ${this.imageList.map((_, index) => html`
@@ -112,7 +113,7 @@ class CarouselElement extends LitElement {
         <div class="carousel-inner">
           ${this.imageList.map((image, index) => html`
             <div class="carousel-item ${index === 0 ? 'active' : ''}">
-              <img src="${image}" class="d-block w-100" alt="Image ${index + 1}">
+              <img src="${image}" class="d-block" alt="Image ${index + 1}">
             </div>
           `)}
         </div>
