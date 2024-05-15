@@ -43,6 +43,12 @@ class AnnoElement extends LitElement {
         position: relative;
         display: inline-block;
       }
+      .toolbar {
+        margin-bottom: 10px;
+      }
+      .toolbar button {
+        margin-right: 5px;
+      }
       canvas {
         border: 1px solid black;
       }
@@ -54,6 +60,7 @@ class AnnoElement extends LitElement {
     this.src = 'https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png';
     this.stage = null;
     this.layer = null;
+    this.currentTool = 'draw'; // Default tool
   }
 
   firstUpdated() {
@@ -102,15 +109,17 @@ class AnnoElement extends LitElement {
     let lastLine;
 
     this.stage.on('mousedown touchstart', () => {
-      isDrawing = true;
-      const pos = this.stage.getPointerPosition();
-      lastLine = new Konva.Line({
-        stroke: 'red',
-        strokeWidth: 5,
-        globalCompositeOperation: 'source-over',
-        points: [pos.x, pos.y],
-      });
-      this.layer.add(lastLine);
+      if (this.currentTool === 'draw') {
+        isDrawing = true;
+        const pos = this.stage.getPointerPosition();
+        lastLine = new Konva.Line({
+          stroke: 'red',
+          strokeWidth: 5,
+          globalCompositeOperation: 'source-over',
+          points: [pos.x, pos.y],
+        });
+        this.layer.add(lastLine);
+      }
     });
 
     this.stage.on('mousemove touchmove', () => {
@@ -130,8 +139,43 @@ class AnnoElement extends LitElement {
     });
   }
 
+  addShape() {
+    const rect = new Konva.Rect({
+      x: 50,
+      y: 50,
+      width: 100,
+      height: 100,
+      fill: 'green',
+      draggable: true,
+    });
+    this.layer.add(rect);
+    this.layer.draw();
+  }
+
+  addText() {
+    const textNode = new Konva.Text({
+      text: 'Some text here',
+      x: 50,
+      y: 50,
+      fontSize: 20,
+      draggable: true,
+    });
+
+    this.layer.add(textNode);
+    this.layer.draw();
+  }
+
+  setTool(tool) {
+    this.currentTool = tool;
+  }
+
   render() {
     return html`
+      <div class="toolbar">
+        <button @click="${() => this.setTool('draw')}">Draw</button>
+        <button @click="${() => this.addShape()}">Add Rectangle</button>
+        <button @click="${() => this.addText()}">Add Text</button>
+      </div>
       <div id="container" class="image-container"></div>
     `;
   }
