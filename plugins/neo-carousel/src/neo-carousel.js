@@ -85,8 +85,8 @@ class CarouselElement extends LitElement {
     document.head.appendChild(script);
 
     // Set custom properties for height and background color
-    this.style.setProperty('--carousel-height', `${this.height}px`);
-    this.style.setProperty('--carousel-bg-color', this.backgroundColor);
+    this.style.setProperty('height', `${this.height}px`);
+    this.style.setProperty('backgroundcolor', this.backgroundColor);
 
     // Set the transition interval
     const carouselElement = this.querySelector('#carouselExampleIndicators');
