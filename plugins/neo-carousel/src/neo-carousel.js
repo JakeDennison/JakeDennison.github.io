@@ -1,4 +1,4 @@
-import { html, LitElement, css } from 'lit';
+import { html, LitElement } from 'lit';
 
 class CarouselElement extends LitElement {
   static getMetaConfig() {
@@ -23,12 +23,6 @@ class CarouselElement extends LitElement {
           maximum: 300,
           defaultValue: 5,
         },
-        backgroundColor: {
-          title: 'Background color',
-          description: 'Hex color code for the background',
-          type: 'string',
-          defaultValue: '#808080', // Defaulting to gray
-        }
       },
       standardProperties: {
         fieldLabel: true,
@@ -43,7 +37,6 @@ class CarouselElement extends LitElement {
     super();
     this.images = '';
     this.transition = 5;
-    this.backgroundColor = '#808080';
   }
 
   createRenderRoot() {
@@ -77,20 +70,6 @@ class CarouselElement extends LitElement {
     this.imageList = this.images.split(';').filter(image => image.trim() !== '');
 
     return html`
-      <style>
-        .carousel-inner {
-          background-color: ${this.backgroundColor};
-        }
-        .carousel-item {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        .carousel-item img {
-          object-fit: contain;
-          max-height: 100%;
-        }
-      </style>
       <div id="carouselExampleIndicators" class="carousel slide" data-bs-theme="dark" data-bs-ride="carousel">
         <div class="carousel-indicators">
           ${this.imageList.map((_, index) => html`
