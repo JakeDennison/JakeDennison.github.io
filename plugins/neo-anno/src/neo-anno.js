@@ -97,16 +97,17 @@ class AnnoElement extends LitElement {
 
   render() {
     const imgSrc = this.image ? `data:image/png;base64,${this.image}` : this.src;
-    const placeholderSvg = `
-      <svg class="placeholder" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-        <rect width="100%" height="100%" fill="#ccc" />
-        <text x="50%" y="50%" text-anchor="middle" fill="#666" font-size="20" font-family="Arial" dy=".3em">No Image</text>
-      </svg>
-    `;
 
     return html`
       <div class="image-container">
-        ${imgSrc ? html`<img src="${imgSrc}" alt="Annotatable image" crossorigin="anonymous" />` : html([placeholderSvg])}
+        ${imgSrc
+          ? html`<img src="${imgSrc}" alt="Annotatable image" crossorigin="anonymous" />`
+          : html`
+            <svg class="placeholder" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+              <rect width="100%" height="100%" fill="#ccc" />
+              <text x="50%" y="50%" text-anchor="middle" fill="#666" font-size="20" font-family="Arial" dy=".3em">No Image</text>
+            </svg>
+          `}
       </div>
       <div class="tooltip">Click the image to start annotation</div>
     `;

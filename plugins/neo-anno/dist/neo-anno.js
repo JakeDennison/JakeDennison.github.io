@@ -23,7 +23,12 @@
       }
     `}constructor(){super(),this.src=""}firstUpdated(){this.shadowRoot.querySelector(".image-container").addEventListener("click",(()=>this.setupMarker()))}setupMarker(){const t=this.shadowRoot.querySelector("img")||this.shadowRoot.querySelector(".placeholder"),e=new ee(t);e.addEventListener("render",(t=>{const e=t.dataUrl.replace(/^data:image\/png;base64,/,"");this.image=e,this.requestUpdate(),this.dispatchEvent(new CustomEvent("ntx-value-change",{detail:e,bubbles:!0,cancelable:!1,composed:!0}))})),e.settings.displayMode="popup",e.settings.defaultMarkerTypeName="FrameMarker",e.show()}render(){const t=this.image?`data:image/png;base64,${this.image}`:this.src;return O`
       <div class="image-container">
-        ${t?O`<img src="${t}" alt="Annotatable image" crossorigin="anonymous" />`:O(['\n      <svg class="placeholder" width="200" height="200" xmlns="http://www.w3.org/2000/svg">\n        <rect width="100%" height="100%" fill="#ccc" />\n        <text x="50%" y="50%" text-anchor="middle" fill="#666" font-size="20" font-family="Arial" dy=".3em">No Image</text>\n      </svg>\n    '])}
+        ${t?O`<img src="${t}" alt="Annotatable image" crossorigin="anonymous" />`:O`
+            <svg class="placeholder" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+              <rect width="100%" height="100%" fill="#ccc" />
+              <text x="50%" y="50%" text-anchor="middle" fill="#666" font-size="20" font-family="Arial" dy=".3em">No Image</text>
+            </svg>
+          `}
       </div>
       <div class="tooltip">Click the image to start annotation</div>
     `}})})();
