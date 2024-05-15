@@ -1,5 +1,3 @@
-/*! Fabric.js Copyright 2008-2015, Printio (Juriy Zaytsev, Maxim Chernyak) */
-
 /**
  * @license
  * Copyright 2017 Google LLC
