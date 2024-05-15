@@ -80,6 +80,12 @@ class AnnoElement extends LitElement {
     markerArea.addEventListener('render', (dataUrl) => {
       this.image = dataUrl;
       this.requestUpdate();
+      this.dispatchEvent(new CustomEvent('ntx-value-change', {
+        detail: dataUrl,
+        bubbles: true,
+        cancelable: false,
+        composed: true,
+      }));
     });
 
     markerArea.settings.displayMode = 'popup';
@@ -92,7 +98,7 @@ class AnnoElement extends LitElement {
 
     return html`
       <div class="image-container">
-        <img src="${imgSrc}" alt="Annotatable image" />
+        <img src="${imgSrc}" width="100%" alt="Annotatable image" />
       </div>
       <div class="tooltip">Click the image to start annotation</div>
     `;
