@@ -40,11 +40,11 @@ class CarouselElement extends LitElement {
     // Load Bootstrap CSS and JS
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css';
+    link.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css';
     document.head.appendChild(link);
 
     const script = document.createElement('script');
-    script.src = 'https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js';
+    script.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js';
     document.head.appendChild(script);
   }
 
