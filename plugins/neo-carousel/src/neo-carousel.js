@@ -2,7 +2,6 @@ import { html, LitElement } from 'lit';
 
 class CarouselElement extends LitElement {
   static getMetaConfig() {
-    // plugin contract information
     return {
       controlName: 'neo-carousel',
       fallbackDisableSubmit: false,
@@ -32,12 +31,12 @@ class CarouselElement extends LitElement {
   }
 
   createRenderRoot() {
-    // Render without shadow DOM
+    // Render without shadow DOM to apply Bootstrap styles
     return this;
   }
 
   firstUpdated() {
-    // Load Bootstrap CSS and JS
+    // Load Bootstrap CSS and JS dynamically
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css';
@@ -56,7 +55,7 @@ class CarouselElement extends LitElement {
     this.imageList = this.images.split(';').filter(image => image.trim() !== '');
 
     return html`
-      <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+      <div id="carouselExampleIndicators" class="carousel slide" data-bs-theme="dark" data-bs-ride="carousel">
         <div class="carousel-indicators">
           ${this.imageList.map((_, index) => html`
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${index}" class="${index === 0 ? 'active' : ''}" aria-current="${index === 0 ? 'true' : 'false'}" aria-label="Slide ${index + 1}"></button>
