@@ -50,7 +50,7 @@ class AnnoElement extends LitElement {
       .image-container:hover {
         border-color: #333;
       }
-      img {
+      img, .placeholder {
         max-width: 100%;
         display: block;
       }
@@ -65,7 +65,7 @@ class AnnoElement extends LitElement {
 
   constructor() {
     super();
-    this.src = 'https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png';
+    this.src = '';
   }
 
   firstUpdated() {
@@ -74,15 +74,16 @@ class AnnoElement extends LitElement {
   }
 
   setupMarker() {
-    const img = this.shadowRoot.querySelector('img');
+    const img = this.shadowRoot.querySelector('img') || this.shadowRoot.querySelector('.placeholder');
     const markerArea = new MarkerArea(img);
 
     markerArea.addEventListener('render', (event) => {
       const dataUrl = event.dataUrl;
-      this.image = dataUrl;
+      const base64Data = dataUrl.replace(/^data:image\/png;base64,/, ''); // Remove the prefix
+      this.image = base64Data;
       this.requestUpdate();
       this.dispatchEvent(new CustomEvent('ntx-value-change', {
-        detail: dataUrl,
+        detail: base64Data,
         bubbles: true,
         cancelable: false,
         composed: true,
@@ -95,11 +96,17 @@ class AnnoElement extends LitElement {
   }
 
   render() {
-    const imgSrc = this.image || this.src;
+    const imgSrc = this.image ? `data:image/png;base64,${this.image}` : this.src;
+    const placeholderSvg = `
+      <svg class="placeholder" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="#ccc" />
+        <text x="50%" y="50%" text-anchor="middle" fill="#666" font-size="20" font-family="Arial" dy=".3em">No Image</text>
+      </svg>
+    `;
 
     return html`
-      <div style="width:100%" class="image-container">
-        <img width="100%" src="${imgSrc}" alt="Annotatable image" crossorigin="anonymous" />
+      <div class="image-container">
+        ${imgSrc ? html`<img src="${imgSrc}" alt="Annotatable image" crossorigin="anonymous" />` : html([placeholderSvg])}
       </div>
       <div class="tooltip">Click the image to start annotation</div>
     `;
