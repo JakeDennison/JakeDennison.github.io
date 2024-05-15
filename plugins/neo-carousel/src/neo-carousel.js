@@ -1,4 +1,4 @@
-import { html, LitElement } from 'lit';
+import { html, css, LitElement } from 'lit';
 
 class CarouselElement extends LitElement {
   static getMetaConfig() {
@@ -15,6 +15,28 @@ class CarouselElement extends LitElement {
           title: 'Images',
           description: 'Please list image URLs semi-colon (;) separated'
         },
+        height: {
+          title: 'Height in pixels',
+          description: 'From 50 to 1000',
+          type: 'number',
+          minimum: 50,
+          maximum: 1000,
+          defaultValue: 500,
+        },
+        transition: {
+          title: 'Transition interval in seconds',
+          description: 'From 0 to 300',
+          type: 'number',
+          minimum: 0,
+          maximum: 300,
+          defaultValue: 5,
+        },
+        backgroundColor: {
+          title: 'Background color',
+          description: 'Hex color code for the background',
+          type: 'string',
+          defaultValue: '#808080', // Defaulting to gray
+        }
       },
       standardProperties: {
         fieldLabel: true,
@@ -25,9 +47,25 @@ class CarouselElement extends LitElement {
     };
   }
 
+  static get styles() {
+    return css`
+      .carousel-inner {
+        height: var(--carousel-height, 500px);
+        background-color: var(--carousel-bg-color, #808080);
+      }
+      .carousel-item img {
+        height: 100%;
+        object-fit: contain; /* Ensure image fits without distorting aspect ratio */
+      }
+    `;
+  }
+
   constructor() {
     super();
     this.images = '';
+    this.height = 500;
+    this.transition = 5;
+    this.backgroundColor = '#808080';
   }
 
   createRenderRoot() {
@@ -45,6 +83,16 @@ class CarouselElement extends LitElement {
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js';
     document.head.appendChild(script);
+
+    // Set custom properties for height and background color
+    this.style.setProperty('--carousel-height', `${this.height}px`);
+    this.style.setProperty('--carousel-bg-color', this.backgroundColor);
+
+    // Set the transition interval
+    const carouselElement = this.querySelector('#carouselExampleIndicators');
+    if (carouselElement) {
+      carouselElement.setAttribute('data-bs-interval', this.transition * 1000);
+    }
   }
 
   render() {
