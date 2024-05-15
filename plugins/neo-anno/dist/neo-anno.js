@@ -13,12 +13,9 @@
         border-color: #333;
       }
       img, .placeholder {
-        max-width: 100%;
-        display: block;
-      }
-      .placeholder {
-        width: 100%; /* Ensure the SVG takes up the full width of the container */
+        width: 100%; /* Ensure the image and SVG take up the full width of the container */
         height: auto;
+        display: block;
       }
       .tooltip {
         text-align: center;
