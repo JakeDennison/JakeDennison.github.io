@@ -15,14 +15,6 @@ class CarouselElement extends LitElement {
           title: 'Images',
           description: 'Please list image URLs semi-colon (;) separated'
         },
-        height: {
-          title: 'Height in pixels',
-          description: 'From 50 to 1000',
-          type: 'number',
-          minimum: 50,
-          maximum: 1000,
-          defaultValue: 500,
-        },
         transition: {
           title: 'Transition interval in seconds',
           description: 'From 0 to 300',
@@ -50,7 +42,6 @@ class CarouselElement extends LitElement {
   constructor() {
     super();
     this.images = '';
-    this.height = 500;
     this.transition = 5;
     this.backgroundColor = '#808080';
   }
@@ -88,20 +79,16 @@ class CarouselElement extends LitElement {
     return html`
       <style>
         .carousel-inner {
-          height: ${this.height}px;
           background-color: ${this.backgroundColor};
-          display: flex;
-          align-items: center;
         }
         .carousel-item {
           display: flex;
           justify-content: center;
           align-items: center;
-          height: 100%;
         }
         .carousel-item img {
-          max-height: 100%;
           object-fit: contain;
+          max-height: 100%;
         }
       </style>
       <div id="carouselExampleIndicators" class="carousel slide" data-bs-theme="dark" data-bs-ride="carousel">
@@ -113,7 +100,7 @@ class CarouselElement extends LitElement {
         <div class="carousel-inner">
           ${this.imageList.map((image, index) => html`
             <div class="carousel-item ${index === 0 ? 'active' : ''}">
-              <img src="${image}" class="d-block" alt="Image ${index + 1}">
+              <img src="${image}" class="d-block w-100" alt="Image ${index + 1}">
             </div>
           `)}
         </div>
