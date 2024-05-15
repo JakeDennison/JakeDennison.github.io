@@ -65,6 +65,7 @@ class AnnoElement extends LitElement {
 
   setupMarker() {
     const img = this.shadowRoot.querySelector('img');
+    const container = this.shadowRoot.querySelector('.image-container');
     const markerArea = new MarkerArea(img);
 
     markerArea.addEventListener('render', (dataUrl) => {
@@ -72,15 +73,10 @@ class AnnoElement extends LitElement {
       this.requestUpdate();
     });
 
-    // Ensure the marker area uses inline display mode
+    // Set display mode to inline and host to container
     markerArea.settings.displayMode = 'inline';
     markerArea.settings.defaultMarkerTypeName = 'FrameMarker';
-
-    // Append the marker area to the shadow root
-    markerArea.addRenderEventListener(() => {
-      this.shadowRoot.appendChild(markerArea.renderElement);
-      markerArea.renderElement.classList.add('annotation-canvas');
-    });
+    markerArea.host = container; // Ensure the marker area is rendered inside the container
 
     markerArea.show();
   }
