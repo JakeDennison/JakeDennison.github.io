@@ -1,5 +1,5 @@
 import { html, LitElement, css } from 'lit';
-import Konva from 'konva';
+import { FrameMarker, MarkerArea } from 'markerjs2';
 
 class AnnoElement extends LitElement {
   static getMetaConfig() {
@@ -42,15 +42,23 @@ class AnnoElement extends LitElement {
       .image-container {
         position: relative;
         display: inline-block;
+        border: 2px dashed #888;
+        padding: 5px;
+        cursor: pointer;
+        transition: border-color 0.3s;
       }
-      .toolbar {
-        margin-bottom: 10px;
+      .image-container:hover {
+        border-color: #333;
       }
-      .toolbar button {
-        margin-right: 5px;
+      img {
+        max-width: 100%;
+        display: block;
       }
-      canvas {
-        border: 1px solid black;
+      .tooltip {
+        text-align: center;
+        color: #888;
+        font-size: 14px;
+        margin-top: 5px;
       }
     `;
   }
@@ -58,125 +66,35 @@ class AnnoElement extends LitElement {
   constructor() {
     super();
     this.src = 'https://jsdenintex.github.io/plugins/neo-anno/dist/img/person.png';
-    this.stage = null;
-    this.layer = null;
-    this.currentTool = 'draw'; // Default tool
   }
 
   firstUpdated() {
-    this.setupKonva();
+    const imageContainer = this.shadowRoot.querySelector('.image-container');
+    imageContainer.addEventListener('click', () => this.setupMarker());
   }
 
-  setupKonva() {
-    const container = this.shadowRoot.getElementById('container');
-    
-    // Initialize Konva stage and layer
-    this.stage = new Konva.Stage({
-      container: container,
-      width: container.clientWidth,
-      height: container.clientHeight,
-    });
+  setupMarker() {
+    const img = this.shadowRoot.querySelector('img');
+    const markerArea = new MarkerArea(img);
 
-    this.layer = new Konva.Layer();
-    this.stage.add(this.layer);
-
-    // Load the image
-    const img = new Image();
-    img.src = this.src;
-    img.onload = () => {
-      const konvaImage = new Konva.Image({
-        x: 0,
-        y: 0,
-        image: img,
-        width: img.width,
-        height: img.height,
-      });
-
-      // Adjust stage size to image size
-      this.stage.width(img.width);
-      this.stage.height(img.height);
-
-      this.layer.add(konvaImage);
-      this.layer.draw();
-      
-      // Add drawing functionality
-      this.addDrawingFunctionality();
-    };
-  }
-
-  addDrawingFunctionality() {
-    let isDrawing = false;
-    let lastLine;
-
-    this.stage.on('mousedown touchstart', () => {
-      if (this.currentTool === 'draw') {
-        isDrawing = true;
-        const pos = this.stage.getPointerPosition();
-        lastLine = new Konva.Line({
-          stroke: 'red',
-          strokeWidth: 5,
-          globalCompositeOperation: 'source-over',
-          points: [pos.x, pos.y],
-        });
-        this.layer.add(lastLine);
-      }
-    });
-
-    this.stage.on('mousemove touchmove', () => {
-      if (!isDrawing) {
-        return;
-      }
-      const pos = this.stage.getPointerPosition();
-      const newPoints = lastLine.points().concat([pos.x, pos.y]);
-      lastLine.points(newPoints);
-      this.layer.batchDraw();
-    });
-
-    this.stage.on('mouseup touchend', () => {
-      isDrawing = false;
-      this.image = this.stage.toDataURL();
+    markerArea.addEventListener('render', (dataUrl) => {
+      this.image = dataUrl;
       this.requestUpdate();
     });
-  }
 
-  addShape() {
-    const rect = new Konva.Rect({
-      x: 50,
-      y: 50,
-      width: 100,
-      height: 100,
-      fill: 'green',
-      draggable: true,
-    });
-    this.layer.add(rect);
-    this.layer.draw();
-  }
-
-  addText() {
-    const textNode = new Konva.Text({
-      text: 'Some text here',
-      x: 50,
-      y: 50,
-      fontSize: 20,
-      draggable: true,
-    });
-
-    this.layer.add(textNode);
-    this.layer.draw();
-  }
-
-  setTool(tool) {
-    this.currentTool = tool;
+    markerArea.settings.displayMode = 'popup';
+    markerArea.settings.defaultMarkerTypeName = 'FrameMarker';
+    markerArea.show();
   }
 
   render() {
+    const imgSrc = this.image || this.src;
+
     return html`
-      <div class="toolbar">
-        <button @click="${() => this.setTool('draw')}">Draw</button>
-        <button @click="${() => this.addShape()}">Add Rectangle</button>
-        <button @click="${() => this.addText()}">Add Text</button>
+      <div class="image-container">
+        <img src="${imgSrc}" alt="Annotatable image" />
       </div>
-      <div id="container" class="image-container"></div>
+      <div class="tooltip">Click the image to start annotation</div>
     `;
   }
 }
