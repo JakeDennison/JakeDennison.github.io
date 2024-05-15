@@ -41,6 +41,7 @@ class AnnoElement extends LitElement {
     return css`
       .image-container {
         position: relative;
+        display: inline-block;
       }
       img {
         max-width: 100%;
@@ -76,8 +77,9 @@ class AnnoElement extends LitElement {
       this.image = dataUrl;
       this.requestUpdate();
     });
-    
-    markerArea.settings.displayMode = 'popup';
+
+    // Set display mode to inline
+    markerArea.settings.displayMode = 'inline';
     markerArea.settings.defaultMarkerTypeName = 'FrameMarker';
     markerArea.show();
   }
