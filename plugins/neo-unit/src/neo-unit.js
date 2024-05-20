@@ -310,26 +310,23 @@ class unitElement extends LitElement {
     }
   
     return html`
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="neo-unit-control">
-          <div class="input-unit-group-append">
-            <button type="button" class="neo-btn-input-icon neo-unit-btn">
-              <span>${unitsOfMeasurement[this.unittype].symbol}</span>
-            </button>
-          </div>
-          <div class="nx-zinc-control-input input-group">
-            <input type="text"
+        <div class="input-group">
+            <span class="input-group-text">${unitsOfMeasurement[this.unittype].symbol}</span>
+            <input type="text" class="form-control"
               data-simple-control="true"
               ntxmaskablenumberinputvalueaccessor=""
-              class="form-control nx-theme-input-1 ng-untouched ng-pristine ng-valid"
               inputmode="decimal"
               decimalplaces=${this.decimalplaces}
               placeholder=${placeholder}
               value=${displayedValue}
               @blur=${this.onChange}
               ?disabled="${this.readOnly}"
-            >
+              >
           </div>
       </div>
+
     `;
   }
 }
