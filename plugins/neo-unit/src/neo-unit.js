@@ -114,6 +114,10 @@ class unitElement extends LitElement {
     }
   }
 
+  onInput(e) {
+    this.unitvalue = e.target.value;
+  }
+
   onChange() {
     // Create the output object
     const outputObject = {
@@ -143,6 +147,7 @@ class unitElement extends LitElement {
             <span class="input-group-text">${unitsOfMeasurement[this.unittype].symbol}</span>
             <input type="text" class="form-control text-end"
               .value=${this.unitvalue}
+              @input=${this.onInput}
               @blur=${this.onChange}
               ?disabled="${this.readOnly}"
               >
