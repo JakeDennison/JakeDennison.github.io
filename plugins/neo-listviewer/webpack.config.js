@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/neo-listviewer.ts',  // Change this to .ts
+  entry: './src/neo-listviewer.js',  // Change this to .ts
   mode: 'production',
   output: {
     filename: 'neo-listviewer.js',
@@ -26,6 +26,6 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.ts', '.js'],  // Recognize .ts files
+    extensions: ['.js'],  // Recognize .ts files
   },
 };
