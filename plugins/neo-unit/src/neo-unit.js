@@ -83,6 +83,7 @@ class unitElement extends LitElement {
       standardProperties: {
         fieldLabel: true,
         description: true,
+        readOnly: true,
       },
       events: ["ntx-value-change"],
     };
