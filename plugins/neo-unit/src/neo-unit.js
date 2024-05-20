@@ -121,13 +121,16 @@ class unitElement extends LitElement {
   
     if (!isNaN(value)) {
       const formattedValue = value.toFixed(this.decimalplaces);
-      this.unitvalue = parseFloat(formattedValue);
       inputElement.value = formattedValue;
+      this.unitvalue = parseFloat(formattedValue);
+    } else {
+      this.unitvalue = '';
     }
   
     // Call onChange to return the value
     this.onChange();
   }
+  
   
   onChange() {
     // Create the output object
@@ -154,7 +157,7 @@ class unitElement extends LitElement {
   render() {
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
     const placeholder = (0).toFixed(decimalPlaces);
-    const valueToShow = this.unitvalue;
+    const valueToShow = this.unitvalue ? this.unitvalue.toFixed(decimalPlaces) : '';
   
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -171,6 +174,7 @@ class unitElement extends LitElement {
       </div>
     `;
   }
+  
     
 }
 
