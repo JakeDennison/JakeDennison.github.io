@@ -54,7 +54,7 @@ class unitElement extends LitElement {
           isValueField: true,
           properties: {
             unittype: {
-              title: 'Select unit of measurement',
+              title: 'Unit of measurement',
               type: 'string',
             },
             unitvalue: {
