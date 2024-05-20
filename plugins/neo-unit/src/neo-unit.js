@@ -114,120 +114,6 @@ class unitElement extends LitElement {
     }
   }
 
-  static get styles() {
-    const { cssRules } = document.styleSheets[0];
-    const globalStyle = css([Object.values(cssRules).map(rule =>
-      rule.cssText).join('\n')]);
-    return [
-      globalStyle,
-      css`
-        .neo-unit-control {
-          position: relative;
-          display: flex;
-          flex-wrap: wrap;
-          align-items: stretch;
-          width: 100%;
-          box-sizing: border-box;
-        }
-
-        .neo-unit-control .input-unit-group-append {
-          border-bottom-left-radius: 4px;
-          border-top-left-radius: 4px;
-          border-color: #898F94;
-          background: #FFFFFF;
-          font-size: 14px;
-          display: flex;
-        }
-        
-        .neo-unit-control .input-unit-group-append .neo-btn-input-icon:last-child {
-          border-bottom-left-radius: 4px;
-          border-top-left-radius: 4px;
-        }
-        
-        .neo-unit-control .neo-unit-btn-icon {
-          color: #006BD6;
-          font-size: 20px;
-          padding-left: 7px;
-          padding-right: 7px;
-        }
-        
-        .neo-unit-control .input-unit-group-append .neo-unit-btn {
-          border-radius: 4px 0 0 4px;
-          cursor: default;
-          border-left: 1px solid;
-          border-right: none;
-          border-color: inherit;
-          min-width: 36px;
-          color: #006bd6;
-          font-size: 20px;
-          font-style: normal;
-          overflow: hidden;
-          line-height: var(--bs-body-line-height);
-        }     
-        
-        .neo-btn-input-icon {
-          border-left: 1px solid;
-          border-right: 1px solid;
-          border-top: 1px solid;
-          border-bottom: 1px solid;
-          border-color: inherit;
-          margin-left: 0;
-          margin-right: 0;
-          margin-bottom: 0;
-          background-color: transparent;
-          cursor: pointer;
-        }
-        
-      .neo-unit-control .nx-zinc-control-input {
-        display: flex;  
-        flex: 1;
-      }
-
-      .neo-unit-control .nx-zinc-control-input .input-group {
-        align-items: stretch;
-        display: flex;
-        flex-grow: 1;
-        flex-wrap: wrap;
-        position: relative;
-        width: 100%;
-      }
-
-      .neo-unit-control > div.nx-zinc-control-input > input {
-        word-break: break-word;
-        user-select: none;
-        box-sizing: border-box;
-        margin: 0;
-        appearance: none;
-        display: flex;
-        flex-grow: 1;
-        font-weight: 400;
-        line-height: var(--bs-body-line-height);
-        padding: .4375rem .75rem;
-        transition: none;
-        width: 100%;
-        height: auto;
-        border: 1px solid #898F94;
-        text-align: right;
-        caret-color: #161718;
-        color: var(--bs-body-color);
-        border-color: #898F94;
-        font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
-        background: #FFFFFF;
-        font-size: 14px;
-        border-radius: 0 4px 4px 0;
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
-        outline: none;
-        outline-offset: 0;
-      }
-
-      .neo-unit-control > div.nx-zinc-control-input > input::placeholder {
-        color: var(--bs-body-color);
-      }
-      `
-    ];
-  }
-
   onChange(e) {
     const inputValue = e.target.value;
     const trimmedValue = inputValue.trim();
@@ -314,7 +200,7 @@ class unitElement extends LitElement {
       <div class="neo-unit-control">
         <div class="input-group">
             <span class="input-group-text">${unitsOfMeasurement[this.unittype].symbol}</span>
-            <input type="text" class="form-control"
+            <input type="text" class="form-control text-end"
               data-simple-control="true"
               ntxmaskablenumberinputvalueaccessor=""
               inputmode="decimal"
@@ -326,7 +212,6 @@ class unitElement extends LitElement {
               >
           </div>
       </div>
-
     `;
   }
 }
