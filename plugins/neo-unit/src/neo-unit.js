@@ -115,17 +115,17 @@ class unitElement extends LitElement {
   }
 
   onInput(e) {
-    this.unitvalue = parseFloat(e.target.value);
+    this.unitvalue = e.target.value;
   }
 
   onChange() {
-    // Apply decimal places
-    const formattedValue = this.unitvalue ? this.unitvalue.toFixed(this.decimalplaces) : '';
+    // Apply decimal places and formatting
+    const formattedValue = this.unitvalue ? parseFloat(this.unitvalue).toFixed(this.decimalplaces) : '';
 
     // Create the output object
     const outputObject = {
       unittype: this.unittype,
-      unitvalue: this.unitvalue,
+      unitvalue: parseFloat(formattedValue),
       decimalplaces: this.decimalplaces,
       boolRound: this.boolRound,
       boolFixed: this.boolFixed
@@ -148,7 +148,7 @@ class unitElement extends LitElement {
   render() {
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
     const placeholder = (0).toFixed(decimalPlaces);
-    const valueToShow = this.unitvalue ? this.unitvalue.toFixed(decimalPlaces) : '';
+    const valueToShow = this.unitvalue ? parseFloat(this.unitvalue).toLocaleString(undefined, { minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces }) : '';
 
     return html`
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
