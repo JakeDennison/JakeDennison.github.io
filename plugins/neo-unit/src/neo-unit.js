@@ -109,8 +109,8 @@ class unitElement extends LitElement {
   }
 
   updated(changedProperties) {
-    if (changedProperties.has('unittype')) {
-      this.unittype = this.unittype || "unit";
+    if (changedProperties.has('unittype') || changedProperties.has('decimalplaces') || changedProperties.has('boolRound') || changedProperties.has('boolFixed')) {
+      this.onChange({ target: { value: this.unitvalue.toString() } });
     }
   }
 
