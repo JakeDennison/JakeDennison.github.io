@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
 import { unitsOfMeasurement } from './units';
 
 class unitElement extends LitElement {
@@ -110,103 +110,39 @@ class unitElement extends LitElement {
 
   updated(changedProperties) {
     if (changedProperties.has('unittype') || changedProperties.has('decimalplaces') || changedProperties.has('boolRound') || changedProperties.has('boolFixed')) {
-      this.onChange({ target: { value: this.unitvalue.toString() } });
+      this.onChange();
     }
   }
 
-  onChange(e) {
-    const inputValue = e.target.value;
-    const trimmedValue = inputValue.trim();
-    const numericValue = parseFloat(trimmedValue);
-  
-    // Initialize the displayedValue
-    let displayedValue = "";
-  
-    // If the input is not empty
-    if (trimmedValue !== "") {
-      // If the numeric value is not NaN
-      if (!isNaN(numericValue)) {
-        // Apply your formatting logic here...
-        displayedValue = numericValue.toLocaleString(undefined, {
-          minimumFractionDigits: this.decimalplaces,
-          maximumFractionDigits: this.decimalplaces
-        });
-  
-        // Apply fixed value behavior if enabled
-        if (this.boolFixed) {
-          displayedValue = displayedValue.padEnd(displayedValue.indexOf('.') + this.decimalplaces + 1, '0');
-        }
-  
-        // Create the output object
-        const outputObject = {
-          unittype: this.unittype,
-          unitvalue: numericValue,
-          decimalplaces: this.decimalplaces,
-          boolRound: this.boolRound,
-          boolFixed: this.boolFixed
-        };
-  
-        // Dispatch the custom event with the output object
-        const customEvent = new CustomEvent('ntx-value-change', {
-          bubbles: true,
-          cancelable: false,
-          composed: true,
-          detail: outputObject,
-        });
-  
-        this.dispatchEvent(customEvent);
-      }
-    } else {
-      // If the input is empty, dispatch an event with detail as an empty string
-      const customEvent = new CustomEvent('ntx-value-change', {
-        bubbles: true,
-        cancelable: false,
-        composed: true,
-        detail: "",
-      });
-  
-      this.dispatchEvent(customEvent);
-    }
-  
-    // Update the input value directly
-    e.target.value = displayedValue;
+  onChange() {
+    // Create the output object
+    const outputObject = {
+      unittype: this.unittype,
+      unitvalue: this.unitvalue,
+      decimalplaces: this.decimalplaces,
+      boolRound: this.boolRound,
+      boolFixed: this.boolFixed
+    };
+
+    // Dispatch the custom event with the output object
+    const customEvent = new CustomEvent('ntx-value-change', {
+      bubbles: true,
+      cancelable: false,
+      composed: true,
+      detail: outputObject,
+    });
+
+    this.dispatchEvent(customEvent);
   }
-  
+
   render() {
-    // Calculate the placeholder as before
-    const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
-    const placeholder = (0).toLocaleString(undefined, { minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces });
-  
-    // Calculate the displayed value with proper decimal places, rounding, and fixed value behavior
-    let displayedValue = "";
-    if (this.unitvalue !== "") {
-      const numericValue = parseFloat(this.unitvalue);
-      
-      // Apply rounding if enabled
-      if (this.boolRound) {
-        displayedValue = numericValue.toLocaleString(undefined, { minimumFractionDigits: decimalPlaces + 1, maximumFractionDigits: decimalPlaces + 1 });
-      } else {
-        displayedValue = numericValue.toLocaleString(undefined, { minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces });
-      }
-  
-      // Apply fixed value behavior if enabled
-      if (this.boolFixed) {
-        displayedValue = displayedValue.padEnd(displayedValue.indexOf('.') + decimalPlaces + 1, '0');
-      }
-    }
-  
     return html`
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="neo-unit-control">
         <div class="input-group">
             <span class="input-group-text">${unitsOfMeasurement[this.unittype].symbol}</span>
             <input type="text" class="form-control text-end"
-              data-simple-control="true"
-              ntxmaskablenumberinputvalueaccessor=""
-              inputmode="decimal"
-              decimalplaces=${this.decimalplaces}
-              placeholder=${placeholder}
-              value=${displayedValue}
+              .value=${this.unitvalue}
               @blur=${this.onChange}
               ?disabled="${this.readOnly}"
               >
