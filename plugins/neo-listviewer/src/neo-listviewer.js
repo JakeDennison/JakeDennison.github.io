@@ -47,12 +47,12 @@ class listviewElement extends LitElement {
         },
         orderKeys:{
           type: 'string',
-          title: 'Specify the order of keys',
+          title: 'Column Order',
           description: 'Semicolon separate a list of keys to define the order e.g. Key1;Key2;Key3'
         },
         editableKeys:{
           type: 'string',
-          title: 'Specify the columns that should be editable',
+          title: 'Editable Columns',
           description: 'Semicolon separate a list of keys (column names) to define the order e.g. Key1;Key2;Key3'
         },
         dateFormat:{
@@ -61,7 +61,7 @@ class listviewElement extends LitElement {
           description: 'Enter a common data format to set the dates returned accordingly e.g. YYYY-MM-DD HH:mm:ss'
         },
         boolFilter: {
-          title: 'Show filter options?',
+          title: 'Show filter options',
           type: 'boolean',
           defaultValue: true,
         },
