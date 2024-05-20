@@ -49,44 +49,34 @@ class unitElement extends LitElement {
         },
         outputobj: {
           type: 'object',
-          title: 'Object Output',
+          title: 'Unit Output',
           description: 'this is for output only please ignore.',
           isValueField: true,
           properties: {
-            budgetItems: {
-              type: 'array',
-              title: 'Budget Items',
-              items: {
-                type: 'object',
-                properties: {
-                  unittype: {
-                    title: 'Select unit of measurement',
-                    type: 'string',
-                    defaultValue: "Meter (m)",
-                  },
-                  unitvalue: {
-                    type: 'number',
-                    title: 'Unit value',
-                    description: 'Decimal unit value',
-                  },
-                  decimalplaces: {
-                    type: 'integer',
-                    title: 'Decimal places',
-                    description: 'enter 0 for none, 1 for .0, 2 for .01 etc.',
-                  },
-                  boolRound: {
-                    type: 'boolean',
-                    title: 'Enable rounding',
-                    description: 'Allow values to be rounded. e.g. for 2 decimal places 12.129 becomes 12.13',
-                  },
-                  boolFixed: {
-                    type: 'boolean',
-                    title: 'Ensure fixed value',
-                    description: 'Ensure fixed values are output, with this enabled 10.10 will output as 10.10 instead of 10.1',
-                  },
-                }
-              }
-            }
+            unittype: {
+              title: 'Select unit of measurement',
+              type: 'string',
+            },
+            unitvalue: {
+              type: 'number',
+              title: 'Unit value',
+              description: 'Decimal unit value',
+            },
+            decimalplaces: {
+              type: 'integer',
+              title: 'Decimal places',
+              description: 'enter 0 for none, 1 for .0, 2 for .01 etc.',
+            },
+            boolRound: {
+              type: 'boolean',
+              title: 'Enable rounding',
+              description: 'Allow values to be rounded. e.g. for 2 decimal places 12.129 becomes 12.13',
+            },
+            boolFixed: {
+              type: 'boolean',
+              title: 'Ensure fixed value',
+              description: 'Ensure fixed values are output, with this enabled 10.10 will output as 10.10 instead of 10.1',
+            },
           }
         }
       },
