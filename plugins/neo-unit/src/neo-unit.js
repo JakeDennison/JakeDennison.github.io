@@ -117,20 +117,20 @@ class unitElement extends LitElement {
   handleBlur() {
     // Apply decimal places and formatting
     const inputElement = this.shadowRoot.querySelector('input');
-    const value = parseFloat(inputElement.value);
+    let value = parseFloat(inputElement.value);
   
     if (!isNaN(value)) {
-      const formattedValue = value.toFixed(this.decimalplaces);
-      inputElement.value = formattedValue;
-      this.unitvalue = parseFloat(formattedValue);
-    } else {
-      this.unitvalue = '';
+      // Format the value with the correct number of decimal places
+      value = value.toFixed(this.decimalplaces);
+      // Update the input element with the formatted value
+      inputElement.value = value;
+      // Update the unitvalue property with the formatted value
+      this.unitvalue = parseFloat(value);
     }
   
     // Call onChange to return the value
     this.onChange();
   }
-  
   
   onChange() {
     // Create the output object
@@ -153,11 +153,10 @@ class unitElement extends LitElement {
     this.dispatchEvent(customEvent);
   }
   
-
   render() {
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
     const placeholder = (0).toFixed(decimalPlaces);
-    const valueToShow = this.unitvalue ? this.unitvalue.toFixed(decimalPlaces) : '';
+    const valueToShow = this.unitvalue;
   
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -173,8 +172,7 @@ class unitElement extends LitElement {
         </div>
       </div>
     `;
-  }
-  
+  }  
     
 }
 
