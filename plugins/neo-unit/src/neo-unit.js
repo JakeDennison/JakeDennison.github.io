@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import {unitsOfMeasurement} from './units'
+import { unitsOfMeasurement } from './units';
 
 class unitElement extends LitElement {
   static getMetaConfig() {
@@ -11,7 +11,7 @@ class unitElement extends LitElement {
     return {
       controlName: 'neo-unit',
       fallbackDisableSubmit: false,
-      description: 'Control for diplaying units of measurement',
+      description: 'Control for displaying units of measurement',
       iconUrl: "https://jsdenintex.github.io/plugins/neo-unit/dist/unit-icon.svg",
       groupName: 'Custom controls',
       version: '1.0',
@@ -27,7 +27,6 @@ class unitElement extends LitElement {
           type: 'number',
           title: 'Unit value',
           description: 'Decimal unit value',
-          isValueField: true,
           staticProperties: true,
         },
         decimalplaces: {
@@ -48,6 +47,54 @@ class unitElement extends LitElement {
           description: 'Ensure fixed values are output, with this enabled 10.10 will output as 10.10 instead of 10.1',
           defaultValue: false,
         },
+        outputobj: {
+          type: 'object',
+          title: 'Object Output',
+          description: 'this is for output only please ignore.',
+          isValueField: true,
+          properties: {
+            budgetItems: {
+              type: 'array',
+              title: 'Budget Items',
+              items: {
+                type: 'object',
+                properties: {
+                  unittype: {
+                    title: 'Select unit of measurement',
+                    type: 'string',
+                    enum: enumChoices,
+                    verticalLayout: true,
+                    defaultValue: "Meter (m)",
+                  },
+                  unitvalue: {
+                    type: 'number',
+                    title: 'Unit value',
+                    description: 'Decimal unit value',
+                    staticProperties: true,
+                  },
+                  decimalplaces: {
+                    type: 'integer',
+                    title: 'Decimal places',
+                    description: 'enter 0 for none, 1 for .0, 2 for .01 etc.',
+                    defaultValue: 0,
+                  },
+                  boolRound: {
+                    type: 'boolean',
+                    title: 'Enable rounding',
+                    description: 'Allow values to be rounded. e.g. for 2 decimal places 12.129 becomes 12.13',
+                    defaultValue: false,
+                  },
+                  boolFixed: {
+                    type: 'boolean',
+                    title: 'Ensure fixed value',
+                    description: 'Ensure fixed values are output, with this enabled 10.10 will output as 10.10 instead of 10.1',
+                    defaultValue: false,
+                  },
+                }
+              }
+            }
+          }
+        }
       },
       standardProperties: {
         fieldLabel: true,
@@ -58,16 +105,22 @@ class unitElement extends LitElement {
   }
 
   static properties = {
-    unittype: "unit",
-    unitvalue: "",
-    decimalplaces: 0
+    unittype: { type: String },
+    unitvalue: { type: Number },
+    decimalplaces: { type: Number },
+    boolRound: { type: Boolean },
+    boolFixed: { type: Boolean },
+    outputobj: { type: Object },
   };
 
   constructor() {
     super();
-    this.unittype = "unit"
-    this.unitvalue = ""
-    this.decimalplaces = 0
+    this.unittype = "unit";
+    this.unitvalue = "";
+    this.decimalplaces = 0;
+    this.boolRound = false;
+    this.boolFixed = false;
+    this.outputobj = {};
   }
 
   updated(changedProperties) {
@@ -77,9 +130,9 @@ class unitElement extends LitElement {
   }
 
   static get styles() {
-    const { cssRules } = document.styleSheets[0]
-    const globalStyle = css([Object.values(cssRules).map(rule => 
-    rule.cssText).join('\n')])
+    const { cssRules } = document.styleSheets[0];
+    const globalStyle = css([Object.values(cssRules).map(rule =>
+      rule.cssText).join('\n')]);
     return [
       globalStyle,
       css`
@@ -154,7 +207,7 @@ class unitElement extends LitElement {
         width: 100%;
       }
 
-      .neo-unit-control > div.nx-zinc-control-input > input{
+      .neo-unit-control > div.nx-zinc-control-input > input {
         word-break: break-word;
         user-select: none;
         box-sizing: border-box;
@@ -183,7 +236,7 @@ class unitElement extends LitElement {
         outline-offset: 0;
       }
 
-      .neo-unit-control > div.nx-zinc-control-input > input::placeholder{
+      .neo-unit-control > div.nx-zinc-control-input > input::placeholder {
         color: var(--bs-body-color);
       }
       `
@@ -213,12 +266,21 @@ class unitElement extends LitElement {
           displayedValue = displayedValue.padEnd(displayedValue.indexOf('.') + this.decimalplaces + 1, '0');
         }
   
-        // Dispatch the custom event with the numeric value
+        // Create the output object
+        const outputObject = {
+          unittype: this.unittype,
+          unitvalue: numericValue,
+          decimalplaces: this.decimalplaces,
+          boolRound: this.boolRound,
+          boolFixed: this.boolFixed
+        };
+  
+        // Dispatch the custom event with the output object
         const customEvent = new CustomEvent('ntx-value-change', {
           bubbles: true,
           cancelable: false,
           composed: true,
-          detail: numericValue,
+          detail: outputObject,
         });
   
         this.dispatchEvent(customEvent);
@@ -238,7 +300,6 @@ class unitElement extends LitElement {
     // Update the input value directly
     e.target.value = displayedValue;
   }
-  
   
   render() {
     // Calculate the placeholder as before
