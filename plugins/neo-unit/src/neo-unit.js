@@ -32,7 +32,7 @@ class unitElement extends LitElement {
         decimalplaces: {
           type: 'integer',
           title: 'Decimal places',
-          description: 'enter 0 for none, 1 for .0, 2 for .01 etc.',
+          description: 'Enter 0 for none, 1 for .0, 2 for .01 etc.',
           defaultValue: 0,
         },
         boolRound: {
@@ -50,7 +50,7 @@ class unitElement extends LitElement {
         outputobj: {
           type: 'object',
           title: 'Unit Output',
-          description: 'this is for output only please ignore.',
+          description: 'This is for output only please ignore.',
           isValueField: true,
           properties: {
             unittype: {
@@ -65,7 +65,7 @@ class unitElement extends LitElement {
             decimalplaces: {
               type: 'integer',
               title: 'Decimal places',
-              description: 'enter 0 for none, 1 for .0, 2 for .01 etc.',
+              description: 'Enter 0 for none, 1 for .0, 2 for .01 etc.',
             },
             boolRound: {
               type: 'boolean',
@@ -119,10 +119,13 @@ class unitElement extends LitElement {
   }
 
   onChange() {
+    // Apply decimal places
+    const formattedValue = parseFloat(this.unitvalue).toFixed(this.decimalplaces);
+
     // Create the output object
     const outputObject = {
       unittype: this.unittype,
-      unitvalue: this.unitvalue,
+      unitvalue: parseFloat(formattedValue),
       decimalplaces: this.decimalplaces,
       boolRound: this.boolRound,
       boolFixed: this.boolFixed
@@ -140,13 +143,17 @@ class unitElement extends LitElement {
   }
 
   render() {
+    const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
+    const placeholder = (0).toFixed(decimalPlaces);
+
     return html`
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="neo-unit-control">
         <div class="input-group">
             <span class="input-group-text">${unitsOfMeasurement[this.unittype].symbol}</span>
             <input type="text" class="form-control text-end"
-              .value=${this.unitvalue}
+              .value=${this.unitvalue.toFixed(decimalPlaces)}
+              placeholder=${placeholder}
               @input=${this.onInput}
               @blur=${this.onChange}
               ?disabled="${this.readOnly}"
