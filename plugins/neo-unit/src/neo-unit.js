@@ -126,11 +126,15 @@ class unitElement extends LitElement {
       inputElement.value = value;
       // Update the unitvalue property with the formatted value
       this.unitvalue = parseFloat(value);
+    } else {
+      // If the value is not a number, clear the input
+      inputElement.value = '';
+      this.unitvalue = '';
     }
   
     // Call onChange to return the value
     this.onChange();
-  }
+  }  
   
   onChange() {
     // Create the output object
@@ -156,7 +160,7 @@ class unitElement extends LitElement {
   render() {
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
     const placeholder = (0).toFixed(decimalPlaces);
-    const valueToShow = this.unitvalue;
+    const valueToShow = this.unitvalue || '';
   
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -166,7 +170,7 @@ class unitElement extends LitElement {
           <input type="text" class="form-control text-end"
             .value=${valueToShow}
             placeholder=${placeholder}
-            @blur=${this.handleBlur}
+            @blur=${this.handleBlur.bind(this)}
             ?disabled="${this.readOnly}"
             >
         </div>
