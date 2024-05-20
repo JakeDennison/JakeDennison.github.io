@@ -114,18 +114,26 @@ class unitElement extends LitElement {
     }
   }
 
-  onInput(e) {
-    this.unitvalue = e.target.value;
-  }
-
-  onChange() {
+  handleBlur() {
     // Apply decimal places and formatting
-    const formattedValue = this.unitvalue ? parseFloat(this.unitvalue).toFixed(this.decimalplaces) : '';
+    const inputElement = this.shadowRoot.querySelector('input');
+    const value = parseFloat(inputElement.value);
   
+    if (!isNaN(value)) {
+      const formattedValue = value.toFixed(this.decimalplaces);
+      this.unitvalue = parseFloat(formattedValue);
+      inputElement.value = formattedValue;
+    }
+  
+    // Call onChange to return the value
+    this.onChange();
+  }
+  
+  onChange() {
     // Create the output object
     const outputObject = {
       unittype: this.unittype,
-      unitvalue: parseFloat(formattedValue),
+      unitvalue: this.unitvalue,
       decimalplaces: this.decimalplaces,
       boolRound: this.boolRound,
       boolFixed: this.boolFixed
@@ -140,12 +148,6 @@ class unitElement extends LitElement {
     });
   
     this.dispatchEvent(customEvent);
-  
-    // Update the unitvalue with the formatted value
-    this.unitvalue = formattedValue;
-  
-    // Force an update to re-render the input with the formatted value
-    this.requestUpdate();
   }
   
 
@@ -162,14 +164,14 @@ class unitElement extends LitElement {
           <input type="text" class="form-control text-end"
             .value=${valueToShow}
             placeholder=${placeholder}
-            @blur=${this.onChange}
+            @blur=${this.handleBlur}
             ?disabled="${this.readOnly}"
             >
         </div>
       </div>
     `;
   }
-  
+    
 }
 
 customElements.define('neo-unit', unitElement);
