@@ -40,10 +40,10 @@ class listviewElement extends LitElement {
           title: 'Keys to ignore',
           description: 'Insert a comma separated list of keys to ignore.'
         },
-        renamedKeys:{
+        replaceKeys: {
           type: 'string',
-          title: 'Keys to Rename',
-          description: 'Use key-value pairs to rename columns separating by colon e.g. oldKey1:newKey1,oldKey2:newKey2'
+          title: 'Rename keys JSON',
+          description: 'Use key-value pairs to rename columns e.g. {"keyMappings": {"oldKey1": "newKey1","oldKey2": "newKey2"}}'
         },
         orderKeys:{
           type: 'string',
