@@ -326,6 +326,7 @@ class unitElement extends LitElement {
               placeholder=${placeholder}
               value=${displayedValue}
               @blur=${this.onChange}
+              ?disabled="${this.readOnly}"
             >
           </div>
       </div>
