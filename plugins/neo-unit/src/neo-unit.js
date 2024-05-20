@@ -62,33 +62,27 @@ class unitElement extends LitElement {
                   unittype: {
                     title: 'Select unit of measurement',
                     type: 'string',
-                    enum: enumChoices,
-                    verticalLayout: true,
                     defaultValue: "Meter (m)",
                   },
                   unitvalue: {
                     type: 'number',
                     title: 'Unit value',
                     description: 'Decimal unit value',
-                    staticProperties: true,
                   },
                   decimalplaces: {
                     type: 'integer',
                     title: 'Decimal places',
                     description: 'enter 0 for none, 1 for .0, 2 for .01 etc.',
-                    defaultValue: 0,
                   },
                   boolRound: {
                     type: 'boolean',
                     title: 'Enable rounding',
                     description: 'Allow values to be rounded. e.g. for 2 decimal places 12.129 becomes 12.13',
-                    defaultValue: false,
                   },
                   boolFixed: {
                     type: 'boolean',
                     title: 'Ensure fixed value',
                     description: 'Ensure fixed values are output, with this enabled 10.10 will output as 10.10 instead of 10.1',
-                    defaultValue: false,
                   },
                 }
               }
