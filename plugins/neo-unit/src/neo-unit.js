@@ -121,7 +121,7 @@ class unitElement extends LitElement {
   onChange() {
     // Apply decimal places and formatting
     const formattedValue = this.unitvalue ? parseFloat(this.unitvalue).toFixed(this.decimalplaces) : '';
-
+  
     // Create the output object
     const outputObject = {
       unittype: this.unittype,
@@ -130,7 +130,7 @@ class unitElement extends LitElement {
       boolRound: this.boolRound,
       boolFixed: this.boolFixed
     };
-
+  
     // Dispatch the custom event with the output object
     const customEvent = new CustomEvent('ntx-value-change', {
       bubbles: true,
@@ -138,34 +138,38 @@ class unitElement extends LitElement {
       composed: true,
       detail: outputObject,
     });
-
+  
     this.dispatchEvent(customEvent);
-
+  
     // Update the unitvalue with the formatted value
     this.unitvalue = formattedValue;
+  
+    // Force an update to re-render the input with the formatted value
+    this.requestUpdate();
   }
+  
 
   render() {
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
     const placeholder = (0).toFixed(decimalPlaces);
-    const valueToShow = this.unitvalue ? parseFloat(this.unitvalue).toLocaleString(undefined, { minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces }) : '';
-
+    const valueToShow = this.unitvalue;
+  
     return html`
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="neo-unit-control">
         <div class="input-group">
-            <span class="input-group-text">${unitsOfMeasurement[this.unittype].symbol}</span>
-            <input type="text" class="form-control text-end"
-              .value=${valueToShow}
-              placeholder=${placeholder}
-              @input=${this.onInput}
-              @blur=${this.onChange}
-              ?disabled="${this.readOnly}"
-              >
-          </div>
+          <span class="input-group-text">${unitsOfMeasurement[this.unittype].symbol}</span>
+          <input type="text" class="form-control text-end"
+            .value=${valueToShow}
+            placeholder=${placeholder}
+            @blur=${this.onChange}
+            ?disabled="${this.readOnly}"
+            >
+        </div>
       </div>
     `;
   }
+  
 }
 
 customElements.define('neo-unit', unitElement);
