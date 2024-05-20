@@ -115,17 +115,17 @@ class unitElement extends LitElement {
   }
 
   onInput(e) {
-    this.unitvalue = e.target.value;
+    this.unitvalue = parseFloat(e.target.value);
   }
 
   onChange() {
     // Apply decimal places
-    const formattedValue = parseFloat(this.unitvalue).toFixed(this.decimalplaces);
+    const formattedValue = this.unitvalue ? this.unitvalue.toFixed(this.decimalplaces) : '';
 
     // Create the output object
     const outputObject = {
       unittype: this.unittype,
-      unitvalue: parseFloat(formattedValue),
+      unitvalue: this.unitvalue,
       decimalplaces: this.decimalplaces,
       boolRound: this.boolRound,
       boolFixed: this.boolFixed
@@ -140,11 +140,15 @@ class unitElement extends LitElement {
     });
 
     this.dispatchEvent(customEvent);
+
+    // Update the unitvalue with the formatted value
+    this.unitvalue = formattedValue;
   }
 
   render() {
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
     const placeholder = (0).toFixed(decimalPlaces);
+    const valueToShow = this.unitvalue ? this.unitvalue.toFixed(decimalPlaces) : '';
 
     return html`
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -152,7 +156,7 @@ class unitElement extends LitElement {
         <div class="input-group">
             <span class="input-group-text">${unitsOfMeasurement[this.unittype].symbol}</span>
             <input type="text" class="form-control text-end"
-              .value=${this.unitvalue.toFixed(decimalPlaces)}
+              .value=${valueToShow}
               placeholder=${placeholder}
               @input=${this.onInput}
               @blur=${this.onChange}
