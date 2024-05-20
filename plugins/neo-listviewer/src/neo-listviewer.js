@@ -171,20 +171,18 @@ class listviewElement extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-  
+
     const linkElem = document.createElement('link');
     linkElem.setAttribute('rel', 'stylesheet');
     linkElem.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/tabulator/5.5.1/css/tabulator_semanticui.min.css');
-  
     this.shadowRoot.appendChild(linkElem);
 
     if (this.renamedKeys) {
-      this.renamedKeysObject = {};
-      const pairs = this.renamedKeys.split(',');
-      for (const pair of pairs) {
+      this.renamedKeysObject = this.renamedKeys.split(',').reduce((obj, pair) => {
         const [oldKey, newKey] = pair.split(':').map(k => k.trim());
-        this.renamedKeysObject[oldKey] = newKey;
-      }
+        obj[oldKey] = newKey;
+        return obj;
+      }, {});
     }
   }
   
@@ -192,42 +190,34 @@ class listviewElement extends LitElement {
     let tabledata, keys;
 
     try {
-        tabledata = JSON.parse(this.dataobject);
-        tabledata = this.replaceUnicodeRegex(tabledata);
+      tabledata = JSON.parse(this.dataobject);
+      tabledata = this.replaceUnicodeRegex(tabledata);
 
-        // Split renamed keys into an array of oldKey:newKey pairs
-        const renamedKeyPairs = this.renamedKeys.split(',').map(pair => pair.trim().split(':'));
-        
-        // Create a map of oldKey:newKey pairs
-        const keyMap = renamedKeyPairs.reduce((result, [oldKey, newKey]) => {
-            result[oldKey] = newKey;
-            return result;
+      const keyMap = this.renamedKeys.split(',').reduce((result, pair) => {
+        const [oldKey, newKey] = pair.split(':').map(k => k.trim());
+        result[oldKey] = newKey;
+        return result;
+      }, {});
+
+      tabledata = tabledata.map(item => {
+        return Object.entries(item).reduce((newItem, [oldKey, value]) => {
+          newItem[keyMap[oldKey] || oldKey] = value;
+          return newItem;
         }, {});
+      });
 
-        // Map over each object in data array and replace keys as necessary
-        tabledata = tabledata.map(item => {
-            const newItem = {};
-            for (const [oldKey, value] of Object.entries(item)) {
-                const newKey = keyMap[oldKey] || oldKey;
-                newItem[newKey] = value;
-            }
-            return newItem;
-        });
-
-        keys = tabledata.length > 0 ? Object.keys(tabledata[0]) : [];
-
-        // Rearrange data based on the orderKeys property
-        const columnOrder = this.orderKeys ? this.orderKeys.split(';').map(key => key.trim()) : [];
-        tabledata = this.rearrangeData(tabledata, columnOrder);
+      keys = tabledata.length > 0 ? Object.keys(tabledata[0]) : [];
+      const columnOrder = this.orderKeys ? this.orderKeys.split(';').map(key => key.trim()) : [];
+      tabledata = this.rearrangeData(tabledata, columnOrder);
 
     } catch (e) {
-        console.error(e);
-        tabledata = null;
-        keys = [];
+      console.error(e);
+      tabledata = null;
+      keys = [];
     }
 
     return { data: tabledata, keys };
-}
+  }
 
   
   rearrangeData(data, columnOrder) {
@@ -493,10 +483,10 @@ class listviewElement extends LitElement {
   }
 
   render() {
-    let filterOptions = this.keys.map(key => this.renamedKeysObject[key] || key); // Use renamed keys if available
-  
-    if (this.boolFilter) {
-      return html`
+    const filterOptions = this.keys.map(key => this.renamedKeysObject[key] || key);
+
+    return html`
+      ${this.boolFilter ? html`
         <div style="margin-bottom:5px">
           <select id="filter-field">
             ${filterOptions.map(key => html`<option value="${key}">${key}</option>`)}
@@ -505,21 +495,13 @@ class listviewElement extends LitElement {
           <button id="filter-btn" class="fltr-btn" @click="${this.handleFilterClick}">Filter</button>
           <button id="reset-btn" class="fltr-btn" @click="${this.handleResetClick}">Reset</button>
         </div>
-        <div>
-          <button id="history-undo" @click="${this.handleUndo}">Undo Edit</button>
-          <button id="history-redo" @click="${this.handleRedo}">Redo Edit</button>
-        </div>
-        <div id="table"></div>
-      `;
-    } else {
-      return html`
+      ` : ''}
       <div>
-          <button id="history-undo">Undo Edit</button>
-          <button id="history-redo">Redo Edit</button>
+        <button id="history-undo" @click="${this.handleUndo}">Undo Edit</button>
+        <button id="history-redo" @click="${this.handleRedo}">Redo Edit</button>
       </div>
-        <div id="table"></div>
-      `;
-    }
+      <div id="table" class="neo-lv-table"></div>
+    `;
   }
   
 }
