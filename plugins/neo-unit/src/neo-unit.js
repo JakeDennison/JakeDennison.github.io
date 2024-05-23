@@ -119,22 +119,25 @@ class UnitElement extends LitElement {
   handleBlur() {
     const inputElement = this.shadowRoot.querySelector('input');
     let value = parseFloat(inputElement.value);
-  
+
     if (!isNaN(value)) {
       if (this.boolRound) {
         value = parseFloat(value.toFixed(this.decimalplaces));
+      } else {
+        const factor = Math.pow(10, this.decimalplaces);
+        value = Math.floor(value * factor) / factor;
       }
-      const fixedValue = this.boolFixed ? value.toFixed(this.decimalplaces) : value.toFixed(this.decimalplaces);
+      const fixedValue = this.boolFixed ? value.toFixed(this.decimalplaces) : value.toString();
       inputElement.value = fixedValue;
       this.unitvalue = parseFloat(fixedValue);
     } else {
       inputElement.value = '';
       this.unitvalue = 0;
     }
-  
+
     this.onChange();
-  }  
-  
+  }
+
   onChange() {
     const outputObject = {
       unittype: this.unittype,
@@ -143,14 +146,14 @@ class UnitElement extends LitElement {
       boolRound: this.boolRound,
       boolFixed: this.boolFixed
     };
-  
+
     const customEvent = new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: false,
       composed: true,
       detail: outputObject,
     });
-  
+
     this.dispatchEvent(customEvent);
   }
 
