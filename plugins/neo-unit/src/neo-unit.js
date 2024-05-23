@@ -124,12 +124,9 @@ class UnitElement extends LitElement {
       if (this.boolRound) {
         value = parseFloat(value.toFixed(this.decimalplaces));
       }
-      if (this.boolFixed) {
-        inputElement.value = value.toFixed(this.decimalplaces);
-      } else {
-        inputElement.value = value.toString();
-      }
-      this.unitvalue = value;
+      const fixedValue = this.boolFixed ? value.toFixed(this.decimalplaces) : value.toString();
+      inputElement.value = fixedValue;
+      this.unitvalue = parseFloat(fixedValue);
     } else {
       inputElement.value = '';
       this.unitvalue = 0;
@@ -160,7 +157,7 @@ class UnitElement extends LitElement {
   render() {
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
     const placeholder = (0).toFixed(decimalPlaces);
-    const valueToShow = this.unitvalue !== 0 ? this.unitvalue.toString() : '';
+    const valueToShow = this.unitvalue !== 0 ? this.unitvalue.toFixed(decimalPlaces) : '';
 
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
