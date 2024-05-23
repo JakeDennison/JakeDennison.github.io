@@ -3,13 +3,13 @@
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="neo-unit-control">
         <div class="input-group">
-          <span class="input-group-text">${et[this.unittype].symbol}</span>
           <input type="text" class="form-control text-end"
             .value=${i}
             placeholder=${e}
             @blur=${this.handleBlur.bind(this)}
             ?disabled="${this.readOnly}"
             >
+            <span class="input-group-text">${et[this.unittype].symbol}</span>
         </div>
       </div>
     `}})})();
