@@ -172,7 +172,7 @@ class UnitElement extends LitElement {
             @blur=${this.handleBlur.bind(this)}
             ?disabled="${this.readOnly}"
             >
-            <span class="input-group-text">${unitsOfMeasurement[this.unittype].symbol}</span>
+          <span class="input-group-text">${unitsOfMeasurement[this.unittype].symbol}</span>
         </div>
       </div>
     `;

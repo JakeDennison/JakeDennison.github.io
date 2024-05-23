@@ -9,7 +9,7 @@
             @blur=${this.handleBlur.bind(this)}
             ?disabled="${this.readOnly}"
             >
-            <span class="input-group-text">${et[this.unittype].symbol}</span>
+          <span class="input-group-text">${et[this.unittype].symbol}</span>
         </div>
       </div>
     `}})})();
