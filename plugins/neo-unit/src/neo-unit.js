@@ -1,13 +1,11 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, css } from 'lit';
 import { unitsOfMeasurement } from './units';
 
-class unitElement extends LitElement {
+class UnitElement extends LitElement {
   static getMetaConfig() {
-    // get units for selection
     const unitKeys = Object.keys(unitsOfMeasurement);
     const filteredKeys = unitKeys.filter((key) => key !== "unit");
     const enumChoices = filteredKeys.map((key) => `${key}`);
-    // plugin contract information
     return {
       controlName: 'neo-unit',
       fallbackDisableSubmit: false,
@@ -89,23 +87,27 @@ class unitElement extends LitElement {
     };
   }
 
-  static properties = {
-    unittype: { type: String },
-    unitvalue: { type: Number },
-    decimalplaces: { type: Number },
-    boolRound: { type: Boolean },
-    boolFixed: { type: Boolean },
-    outputobj: { type: Object },
-  };
+  static get properties() {
+    return {
+      unittype: { type: String },
+      unitvalue: { type: Number },
+      decimalplaces: { type: Number },
+      boolRound: { type: Boolean },
+      boolFixed: { type: Boolean },
+      outputobj: { type: Object },
+      readOnly: { type: Boolean },
+    };
+  }
 
   constructor() {
     super();
     this.unittype = "unit";
-    this.unitvalue = "";
+    this.unitvalue = 0;
     this.decimalplaces = 0;
     this.boolRound = false;
     this.boolFixed = false;
     this.outputobj = {};
+    this.readOnly = false;
   }
 
   updated(changedProperties) {
@@ -115,29 +117,28 @@ class unitElement extends LitElement {
   }
 
   handleBlur() {
-    // Apply decimal places and formatting
     const inputElement = this.shadowRoot.querySelector('input');
     let value = parseFloat(inputElement.value);
   
     if (!isNaN(value)) {
-      // Format the value with the correct number of decimal places
-      value = value.toFixed(this.decimalplaces);
-      // Update the input element with the formatted value
-      inputElement.value = value;
-      // Update the unitvalue property with the formatted value
-      this.unitvalue = parseFloat(value);
+      if (this.boolRound) {
+        value = parseFloat(value.toFixed(this.decimalplaces));
+      }
+      if (this.boolFixed) {
+        inputElement.value = value.toFixed(this.decimalplaces);
+      } else {
+        inputElement.value = value.toString();
+      }
+      this.unitvalue = value;
     } else {
-      // If the value is not a number, clear the input
       inputElement.value = '';
-      this.unitvalue = '';
+      this.unitvalue = 0;
     }
   
-    // Call onChange to return the value
     this.onChange();
   }  
   
   onChange() {
-    // Create the output object
     const outputObject = {
       unittype: this.unittype,
       unitvalue: this.unitvalue,
@@ -146,7 +147,6 @@ class unitElement extends LitElement {
       boolFixed: this.boolFixed
     };
   
-    // Dispatch the custom event with the output object
     const customEvent = new CustomEvent('ntx-value-change', {
       bubbles: true,
       cancelable: false,
@@ -156,12 +156,12 @@ class unitElement extends LitElement {
   
     this.dispatchEvent(customEvent);
   }
-  
+
   render() {
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
     const placeholder = (0).toFixed(decimalPlaces);
-    const valueToShow = this.unitvalue || '';
-  
+    const valueToShow = this.unitvalue !== 0 ? this.unitvalue.toString() : '';
+
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="neo-unit-control">
@@ -176,8 +176,7 @@ class unitElement extends LitElement {
         </div>
       </div>
     `;
-  }  
-    
+  }
 }
 
-customElements.define('neo-unit', unitElement);
+customElements.define('neo-unit', UnitElement);
