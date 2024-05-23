@@ -127,9 +127,9 @@ class UnitElement extends LitElement {
         const factor = Math.pow(10, this.decimalplaces);
         value = Math.floor(value * factor) / factor;
       }
-      const fixedValue = this.boolFixed ? value.toFixed(this.decimalplaces) : value.toString();
-      inputElement.value = fixedValue;
-      this.unitvalue = parseFloat(fixedValue);
+      this.unitvalue = value;
+      const displayValue = this.boolFixed ? value.toFixed(this.decimalplaces) : value.toString();
+      inputElement.value = displayValue;
     } else {
       inputElement.value = '';
       this.unitvalue = 0;
@@ -160,19 +160,19 @@ class UnitElement extends LitElement {
   render() {
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
     const placeholder = (0).toFixed(decimalPlaces);
-    const valueToShow = this.unitvalue !== 0 ? this.unitvalue.toFixed(decimalPlaces) : '';
+    const valueToShow = this.unitvalue !== 0 || this.unitvalue === 0 && this.boolFixed ? this.unitvalue.toFixed(decimalPlaces) : '';
 
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="neo-unit-control">
         <div class="input-group">
+          <span class="input-group-text">${unitsOfMeasurement[this.unittype].symbol}</span>
           <input type="text" class="form-control text-end"
             .value=${valueToShow}
             placeholder=${placeholder}
             @blur=${this.handleBlur.bind(this)}
             ?disabled="${this.readOnly}"
             >
-          <span class="input-group-text">${unitsOfMeasurement[this.unittype].symbol}</span>
         </div>
       </div>
     `;
