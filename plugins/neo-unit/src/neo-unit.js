@@ -124,7 +124,7 @@ class UnitElement extends LitElement {
       if (this.boolRound) {
         value = parseFloat(value.toFixed(this.decimalplaces));
       }
-      const fixedValue = this.boolFixed ? value.toFixed(this.decimalplaces) : value.toString();
+      const fixedValue = this.boolFixed ? value.toFixed(this.decimalplaces) : value.toFixed(this.decimalplaces);
       inputElement.value = fixedValue;
       this.unitvalue = parseFloat(fixedValue);
     } else {
