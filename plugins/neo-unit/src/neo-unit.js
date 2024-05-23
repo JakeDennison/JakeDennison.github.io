@@ -33,18 +33,6 @@ class UnitElement extends LitElement {
           description: 'Enter 0 for none, 1 for .0, 2 for .01 etc.',
           defaultValue: 0,
         },
-        boolRound: {
-          type: 'boolean',
-          title: 'Enable rounding',
-          description: 'Allow values to be rounded. e.g. for 2 decimal places 12.129 becomes 12.13',
-          defaultValue: false,
-        },
-        boolFixed: {
-          type: 'boolean',
-          title: 'Ensure fixed value',
-          description: 'Ensure fixed values are output, with this enabled 10.10 will output as 10.10 instead of 10.1',
-          defaultValue: false,
-        },
         outputobj: {
           type: 'object',
           title: 'Unit Output',
@@ -64,17 +52,7 @@ class UnitElement extends LitElement {
               type: 'integer',
               title: 'Decimal places',
               description: 'Enter 0 for none, 1 for .0, 2 for .01 etc.',
-            },
-            boolRound: {
-              type: 'boolean',
-              title: 'Enable rounding',
-              description: 'Allow values to be rounded. e.g. for 2 decimal places 12.129 becomes 12.13',
-            },
-            boolFixed: {
-              type: 'boolean',
-              title: 'Ensure fixed value',
-              description: 'Ensure fixed values are output, with this enabled 10.10 will output as 10.10 instead of 10.1',
-            },
+            }
           }
         }
       },
@@ -92,8 +70,6 @@ class UnitElement extends LitElement {
       unittype: { type: String },
       unitvalue: { type: Number },
       decimalplaces: { type: Number },
-      boolRound: { type: Boolean },
-      boolFixed: { type: Boolean },
       outputobj: { type: Object },
       readOnly: { type: Boolean },
     };
@@ -104,14 +80,12 @@ class UnitElement extends LitElement {
     this.unittype = "unit";
     this.unitvalue = 0;
     this.decimalplaces = 0;
-    this.boolRound = false;
-    this.boolFixed = false;
     this.outputobj = {};
     this.readOnly = false;
   }
 
   updated(changedProperties) {
-    if (changedProperties.has('unittype') || changedProperties.has('decimalplaces') || changedProperties.has('boolRound') || changedProperties.has('boolFixed')) {
+    if (changedProperties.has('unittype') || changedProperties.has('decimalplaces')) {
       this.onChange();
     }
   }
@@ -121,15 +95,11 @@ class UnitElement extends LitElement {
     let value = parseFloat(inputElement.value);
 
     if (!isNaN(value)) {
-      if (this.boolRound) {
-        value = parseFloat(value.toFixed(this.decimalplaces));
-      } else {
-        const factor = Math.pow(10, this.decimalplaces);
-        value = Math.floor(value * factor) / factor;
-      }
-      this.unitvalue = value;
-      const displayValue = this.boolFixed ? value.toFixed(this.decimalplaces) : value.toString();
-      inputElement.value = displayValue;
+      const factor = Math.pow(10, this.decimalplaces);
+      value = Math.floor(value * factor) / factor;
+      const fixedValue = value.toFixed(this.decimalplaces);
+      inputElement.value = fixedValue;
+      this.unitvalue = parseFloat(fixedValue);
     } else {
       inputElement.value = '';
       this.unitvalue = 0;
@@ -142,9 +112,7 @@ class UnitElement extends LitElement {
     const outputObject = {
       unittype: this.unittype,
       unitvalue: this.unitvalue,
-      decimalplaces: this.decimalplaces,
-      boolRound: this.boolRound,
-      boolFixed: this.boolFixed
+      decimalplaces: this.decimalplaces
     };
 
     const customEvent = new CustomEvent('ntx-value-change', {
@@ -160,19 +128,19 @@ class UnitElement extends LitElement {
   render() {
     const decimalPlaces = this.decimalplaces >= 0 ? this.decimalplaces : 0;
     const placeholder = (0).toFixed(decimalPlaces);
-    const valueToShow = this.unitvalue !== 0 || this.unitvalue === 0 && this.boolFixed ? this.unitvalue.toFixed(decimalPlaces) : '';
+    const valueToShow = this.unitvalue !== 0 ? this.unitvalue.toFixed(decimalPlaces) : '';
 
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="neo-unit-control">
         <div class="input-group">
-          <span class="input-group-text">${unitsOfMeasurement[this.unittype].symbol}</span>
           <input type="text" class="form-control text-end"
             .value=${valueToShow}
             placeholder=${placeholder}
             @blur=${this.handleBlur.bind(this)}
             ?disabled="${this.readOnly}"
             >
+          <span class="input-group-text">${unitsOfMeasurement[this.unittype].symbol}</span>
         </div>
       </div>
     `;
