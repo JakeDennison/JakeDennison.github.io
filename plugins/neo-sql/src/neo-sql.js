@@ -59,6 +59,11 @@ class neoSQLElement extends LitElement {
           title: 'Database name',
           description: 'Link to server address'
         },
+        tableviewName: {
+          type: 'string',
+          title: 'Table or View name',
+          description: 'Full name of the table or view'
+        },
         queryType: {
           title: 'Query Type',
           type: 'string',
@@ -115,6 +120,7 @@ class neoSQLElement extends LitElement {
     clientSecret: { type: String },
     tenantId: { type: String },
     dbName: { type: String },
+    tableviewName: { type: String },
     queryType: { type: String },
     itemLimit: { type: Number },
     sortBy: { type: String },
@@ -143,6 +149,7 @@ class neoSQLElement extends LitElement {
     this.clientSecret = '';
     this.tenantId = '';
     this.dbName = '';
+    this.tableviewName = '';
     this.queryType = 'Table';
     this.itemLimit = 1000;
     this.sortBy = '';
@@ -196,6 +203,7 @@ class neoSQLElement extends LitElement {
       headers,
       body: JSON.stringify({
         dbName: this.dbName,
+        tableviewName: this.tableviewName,
         queryType: this.queryType,
         itemLimit: this.itemLimit,
         sortBy: this.sortBy,
