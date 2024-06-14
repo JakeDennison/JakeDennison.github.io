@@ -40,6 +40,7 @@ class NeoPageHoldElement extends LitElement {
 
   constructor() {
     super();
+    this.applyhold = false; // Initialize applyhold to false
     this.stepHeaders = [];
     this.actionPanels = [];
   }
@@ -47,7 +48,7 @@ class NeoPageHoldElement extends LitElement {
   firstUpdated() {
     this.stepHeaders = document.querySelectorAll('mat-step-header');
     this.actionPanels = document.querySelectorAll('div.nx-action-panel');
-    this.updateVisibility();
+    this.updateVisibility(); // Ensure visibility is updated after first render
     console.log("first update complete")
   }
 
