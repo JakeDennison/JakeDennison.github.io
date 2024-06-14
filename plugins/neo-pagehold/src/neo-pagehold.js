@@ -20,8 +20,7 @@ class NeoPageHoldElement extends LitElement {
       properties: {
         applyhold: {
           title: 'Apply hold?',
-          type: 'boolean',
-          defaultValue: true,
+          type: 'boolean'
         },
       },
       standardProperties: {
@@ -79,6 +78,7 @@ class NeoPageHoldElement extends LitElement {
   
   render() {
     return html`
+    <p>${this.applyhold}</p>
     `;
   }
 }
