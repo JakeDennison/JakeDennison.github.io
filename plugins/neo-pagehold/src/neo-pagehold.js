@@ -4,7 +4,7 @@ class NeoPageHoldElement extends LitElement {
 
   static get properties() {
     return {
-      applyhold: { type: Boolean }
+      allownav: { type: Boolean }
     };
   }
 
@@ -18,8 +18,8 @@ class NeoPageHoldElement extends LitElement {
       groupName: 'Admin Tools',
       version: '1.0',
       properties: {
-        applyhold: {
-          title: 'Apply hold?',
+        allownav: {
+          title: 'Allow Navigation?',
           type: 'boolean'
         },
       },
@@ -40,7 +40,7 @@ class NeoPageHoldElement extends LitElement {
 
   constructor() {
     super();
-    this.applyhold = false; // Initialize applyhold to false
+    this.allownav = true; // Initialize allownav to true
     this.stepHeaders = [];
     this.actionPanels = [];
     this._eventListenersAdded = false;
@@ -54,14 +54,14 @@ class NeoPageHoldElement extends LitElement {
   }
 
   updated(changedProperties) {
-    if (changedProperties.has('applyhold')) {
+    if (changedProperties.has('allownav')) {
       this.updateVisibility();
     }
   }
 
   updateVisibility() {
     console.log("visibility running");
-    console.log(this.applyhold);
+    console.log(this.allownav);
 
     // Function to toggle event listeners
     const toggleEventListeners = (add) => {
@@ -76,13 +76,13 @@ class NeoPageHoldElement extends LitElement {
 
     // Function to prevent navigation
     this.preventNavigation = (event) => {
-      if (this.applyhold) {
+      if (this.allownav) {
         event.stopImmediatePropagation();
         event.preventDefault();
       }
     };
 
-    if (this.applyhold) {
+    if (this.allownav) {
       // Hide elements and add event listeners if not already added
       this.stepHeaders.forEach((header) => {
         header.style.display = 'none';
@@ -126,7 +126,7 @@ class NeoPageHoldElement extends LitElement {
   
   render() {
     return html`
-    <p>${this.applyhold}</p>
+    <p>${this.allownav}</p>
     `;
   }
 }
