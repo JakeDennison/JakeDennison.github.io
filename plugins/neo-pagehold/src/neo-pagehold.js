@@ -40,10 +40,9 @@ class NeoPageHoldElement extends LitElement {
 
   constructor() {
     super();
-    this.allownav = false;
+    this.allownav = true; // Default to allowing navigation
     this.stepHeaders = [];
     this.actionPanels = [];
-    this._eventListenersAdded = false;
   }
 
   firstUpdated() {
@@ -63,29 +62,19 @@ class NeoPageHoldElement extends LitElement {
     console.log("visibility running");
     console.log(this.allownav);
 
-    // Function to toggle event listeners
-    const toggleEventListeners = (add) => {
-      const method = add ? 'addEventListener' : 'removeEventListener';
-      this.stepHeaders.forEach((header) => {
-        header[method]('click', this.preventNavigation);
-      });
-      this.actionPanels.forEach((panel) => {
-        panel[method]('click', this.preventNavigation);
-      });
-    };
-
     // Function to prevent navigation
     this.preventNavigation = (event) => {
-      if (this.allownav) {
+      if (!this.allownav) {
         event.stopImmediatePropagation();
         event.preventDefault();
       }
     };
 
-    if (this.allownav) {
-      // Hide elements and add event listeners if not already added
+    if (!this.allownav) {
+      // Hide elements and add event listeners to prevent navigation
       this.stepHeaders.forEach((header) => {
         header.style.display = 'none';
+        header.addEventListener('click', this.preventNavigation, true);
       });
 
       this.actionPanels.forEach((panel) => {
@@ -94,18 +83,17 @@ class NeoPageHoldElement extends LitElement {
           parent = parent.parentElement;
           if (!parent) break; // avoid null parent if the hierarchy is less than 7
         }
-        if (parent) parent.style.display = 'none'; // apply style only if parent is not null
+        if (parent) {
+          parent.style.display = 'none';
+          parent.addEventListener('click', this.preventNavigation, true);
+        }
       });
-
-      if (!this._eventListenersAdded) {
-        toggleEventListeners(true); // Add event listeners to prevent navigation
-        this._eventListenersAdded = true;
-      }
 
     } else {
-      // Show elements and remove event listeners if previously added
+      // Show elements and remove event listeners
       this.stepHeaders.forEach((header) => {
         header.style.display = '';
+        header.removeEventListener('click', this.preventNavigation, true);
       });
 
       this.actionPanels.forEach((panel) => {
@@ -114,13 +102,11 @@ class NeoPageHoldElement extends LitElement {
           parent = parent.parentElement;
           if (!parent) break; // avoid null parent if the hierarchy is less than 7
         }
-        if (parent) parent.style.display = ''; // apply style only if parent is not null
+        if (parent) {
+          parent.style.display = '';
+          parent.removeEventListener('click', this.preventNavigation, true);
+        }
       });
-
-      if (this._eventListenersAdded) {
-        toggleEventListeners(false); // Remove event listeners
-        this._eventListenersAdded = false;
-      }
     }
   }
   
