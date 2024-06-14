@@ -5,7 +5,9 @@ class NeoPageHoldElement extends LitElement {
   static get properties() {
     return {
       allownav: { type: Boolean },
-      allownavProp: { type: Boolean }
+      allownavProp: { type: Boolean },
+      allowsubmit: { type: Boolean },
+      allowsubmitProp: { type: Boolean }
     };
   }
 
@@ -23,6 +25,10 @@ class NeoPageHoldElement extends LitElement {
           title: 'Allow Navigation?',
           type: 'boolean'
         },
+        allowsubmitProp: {
+          title: 'Allow Submission?',
+          type: 'boolean'
+        },
       },
       standardProperties: {
         fieldLabel: true,
@@ -36,13 +42,19 @@ class NeoPageHoldElement extends LitElement {
       :host {
         display: block;
       }
+      .disabled-button {
+        opacity: 0.5; /* Adjust the opacity to make the button look washed out */
+        pointer-events: none; /* Prevent interactions */
+      }
     `;
   }
 
   constructor() {
     super();
-    this.allownav = false; // Initialize default value
-    this.allownavProp = false; // Initialize default value
+    this.allownav = false;
+    this.allownavProp = false;
+    this.allowsubmit = false;
+    this.allowsubmitProp = false;
     this.stepHeaders = [];
     this.actionPanels = [];
   }
@@ -51,13 +63,18 @@ class NeoPageHoldElement extends LitElement {
     this.stepHeaders = document.querySelectorAll('mat-step-header');
     this.actionPanels = document.querySelectorAll('div.nx-action-panel');
     this.allownav = this.allownavProp; // Initialize allownav based on allownavProp
+    this.allowsubmit = this.allowsubmitProp; // Initialize allowsubmit based on allowsubmitProp
     this.updateVisibility();
+    this.updateSubmitButton();
     console.log("first update complete");
   }
 
   updated(changedProperties) {
     if (changedProperties.has('allownav')) {
       this.updateVisibility();
+    }
+    if (changedProperties.has('allowsubmit')) {
+      this.updateSubmitButton();
     }
   }
 
@@ -113,9 +130,23 @@ class NeoPageHoldElement extends LitElement {
     }
   }
 
+  updateSubmitButton() {
+    const submitButton = document.querySelector('button[data-e2e="btn-submit"]');
+    if (submitButton) {
+      if (!this.allowsubmit) {
+        submitButton.disabled = true;
+        submitButton.classList.add('disabled-button');
+      } else {
+        submitButton.disabled = false;
+        submitButton.classList.remove('disabled-button');
+      }
+    }
+  }
+
   render() {
     return html`
       <p>${this.allownav}</p>
+      <p>${this.allowsubmit}</p>
     `;
   }
 }
