@@ -40,7 +40,7 @@ class NeoPageHoldElement extends LitElement {
 
   constructor() {
     super();
-    this.allownav = true; // Initialize allownav to true
+    this.allownav = false;
     this.stepHeaders = [];
     this.actionPanels = [];
     this._eventListenersAdded = false;
@@ -49,7 +49,7 @@ class NeoPageHoldElement extends LitElement {
   firstUpdated() {
     this.stepHeaders = document.querySelectorAll('mat-step-header');
     this.actionPanels = document.querySelectorAll('div.nx-action-panel');
-    this.updateVisibility(); // Ensure visibility is updated after first render
+    this.updateVisibility();
     console.log("first update complete")
   }
 
