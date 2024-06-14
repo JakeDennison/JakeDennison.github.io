@@ -60,6 +60,13 @@ class NeoPageHoldElement extends LitElement {
   }
 
   firstUpdated() {
+    const formDesigner = document.querySelector('.nx-zinc-form-designer');
+
+    if (formDesigner && formDesigner.classList.contains('mode-form-builder')) {
+      console.log('In form builder mode, no functions applied');
+      return;
+    }
+
     this.stepHeaders = document.querySelectorAll('mat-step-header');
     this.actionPanels = document.querySelectorAll('div.nx-action-panel');
     this.allownav = this.allownavProp; // Initialize allownav based on allownavProp
@@ -70,6 +77,13 @@ class NeoPageHoldElement extends LitElement {
   }
 
   updated(changedProperties) {
+    const formDesigner = document.querySelector('.nx-zinc-form-designer');
+
+    if (formDesigner && formDesigner.classList.contains('mode-form-builder')) {
+      console.log('In form builder mode, no functions applied');
+      return;
+    }
+
     if (changedProperties.has('allownav')) {
       this.updateVisibility();
     }
