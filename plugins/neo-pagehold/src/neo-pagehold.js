@@ -4,7 +4,8 @@ class NeoPageHoldElement extends LitElement {
 
   static get properties() {
     return {
-      allownav: { type: Boolean }
+      allownav: { type: Boolean },
+      allownavProp: { type: Boolean }
     };
   }
 
@@ -18,7 +19,7 @@ class NeoPageHoldElement extends LitElement {
       groupName: 'Admin Tools',
       version: '1.0',
       properties: {
-        allownav: {
+        allownavProp: {
           title: 'Allow Navigation?',
           type: 'boolean'
         },
@@ -40,7 +41,8 @@ class NeoPageHoldElement extends LitElement {
 
   constructor() {
     super();
-    this.allownav = true; // Default to allowing navigation
+    this.allownav = false; // Initialize default value
+    this.allownavProp = false; // Initialize default value
     this.stepHeaders = [];
     this.actionPanels = [];
   }
@@ -48,8 +50,9 @@ class NeoPageHoldElement extends LitElement {
   firstUpdated() {
     this.stepHeaders = document.querySelectorAll('mat-step-header');
     this.actionPanels = document.querySelectorAll('div.nx-action-panel');
+    this.allownav = this.allownavProp; // Initialize allownav based on allownavProp
     this.updateVisibility();
-    console.log("first update complete")
+    console.log("first update complete");
   }
 
   updated(changedProperties) {
@@ -109,10 +112,10 @@ class NeoPageHoldElement extends LitElement {
       });
     }
   }
-  
+
   render() {
     return html`
-    <p>${this.allownav}</p>
+      <p>${this.allownav}</p>
     `;
   }
 }
