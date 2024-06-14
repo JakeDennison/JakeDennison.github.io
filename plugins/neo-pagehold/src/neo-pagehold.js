@@ -84,10 +84,12 @@ class NeoPageHoldElement extends LitElement {
       return;
     }
 
-    if (changedProperties.has('allownav')) {
+    if (changedProperties.has('allownavProp')) {
+      this.allownav = this.allownavProp;
       this.updateVisibility();
     }
-    if (changedProperties.has('allowsubmit')) {
+    if (changedProperties.has('allowsubmitProp')) {
+      this.allowsubmit = this.allowsubmitProp;
       this.updateSubmitButton();
     }
   }
@@ -159,8 +161,8 @@ class NeoPageHoldElement extends LitElement {
 
   render() {
     return html`
-      <p>${this.allownav}</p>
-      <p>${this.allowsubmit}</p>
+      <p>Allow Navigation: ${this.allownavProp}</p>
+      <p>Allow Submission: ${this.allowsubmitProp}</p>
     `;
   }
 }
