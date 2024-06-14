@@ -12,7 +12,6 @@ class NeoPageHoldElement extends LitElement {
   }
 
   static getMetaConfig() {
-    // plugin contract information
     return {
       controlName: 'neo-pagehold',
       fallbackDisableSubmit: false,
@@ -43,8 +42,8 @@ class NeoPageHoldElement extends LitElement {
         display: block;
       }
       .disabled-button {
-        opacity: 0.5; /* Adjust the opacity to make the button look washed out */
-        pointer-events: none; /* Prevent interactions */
+        opacity: 0.5;
+        pointer-events: none;
       }
     `;
   }
@@ -67,8 +66,7 @@ class NeoPageHoldElement extends LitElement {
       return;
     }
 
-    this.stepHeaders = document.querySelectorAll('mat-step-header');
-    this.actionPanels = document.querySelectorAll('div.nx-action-panel');
+    this.initializeElements();
     this.allownav = this.allownavProp; // Initialize allownav based on allownavProp
     this.allowsubmit = this.allowsubmitProp; // Initialize allowsubmit based on allowsubmitProp
     this.updateVisibility();
@@ -94,11 +92,15 @@ class NeoPageHoldElement extends LitElement {
     }
   }
 
+  initializeElements() {
+    this.stepHeaders = document.querySelectorAll('mat-step-header');
+    this.actionPanels = document.querySelectorAll('div.nx-action-panel');
+  }
+
   updateVisibility() {
     console.log("visibility running");
     console.log(this.allownav);
 
-    // Function to prevent navigation
     this.preventNavigation = (event) => {
       if (!this.allownav) {
         event.stopImmediatePropagation();
@@ -107,7 +109,6 @@ class NeoPageHoldElement extends LitElement {
     };
 
     if (!this.allownav) {
-      // Hide elements and add event listeners to prevent navigation
       this.stepHeaders.forEach((header) => {
         header.style.display = 'none';
         header.addEventListener('click', this.preventNavigation, true);
@@ -117,7 +118,7 @@ class NeoPageHoldElement extends LitElement {
         let parent = panel;
         for (let i = 0; i < 7; i++) {
           parent = parent.parentElement;
-          if (!parent) break; // avoid null parent if the hierarchy is less than 7
+          if (!parent) break;
         }
         if (parent) {
           parent.style.display = 'none';
@@ -126,7 +127,6 @@ class NeoPageHoldElement extends LitElement {
       });
 
     } else {
-      // Show elements and remove event listeners
       this.stepHeaders.forEach((header) => {
         header.style.display = '';
         header.removeEventListener('click', this.preventNavigation, true);
@@ -136,7 +136,7 @@ class NeoPageHoldElement extends LitElement {
         let parent = panel;
         for (let i = 0; i < 7; i++) {
           parent = parent.parentElement;
-          if (!parent) break; // avoid null parent if the hierarchy is less than 7
+          if (!parent) break;
         }
         if (parent) {
           parent.style.display = '';
