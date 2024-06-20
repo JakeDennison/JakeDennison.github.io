@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 
-class animalcardsElement extends LitElement {
+class AnimalCardsElement extends LitElement {
   static getMetaConfig() {
     return {
       controlName: 'neo-animalcards',
@@ -94,7 +94,8 @@ class animalcardsElement extends LitElement {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'Accept': 'application/json;odata=verbose'
+          'Accept': 'application/json;odata=verbose',
+          'X-RequestDigest': document.getElementById('__REQUESTDIGEST').value
         }
       });
 
@@ -122,4 +123,4 @@ class animalcardsElement extends LitElement {
   }
 }
 
-customElements.define('neo-animalcards', animalcardsElement);
+customElements.define('neo-animalcards', AnimalCardsElement);
