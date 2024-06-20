@@ -85,24 +85,30 @@ class AnimalCardsElement extends LitElement {
   }
 
   async fetchRequestDigest() {
-    const response = await fetch(`${this.siteurl}/_api/contextinfo`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json;odata=verbose',
-        'Content-Type': 'application/json'
+    const url = `${this.siteurl}/_api/contextinfo`;
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json;odata=verbose',
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching context info: ${response.statusText}`);
       }
-    });
 
-    if (!response.ok) {
-      throw new Error(`Error fetching context info: ${response.statusText}`);
-    }
+      const data = await response.json();
 
-    const data = await response.json();
-
-    if (data.d && data.d.GetContextWebInformation) {
-      return data.d.GetContextWebInformation.FormDigestValue;
-    } else {
-      throw new Error('Invalid context info response');
+      if (data.d && data.d.GetContextWebInformation) {
+        return data.d.GetContextWebInformation.FormDigestValue;
+      } else {
+        throw new Error('Invalid context info response');
+      }
+    } catch (error) {
+      console.error('Error fetching request digest:', error);
+      throw error;
     }
   }
 
