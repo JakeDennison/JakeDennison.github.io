@@ -92,8 +92,18 @@ class AnimalCardsElement extends LitElement {
         'Content-Type': 'application/json'
       }
     });
+
+    if (!response.ok) {
+      throw new Error(`Error fetching context info: ${response.statusText}`);
+    }
+
     const data = await response.json();
-    return data.d.GetContextWebInformation.FormDigestValue;
+
+    if (data.d && data.d.GetContextWebInformation) {
+      return data.d.GetContextWebInformation.FormDigestValue;
+    } else {
+      throw new Error('Invalid context info response');
+    }
   }
 
   async fetchListData() {
