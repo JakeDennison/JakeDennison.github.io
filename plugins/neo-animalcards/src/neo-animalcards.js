@@ -84,6 +84,18 @@ class AnimalCardsElement extends LitElement {
     this.fetchListData();
   }
 
+  async fetchRequestDigest() {
+    const response = await fetch(`${this.siteurl}/_api/contextinfo`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json;odata=verbose',
+        'Content-Type': 'application/json'
+      }
+    });
+    const data = await response.json();
+    return data.d.GetContextWebInformation.FormDigestValue;
+  }
+
   async fetchListData() {
     const filterQuery = this.filtervalue ? `&$filter=${this.filtercolumn} eq '${this.filtervalue}'` : '';
     const selectQuery = this.outputcolumns.split(';').map(col => col.trim()).join(',');
@@ -91,11 +103,14 @@ class AnimalCardsElement extends LitElement {
     const url = `${this.siteurl}/_api/web/lists/getbytitle('${this.listname}')/items?$select=${selectQuery}${filterQuery}`;
 
     try {
+      const requestDigestElement = document.getElementById('__REQUESTDIGEST');
+      const requestDigest = requestDigestElement ? requestDigestElement.value : await this.fetchRequestDigest();
+
       const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Accept': 'application/json;odata=verbose',
-          'X-RequestDigest': document.getElementById('__REQUESTDIGEST').value
+          'X-RequestDigest': requestDigest
         }
       });
 
