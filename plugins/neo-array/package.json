@@ -1,14 +1,11 @@
 {
-  "name": "jsdenintex.github.io",
+  "name": "neo-array",
   "version": "1.0.0",
-  "description": "Plugins Repo",
-  "main": "index.js",
-  "private": true,
-  "workspaces": [
-    "plugins/*"
-  ],
+  "description": "",
+  "main": "./src/neo-array.js",
+  "browser": "./src/index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -21,6 +18,13 @@
   },
   "homepage": "https://github.com/JSDenintex/JSDenintex.github.io#readme",
   "dependencies": {
-    "lit": "^3.1.2"
+    "css-loader": "^6.8.1",
+    "lit": "^2.6.1",
+    "style-loader": "^3.3.3",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  },
+  "devDependencies": {
+    "babel-loader": "^9.1.2"
   }
 }

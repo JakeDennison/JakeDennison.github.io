@@ -1,10 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/neo-lv0.js',
+  entry: './src/neo-array.js',
   mode: 'production',
   output: {
-    filename: 'neo-lv0.js',
+    filename: 'neo-array.js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {

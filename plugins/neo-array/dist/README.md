@@ -1,11 +1,11 @@
-neo-lv0 plugin//3d object viewer.
+neo-array plugin//3d object viewer.
 
 version 1.0
 Plugin uses three.js 
 
 Properties
 
-The neo-lv0 plugin provides the following properties:
+The neo-array plugin provides the following properties:
 
     src (string): The URL of the 3D object to display.
     This is set inside the Nintex plugin control panel in the forms designer canvas.

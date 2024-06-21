@@ -6,7 +6,7 @@ class listviewElement extends LitElement {
   static getMetaConfig() {
     // plugin contract information
     return {
-      controlName: 'neo-listviewer',
+      controlName: 'neo-lv0',
       fallbackDisableSubmit: false,
       description: 'Display a list of records',
       iconUrl: "group-control",
@@ -106,4 +106,4 @@ replaceUnicodeRegex(input) {
   }
 }
 
-customElements.define('neo-listviewer', listviewElement);
+customElements.define('neo-lv0', listviewElement);

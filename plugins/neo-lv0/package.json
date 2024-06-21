@@ -1,7 +1,7 @@
 {
-  "name": "neo-listviewer",
+  "name": "neo-lv0",
   "version": "1.0.0",
-  "main": "./src/neo-listviewer.js",
+  "main": "./src/neo-lv0.js",
   "browser": "./src/index.html",
   "scripts": {
     "build": "webpack"
