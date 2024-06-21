@@ -22,7 +22,7 @@ class ArrayElement extends LitElement {
           description: 'Do not use, Output only',
           isValueField: true,
           properties: {
-            outputArray:{
+            outputArray: {
               type: 'array',
               title: 'Array',
             },
@@ -60,6 +60,7 @@ class ArrayElement extends LitElement {
       const array = JSON.parse(this.input);
       if (Array.isArray(array)) {
         this.output = { array: array };
+        console.log('Parsed JSON array:', array);
       } else {
         throw new Error('Input is not a valid array');
       }
@@ -68,8 +69,10 @@ class ArrayElement extends LitElement {
       // Fallback to handling semicolon-separated values
       const array = this.input.split(';').map(item => item.replace('#', ''));
       this.output = { array: array };
+      console.log('Parsed semicolon-separated values:', array);
     }
 
+    console.log('Dispatching event with output:', this.output);
     this.dispatchEvent(new CustomEvent('ntx-value-change', {
       detail: this.output,
       bubbles: true,
