@@ -21,12 +21,18 @@ class ArrayElement extends LitElement {
           title: 'Output Object',
           description: 'Do not use, Output only',
           isValueField: true,
+          properties: {
+            array:{
+              type: 'string',
+              title: 'Output',
+            },
+          },
         },
       },
       events: ["ntx-value-change"],
       standardProperties: {
-        fieldLabel: true,
-        description: true,
+        fieldLabel: false,
+        description: false,
       }
     };
   }
