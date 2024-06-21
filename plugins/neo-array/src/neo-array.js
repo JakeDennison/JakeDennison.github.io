@@ -70,7 +70,9 @@ class ArrayElement extends LitElement {
   }
 
   render() {
-    return html``;
+    return html`
+      <div>Input: ${this.input}</div>
+    `;
   }
 }
 
