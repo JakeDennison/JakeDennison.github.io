@@ -22,9 +22,9 @@ class ArrayElement extends LitElement {
           description: 'Do not use, Output only',
           isValueField: true,
           properties: {
-            array:{
-              type: 'string',
-              title: 'Output',
+            outputArray:{
+              type: 'array',
+              title: 'Array',
             },
           },
         },
