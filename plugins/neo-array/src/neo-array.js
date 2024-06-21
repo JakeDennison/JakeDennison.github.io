@@ -50,6 +50,7 @@ class ArrayElement extends LitElement {
 
   handleInputChange() {
     try {
+      // First, try to parse as JSON array
       const array = JSON.parse(this.input);
       if (Array.isArray(array)) {
         this.output = { array: array };
@@ -57,8 +58,10 @@ class ArrayElement extends LitElement {
         throw new Error('Input is not a valid array');
       }
     } catch (error) {
-      console.error('Invalid array string:', error);
-      this.output = { error: 'Invalid array string' };
+      console.error('Invalid JSON array string:', error);
+      // Fallback to handling semicolon-separated values
+      const array = this.input.split(';').map(item => item.replace('#', ''));
+      this.output = { array: array };
     }
 
     this.dispatchEvent(new CustomEvent('ntx-value-change', {
