@@ -54,27 +54,27 @@ class NeoCardsElement extends LitElement {
           description: 'Insert the content for the card footer including any key tags'
         },
         style: {
-          title: 'Card Background Style',
           type: 'string',
+          title: 'Card Background Style',
           description: 'Apply a custom card background style using the bootstrap 5 card styles, e.g. bg-secondary'
         },
         borderstyle: {
-          title: 'Card Border Style',
           type: 'string',
+          title: 'Card Border Style',
           description: 'Apply a custom card border style using the bootstrap 5 card styles, e.g. bg-success'
         },
         cardLayout: {
-          title: 'Choice field',
           type: 'string',
+          title: 'Choice field',
           enum: ['Grid', 'Group'],
           showAsRadio: true,
           verticalLayout: true,
           defaultValue: 'Grid',
         },
-        cardRow:{
+        cardRow: {
+          type: 'integer',
           title: 'Number of cards per row',
           description: 'From 1 - 6',
-          type: 'integer',
           minimum: 1,
           maximum: 6,
           defaultValue: 1,
@@ -149,17 +149,35 @@ class NeoCardsElement extends LitElement {
           <div class="card ${this.style} ${this.borderstyle}">
             <img src="${item[this.imgurl]}" class="card-img-top" alt="...">
             <div class="card-body">
-              <h5 class="card-title">${item[this.header]}</h5>
-              <p class="card-text">${item[this.body]}</p>
-              <a href="${item[this.btnURL]}" class="btn btn-primary">${this.btnLabel}</a>
+              <h5 class="card-title">${this.interpolateTemplate(this.header, item)}</h5>
+              <p class="card-text">${this.interpolateTemplate(this.body, item)}</p>
+              <a href="${this.interpolateTemplate(this.btnURL, item)}" class="btn btn-primary">${this.btnLabel}</a>
             </div>
             <div class="card-footer">
-              <small class="text-muted">${item[this.footer]}</small>
+              <small class="text-muted">${this.interpolateTemplate(this.footer, item)}</small>
             </div>
           </div>
         `)}
       </div>
     `;
+  }
+
+  interpolateTemplate(template, data) {
+    // Regular expression to find all occurrences of `${...}`
+    const regex = /\${(.*?)}/g;
+    // Replace each placeholder with its corresponding value from data
+    return template.replace(regex, (match, expression) => {
+      const keys = expression.split('.'); // handle nested keys if needed
+      let value = data;
+      for (const key of keys) {
+        if (value.hasOwnProperty(key)) {
+          value = value[key];
+        } else {
+          return match; // return the original placeholder if key is not found
+        }
+      }
+      return value;
+    });
   }
 }
 
