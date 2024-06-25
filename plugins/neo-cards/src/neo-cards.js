@@ -132,26 +132,19 @@ class NeoCardsElement extends LitElement {
         overflow: hidden;
         background-color: #f8f9fa; /* Default background color for the card */
       }
-      .card-img-top-container {
-        position: relative;
-        width: 100%;
-        overflow: hidden;
-      }
       .card-img-top {
         width: 100%;
         height: auto;
         object-fit: cover; /* Maintain aspect ratio */
       }
-      .card-img-top.blurred::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
+      .vertical-group .card {
+        display: flex;
+        flex-direction: row;
+      }
+      .vertical-group .card-img-top {
+        width: auto;
         height: 100%;
-        background: inherit;
-        filter: blur(10px);
-        z-index: -1;
+        object-fit: cover;
       }
       .card-body {
         padding: 1rem;
@@ -215,9 +208,7 @@ class NeoCardsElement extends LitElement {
           return html`
             <div class="card ${this.style} ${this.borderstyle}">
               ${imageUrl ? html`
-                <div class="card-img-top-container ${imageWidth ? 'blurred' : ''}">
-                  <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top" style="${imageHeight ? `height: ${imageHeight};` : ''} ${imageWidth ? `max-width: ${imageWidth};` : ''}">
-                </div>
+                <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top" style="${imageHeight ? `height: ${imageHeight};` : ''} ${imageWidth ? `max-width: ${imageWidth};` : ''}">
               ` : ''}
               <div class="card-body">
                 ${this.header ? html`
@@ -245,7 +236,7 @@ class NeoCardsElement extends LitElement {
   getCardLayoutClass() {
     switch (this.cardLayout) {
       case 'Vertical Group':
-        return 'card-vertical-group';
+        return 'card-vertical-group vertical-group';
       case 'Horizontal Group':
         return 'card-group';
       case 'Grid':
