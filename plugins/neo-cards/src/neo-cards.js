@@ -31,6 +31,11 @@ class NeoCardsElement extends LitElement {
           title: 'Image height',
           description: 'Apply an image height value, e.g. 150px'
         },
+        imgwidth: {
+          type: 'string',
+          title: 'Image width',
+          description: 'When the images are being stretched too far, apply an image max width'
+        },
         header: {
           type: 'string',
           title: 'Card Header Content',
@@ -89,6 +94,7 @@ class NeoCardsElement extends LitElement {
       inputobject: { type: Object },
       imgurl: { type: String },
       imgheight: { type: String },
+      imgwidth: { type: String },
       header: { type: String },
       body: { type: String },
       btnLabel: { type: String },
@@ -109,7 +115,6 @@ class NeoCardsElement extends LitElement {
       .card-group {
         display: flex;
         flex-wrap: wrap;
-        gap: 16px;
       }
       .card-grid {
         display: grid;
@@ -127,10 +132,26 @@ class NeoCardsElement extends LitElement {
         overflow: hidden;
         background-color: #f8f9fa; /* Default background color for the card */
       }
+      .card-img-top-container {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+      }
       .card-img-top {
         width: 100%;
         height: auto;
         object-fit: cover; /* Maintain aspect ratio */
+      }
+      .card-img-top.blurred::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: inherit;
+        filter: blur(10px);
+        z-index: -1;
       }
       .card-body {
         padding: 1rem;
@@ -169,6 +190,7 @@ class NeoCardsElement extends LitElement {
     this.inputobject = [];
     this.imgurl = '';
     this.imgheight = '';
+    this.imgwidth = '';
     this.header = '';
     this.body = '';
     this.btnLabel = 'Click here';
@@ -188,11 +210,14 @@ class NeoCardsElement extends LitElement {
           const imageUrl = this.extractImageUrl(imageUrlString);
           const imageDescription = this.extractImageDescription(imageUrlString);
           const imageHeight = this.interpolateTemplate(this.imgheight, item);
+          const imageWidth = this.interpolateTemplate(this.imgwidth, item);
 
           return html`
             <div class="card ${this.style} ${this.borderstyle}">
               ${imageUrl ? html`
-                <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top" style="${imageHeight ? `height: ${imageHeight};` : ''}">
+                <div class="card-img-top-container ${imageWidth ? 'blurred' : ''}">
+                  <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top" style="${imageHeight ? `height: ${imageHeight};` : ''} ${imageWidth ? `max-width: ${imageWidth};` : ''}">
+                </div>
               ` : ''}
               <div class="card-body">
                 ${this.header ? html`
