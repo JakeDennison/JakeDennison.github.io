@@ -175,7 +175,6 @@ class NeoCardsElement extends LitElement {
         white-space: pre-wrap;
       }
       /* Custom card styles */
-      ${this.cardStyle}
     `;
   }
 

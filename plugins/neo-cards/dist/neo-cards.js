@@ -67,7 +67,6 @@
         white-space: pre-wrap;
       }
       /* Custom card styles */
-      ${this.cardStyle}
     `}constructor(){super(),this.inputobject=[],this.imgurl="",this.imgheight="",this.header="",this.body="",this.btnLabel="Click here",this.btnURL="",this.footer="",this.style="",this.borderstyle="",this.cardLayout="Grid",this.cardStyle=""}render(){return M`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="${this.getCardLayoutClass()}">
