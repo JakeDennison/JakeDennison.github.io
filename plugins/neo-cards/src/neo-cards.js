@@ -10,16 +10,11 @@ class NeoCardsElement extends LitElement {
       groupName: 'neo',
       version: '1.0',
       properties: {
-        inputobject: {
-          type: 'object',
-          title: 'Data Object',
-          description: 'Insert the data object you want to build the cards from'
-        },
-        outputobject: {
-          type: 'object',
-          title: 'Output Object',
-          description: 'Do not use',
-          isValueField: true
+        jsonInput: {
+          type: 'string',
+          title: 'JSON Input',
+          description: 'Input JSON data to build the cards',
+          format: 'textarea'
         },
         imgurl: {
           type: 'string',
@@ -89,7 +84,7 @@ class NeoCardsElement extends LitElement {
 
   static get properties() {
     return {
-      inputobject: { type: Object },
+      jsonInput: { type: String },
       imgurl: { type: String },
       header: { type: String },
       body: { type: String },
@@ -123,12 +118,22 @@ class NeoCardsElement extends LitElement {
         flex: 1 1 calc(100% / var(--cards-per-row) - 16px);
         max-width: calc(100% / var(--cards-per-row) - 16px);
       }
+      textarea {
+        width: 100%;
+        min-height: 100px;
+        margin-bottom: 10px;
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
     `;
   }
 
   constructor() {
     super();
-    this.inputobject = [];
+    this.jsonInput = '';
     this.imgurl = '';
     this.header = '';
     this.body = '';
@@ -144,8 +149,13 @@ class NeoCardsElement extends LitElement {
   render() {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <textarea 
+        placeholder="Enter JSON data here..."
+        .value="${this.jsonInput}"
+        @input="${this.handleJsonInputChange}"
+      ></textarea>
       <div class="${this.cardLayout === 'Grid' ? 'card-grid' : 'card-group'}" style="--cards-per-row: ${this.cardRow}">
-        ${this.inputobject.map(item => html`
+        ${this.parseJsonData().map(item => html`
           <div class="card ${this.style} ${this.borderstyle}">
             <img src="${item[this.imgurl]}" class="card-img-top" alt="...">
             <div class="card-body">
@@ -162,22 +172,54 @@ class NeoCardsElement extends LitElement {
     `;
   }
 
+  handleJsonInputChange(event) {
+    this.jsonInput = event.target.value;
+  }
+
+  parseJsonData() {
+    try {
+      return JSON.parse(this.jsonInput) || [];
+    } catch (error) {
+      console.error('Error parsing JSON input:', error);
+      return [];
+    }
+  }
+
   interpolateTemplate(template, data) {
     // Regular expression to find all occurrences of `${...}`
     const regex = /\${(.*?)}/g;
     // Replace each placeholder with its corresponding value from data
     return template.replace(regex, (match, expression) => {
-      const keys = expression.split('.'); // handle nested keys if needed
+      // Split expression by dot to handle nested properties
+      const keys = expression.split('.');
       let value = data;
+
+      // Traverse each key and resolve value from data
       for (const key of keys) {
-        if (value.hasOwnProperty(key)) {
-          value = value[key];
+        if (Array.isArray(value)) {
+          // If value is an array, map over it and interpolate each item
+          value = value.map(item => this.resolveKey(item, key)).join(', ');
         } else {
-          return match; // return the original placeholder if key is not found
+          // Otherwise, access property from object
+          value = this.resolveKey(value, key);
         }
       }
+
       return value;
     });
+  }
+
+  // Function to resolve key in object or array
+  resolveKey(obj, key) {
+    if (Array.isArray(obj)) {
+      // If object is an array, map over it to resolve each item's key
+      return obj.map(item => this.resolveKey(item, key)).join(', ');
+    } else if (obj && typeof obj === 'object') {
+      // If object is an object, access key directly
+      return obj[key];
+    } else {
+      return undefined; // Return undefined if key cannot be resolved
+    }
   }
 }
 
