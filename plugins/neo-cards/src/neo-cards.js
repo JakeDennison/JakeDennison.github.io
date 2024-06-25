@@ -153,7 +153,7 @@ class NeoCardsElement extends LitElement {
       <div class="${this.cardLayout === 'Grid' ? 'card-grid' : 'card-group'}" style="--cards-per-row: ${this.cardRow}">
         ${this.inputobject.map(item => html`
           <div class="card ${this.style} ${this.borderstyle}">
-            <img src="${item[this.imgurl]}" class="card-img-top" alt="...">
+            <img src="${this.interpolateTemplate(this.imgurl, item)}" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">${this.interpolateTemplate(this.header, item)}</h5>
               <p class="card-text">${this.interpolateTemplate(this.body, item)}</p>

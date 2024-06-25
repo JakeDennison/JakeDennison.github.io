@@ -29,7 +29,7 @@
       <div class="${"Grid"===this.cardLayout?"card-grid":"card-group"}" style="--cards-per-row: ${this.cardRow}">
         ${this.inputobject.map((t=>M`
           <div class="card ${this.style} ${this.borderstyle}">
-            <img src="${t[this.imgurl]}" class="card-img-top" alt="...">
+            <img src="${this.interpolateTemplate(this.imgurl,t)}" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">${this.interpolateTemplate(this.header,t)}</h5>
               <p class="card-text">${this.interpolateTemplate(this.body,t)}</p>
