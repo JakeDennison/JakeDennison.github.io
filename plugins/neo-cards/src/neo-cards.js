@@ -151,19 +151,28 @@ class NeoCardsElement extends LitElement {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="${this.cardLayout === 'Grid' ? 'card-grid' : 'card-group'}" style="--cards-per-row: ${this.cardRow}">
-        ${this.inputobject.map(item => html`
-          <div class="card ${this.style} ${this.borderstyle}">
-            <img src="${this.extractImageUrl(item[this.imgurl])}" class="card-img-top" alt="${this.extractImageDescription(item[this.imgurl])}">
-            <div class="card-body">
-              <h5 class="card-title">${this.interpolateTemplate(this.header, item)}</h5>
-              <p class="card-text">${this.interpolateTemplate(this.body, item)}</p>
-              <a href="${this.interpolateTemplate(this.btnURL, item)}" class="btn btn-primary">${this.btnLabel}</a>
+        ${this.inputobject.map(item => {
+          const imageUrlString = this.interpolateTemplate(this.imgurl, item);
+          const imageUrl = this.extractImageUrl(imageUrlString);
+          const imageDescription = this.extractImageDescription(imageUrlString);
+          return html`
+            <div class="card ${this.style} ${this.borderstyle}">
+              <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top">
+              <div class="card-body">
+                <h5 class="card-title">${this.interpolateTemplate(this.header, item)}</h5>
+                <p class="card-text">${this.interpolateTemplate(this.body, item)}</p>
+                <a href="${this.interpolateTemplate(this.btnURL, item)}" class="btn btn-primary">${this.btnLabel}</a>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">${this.interpolateTemplate(this.footer, item)}</small>
+              </div>
             </div>
-            <div class="card-footer">
-              <small class="text-muted">${this.interpolateTemplate(this.footer, item)}</small>
-            </div>
-          </div>
-        `)}
+          `;
+        })}
+      </div>
+      <div class="debug-section">
+        <h4>JSON Input:</h4>
+        <pre>${JSON.stringify(this.inputobject, null, 2)}</pre>
       </div>
     `;
   }
@@ -196,13 +205,17 @@ class NeoCardsElement extends LitElement {
   }
 
   extractImageUrl(imageUrlString) {
-    // Extract the URL from the combined string
-    return imageUrlString.split(',')[0].trim();
+    // Split the combined string by `,`
+    const parts = imageUrlString.split(',');
+    // First part should be the URL, trim and return it
+    return parts[0].trim();
   }
 
   extractImageDescription(imageUrlString) {
-    // Extract the description from the combined string
-    return imageUrlString.split(',')[1].trim();
+    // Split the combined string by `,`
+    const parts = imageUrlString.split(',');
+    // Second part (if exists) is the description, trim and return it, or empty string if not found
+    return parts.length > 1 ? parts[1].trim() : '';
   }
 }
 
