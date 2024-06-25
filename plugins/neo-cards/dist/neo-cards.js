@@ -21,7 +21,6 @@
       }
       .card {
         flex: 1 1 calc(100% / 3); /* Adjust to 3 cards per row in grid layout */
-        max-width: calc(100% / 3);
         position: relative;
         overflow: hidden;
         background-color: #f8f9fa; /* Default background color for the card */
