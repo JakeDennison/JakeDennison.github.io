@@ -118,18 +118,18 @@ class NeoCardsElement extends LitElement {
       .card-group {
         display: flex;
         flex-wrap: wrap;
-        gap: 16px;
-        justify-content: space-between;
+        justify-content: space-between; /* Ensures cards fill the entire row */
       }
       .card-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(calc(100% / var(--cards-per-row)), 1fr));
         gap: 16px;
       }
       .card {
         position: relative;
         overflow: hidden;
         background-color: #f8f9fa; /* Default background color for the card */
+        margin-bottom: 16px; /* Add margin to bottom of each card */
       }
       .card-img-top {
         width: 100%;
@@ -187,7 +187,7 @@ class NeoCardsElement extends LitElement {
   render() {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <div class="${this.cardLayout === 'Grid' ? 'card-grid' : 'card-group'}">
+      <div class="${this.cardLayout === 'Grid' ? 'card-grid' : 'card-group'}" style="--cards-per-row: ${this.cardRow};">
         ${this.inputobject.map(item => {
           const imageUrlString = this.interpolateTemplate(this.imgurl, item);
           const imageUrl = this.extractImageUrl(imageUrlString);
@@ -195,9 +195,9 @@ class NeoCardsElement extends LitElement {
           const imageHeight = this.interpolateTemplate(this.imgheight, item);
 
           return html`
-            <div class="card ${this.style} ${this.borderstyle}" style="${this.cardLayout === 'Grid' ? `max-width: calc(100% / ${this.cardRow} - 16px);` : ''}">
+            <div class="card ${this.style} ${this.borderstyle}" style="${imageHeight ? `--card-img-height: ${imageHeight};` : ''}">
               ${imageUrl ? html`
-                <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top" style="${imageHeight ? `height: ${imageHeight};` : ''}">
+                <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top">
               ` : ''}
               <div class="card-body">
                 ${this.header ? html`
@@ -218,6 +218,10 @@ class NeoCardsElement extends LitElement {
             </div>
           `;
         })}
+      </div>
+      <div class="debug-section">
+        <h4>JSON Input:</h4>
+        <pre>${JSON.stringify(this.inputobject, null, 2)}</pre>
       </div>
     `;
   }
