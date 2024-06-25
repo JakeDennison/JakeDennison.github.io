@@ -68,21 +68,13 @@ class NeoCardsElement extends LitElement {
           title: 'Card Border Style',
           description: 'Apply a custom card border style using the bootstrap 5 card styles, e.g. bg-success'
         },
-        cardLayout: {
+        cardRow: {
           type: 'string',
-          title: 'Card Layout',
-          enum: ['Grid', 'Group'],
+          title: 'Card Row Limit',
+          enum: ['List', 'Grid'],
           showAsRadio: true,
           verticalLayout: true,
           defaultValue: 'Grid',
-        },
-        cardRow: {
-          type: 'integer',
-          title: 'Number of cards per row',
-          description: 'From 1 - 6',
-          minimum: 1,
-          maximum: 6,
-          defaultValue: 1,
         }
       },
       standardProperties: {
@@ -104,8 +96,7 @@ class NeoCardsElement extends LitElement {
       footer: { type: String },
       style: { type: String },
       borderstyle: { type: String },
-      cardLayout: { type: String },
-      cardRow: { type: Number }
+      cardRow: { type: String }
     };
   }
 
@@ -115,15 +106,9 @@ class NeoCardsElement extends LitElement {
         display: block;
         padding: 16px;
       }
-      .card-group {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between; /* Ensures cards fill the entire row */
-      }
-      .card-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(calc(100% / var(--cards-per-row)), 1fr));
-        gap: 16px;
+      .card-list {
+        width: 100%; /* Take full width */
+        margin-bottom: 16px; /* Add margin between cards */
       }
       .card {
         position: relative;
@@ -180,23 +165,21 @@ class NeoCardsElement extends LitElement {
     this.footer = '';
     this.style = '';
     this.borderstyle = '';
-    this.cardLayout = 'Grid';
-    this.cardRow = 1;
+    this.cardRow = 'Grid'; // Default to Grid layout
   }
 
   render() {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <div class="${this.cardLayout === 'Grid' ? 'card-grid' : 'card-group'}" style="--cards-per-row: ${this.cardRow};">
+      <div class="${this.cardRow === 'Grid' ? 'card-grid' : 'card-list'}">
         ${this.inputobject.map(item => {
           const imageUrlString = this.interpolateTemplate(this.imgurl, item);
           const imageUrl = this.extractImageUrl(imageUrlString);
           const imageDescription = this.extractImageDescription(imageUrlString);
           const imageHeight = this.interpolateTemplate(this.imgheight, item);
-          const columnClass = this.getColumnClass();
 
           return html`
-            <div class="card ${this.style} ${this.borderstyle}" style="${imageHeight ? `--card-img-height: ${imageHeight};` : ''} ${this.cardLayout === 'Group' ? 'flex-fill' : ''}">
+            <div class="card ${this.style} ${this.borderstyle}" style="--card-img-height: ${imageHeight};">
               ${imageUrl ? html`
                 <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top">
               ` : ''}
@@ -272,26 +255,6 @@ class NeoCardsElement extends LitElement {
   isValidUrl(url) {
     // Basic URL validation using regex
     return /^https?:\/\/\S+\.\S+$/.test(url);
-  }
-
-  getColumnClass() {
-    // Determine column class based on cardRow value
-    switch (this.cardRow) {
-      case 1:
-        return 'col-12';
-      case 2:
-        return 'col-6';
-      case 3:
-        return 'col-4';
-      case 4:
-        return 'col-3';
-      case 5:
-        return 'flex-fill'; // For 5, use flex-fill to fill remaining space
-      case 6:
-        return 'col-2';
-      default:
-        return 'col-12'; // Default to full width if cardRow is out of expected range
-    }
   }
 }
 
