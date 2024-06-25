@@ -11,12 +11,12 @@ class NeoCardsElement extends LitElement {
       version: '1.0',
       properties: {
         inputobject: {
-          type: 'Object',
+          type: 'object',
           title: 'Data Object',
           description: 'Insert the data object you want to build the cards from'
         },
         outputobject: {
-          type: 'Object',
+          type: 'object',
           title: 'Output Object',
           description: 'Do not use',
           isValueField: true
