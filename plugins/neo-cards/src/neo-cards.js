@@ -68,13 +68,18 @@ class NeoCardsElement extends LitElement {
           title: 'Card Border Style',
           description: 'Apply a custom card border style using the bootstrap 5 card styles, e.g. bg-success'
         },
-        cardRow: {
+        cardLayout: {
           type: 'string',
-          title: 'Card Row Limit',
-          enum: ['List', 'Grid'],
+          title: 'Card Layout',
+          enum: ['Grid', 'Horizontal Group', 'Vertical Group'],
           showAsRadio: true,
           verticalLayout: true,
           defaultValue: 'Grid',
+        },
+        cardStyle: {
+          type: 'string',
+          title: 'Card Custom Styles',
+          description: 'Apply custom styles to the cards',
         }
       },
       standardProperties: {
@@ -96,7 +101,8 @@ class NeoCardsElement extends LitElement {
       footer: { type: String },
       style: { type: String },
       borderstyle: { type: String },
-      cardRow: { type: String }
+      cardLayout: { type: String },
+      cardStyle: { type: String }
     };
   }
 
@@ -106,9 +112,27 @@ class NeoCardsElement extends LitElement {
         display: block;
         padding: 16px;
       }
-      .card-list {
-        width: 100%; /* Take full width */
-        margin-bottom: 16px; /* Add margin between cards */
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 16px;
+      }
+      .horizontal-group {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .horizontal-group .card {
+        flex: 1 1 calc(50% - 8px);
+        max-width: calc(50% - 8px);
+      }
+      .vertical-group {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .vertical-group .card {
+        width: 100%;
       }
       .card {
         position: relative;
@@ -150,6 +174,8 @@ class NeoCardsElement extends LitElement {
         margin-top: 20px;
         white-space: pre-wrap;
       }
+      /* Custom card styles */
+      ${this.cardStyle}
     `;
   }
 
@@ -165,49 +191,65 @@ class NeoCardsElement extends LitElement {
     this.footer = '';
     this.style = '';
     this.borderstyle = '';
-    this.cardRow = 'Grid'; // Default to Grid layout
+    this.cardLayout = 'Grid';
+    this.cardStyle = '';
   }
 
   render() {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <div class="${this.cardRow === 'Grid' ? 'card-grid' : 'card-list'}">
-        ${this.inputobject.map(item => {
-          const imageUrlString = this.interpolateTemplate(this.imgurl, item);
-          const imageUrl = this.extractImageUrl(imageUrlString);
-          const imageDescription = this.extractImageDescription(imageUrlString);
-          const imageHeight = this.interpolateTemplate(this.imgheight, item);
-
-          return html`
-            <div class="card ${this.style} ${this.borderstyle}" style="--card-img-height: ${imageHeight};">
-              ${imageUrl ? html`
-                <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top">
-              ` : ''}
-              <div class="card-body">
-                ${this.header ? html`
-                  <h5 class="card-title">${this.interpolateTemplate(this.header, item)}</h5>
-                ` : ''}
-                ${this.body ? html`
-                  <p class="card-text">${this.interpolateTemplate(this.body, item)}</p>
-                ` : ''}
-                ${this.btnURL ? html`
-                  <a href="${this.interpolateTemplate(this.btnURL, item)}" class="btn btn-primary">${this.btnLabel}</a>
-                ` : ''}
-              </div>
-              ${this.footer ? html`
-                <div class="card-footer">
-                  <small class="text-muted">${this.interpolateTemplate(this.footer, item)}</small>
-                </div>
-              ` : ''}
+      <div class="${this.getCardLayoutClass()}">
+        ${this.inputobject.map(item => html`
+          <div class="card ${this.style} ${this.borderstyle}">
+            ${this.imgurl && this.renderImage(item)}
+            <div class="card-body">
+              <h5 class="card-title">${this.interpolateTemplate(this.header, item)}</h5>
+              <p class="card-text">${this.interpolateTemplate(this.body, item)}</p>
+              <a href="${this.interpolateTemplate(this.btnURL, item)}" class="btn btn-primary">${this.btnLabel}</a>
             </div>
-          `;
-        })}
+            ${this.footer && html`
+              <div class="card-footer">
+                <small class="text-muted">${this.interpolateTemplate(this.footer, item)}</small>
+              </div>
+            `}
+          </div>
+        `)}
       </div>
       <div class="debug-section">
         <h4>JSON Input:</h4>
         <pre>${JSON.stringify(this.inputobject, null, 2)}</pre>
       </div>
     `;
+  }
+
+  getCardLayoutClass() {
+    switch (this.cardLayout) {
+      case 'Horizontal Group':
+        return 'horizontal-group';
+      case 'Vertical Group':
+        return 'vertical-group';
+      case 'Grid':
+      default:
+        return 'card-grid';
+    }
+  }
+
+  renderImage(item) {
+    const imageUrl = this.interpolateTemplate(this.imgurl, item);
+    const imageDescription = this.getImageDescription(imageUrl);
+    const imageStyle = this.imgheight ? `height: ${this.imgheight}; object-fit: cover;` : '';
+
+    return html`
+      <img src="${imageUrl}" class="card-img-top" alt="${imageDescription}" style="${imageStyle}">
+    `;
+  }
+
+  getImageDescription(imageUrl) {
+    const parts = imageUrl.split(',');
+    if (parts.length > 1) {
+      return parts[1].trim();
+    }
+    return '';
   }
 
   interpolateTemplate(template, data) {
@@ -235,26 +277,6 @@ class NeoCardsElement extends LitElement {
         return data.hasOwnProperty(key) ? data[key] : match;
       }
     });
-  }
-
-  extractImageUrl(imageUrlString) {
-    // Split the combined string by `,`
-    const parts = imageUrlString.split(',');
-    // First part should be the URL, trim and return it if it's a valid URL
-    const url = parts[0].trim();
-    return this.isValidUrl(url) ? url : '';
-  }
-
-  extractImageDescription(imageUrlString) {
-    // Split the combined string by `,`
-    const parts = imageUrlString.split(',');
-    // Second part (if exists) is the description, trim and return it, or an empty string
-    return parts.length > 1 ? parts[1].trim() : '';
-  }
-
-  isValidUrl(url) {
-    // Basic URL validation using regex
-    return /^https?:\/\/\S+\.\S+$/.test(url);
   }
 }
 
