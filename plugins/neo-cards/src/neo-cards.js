@@ -128,6 +128,37 @@ class NeoCardsElement extends LitElement {
       .card {
         flex: 1 1 calc(100% / var(--cards-per-row) - 16px);
         max-width: calc(100% / var(--cards-per-row) - 16px);
+        position: relative;
+        overflow: hidden;
+        background-color: #f8f9fa; /* Default background color for the card */
+      }
+      .card-img-top {
+        width: 100%;
+        height: auto;
+        object-fit: cover; /* Maintain aspect ratio */
+      }
+      .card-body {
+        padding: 1rem;
+      }
+      .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+      .card-text {
+        font-size: 1rem;
+        color: #6c757d;
+      }
+      .btn {
+        text-decoration: none;
+      }
+      .card-footer {
+        padding: 0.75rem 1rem;
+        background-color: #f8f9fa;
+        border-top: 1px solid #dee2e6;
+      }
+      .text-muted {
+        color: #6c757d;
       }
       .debug-section {
         border: 1px solid #ccc;
@@ -188,6 +219,10 @@ class NeoCardsElement extends LitElement {
             </div>
           `;
         })}
+      </div>
+      <div class="debug-section">
+        <h4>JSON Input:</h4>
+        <pre>${JSON.stringify(this.inputobject, null, 2)}</pre>
       </div>
     `;
   }
