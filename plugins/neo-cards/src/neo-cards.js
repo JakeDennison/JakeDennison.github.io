@@ -134,7 +134,7 @@ class NeoCardsElement extends LitElement {
 
   constructor() {
     super();
-    this.inputobject = {};
+    this.inputobject = [];
     this.imgurl = '';
     this.header = '';
     this.body = '';
@@ -153,7 +153,7 @@ class NeoCardsElement extends LitElement {
       <div class="${this.cardLayout === 'Grid' ? 'card-grid' : 'card-group'}" style="--cards-per-row: ${this.cardRow}">
         ${this.inputobject.map(item => html`
           <div class="card ${this.style} ${this.borderstyle}">
-            <img src="${this.interpolateTemplate(this.imgurl, item)}" class="card-img-top" alt="...">
+            <img src="${this.extractImageUrl(item[this.imgurl])}" class="card-img-top" alt="${this.extractImageDescription(item[this.imgurl])}">
             <div class="card-body">
               <h5 class="card-title">${this.interpolateTemplate(this.header, item)}</h5>
               <p class="card-text">${this.interpolateTemplate(this.body, item)}</p>
@@ -165,12 +165,8 @@ class NeoCardsElement extends LitElement {
           </div>
         `)}
       </div>
-      <div class="debug-section">
-        <h4>JSON Input:</h4>
-        <pre>${JSON.stringify(this.inputobject, null, 2)}</pre>
-      </div>
     `;
-  }  
+  }
 
   interpolateTemplate(template, data) {
     // Regular expression to find all occurrences of `${...}`
@@ -198,8 +194,16 @@ class NeoCardsElement extends LitElement {
       }
     });
   }
-  
-  
+
+  extractImageUrl(imageUrlString) {
+    // Extract the URL from the combined string
+    return imageUrlString.split(',')[0].trim();
+  }
+
+  extractImageDescription(imageUrlString) {
+    // Extract the description from the combined string
+    return imageUrlString.split(',')[1].trim();
+  }
 }
 
 customElements.define('neo-cards', NeoCardsElement);
