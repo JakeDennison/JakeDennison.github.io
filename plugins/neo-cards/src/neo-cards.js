@@ -193,9 +193,10 @@ class NeoCardsElement extends LitElement {
           const imageUrl = this.extractImageUrl(imageUrlString);
           const imageDescription = this.extractImageDescription(imageUrlString);
           const imageHeight = this.interpolateTemplate(this.imgheight, item);
+          const columnClass = this.getColumnClass();
 
           return html`
-            <div class="card ${this.style} ${this.borderstyle}" style="${imageHeight ? `--card-img-height: ${imageHeight};` : ''}">
+            <div class="card ${this.style} ${this.borderstyle}" style="${imageHeight ? `--card-img-height: ${imageHeight};` : ''} ${this.cardLayout === 'Group' ? 'flex-fill' : ''}">
               ${imageUrl ? html`
                 <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top">
               ` : ''}
@@ -264,13 +265,33 @@ class NeoCardsElement extends LitElement {
   extractImageDescription(imageUrlString) {
     // Split the combined string by `,`
     const parts = imageUrlString.split(',');
-    // Second part (if exists) is the description, trim and return it, or empty string if not found
+    // Second part (if exists) is the description, trim and return it, or an empty string
     return parts.length > 1 ? parts[1].trim() : '';
   }
 
   isValidUrl(url) {
-    // Simple check for URL format
-    return /^https?:\/\/.+\..+$/.test(url);
+    // Basic URL validation using regex
+    return /^https?:\/\/\S+\.\S+$/.test(url);
+  }
+
+  getColumnClass() {
+    // Determine column class based on cardRow value
+    switch (this.cardRow) {
+      case 1:
+        return 'col-12';
+      case 2:
+        return 'col-6';
+      case 3:
+        return 'col-4';
+      case 4:
+        return 'col-3';
+      case 5:
+        return 'flex-fill'; // For 5, use flex-fill to fill remaining space
+      case 6:
+        return 'col-2';
+      default:
+        return 'col-12'; // Default to full width if cardRow is out of expected range
+    }
   }
 }
 
