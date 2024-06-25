@@ -1,10 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/neo-animalcards.js',
+  entry: './src/neo-cards.js',
   mode: 'production',
   output: {
-    filename: 'neo-animalcards.js',
+    filename: 'neo-cards.js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {

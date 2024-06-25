@@ -1,8 +1,8 @@
 {
-  "name": "neo-animalcards",
+  "name": "neo-cards",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/neo-animalcards.js",
+  "main": "./src/neo-cards.js",
   "browser": "./src/index.html",
   "scripts": {
     "build": "webpack"
