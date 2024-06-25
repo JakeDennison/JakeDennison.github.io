@@ -70,7 +70,7 @@ class NeoCardsElement extends LitElement {
         },
         cardLayout: {
           type: 'string',
-          title: 'Card Layout',
+          title: 'Choice field',
           enum: ['Grid', 'Group'],
           showAsRadio: true,
           verticalLayout: true,
@@ -118,14 +118,16 @@ class NeoCardsElement extends LitElement {
       .card-group {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        gap: 16px;
       }
       .card-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 16px;
       }
       .card {
+        flex: 1 1 calc(100% / var(--cards-per-row) - 16px);
+        max-width: calc(100% / var(--cards-per-row) - 16px);
         position: relative;
         overflow: hidden;
         background-color: #f8f9fa; /* Default background color for the card */
@@ -186,7 +188,7 @@ class NeoCardsElement extends LitElement {
   render() {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <div class="${this.cardLayout === 'Grid' ? 'card-grid' : 'card-group'}">
+      <div class="${this.cardLayout === 'Grid' ? 'card-grid' : 'card-group'}" style="--cards-per-row: ${this.cardRow}">
         ${this.inputobject.map(item => {
           const imageUrlString = this.interpolateTemplate(this.imgurl, item);
           const imageUrl = this.extractImageUrl(imageUrlString);
@@ -194,7 +196,7 @@ class NeoCardsElement extends LitElement {
           const imageHeight = this.interpolateTemplate(this.imgheight, item);
 
           return html`
-            <div class="card ${this.style} ${this.borderstyle}" style="${this.cardLayout === 'Grid' ? `max-width: calc(100% / ${this.cardRow} - 16px);` : ''}">
+            <div class="card ${this.style} ${this.borderstyle}">
               ${imageUrl ? html`
                 <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top" style="${imageHeight ? `height: ${imageHeight};` : ''}">
               ` : ''}
@@ -265,7 +267,7 @@ class NeoCardsElement extends LitElement {
 
   isValidUrl(url) {
     // Simple check for URL format
-    return /^https?:\/\/.+\..+$/.test(url);
+    return /^https?:\/\//.test(url);
   }
 }
 
