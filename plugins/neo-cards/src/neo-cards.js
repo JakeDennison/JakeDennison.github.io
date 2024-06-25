@@ -128,6 +128,12 @@ class NeoCardsElement extends LitElement {
         border-radius: 4px;
         box-sizing: border-box;
       }
+      .debug-section {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-top: 20px;
+        white-space: pre-wrap;
+      }
     `;
   }
 
@@ -168,6 +174,10 @@ class NeoCardsElement extends LitElement {
             </div>
           </div>
         `)}
+      </div>
+      <div class="debug-section">
+        <h4>JSON Input:</h4>
+        <pre>${this.jsonInput}</pre>
       </div>
     `;
   }
