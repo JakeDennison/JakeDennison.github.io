@@ -71,18 +71,10 @@ class NeoCardsElement extends LitElement {
         cardLayout: {
           type: 'string',
           title: 'Choice field',
-          enum: ['Grid', 'Group'],
+          enum: ['Grid', 'Vertical Group', 'Horizontal Group'],
           showAsRadio: true,
           verticalLayout: true,
           defaultValue: 'Grid',
-        },
-        cardRow: {
-          type: 'integer',
-          title: 'Number of cards per row',
-          description: 'From 1 - 6',
-          minimum: 1,
-          maximum: 6,
-          defaultValue: 1,
         }
       },
       standardProperties: {
@@ -104,8 +96,7 @@ class NeoCardsElement extends LitElement {
       footer: { type: String },
       style: { type: String },
       borderstyle: { type: String },
-      cardLayout: { type: String },
-      cardRow: { type: Number }
+      cardLayout: { type: String }
     };
   }
 
@@ -125,9 +116,14 @@ class NeoCardsElement extends LitElement {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 16px;
       }
+      .card-vertical-group {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
       .card {
-        flex: 1 1 calc(100% / var(--cards-per-row) - 16px);
-        max-width: calc(100% / var(--cards-per-row) - 16px);
+        flex: 1 1 calc(100% / 3); /* Adjust to 3 cards per row in grid layout */
+        max-width: calc(100% / 3);
         position: relative;
         overflow: hidden;
         background-color: #f8f9fa; /* Default background color for the card */
@@ -182,13 +178,12 @@ class NeoCardsElement extends LitElement {
     this.style = '';
     this.borderstyle = '';
     this.cardLayout = 'Grid';
-    this.cardRow = 1;
   }
 
   render() {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <div class="${this.cardLayout === 'Grid' ? 'card-grid' : 'card-group'}" style="--cards-per-row: ${this.cardRow}">
+      <div class="${this.getCardLayoutClass()}">
         ${this.inputobject.map(item => {
           const imageUrlString = this.interpolateTemplate(this.imgurl, item);
           const imageUrl = this.extractImageUrl(imageUrlString);
@@ -221,6 +216,18 @@ class NeoCardsElement extends LitElement {
         })}
       </div>
     `;
+  }
+
+  getCardLayoutClass() {
+    switch (this.cardLayout) {
+      case 'Vertical Group':
+        return 'card-vertical-group';
+      case 'Horizontal Group':
+        return 'card-group';
+      case 'Grid':
+      default:
+        return 'card-grid';
+    }
   }
 
   interpolateTemplate(template, data) {
