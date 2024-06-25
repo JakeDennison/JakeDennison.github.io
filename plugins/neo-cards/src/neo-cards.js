@@ -31,11 +31,6 @@ class NeoCardsElement extends LitElement {
           title: 'Image height',
           description: 'Apply an image height value, e.g. 150px'
         },
-        imgwidth: {
-          type: 'string',
-          title: 'Image width',
-          description: 'When the images are being stretched too far, apply an image max width'
-        },
         header: {
           type: 'string',
           title: 'Card Header Content',
@@ -142,9 +137,10 @@ class NeoCardsElement extends LitElement {
         flex-direction: row;
       }
       .vertical-group .card-img-top {
-        width: auto;
+        width: 25%;
         height: 100%;
         object-fit: cover;
+        border-top-right-radius: 0;
       }
       .card-body {
         padding: 1rem;
@@ -183,7 +179,6 @@ class NeoCardsElement extends LitElement {
     this.inputobject = [];
     this.imgurl = '';
     this.imgheight = '';
-    this.imgwidth = '';
     this.header = '';
     this.body = '';
     this.btnLabel = 'Click here';
@@ -203,12 +198,11 @@ class NeoCardsElement extends LitElement {
           const imageUrl = this.extractImageUrl(imageUrlString);
           const imageDescription = this.extractImageDescription(imageUrlString);
           const imageHeight = this.interpolateTemplate(this.imgheight, item);
-          const imageWidth = this.interpolateTemplate(this.imgwidth, item);
 
           return html`
             <div class="card ${this.style} ${this.borderstyle}">
               ${imageUrl ? html`
-                <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top" style="${imageHeight ? `height: ${imageHeight};` : ''} ${imageWidth ? `max-width: ${imageWidth};` : ''}">
+                <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top" style="${imageHeight ? `height: ${imageHeight};` : ''}">
               ` : ''}
               <div class="card-body">
                 ${this.header ? html`
