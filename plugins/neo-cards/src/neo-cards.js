@@ -26,6 +26,11 @@ class NeoCardsElement extends LitElement {
           title: 'Image URL Tag',
           description: 'Insert the header text including any key references'
         },
+        imgheight: {
+          type: 'string',
+          title: 'Image height',
+          description: 'Apply an image height value, e.g. 150px'
+        },
         header: {
           type: 'string',
           title: 'Card Header Content',
@@ -91,6 +96,7 @@ class NeoCardsElement extends LitElement {
     return {
       inputobject: { type: Object },
       imgurl: { type: String },
+      imgheight: { type: String },
       header: { type: String },
       body: { type: String },
       btnLabel: { type: String },
@@ -136,6 +142,7 @@ class NeoCardsElement extends LitElement {
     super();
     this.inputobject = [];
     this.imgurl = '';
+    this.imgheight = '';
     this.header = '';
     this.body = '';
     this.btnLabel = 'Click here';
@@ -155,17 +162,29 @@ class NeoCardsElement extends LitElement {
           const imageUrlString = this.interpolateTemplate(this.imgurl, item);
           const imageUrl = this.extractImageUrl(imageUrlString);
           const imageDescription = this.extractImageDescription(imageUrlString);
+          const imageHeight = this.interpolateTemplate(this.imgheight, item);
+
           return html`
             <div class="card ${this.style} ${this.borderstyle}">
-              <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top">
+              ${imageUrl ? html`
+                <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top" style="${imageHeight ? `height: ${imageHeight};` : ''}">
+              ` : ''}
               <div class="card-body">
-                <h5 class="card-title">${this.interpolateTemplate(this.header, item)}</h5>
-                <p class="card-text">${this.interpolateTemplate(this.body, item)}</p>
-                <a href="${this.interpolateTemplate(this.btnURL, item)}" class="btn btn-primary">${this.btnLabel}</a>
+                ${this.header ? html`
+                  <h5 class="card-title">${this.interpolateTemplate(this.header, item)}</h5>
+                ` : ''}
+                ${this.body ? html`
+                  <p class="card-text">${this.interpolateTemplate(this.body, item)}</p>
+                ` : ''}
+                ${this.btnURL ? html`
+                  <a href="${this.interpolateTemplate(this.btnURL, item)}" class="btn btn-primary">${this.btnLabel}</a>
+                ` : ''}
               </div>
-              <div class="card-footer">
-                <small class="text-muted">${this.interpolateTemplate(this.footer, item)}</small>
-              </div>
+              ${this.footer ? html`
+                <div class="card-footer">
+                  <small class="text-muted">${this.interpolateTemplate(this.footer, item)}</small>
+                </div>
+              ` : ''}
             </div>
           `;
         })}
@@ -207,8 +226,9 @@ class NeoCardsElement extends LitElement {
   extractImageUrl(imageUrlString) {
     // Split the combined string by `,`
     const parts = imageUrlString.split(',');
-    // First part should be the URL, trim and return it
-    return parts[0].trim();
+    // First part should be the URL, trim and return it if it's a valid URL
+    const url = parts[0].trim();
+    return this.isValidUrl(url) ? url : '';
   }
 
   extractImageDescription(imageUrlString) {
@@ -216,6 +236,11 @@ class NeoCardsElement extends LitElement {
     const parts = imageUrlString.split(',');
     // Second part (if exists) is the description, trim and return it, or empty string if not found
     return parts.length > 1 ? parts[1].trim() : '';
+  }
+
+  isValidUrl(url) {
+    // Simple check for URL format
+    return /^https?:\/\//.test(url);
   }
 }
 
