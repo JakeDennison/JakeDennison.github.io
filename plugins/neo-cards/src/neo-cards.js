@@ -170,25 +170,36 @@ class NeoCardsElement extends LitElement {
         <pre>${JSON.stringify(this.inputobject, null, 2)}</pre>
       </div>
     `;
-  }
+  }  
 
   interpolateTemplate(template, data) {
     // Regular expression to find all occurrences of `${...}`
     const regex = /\${(.*?)}/g;
     // Replace each placeholder with its corresponding value from data
     return template.replace(regex, (match, expression) => {
-      const keys = expression.split('.'); // handle nested keys if needed
-      let value = data;
-      for (const key of keys) {
-        if (value.hasOwnProperty(key)) {
-          value = value[key];
-        } else {
-          return match; // return the original placeholder if key is not found
+      // Trim whitespace from expression to handle cases like `${$.Title}`
+      const key = expression.trim();
+      // Check if the key starts with `$` for variable like `$.Title`
+      if (key.startsWith('$.')) {
+        // Evaluate the expression after the `$.` to get the nested property value
+        const nestedKeys = key.substring(2).split('.');
+        let value = data;
+        for (const nestedKey of nestedKeys) {
+          if (value.hasOwnProperty(nestedKey)) {
+            value = value[nestedKey];
+          } else {
+            return match; // return the original placeholder if key is not found
+          }
         }
+        return value;
+      } else {
+        // If no `$` prefix, treat it directly as a property key in the current data item
+        return data.hasOwnProperty(key) ? data[key] : match;
       }
-      return value;
     });
   }
+  
+  
 }
 
 customElements.define('neo-cards', NeoCardsElement);
