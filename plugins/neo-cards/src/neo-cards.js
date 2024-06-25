@@ -189,10 +189,6 @@ class NeoCardsElement extends LitElement {
           `;
         })}
       </div>
-      <div class="debug-section">
-        <h4>JSON Input:</h4>
-        <pre>${JSON.stringify(this.inputobject, null, 2)}</pre>
-      </div>
     `;
   }
 
