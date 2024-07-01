@@ -75,9 +75,8 @@
         margin-right: 8px;
       }
     `}constructor(){super(),this.inputobject=[],this.imgurl="",this.imgheight="",this.header="",this.body="",this.btnLabel="Click here",this.btnURL="",this.footer="",this.style="",this.borderstyle="",this.cardLayout="Grid",this.filterTags="",this.selectedFilters={}}render(){return H`
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/css/BsMultiSelect.min.css">
-      <script src="https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/js/BsMultiSelect.min.js"></script>
-      <script type="module" src="https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/js/BsMultiSelect.esm.min.js"></script>
       
       <div class="filter-bar">
         ${this.renderFilterDropdowns()}
@@ -108,6 +107,10 @@
             </div>
           `}))}
       </div>
-    `}renderFilterDropdowns(){if(!this.filterTags)return;const r=this.filterTags.split(",").map((r=>r.trim())),t=this.getUniqueValuesForTags(r),o=r.map(((r,o)=>{const a=`filter-dropdown-${o}`;return setTimeout((()=>{new BsMultiSelect(document.getElementById(a),{dataSource:t[r].map((r=>({text:r,value:r}))),onChange:t=>this.handleFilterChange({target:{selectedOptions:t}},r),showSelected:!0,getSelected:()=>this.selectedFilters[r]||[]}).init()})),H`
+  
+      <script type="module">
+        import { BsMultiSelect } from 'https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/js/BsMultiSelect.esm.min.js';
+      </script>
+    `}renderFilterDropdowns(){if(!this.filterTags)return;const r=this.filterTags.split(",").map((r=>r.trim())),t=this.getUniqueValuesForTags(r),o=r.map(((r,o)=>{const a=`filter-dropdown-${o}`;return this.updateComplete.then((()=>{new BsMultiSelect(this.shadowRoot.getElementById(a),{dataSource:t[r].map((r=>({text:r,value:r}))),onChange:t=>this.handleFilterChange({target:{selectedOptions:t}},r),showSelected:!0,getSelected:()=>this.selectedFilters[r]||[]}).init()})),H`
         <select id="${a}" multiple style="display: none;"></select>
       `}));return H`${o}`}handleFilterChange(r,t){const o=r.target.selectedOptions,a=Array.from(o).map((r=>r.value));this.selectedFilters={...this.selectedFilters,[t]:a},this.requestUpdate()}getUniqueValuesForTags(r){const t={};return r.forEach((r=>{t[r]=[...new Set(this.inputobject.map((t=>t[r])))]})),t}filteredItems(){return Object.keys(this.selectedFilters).length?this.inputobject.filter((r=>Object.keys(this.selectedFilters).every((t=>!this.selectedFilters[t].length||this.selectedFilters[t].includes(r[t]))))):this.inputobject}getCardLayoutClass(){switch(this.cardLayout){case"Vertical Group":return"card-vertical-group vertical-group";case"Horizontal Group":return"card-group";default:return"card-grid"}}interpolateTemplate(r,t){return r.replace(/\${(.*?)}/g,((r,o)=>{const a=o.trim();if(a.startsWith("$.")){const o=a.substring(2).split(".");let e=t;for(const t of o){if(!e.hasOwnProperty(t))return r;e=e[t]}return e}return t.hasOwnProperty(a)?t[a]:r}))}extractImageUrl(r){const t=r.split(",")[0].trim();return this.isValidUrl(t)?t:""}extractImageDescription(r){const t=r.split(",");return t.length>1?t[1].trim():""}isValidUrl(r){return/^https?:\/\//.test(r)}})})();

@@ -206,9 +206,8 @@ class NeoCardsElement extends LitElement {
 
   render() {
     return html`
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/css/BsMultiSelect.min.css">
-      <script src="https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/js/BsMultiSelect.min.js"></script>
-      <script type="module" src="https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/js/BsMultiSelect.esm.min.js"></script>
       
       <div class="filter-bar">
         ${this.renderFilterDropdowns()}
@@ -246,6 +245,10 @@ class NeoCardsElement extends LitElement {
           `;
         })}
       </div>
+  
+      <script type="module">
+        import { BsMultiSelect } from 'https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/js/BsMultiSelect.esm.min.js';
+      </script>
     `;
   }
   
@@ -256,13 +259,12 @@ class NeoCardsElement extends LitElement {
     const tags = this.filterTags.split(',').map(tag => tag.trim());
     const uniqueValues = this.getUniqueValuesForTags(tags);
   
-    // Ensure unique IDs for each dropdown
     const dropdowns = tags.map((tag, index) => {
       const dropdownId = `filter-dropdown-${index}`;
   
-      // Use BsMultiSelect initialization for each dropdown
-      setTimeout(() => {
-        const dropdown = new BsMultiSelect(document.getElementById(dropdownId), {
+      // Use LitElement's updated lifecycle to ensure BsMultiSelect initializes properly
+      this.updateComplete.then(() => {
+        const dropdown = new BsMultiSelect(this.shadowRoot.getElementById(dropdownId), {
           dataSource: uniqueValues[tag].map(value => ({ text: value, value })),
           onChange: value => this.handleFilterChange({ target: { selectedOptions: value } }, tag),
           showSelected: true,
@@ -278,7 +280,6 @@ class NeoCardsElement extends LitElement {
   
     return html`${dropdowns}`;
   }
-  
 
   handleFilterChange(event, tag) {
     const selectedOptions = event.target.selectedOptions;
@@ -287,7 +288,6 @@ class NeoCardsElement extends LitElement {
     this.requestUpdate();
   }
   
-
   getUniqueValuesForTags(tags) {
     const uniqueValues = {};
     tags.forEach(tag => {
