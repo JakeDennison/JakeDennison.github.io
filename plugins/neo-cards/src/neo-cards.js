@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class NeoCardsElement extends LitElement {
   static getMetaConfig() {
@@ -75,6 +76,11 @@ class NeoCardsElement extends LitElement {
           showAsRadio: true,
           verticalLayout: true,
           defaultValue: 'Grid',
+        },
+        filterTags: {
+          type: 'string',
+          title: 'Filter Field Tags',
+          description: 'Comma-separated list of fields to use for filtering'
         }
       },
       standardProperties: {
@@ -89,7 +95,6 @@ class NeoCardsElement extends LitElement {
       inputobject: { type: Object },
       imgurl: { type: String },
       imgheight: { type: String },
-      imgwidth: { type: String },
       header: { type: String },
       body: { type: String },
       btnLabel: { type: String },
@@ -97,7 +102,9 @@ class NeoCardsElement extends LitElement {
       footer: { type: String },
       style: { type: String },
       borderstyle: { type: String },
-      cardLayout: { type: String }
+      cardLayout: { type: String },
+      filterTags: { type: String },
+      selectedFilters: { type: Object }
     };
   }
 
@@ -171,6 +178,12 @@ class NeoCardsElement extends LitElement {
         margin-top: 20px;
         white-space: pre-wrap;
       }
+      .filter-bar {
+        margin-bottom: 16px;
+      }
+      .filter-dropdown {
+        margin-right: 8px;
+      }
     `;
   }
 
@@ -187,13 +200,18 @@ class NeoCardsElement extends LitElement {
     this.style = '';
     this.borderstyle = '';
     this.cardLayout = 'Grid';
+    this.filterTags = '';
+    this.selectedFilters = {};
   }
 
   render() {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <div class="filter-bar">
+        ${this.renderFilterDropdowns()}
+      </div>
       <div class="${this.getCardLayoutClass()}">
-        ${this.inputobject.map(item => {
+        ${this.filteredItems().map(item => {
           const imageUrlString = this.interpolateTemplate(this.imgurl, item);
           const imageUrl = this.extractImageUrl(imageUrlString);
           const imageDescription = this.extractImageDescription(imageUrlString);
@@ -227,6 +245,46 @@ class NeoCardsElement extends LitElement {
     `;
   }
 
+  renderFilterDropdowns() {
+    if (!this.filterTags) return;
+
+    const tags = this.filterTags.split(',').map(tag => tag.trim());
+    const uniqueValues = this.getUniqueValuesForTags(tags);
+
+    return tags.map(tag => html`
+      <select class="filter-dropdown form-select" @change="${e => this.handleFilterChange(e, tag)}" multiple>
+        ${uniqueValues[tag].map(value => html`
+          <option value="${value}">${value}</option>
+        `)}
+      </select>
+    `);
+  }
+
+  handleFilterChange(event, tag) {
+    const selectedOptions = Array.from(event.target.selectedOptions).map(option => option.value);
+    this.selectedFilters = { ...this.selectedFilters, [tag]: selectedOptions };
+    this.requestUpdate();
+  }
+
+  getUniqueValuesForTags(tags) {
+    const uniqueValues = {};
+    tags.forEach(tag => {
+      uniqueValues[tag] = [...new Set(this.inputobject.map(item => item[tag]))];
+    });
+    return uniqueValues;
+  }
+
+  filteredItems() {
+    if (!Object.keys(this.selectedFilters).length) return this.inputobject;
+
+    return this.inputobject.filter(item => {
+      return Object.keys(this.selectedFilters).every(tag => {
+        if (!this.selectedFilters[tag].length) return true;
+        return this.selectedFilters[tag].includes(item[tag]);
+      });
+    });
+  }
+
   getCardLayoutClass() {
     switch (this.cardLayout) {
       case 'Vertical Group':
@@ -240,49 +298,38 @@ class NeoCardsElement extends LitElement {
   }
 
   interpolateTemplate(template, data) {
-    // Regular expression to find all occurrences of `${...}`
     const regex = /\${(.*?)}/g;
-    // Replace each placeholder with its corresponding value from data
     return template.replace(regex, (match, expression) => {
-      // Trim whitespace from expression to handle cases like `${$.Title}`
       const key = expression.trim();
-      // Check if the key starts with `$` for variable like `$.Title`
       if (key.startsWith('$.')) {
-        // Evaluate the expression after the `$.` to get the nested property value
         const nestedKeys = key.substring(2).split('.');
         let value = data;
         for (const nestedKey of nestedKeys) {
           if (value.hasOwnProperty(nestedKey)) {
             value = value[nestedKey];
           } else {
-            return match; // return the original placeholder if key is not found
+            return match;
           }
         }
         return value;
       } else {
-        // If no `$` prefix, treat it directly as a property key in the current data item
         return data.hasOwnProperty(key) ? data[key] : match;
       }
     });
   }
 
   extractImageUrl(imageUrlString) {
-    // Split the combined string by `,`
     const parts = imageUrlString.split(',');
-    // First part should be the URL, trim and return it if it's a valid URL
     const url = parts[0].trim();
     return this.isValidUrl(url) ? url : '';
   }
 
   extractImageDescription(imageUrlString) {
-    // Split the combined string by `,`
     const parts = imageUrlString.split(',');
-    // Second part (if exists) is the description, trim and return it, or empty string if not found
     return parts.length > 1 ? parts[1].trim() : '';
   }
 
   isValidUrl(url) {
-    // Simple check for URL format
     return /^https?:\/\//.test(url);
   }
 }
