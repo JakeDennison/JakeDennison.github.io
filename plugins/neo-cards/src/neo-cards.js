@@ -207,7 +207,6 @@ class NeoCardsElement extends LitElement {
   render() {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <link href="https://cdn.jsdelivr.net/npm/@admh/multiselect/dist/css/multiselect.css" rel="stylesheet">
       <div class="filter-bar">
         ${this.renderFilterDropdowns()}
       </div>
@@ -248,35 +247,17 @@ class NeoCardsElement extends LitElement {
 
   renderFilterDropdowns() {
     if (!this.filterTags) return;
-  
+
     const tags = this.filterTags.split(',').map(tag => tag.trim());
     const uniqueValues = this.getUniqueValuesForTags(tags);
-  
-    return tags.map(tag => html`
-      <div class="multiselect-wrapper filter-dropdown">
-        <label>${tag}</label>
-        <select id="${tag}" multiple>
-          ${uniqueValues[tag].map(value => html`
-            <option value="${value}">${value}</option>
-          `)}
-        </select>
-      </div>
-    `);
-  }
-  
-  updated(changedProperties) {
-    super.updated(changedProperties);
-  
-    if (changedProperties.has('filterTags')) {
-      this.initializeMultiselectDropdowns();
-    }
-  }
 
-  initializeMultiselectDropdowns() {
-    const selects = this.shadowRoot.querySelectorAll('.filter-dropdown select');
-    selects.forEach(select => {
-      new Multiselect(select);
-    });
+    return tags.map(tag => html`
+      <select class="filter-dropdown form-select" @change="${e => this.handleFilterChange(e, tag)}" multiple>
+        ${uniqueValues[tag].map(value => html`
+          <option value="${value}">${value}</option>
+        `)}
+      </select>
+    `);
   }
 
   handleFilterChange(event, tag) {
