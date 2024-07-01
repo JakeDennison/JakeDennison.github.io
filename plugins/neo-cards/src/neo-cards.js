@@ -206,17 +206,21 @@ class NeoCardsElement extends LitElement {
 
   render() {
     return html`
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/css/BsMultiSelect.min.css">
+      <script src="https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/js/BsMultiSelect.min.js"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/js/BsMultiSelect.esm.min.js"></script>
+      
       <div class="filter-bar">
         ${this.renderFilterDropdowns()}
       </div>
+      
       <div class="${this.getCardLayoutClass()}">
         ${this.filteredItems().map(item => {
           const imageUrlString = this.interpolateTemplate(this.imgurl, item);
           const imageUrl = this.extractImageUrl(imageUrlString);
           const imageDescription = this.extractImageDescription(imageUrlString);
           const imageHeight = this.interpolateTemplate(this.imgheight, item);
-
+  
           return html`
             <div class="card ${this.style} ${this.borderstyle}">
               ${imageUrl ? html`
@@ -244,27 +248,45 @@ class NeoCardsElement extends LitElement {
       </div>
     `;
   }
+  
 
   renderFilterDropdowns() {
     if (!this.filterTags) return;
-
+  
     const tags = this.filterTags.split(',').map(tag => tag.trim());
     const uniqueValues = this.getUniqueValuesForTags(tags);
-
-    return tags.map(tag => html`
-      <select class="filter-dropdown form-select" @change="${e => this.handleFilterChange(e, tag)}" multiple>
-        ${uniqueValues[tag].map(value => html`
-          <option value="${value}">${value}</option>
-        `)}
-      </select>
-    `);
+  
+    // Ensure unique IDs for each dropdown
+    const dropdowns = tags.map((tag, index) => {
+      const dropdownId = `filter-dropdown-${index}`;
+  
+      // Use BsMultiSelect initialization for each dropdown
+      setTimeout(() => {
+        const dropdown = new BsMultiSelect(document.getElementById(dropdownId), {
+          dataSource: uniqueValues[tag].map(value => ({ text: value, value })),
+          onChange: value => this.handleFilterChange({ target: { selectedOptions: value } }, tag),
+          showSelected: true,
+          getSelected: () => this.selectedFilters[tag] || [],
+        });
+        dropdown.init();
+      });
+  
+      return html`
+        <select id="${dropdownId}" multiple style="display: none;"></select>
+      `;
+    });
+  
+    return html`${dropdowns}`;
   }
+  
 
   handleFilterChange(event, tag) {
-    const selectedOptions = Array.from(event.target.selectedOptions).map(option => option.value);
-    this.selectedFilters = { ...this.selectedFilters, [tag]: selectedOptions };
+    const selectedOptions = event.target.selectedOptions;
+    const selectedValues = Array.from(selectedOptions).map(option => option.value);
+    this.selectedFilters = { ...this.selectedFilters, [tag]: selectedValues };
     this.requestUpdate();
   }
+  
 
   getUniqueValuesForTags(tags) {
     const uniqueValues = {};
