@@ -1,5 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import '@yaireo/tagify/dist/tagify.css'; // Import Tagify CSS
+import tagify from '@yaireo/tagify';
 
 class NeoCardsElement extends LitElement {
   static getMetaConfig() {
@@ -181,8 +183,13 @@ class NeoCardsElement extends LitElement {
       .filter-bar {
         margin-bottom: 16px;
       }
-      .filter-dropdown {
-        margin-right: 8px;
+      .filter-dropdown-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .tagify {
+        min-width: 200px; /* Adjust width as needed */
       }
     `;
   }
@@ -202,13 +209,14 @@ class NeoCardsElement extends LitElement {
     this.cardLayout = 'Grid';
     this.filterTags = '';
     this.selectedFilters = {};
+    this.tagifyInstances = {};
   }
 
   firstUpdated() {
-    // Load Selectize.js library via CDN
+    // Load Tagify library via CDN
     const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/selectize.min.js';
-    script.onload = () => this.initSelectize();
+    script.src = 'https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.min.js';
+    script.onload = () => this.initTagify();
     document.head.appendChild(script);
   }
 
@@ -216,7 +224,9 @@ class NeoCardsElement extends LitElement {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="filter-bar">
-        ${this.renderFilterDropdowns()}
+        <div class="filter-dropdown-container">
+          ${this.renderFilterDropdowns()}
+        </div>
       </div>
       <div class="${this.getCardLayoutClass()}">
         ${this.filteredItems().map(item => {
@@ -260,41 +270,55 @@ class NeoCardsElement extends LitElement {
     const uniqueValues = this.getUniqueValuesForTags(tags);
 
     return tags.map(tag => html`
-      <input id="filter-${tag}" class="filter-dropdown form-control" multiple>
+      <input id="filter-${tag}" class="filter-dropdown form-control tagify" multiple>
     `);
   }
 
-  initSelectize() {
+  initTagify() {
     const tags = this.filterTags.split(',').map(tag => tag.trim());
 
     tags.forEach(tag => {
-      const selectElement = this.shadowRoot.getElementById(`filter-${tag}`);
-      if (selectElement) {
-        new Selectize(selectElement, {
-          plugins: ['remove_button'],
-          delimiter: ',',
-          persist: false,
-          create: false,
-          placeholder: `Select ${tag}`,
-          onChange: (value) => {
-            this.handleFilterChange(tag, value.split(','));
+      const inputElement = this.shadowRoot.getElementById(`filter-${tag}`);
+      if (inputElement) {
+        this.tagifyInstances[tag] = new tagify(inputElement, {
+          dropdown: {
+            enabled: 1,
+            position: 'text',
+            highlightFirst: true,
+          },
+          whitelist: this.getUniqueValuesForTag(tag),
+          enforceWhitelist: true,
+          callbacks: {
+            add: (e) => this.handleTagAdded(e, tag),
+            remove: (e) => this.handleTagRemoved(e, tag),
           },
         });
       }
     });
   }
 
-  handleFilterChange(tag, selectedOptions) {
-    this.selectedFilters = { ...this.selectedFilters, [tag]: selectedOptions };
+  handleTagAdded(event, tag) {
+    const selectedTags = this.tagifyInstances[tag].value.map(item => item.value);
+    this.selectedFilters[tag] = selectedTags;
+    this.requestUpdate();
+  }
+
+  handleTagRemoved(event, tag) {
+    const selectedTags = this.tagifyInstances[tag].value.map(item => item.value);
+    this.selectedFilters[tag] = selectedTags;
     this.requestUpdate();
   }
 
   getUniqueValuesForTags(tags) {
     const uniqueValues = {};
     tags.forEach(tag => {
-      uniqueValues[tag] = [...new Set(this.inputobject.map(item => item[tag]))];
+      uniqueValues[tag] = this.getUniqueValuesForTag(tag);
     });
     return uniqueValues;
+  }
+
+  getUniqueValuesForTag(tag) {
+    return [...new Set(this.inputobject.map(item => item[tag]))];
   }
 
   filteredItems() {
