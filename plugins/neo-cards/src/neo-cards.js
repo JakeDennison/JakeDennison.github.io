@@ -207,7 +207,7 @@ class NeoCardsElement extends LitElement {
   firstUpdated() {
     // Load Selectize.js library via CDN
     const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js';
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/selectize.min.js';
     script.onload = () => this.initSelectize();
     document.head.appendChild(script);
   }
@@ -270,7 +270,7 @@ class NeoCardsElement extends LitElement {
     tags.forEach(tag => {
       const selectElement = this.shadowRoot.getElementById(`filter-${tag}`);
       if (selectElement) {
-        $(selectElement).selectize({
+        new Selectize(selectElement, {
           plugins: ['remove_button'],
           delimiter: ',',
           persist: false,
