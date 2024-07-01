@@ -239,6 +239,7 @@ class NeoCardsElement extends LitElement {
   render() {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/css/BsMultiSelect.min.css" rel="stylesheet">
+      <script src="https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/js/BsMultiSelect.min.js"></script>
       <div class="filter-bar">
         ${this.renderFilterDropdowns()}
       </div>
@@ -320,7 +321,7 @@ class NeoCardsElement extends LitElement {
     const regex = /\${(.*?)}/g;
     return template.replace(regex, (match, expression) => {
       const key = expression.trim();
-      if (key.startsWith('$.')) {
+      if (key.startsWith('!')) {
         try {
           return new Function('data', `return ${key.slice(2)}`)(data);
         } catch (error) {
@@ -345,7 +346,7 @@ class NeoCardsElement extends LitElement {
 
   filterItem(item) {
     for (const key in this.selectedFilters) {
-      if (item[key] !== this.selectedFilters[key]) {
+      if (this.selectedFilters[key].length > 0 && !this.selectedFilters[key].includes(item[key])) {
         return false;
       }
     }
@@ -375,17 +376,20 @@ class NeoCardsElement extends LitElement {
     const filterTagsArray = this.filterTags.split(',').map(tag => tag.trim());
     filterTagsArray.forEach(tag => {
       const selectElement = this.shadowRoot.getElementById(`dropdown-${tag}`);
-      const options = this.getFilterOptions(tag).map(option => {
-        const optionElement = document.createElement('option');
-        optionElement.value = option;
-        optionElement.textContent = option;
-        return optionElement;
-      });
-      options.forEach(option => selectElement.appendChild(option));
-      window.dashboardcode.BsMultiSelect.init(selectElement, {
-        placeholder: `Filter by ${tag}`,
-        onChange: (event) => this.handleFilterChange(event, tag),
-      });
+      if (selectElement) {
+        selectElement.innerHTML = ''; // Clear existing options
+        const options = this.getFilterOptions(tag).map(option => {
+          const optionElement = document.createElement('option');
+          optionElement.value = option;
+          optionElement.textContent = option;
+          return optionElement;
+        });
+        options.forEach(option => selectElement.appendChild(option));
+        window.dashboardcode.BsMultiSelect.init(selectElement, {
+          placeholder: `Filter by ${tag}`,
+          onChange: () => this.handleFilterChange(selectElement, tag),
+        });
+      }
     });
   }
 
@@ -399,8 +403,8 @@ class NeoCardsElement extends LitElement {
     return Array.from(uniqueOptions);
   }
 
-  handleFilterChange(event, tag) {
-    const selectedOptions = Array.from(event.target.selectedOptions).map(option => option.value);
+  handleFilterChange(selectElement, tag) {
+    const selectedOptions = Array.from(selectElement.selectedOptions).map(option => option.value);
     this.selectedFilters[tag] = selectedOptions;
     this.requestUpdate();
   }
