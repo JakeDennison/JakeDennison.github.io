@@ -227,11 +227,18 @@ class NeoCardsElement extends LitElement {
 
   firstUpdated() {
     this.renderFilters();
+    this.initializeMultiSelect();
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('inputobject')) {
+      this.initializeMultiSelect();
+    }
   }
 
   render() {
     return html`
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/css/BsMultiSelect.min.css" rel="stylesheet">
       <div class="filter-bar">
         ${this.renderFilterDropdowns()}
       </div>
@@ -314,16 +321,12 @@ class NeoCardsElement extends LitElement {
     return template.replace(regex, (match, expression) => {
       const key = expression.trim();
       if (key.startsWith('$.')) {
-        const nestedKeys = key.substring(2).split('.');
-        let value = data;
-        for (const nestedKey of nestedKeys) {
-          if (value.hasOwnProperty(nestedKey)) {
-            value = value[nestedKey];
-          } else {
-            return match;
-          }
+        try {
+          return new Function('data', `return ${key.slice(2)}`)(data);
+        } catch (error) {
+          console.error('Error evaluating expression:', error);
+          return match;
         }
-        return value;
       } else {
         return data.hasOwnProperty(key) ? data[key] : match;
       }
@@ -352,7 +355,7 @@ class NeoCardsElement extends LitElement {
   renderFilters() {
     const filterTagsArray = this.filterTags.split(',').map(tag => tag.trim());
     filterTagsArray.forEach(tag => {
-      this.selectedFilters[tag] = '';
+      this.selectedFilters[tag] = [];
     });
     this.requestUpdate();
   }
@@ -362,47 +365,28 @@ class NeoCardsElement extends LitElement {
     return filterTagsArray.map(
       tag => html`
         <div class="filter-dropdown dropdown">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Filter by ${tag}"
-            @input="${e => this.filterDropdownOptions(e, tag)}"
-            @click="${e => this.toggleDropdown(e)}"
-          />
-          <div class="dropdown-menu" id="dropdown-${tag}">
-            ${this.getFilterOptions(tag).map(
-              option => html`
-                <div
-                  class="dropdown-item ${this.selectedFilters[tag] === option ? 'selected' : ''}"
-                  @click="${() => this.selectFilterOption(tag, option)}"
-                >
-                  ${option}
-                </div>
-              `
-            )}
-          </div>
+          <select id="dropdown-${tag}" multiple="multiple"></select>
         </div>
       `
     );
   }
 
-  filterDropdownOptions(event, tag) {
-    const query = event.target.value.toLowerCase();
-    const dropdownMenu = this.shadowRoot.getElementById(`dropdown-${tag}`);
-    const items = dropdownMenu.querySelectorAll('.dropdown-item');
-    items.forEach(item => {
-      const text = item.textContent.toLowerCase();
-      if (text.includes(query)) {
-        item.style.display = 'block';
-      } else {
-        item.style.display = 'none';
-      }
+  initializeMultiSelect() {
+    const filterTagsArray = this.filterTags.split(',').map(tag => tag.trim());
+    filterTagsArray.forEach(tag => {
+      const selectElement = this.shadowRoot.getElementById(`dropdown-${tag}`);
+      const options = this.getFilterOptions(tag).map(option => {
+        const optionElement = document.createElement('option');
+        optionElement.value = option;
+        optionElement.textContent = option;
+        return optionElement;
+      });
+      options.forEach(option => selectElement.appendChild(option));
+      window.dashboardcode.BsMultiSelect.init(selectElement, {
+        placeholder: `Filter by ${tag}`,
+        onChange: (event) => this.handleFilterChange(event, tag),
+      });
     });
-  }
-
-  toggleDropdown(event) {
-    const dropdown = event.target.nextElementSibling;
-    dropdown.classList.toggle('show');
   }
 
   getFilterOptions(tag) {
@@ -415,8 +399,9 @@ class NeoCardsElement extends LitElement {
     return Array.from(uniqueOptions);
   }
 
-  selectFilterOption(tag, option) {
-    this.selectedFilters[tag] = option;
+  handleFilterChange(event, tag) {
+    const selectedOptions = Array.from(event.target.selectedOptions).map(option => option.value);
+    this.selectedFilters[tag] = selectedOptions;
     this.requestUpdate();
   }
 }
