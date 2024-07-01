@@ -283,6 +283,11 @@ class NeoCardsElement extends LitElement {
           searchEnabled: true,
           placeholder: true,
           placeholderValue: `Select ${tag}`,
+          itemSelectText: '',
+          classNames: {
+            containerOuter: 'choices form-control',
+            containerInner: 'choices__inner',
+          },
           callbackOnCreateTemplates: function(template) {
             return {
               choice: (classNames, data) => {
