@@ -1,7 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
-import '@yaireo/tagify/dist/tagify.css'; // Import Tagify CSS
-import tagify from '@yaireo/tagify';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class NeoCardsElement extends LitElement {
   static getMetaConfig() {
@@ -16,60 +14,60 @@ class NeoCardsElement extends LitElement {
         inputobject: {
           type: 'object',
           title: 'Data Object',
-          description: 'Insert the data object you want to build the cards from',
+          description: 'Insert the data object you want to build the cards from'
         },
         outputobject: {
           type: 'object',
           title: 'Output Object',
           description: 'Do not use',
-          isValueField: true,
+          isValueField: true
         },
         imgurl: {
           type: 'string',
           title: 'Image URL Tag',
-          description: 'Insert the header text including any key references',
+          description: 'Insert the header text including any key references'
         },
         imgheight: {
           type: 'string',
           title: 'Image height',
-          description: 'Apply an image height value, e.g. 150px',
+          description: 'Apply an image height value, e.g. 150px'
         },
         header: {
           type: 'string',
           title: 'Card Header Content',
-          description: 'Insert the header text including any key tags',
+          description: 'Insert the header text including any key tags'
         },
         body: {
           type: 'string',
           title: 'Card Body Content',
           description: 'Insert the body of the text including any key tags',
-          format: 'rich-text',
+          format: 'rich-text'
         },
         btnLabel: {
           type: 'string',
           title: 'Button Label',
           defaultValue: 'Click here',
-          description: 'Name the button',
+          description: 'Name the button'
         },
         btnURL: {
           type: 'string',
           title: 'Button URL',
-          description: 'URL tag for the button',
+          description: 'URL tag for the button'
         },
         footer: {
           type: 'string',
           title: 'Card Footer Content',
-          description: 'Insert the content for the card footer including any key tags',
+          description: 'Insert the content for the card footer including any key tags'
         },
         style: {
           type: 'string',
           title: 'Card Background Style',
-          description: 'Apply a custom card background style using the bootstrap 5 card styles, e.g. bg-secondary',
+          description: 'Apply a custom card background style using the bootstrap 5 card styles, e.g. bg-secondary'
         },
         borderstyle: {
           type: 'string',
           title: 'Card Border Style',
-          description: 'Apply a custom card border style using the bootstrap 5 card styles, e.g. bg-success',
+          description: 'Apply a custom card border style using the bootstrap 5 card styles, e.g. bg-success'
         },
         cardLayout: {
           type: 'string',
@@ -82,13 +80,13 @@ class NeoCardsElement extends LitElement {
         filterTags: {
           type: 'string',
           title: 'Filter Field Tags',
-          description: 'Comma-separated list of fields to use for filtering',
-        },
+          description: 'Comma-separated list of fields to use for filtering'
+        }
       },
       standardProperties: {
         fieldLabel: true,
         description: true,
-      },
+      }
     };
   }
 
@@ -106,7 +104,7 @@ class NeoCardsElement extends LitElement {
       borderstyle: { type: String },
       cardLayout: { type: String },
       filterTags: { type: String },
-      selectedFilters: { type: Object },
+      selectedFilters: { type: Object }
     };
   }
 
@@ -183,13 +181,8 @@ class NeoCardsElement extends LitElement {
       .filter-bar {
         margin-bottom: 16px;
       }
-      .filter-dropdown-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-      .tagify {
-        min-width: 200px; /* Adjust width as needed */
+      .filter-dropdown {
+        margin-right: 8px;
       }
     `;
   }
@@ -209,24 +202,14 @@ class NeoCardsElement extends LitElement {
     this.cardLayout = 'Grid';
     this.filterTags = '';
     this.selectedFilters = {};
-    this.tagifyInstances = {};
-  }
-
-  firstUpdated() {
-    // Load Tagify library via CDN
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.min.js';
-    script.onload = () => this.initTagify();
-    document.head.appendChild(script);
   }
 
   render() {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/@admh/multiselect/dist/css/multiselect.css" rel="stylesheet">
       <div class="filter-bar">
-        <div class="filter-dropdown-container">
-          ${this.renderFilterDropdowns()}
-        </div>
+        ${this.renderFilterDropdowns()}
       </div>
       <div class="${this.getCardLayoutClass()}">
         ${this.filteredItems().map(item => {
@@ -265,60 +248,49 @@ class NeoCardsElement extends LitElement {
 
   renderFilterDropdowns() {
     if (!this.filterTags) return;
-
+  
     const tags = this.filterTags.split(',').map(tag => tag.trim());
     const uniqueValues = this.getUniqueValuesForTags(tags);
-
+  
     return tags.map(tag => html`
-      <input id="filter-${tag}" class="filter-dropdown form-control tagify" multiple>
+      <div class="multiselect-wrapper filter-dropdown">
+        <label>${tag}</label>
+        <select id="${tag}" multiple>
+          ${uniqueValues[tag].map(value => html`
+            <option value="${value}">${value}</option>
+          `)}
+        </select>
+      </div>
     `);
   }
+  
+  updated(changedProperties) {
+    super.updated(changedProperties);
+  
+    if (changedProperties.has('filterTags')) {
+      this.initializeMultiselectDropdowns();
+    }
+  }
 
-  initTagify() {
-    const tags = this.filterTags.split(',').map(tag => tag.trim());
-
-    tags.forEach(tag => {
-      const inputElement = this.shadowRoot.getElementById(`filter-${tag}`);
-      if (inputElement) {
-        this.tagifyInstances[tag] = new tagify(inputElement, {
-          dropdown: {
-            enabled: 1,
-            position: 'text',
-            highlightFirst: true,
-          },
-          whitelist: this.getUniqueValuesForTag(tag),
-          enforceWhitelist: true,
-          callbacks: {
-            add: (e) => this.handleTagAdded(e, tag),
-            remove: (e) => this.handleTagRemoved(e, tag),
-          },
-        });
-      }
+  initializeMultiselectDropdowns() {
+    const selects = this.shadowRoot.querySelectorAll('.filter-dropdown select');
+    selects.forEach(select => {
+      new Multiselect(select);
     });
   }
 
-  handleTagAdded(event, tag) {
-    const selectedTags = this.tagifyInstances[tag].value.map(item => item.value);
-    this.selectedFilters[tag] = selectedTags;
-    this.requestUpdate();
-  }
-
-  handleTagRemoved(event, tag) {
-    const selectedTags = this.tagifyInstances[tag].value.map(item => item.value);
-    this.selectedFilters[tag] = selectedTags;
+  handleFilterChange(event, tag) {
+    const selectedOptions = Array.from(event.target.selectedOptions).map(option => option.value);
+    this.selectedFilters = { ...this.selectedFilters, [tag]: selectedOptions };
     this.requestUpdate();
   }
 
   getUniqueValuesForTags(tags) {
     const uniqueValues = {};
     tags.forEach(tag => {
-      uniqueValues[tag] = this.getUniqueValuesForTag(tag);
+      uniqueValues[tag] = [...new Set(this.inputobject.map(item => item[tag]))];
     });
     return uniqueValues;
-  }
-
-  getUniqueValuesForTag(tag) {
-    return [...new Set(this.inputobject.map(item => item[tag]))];
   }
 
   filteredItems() {
