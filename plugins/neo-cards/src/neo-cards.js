@@ -80,7 +80,6 @@ class NeoCardsElement extends LitElement {
         filterTags: {
           type: 'string',
           title: 'Filter Field Tags',
-          description: 'Comma-separated list of fields to use for filtering'
         }
       },
       standardProperties: {
@@ -95,6 +94,7 @@ class NeoCardsElement extends LitElement {
       inputobject: { type: Object },
       imgurl: { type: String },
       imgheight: { type: String },
+      imgwidth: { type: String },
       header: { type: String },
       body: { type: String },
       btnLabel: { type: String },
@@ -129,15 +129,15 @@ class NeoCardsElement extends LitElement {
         gap: 16px;
       }
       .card {
-        flex: 1 1 calc(100% / 3); /* Adjust to 3 cards per row in grid layout */
+        flex: 1 1 calc(100% / 3);
         position: relative;
         overflow: hidden;
-        background-color: #f8f9fa; /* Default background color for the card */
+        background-color: #f8f9fa;
       }
       .card-img-top {
         width: 100%;
         height: auto;
-        object-fit: cover; /* Maintain aspect ratio */
+        object-fit: cover;
       }
       .vertical-group .card {
         display: flex;
@@ -179,10 +179,31 @@ class NeoCardsElement extends LitElement {
         white-space: pre-wrap;
       }
       .filter-bar {
-        margin-bottom: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
       }
       .filter-dropdown {
-        margin-right: 8px;
+        position: relative;
+      }
+      .filter-dropdown input {
+        width: 200px;
+      }
+      .filter-dropdown .dropdown-menu {
+        max-height: 200px;
+        overflow-y: auto;
+        padding: 10px;
+      }
+      .filter-dropdown .dropdown-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px;
+      }
+      .filter-dropdown .dropdown-item.selected {
+        background-color: #007bff;
+        color: white;
       }
     `;
   }
@@ -204,6 +225,10 @@ class NeoCardsElement extends LitElement {
     this.selectedFilters = {};
   }
 
+  firstUpdated() {
+    this.renderFilters();
+  }
+
   render() {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -211,78 +236,65 @@ class NeoCardsElement extends LitElement {
         ${this.renderFilterDropdowns()}
       </div>
       <div class="${this.getCardLayoutClass()}">
-        ${this.filteredItems().map(item => {
-          const imageUrlString = this.interpolateTemplate(this.imgurl, item);
-          const imageUrl = this.extractImageUrl(imageUrlString);
-          const imageDescription = this.extractImageDescription(imageUrlString);
-          const imageHeight = this.interpolateTemplate(this.imgheight, item);
+        ${this.inputobject
+          .filter(item => this.filterItem(item))
+          .map(item => {
+            const imageUrlString = this.interpolateTemplate(this.imgurl, item);
+            const imageUrl = this.extractImageUrl(imageUrlString);
+            const imageDescription = this.extractImageDescription(imageUrlString);
+            const imageHeight = this.interpolateTemplate(this.imgheight, item);
 
-          return html`
-            <div class="card ${this.style} ${this.borderstyle}">
-              ${imageUrl ? html`
-                <img src="${imageUrl}" alt="${imageDescription}" class="card-img-top" style="${imageHeight ? `height: ${imageHeight};` : ''}">
-              ` : ''}
-              <div class="card-body">
-                ${this.header ? html`
-                  <h5 class="card-title">${this.interpolateTemplate(this.header, item)}</h5>
-                ` : ''}
-                ${this.body ? html`
-                  <p class="card-text">${this.interpolateTemplate(this.body, item)}</p>
-                ` : ''}
-                ${this.btnURL ? html`
-                  <a href="${this.interpolateTemplate(this.btnURL, item)}" class="btn btn-primary">${this.btnLabel}</a>
-                ` : ''}
-              </div>
-              ${this.footer ? html`
-                <div class="card-footer">
-                  <small class="text-muted">${this.interpolateTemplate(this.footer, item)}</small>
+            return html`
+              <div class="card ${this.style} ${this.borderstyle}">
+                ${imageUrl
+                  ? html`
+                      <img
+                        src="${imageUrl}"
+                        alt="${imageDescription}"
+                        class="card-img-top"
+                        style="${imageHeight ? `height: ${imageHeight};` : ''}"
+                      />
+                    `
+                  : ''}
+                <div class="card-body">
+                  ${this.header
+                    ? html`
+                        <h5 class="card-title">
+                          ${this.interpolateTemplate(this.header, item)}
+                        </h5>
+                      `
+                    : ''}
+                  ${this.body
+                    ? html`
+                        <p class="card-text">
+                          ${this.interpolateTemplate(this.body, item)}
+                        </p>
+                      `
+                    : ''}
+                  ${this.btnURL
+                    ? html`
+                        <a
+                          href="${this.interpolateTemplate(this.btnURL, item)}"
+                          class="btn btn-primary"
+                          >${this.btnLabel}</a
+                        >
+                      `
+                    : ''}
                 </div>
-              ` : ''}
-            </div>
-          `;
-        })}
+                ${this.footer
+                  ? html`
+                      <div class="card-footer">
+                        <small class="text-muted">
+                          ${this.interpolateTemplate(this.footer, item)}
+                        </small>
+                      </div>
+                    `
+                  : ''}
+              </div>
+            `;
+          })}
       </div>
     `;
-  }
-
-  renderFilterDropdowns() {
-    if (!this.filterTags) return;
-
-    const tags = this.filterTags.split(',').map(tag => tag.trim());
-    const uniqueValues = this.getUniqueValuesForTags(tags);
-
-    return tags.map(tag => html`
-      <select class="filter-dropdown form-select" @change="${e => this.handleFilterChange(e, tag)}" multiple>
-        ${uniqueValues[tag].map(value => html`
-          <option value="${value}">${value}</option>
-        `)}
-      </select>
-    `);
-  }
-
-  handleFilterChange(event, tag) {
-    const selectedOptions = Array.from(event.target.selectedOptions).map(option => option.value);
-    this.selectedFilters = { ...this.selectedFilters, [tag]: selectedOptions };
-    this.requestUpdate();
-  }
-
-  getUniqueValuesForTags(tags) {
-    const uniqueValues = {};
-    tags.forEach(tag => {
-      uniqueValues[tag] = [...new Set(this.inputobject.map(item => item[tag]))];
-    });
-    return uniqueValues;
-  }
-
-  filteredItems() {
-    if (!Object.keys(this.selectedFilters).length) return this.inputobject;
-
-    return this.inputobject.filter(item => {
-      return Object.keys(this.selectedFilters).every(tag => {
-        if (!this.selectedFilters[tag].length) return true;
-        return this.selectedFilters[tag].includes(item[tag]);
-      });
-    });
   }
 
   getCardLayoutClass() {
@@ -319,19 +331,94 @@ class NeoCardsElement extends LitElement {
   }
 
   extractImageUrl(imageUrlString) {
-    const parts = imageUrlString.split(',');
-    const url = parts[0].trim();
-    return this.isValidUrl(url) ? url : '';
+    const matches = imageUrlString.match(/src="([^"]+)"/);
+    return matches ? matches[1] : '';
   }
 
   extractImageDescription(imageUrlString) {
-    const parts = imageUrlString.split(',');
-    return parts.length > 1 ? parts[1].trim() : '';
+    const matches = imageUrlString.match(/alt="([^"]+)"/);
+    return matches ? matches[1] : '';
   }
 
-  isValidUrl(url) {
-    return /^https?:\/\//.test(url);
+  filterItem(item) {
+    for (const key in this.selectedFilters) {
+      if (item[key] !== this.selectedFilters[key]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  renderFilters() {
+    const filterTagsArray = this.filterTags.split(',').map(tag => tag.trim());
+    filterTagsArray.forEach(tag => {
+      this.selectedFilters[tag] = '';
+    });
+    this.requestUpdate();
+  }
+
+  renderFilterDropdowns() {
+    const filterTagsArray = this.filterTags.split(',').map(tag => tag.trim());
+    return filterTagsArray.map(
+      tag => html`
+        <div class="filter-dropdown dropdown">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Filter by ${tag}"
+            @input="${e => this.filterDropdownOptions(e, tag)}"
+            @click="${e => this.toggleDropdown(e)}"
+          />
+          <div class="dropdown-menu" id="dropdown-${tag}">
+            ${this.getFilterOptions(tag).map(
+              option => html`
+                <div
+                  class="dropdown-item ${this.selectedFilters[tag] === option ? 'selected' : ''}"
+                  @click="${() => this.selectFilterOption(tag, option)}"
+                >
+                  ${option}
+                </div>
+              `
+            )}
+          </div>
+        </div>
+      `
+    );
+  }
+
+  filterDropdownOptions(event, tag) {
+    const query = event.target.value.toLowerCase();
+    const dropdownMenu = this.shadowRoot.getElementById(`dropdown-${tag}`);
+    const items = dropdownMenu.querySelectorAll('.dropdown-item');
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      if (text.includes(query)) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+
+  toggleDropdown(event) {
+    const dropdown = event.target.nextElementSibling;
+    dropdown.classList.toggle('show');
+  }
+
+  getFilterOptions(tag) {
+    const uniqueOptions = new Set();
+    this.inputobject.forEach(item => {
+      if (item.hasOwnProperty(tag)) {
+        uniqueOptions.add(item[tag]);
+      }
+    });
+    return Array.from(uniqueOptions);
+  }
+
+  selectFilterOption(tag, option) {
+    this.selectedFilters[tag] = option;
+    this.requestUpdate();
   }
 }
 
-customElements.define('neo-cards', NeoCardsElement);
+customElements.define('neo-cards-element', NeoCardsElement);
