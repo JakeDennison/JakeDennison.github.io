@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import Choices from 'choices.js';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 
 class NeoCardsElement extends LitElement {
   static getMetaConfig() {
@@ -14,60 +14,60 @@ class NeoCardsElement extends LitElement {
         inputobject: {
           type: 'object',
           title: 'Data Object',
-          description: 'Insert the data object you want to build the cards from'
+          description: 'Insert the data object you want to build the cards from',
         },
         outputobject: {
           type: 'object',
           title: 'Output Object',
           description: 'Do not use',
-          isValueField: true
+          isValueField: true,
         },
         imgurl: {
           type: 'string',
           title: 'Image URL Tag',
-          description: 'Insert the header text including any key references'
+          description: 'Insert the header text including any key references',
         },
         imgheight: {
           type: 'string',
           title: 'Image height',
-          description: 'Apply an image height value, e.g. 150px'
+          description: 'Apply an image height value, e.g. 150px',
         },
         header: {
           type: 'string',
           title: 'Card Header Content',
-          description: 'Insert the header text including any key tags'
+          description: 'Insert the header text including any key tags',
         },
         body: {
           type: 'string',
           title: 'Card Body Content',
           description: 'Insert the body of the text including any key tags',
-          format: 'rich-text'
+          format: 'rich-text',
         },
         btnLabel: {
           type: 'string',
           title: 'Button Label',
           defaultValue: 'Click here',
-          description: 'Name the button'
+          description: 'Name the button',
         },
         btnURL: {
           type: 'string',
           title: 'Button URL',
-          description: 'URL tag for the button'
+          description: 'URL tag for the button',
         },
         footer: {
           type: 'string',
           title: 'Card Footer Content',
-          description: 'Insert the content for the card footer including any key tags'
+          description: 'Insert the content for the card footer including any key tags',
         },
         style: {
           type: 'string',
           title: 'Card Background Style',
-          description: 'Apply a custom card background style using the bootstrap 5 card styles, e.g. bg-secondary'
+          description: 'Apply a custom card background style using the bootstrap 5 card styles, e.g. bg-secondary',
         },
         borderstyle: {
           type: 'string',
           title: 'Card Border Style',
-          description: 'Apply a custom card border style using the bootstrap 5 card styles, e.g. bg-success'
+          description: 'Apply a custom card border style using the bootstrap 5 card styles, e.g. bg-success',
         },
         cardLayout: {
           type: 'string',
@@ -80,13 +80,13 @@ class NeoCardsElement extends LitElement {
         filterTags: {
           type: 'string',
           title: 'Filter Field Tags',
-          description: 'Comma-separated list of fields to use for filtering'
-        }
+          description: 'Comma-separated list of fields to use for filtering',
+        },
       },
       standardProperties: {
         fieldLabel: true,
         description: true,
-      }
+      },
     };
   }
 
@@ -104,7 +104,7 @@ class NeoCardsElement extends LitElement {
       borderstyle: { type: String },
       cardLayout: { type: String },
       filterTags: { type: String },
-      selectedFilters: { type: Object }
+      selectedFilters: { type: Object },
     };
   }
 
@@ -181,8 +181,8 @@ class NeoCardsElement extends LitElement {
       .filter-bar {
         margin-bottom: 16px;
       }
-      .choices {
-        margin-bottom: 16px;
+      .filter-dropdown {
+        margin-right: 8px;
       }
     `;
   }
@@ -204,22 +204,27 @@ class NeoCardsElement extends LitElement {
     this.selectedFilters = {};
   }
 
+  firstUpdated() {
+    // Load Selectize.js library via CDN
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js';
+    script.onload = () => this.initSelectize();
+    document.head.appendChild(script);
+  }
+
   render() {
     return html`
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
-      
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       <div class="filter-bar">
         ${this.renderFilterDropdowns()}
       </div>
-      
       <div class="${this.getCardLayoutClass()}">
         ${this.filteredItems().map(item => {
           const imageUrlString = this.interpolateTemplate(this.imgurl, item);
           const imageUrl = this.extractImageUrl(imageUrlString);
           const imageDescription = this.extractImageDescription(imageUrlString);
           const imageHeight = this.interpolateTemplate(this.imgheight, item);
-  
+
           return html`
             <div class="card ${this.style} ${this.borderstyle}">
               ${imageUrl ? html`
@@ -248,80 +253,39 @@ class NeoCardsElement extends LitElement {
     `;
   }
 
-  updated(changedProperties) {
-    super.updated(changedProperties);
-
-    // Initialize Choices.js after update to ensure DOM is ready
-    if (changedProperties.has('inputobject') || changedProperties.has('filterTags')) {
-      this.initChoices();
-    }
-  }
-
   renderFilterDropdowns() {
-    if (!this.filterTags) return html``;
+    if (!this.filterTags) return;
 
     const tags = this.filterTags.split(',').map(tag => tag.trim());
     const uniqueValues = this.getUniqueValuesForTags(tags);
 
     return tags.map(tag => html`
-      <select id="filter-${tag}" multiple style="display: none;">
-        ${uniqueValues[tag].map(value => html`
-          <option value="${value}">${value}</option>
-        `)}
-      </select>
+      <input id="filter-${tag}" class="filter-dropdown form-control" multiple>
     `);
   }
 
-  initChoices() {
+  initSelectize() {
     const tags = this.filterTags.split(',').map(tag => tag.trim());
-  
+
     tags.forEach(tag => {
       const selectElement = this.shadowRoot.getElementById(`filter-${tag}`);
       if (selectElement) {
-        new Choices(selectElement, {
-          removeItemButton: true,
-          searchEnabled: true,
-          placeholder: true,
-          placeholderValue: `Select ${tag}`,
-          itemSelectText: '',
-          classNames: {
-            containerOuter: 'choices form-control',
-            containerInner: 'choices__inner',
+        $(selectElement).selectize({
+          plugins: ['remove_button'],
+          delimiter: ',',
+          persist: false,
+          create: false,
+          placeholder: `Select ${tag}`,
+          onChange: (value) => {
+            this.handleFilterChange(tag, value.split(','));
           },
-          callbackOnCreateTemplates: function(template) {
-            return {
-              choice: (classNames, data) => {
-                return `
-                  <div class="${classNames.item} ${classNames.highlightedState}">
-                    <input
-                      type="checkbox"
-                      data-value="${data.value}"
-                      id="${classNames.input}-${data.value}"
-                      aria-label="${data.label}"
-                      value="${data.value}"
-                      ${classNames.itemSelectable}
-                      ${classNames.placeholder}
-                      ${classNames.itemDisabled ? 'disabled' : ''}
-                    />
-                    <label for="${classNames.input}-${data.value}" ${classNames.label}>
-                      ${data.label}
-                    </label>
-                  </div>
-                `;
-              }
-            };
-          },
-          callbackOnChange: (value) => {
-            this.handleFilterChange(tag, value);
-          }
         });
       }
     });
   }
-  
 
-  handleFilterChange(tag, value) {
-    this.selectedFilters[tag] = value.map(item => item.value);
+  handleFilterChange(tag, selectedOptions) {
+    this.selectedFilters = { ...this.selectedFilters, [tag]: selectedOptions };
     this.requestUpdate();
   }
 

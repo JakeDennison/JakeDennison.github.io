@@ -1,5 +1,3 @@
-/*! choices.js v10.2.0 | © 2022 Josh Johnson | https://github.com/jshjohnson/Choices#readme */
-
 /**
  * @license
  * Copyright 2017 Google LLC
