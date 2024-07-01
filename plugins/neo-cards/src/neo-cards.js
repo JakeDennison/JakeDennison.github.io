@@ -301,7 +301,7 @@ class NeoCardsElement extends LitElement {
                       value="${data.value}"
                       ${classNames.itemSelectable}
                       ${classNames.placeholder}
-                      ${classNames.itemDisabled}
+                      ${classNames.itemDisabled ? 'disabled' : ''}
                     />
                     <label for="${classNames.input}-${data.value}" ${classNames.label}>
                       ${data.label}
@@ -318,6 +318,7 @@ class NeoCardsElement extends LitElement {
       }
     });
   }
+  
 
   handleFilterChange(tag, value) {
     this.selectedFilters[tag] = value.map(item => item.value);
