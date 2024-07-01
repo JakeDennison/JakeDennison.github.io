@@ -274,7 +274,7 @@ class NeoCardsElement extends LitElement {
 
   initChoices() {
     const tags = this.filterTags.split(',').map(tag => tag.trim());
-
+  
     tags.forEach(tag => {
       const selectElement = this.shadowRoot.getElementById(`filter-${tag}`);
       if (selectElement) {
@@ -291,7 +291,7 @@ class NeoCardsElement extends LitElement {
           callbackOnCreateTemplates: function(template) {
             return {
               choice: (classNames, data) => {
-                return Choices.template(`
+                return `
                   <div class="${classNames.item} ${classNames.highlightedState}">
                     <input
                       type="checkbox"
@@ -307,7 +307,7 @@ class NeoCardsElement extends LitElement {
                       ${data.label}
                     </label>
                   </div>
-                `, classNames);
+                `;
               }
             };
           },
