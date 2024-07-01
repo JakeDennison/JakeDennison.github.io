@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Choices from 'choices.js';
 
 class NeoCardsElement extends LitElement {
   static getMetaConfig() {
@@ -181,8 +181,8 @@ class NeoCardsElement extends LitElement {
       .filter-bar {
         margin-bottom: 16px;
       }
-      .filter-dropdown {
-        margin-right: 8px;
+      .choices {
+        margin-bottom: 16px;
       }
     `;
   }
@@ -207,7 +207,7 @@ class NeoCardsElement extends LitElement {
   render() {
     return html`
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/css/BsMultiSelect.min.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
       
       <div class="filter-bar">
         ${this.renderFilterDropdowns()}
@@ -245,49 +245,80 @@ class NeoCardsElement extends LitElement {
           `;
         })}
       </div>
-  
-      <script type="module">
-        import { BsMultiSelect } from 'https://cdn.jsdelivr.net/npm/@dashboardcode/bsmultiselect@1.1.18/dist/js/BsMultiSelect.esm.min.js';
-      </script>
     `;
   }
-  
+
+  updated(changedProperties) {
+    super.updated(changedProperties);
+
+    // Initialize Choices.js after update to ensure DOM is ready
+    if (changedProperties.has('inputobject') || changedProperties.has('filterTags')) {
+      this.initChoices();
+    }
+  }
 
   renderFilterDropdowns() {
-    if (!this.filterTags) return;
-  
+    if (!this.filterTags) return html``;
+
     const tags = this.filterTags.split(',').map(tag => tag.trim());
     const uniqueValues = this.getUniqueValuesForTags(tags);
-  
-    const dropdowns = tags.map((tag, index) => {
-      const dropdownId = `filter-dropdown-${index}`;
-  
-      // Use LitElement's updated lifecycle to ensure BsMultiSelect initializes properly
-      this.updateComplete.then(() => {
-        const dropdown = new BsMultiSelect(this.shadowRoot.getElementById(dropdownId), {
-          dataSource: uniqueValues[tag].map(value => ({ text: value, value })),
-          onChange: value => this.handleFilterChange({ target: { selectedOptions: value } }, tag),
-          showSelected: true,
-          getSelected: () => this.selectedFilters[tag] || [],
-        });
-        dropdown.init();
-      });
-  
-      return html`
-        <select id="${dropdownId}" multiple style="display: none;"></select>
-      `;
-    });
-  
-    return html`${dropdowns}`;
+
+    return tags.map(tag => html`
+      <select id="filter-${tag}" multiple style="display: none;">
+        ${uniqueValues[tag].map(value => html`
+          <option value="${value}">${value}</option>
+        `)}
+      </select>
+    `);
   }
 
-  handleFilterChange(event, tag) {
-    const selectedOptions = event.target.selectedOptions;
-    const selectedValues = Array.from(selectedOptions).map(option => option.value);
-    this.selectedFilters = { ...this.selectedFilters, [tag]: selectedValues };
+  initChoices() {
+    const tags = this.filterTags.split(',').map(tag => tag.trim());
+
+    tags.forEach(tag => {
+      const selectElement = this.shadowRoot.getElementById(`filter-${tag}`);
+      if (selectElement) {
+        new Choices(selectElement, {
+          removeItemButton: true,
+          searchEnabled: true,
+          placeholder: true,
+          placeholderValue: `Select ${tag}`,
+          callbackOnCreateTemplates: function(template) {
+            return {
+              choice: (classNames, data) => {
+                return Choices.template(`
+                  <div class="${classNames.item} ${classNames.highlightedState}">
+                    <input
+                      type="checkbox"
+                      data-value="${data.value}"
+                      id="${classNames.input}-${data.value}"
+                      aria-label="${data.label}"
+                      value="${data.value}"
+                      ${classNames.itemSelectable}
+                      ${classNames.placeholder}
+                      ${classNames.itemDisabled}
+                    />
+                    <label for="${classNames.input}-${data.value}" ${classNames.label}>
+                      ${data.label}
+                    </label>
+                  </div>
+                `, classNames);
+              }
+            };
+          },
+          callbackOnChange: (value) => {
+            this.handleFilterChange(tag, value);
+          }
+        });
+      }
+    });
+  }
+
+  handleFilterChange(tag, value) {
+    this.selectedFilters[tag] = value.map(item => item.value);
     this.requestUpdate();
   }
-  
+
   getUniqueValuesForTags(tags) {
     const uniqueValues = {};
     tags.forEach(tag => {

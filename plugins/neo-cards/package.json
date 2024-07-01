@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/JSDenintex/JSDenintex.github.io#readme",
   "dependencies": {
+    "choices.js": "^10.2.0",
     "css-loader": "^6.8.1",
     "lit": "^2.6.1",
     "style-loader": "^3.3.3",
