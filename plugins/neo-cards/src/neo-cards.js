@@ -104,7 +104,9 @@ class NeoCardsElement extends LitElement {
       borderstyle: { type: String },
       cardLayout: { type: String },
       filterTags: { type: String },
-      selectedFilters: { type: Object }
+      selectedFilters: { type: Object },
+      options: { type: Array },
+      selectedOptions: { type: Array },
     };
   }
 
@@ -184,6 +186,54 @@ class NeoCardsElement extends LitElement {
       .filter-dropdown {
         margin-right: 8px;
       }
+
+
+
+      .dropdown {
+        border: 1px solid #ccc;
+        padding: 10px;
+        position: relative;
+        width: 300px;
+      }
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 300px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+      .dropdown-content.show {
+        display: block;
+      }
+      .dropdown-content div {
+        padding: 12px 16px;
+        cursor: pointer;
+      }
+      .dropdown-content div:hover {
+        background-color: #f1f1f1;
+      }
+      .pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-bottom: 10px;
+      }
+      .pill {
+        background-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+      }
+      .pill button {
+        background: none;
+        border: none;
+        color: white;
+        margin-left: 5px;
+        cursor: pointer;
+      }
     `;
   }
 
@@ -202,11 +252,33 @@ class NeoCardsElement extends LitElement {
     this.cardLayout = 'Grid';
     this.filterTags = '';
     this.selectedFilters = {};
+    this.options = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
+    this.selectedOptions = [];
   }
 
   render() {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+      <div class="dropdown">
+        <div @click="${this.toggleDropdown}">
+          ${this.selectedOptions.length === 0 ? 'Select options' : ''}
+          <div class="pills">
+            ${this.selectedOptions.map((option, index) => html`
+              <div class="pill">
+                ${option}
+                <button @click="${() => this.removeOption(index)}">&times;</button>
+              </div>
+            `)}
+          </div>
+        </div>
+        <div class="dropdown-content ${this.showDropdown ? 'show' : ''}">
+          ${this.options.map(option => html`
+            <div @click="${() => this.selectOption(option)}">${option}</div>
+          `)}
+        </div>
+      </div>
+
       <div class="filter-bar">
         ${this.renderFilterDropdowns()}
       </div>
@@ -244,6 +316,25 @@ class NeoCardsElement extends LitElement {
       </div>
     `;
   }
+
+  //
+
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  selectOption(option) {
+    if (!this.selectedOptions.includes(option)) {
+      this.selectedOptions = [...this.selectedOptions, option];
+    }
+    this.showDropdown = false;
+  }
+
+  removeOption(index) {
+    this.selectedOptions = this.selectedOptions.filter((_, i) => i !== index);
+  }
+
+  //
 
   renderFilterDropdowns() {
     if (!this.filterTags) return;
