@@ -11,7 +11,7 @@ class neoFilterElement extends Component {
   };
 
   static defaultProps = {
-    inputObj: {},
+    inputObj: '',
   };
 
   static getMetaConfig() {
