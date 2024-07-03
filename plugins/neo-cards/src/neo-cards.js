@@ -83,6 +83,7 @@ class NeoCardsElement extends LitElement {
           description: 'Comma-separated list of fields to use for filtering'
         }
       },
+      events: ["ntx-value-change"],
       standardProperties: {
         fieldLabel: true,
         description: true,

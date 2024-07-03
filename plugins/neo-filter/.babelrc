@@ -1,0 +1,7 @@
+{
+    "presets": [
+      "@babel/preset-env", // Handles ES6+ to ES5 conversion based on environment
+      "@babel/preset-react" // Handles JSX to JavaScript transformation
+    ]
+  }
+  

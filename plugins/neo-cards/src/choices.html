@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Select Dropdown with Range Slider (noUiSlider)</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.8.1/nouislider.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+  <style>
+    .range-slider {
+      margin-top: 20px;
+    }
+    .range-slider .noUi-connect {
+      background: #007bff;
+    }
+    .range-slider .noUi-tooltip {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Multi-Select Dropdown with Range Slider (noUiSlider)</h1>
+    
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="multiSelect" class="form-label">Choose Options</label>
+        <select id="multiSelect" class="form-control" multiple>
+          <option value="1">Option 1</option>
+          <option value="2">Option 2</option>
+          <option value="3">Option 3</option>
+          <option value="4">Option 4</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div id="rangeSlider"></div>
+        <div id="rangeValues" class="mt-3">Selected Range: <span id="rangeStart"></span> - <span id="rangeEnd"></span></div>
+      </div>
+    </div>
+    
+    <div class="row mt-3">
+      <div class="col">
+        <label id="selectedItemsLabel" class="form-label">Selected Items:</label>
+        <div id="selectedItems"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.8.1/nouislider.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Initialize Select2
+      $('#multiSelect').select2({
+        placeholder: 'Select options',
+        closeOnSelect: false // Keep dropdown open after selection
+      });
+
+      // Initialize noUiSlider
+      var rangeSlider = document.getElementById('rangeSlider');
+      var rangeStart = document.getElementById('rangeStart');
+      var rangeEnd = document.getElementById('rangeEnd');
+
+      noUiSlider.create(rangeSlider, {
+        start: [20, 80], // Initial values
+        connect: true, // Connect the handles
+        range: {
+          'min': 0,
+          'max': 100
+        }
+      });
+
+      // Display selected range values
+      rangeSlider.noUiSlider.on('update', function(values, handle) {
+        if (handle === 0) {
+          rangeStart.textContent = values[0];
+        }
+        if (handle === 1) {
+          rangeEnd.textContent = values[1];
+        }
+      });
+
+      // Update selected items on change
+      $('#multiSelect').on('change', function() {
+        var selectedOptions = $(this).val() || [];
+        $('#selectedItems').text(selectedOptions.join(', '));
+      });
+    });
+  </script>
+</body>
+</html>
