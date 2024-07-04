@@ -80,7 +80,9 @@ class RedirectElement extends LitElement {
   _validateURL(url) {
     try {
       const parsedURL = new URL(url);
-      return parsedURL.pathname.includes('UFRuntime.aspx');
+      const isRuntimePath = parsedURL.pathname.includes('UFRuntime.aspx');
+      const isCurrentPageRuntime = window.location.href.includes('/runtime');
+      return isRuntimePath || isCurrentPageRuntime;
     } catch (e) {
       return false;
     }
