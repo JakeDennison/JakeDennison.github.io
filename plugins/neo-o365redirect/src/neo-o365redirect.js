@@ -66,10 +66,13 @@ class RedirectElement extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.isDesignMode = window.location.href.includes('UFDesigner.aspx');
+    console.log('Current page URL:', window.location.href);
   }
 
   updated(changedProperties) {
-    if (changedProperties.has('trigger') && this.trigger) {
+    console.log('Trigger value:', this.trigger);
+    console.log('Target URL:', this.targetURL);
+    if (changedProperties.has('trigger')) {
       this._handleRedirect();
     }
   }
@@ -84,8 +87,14 @@ class RedirectElement extends LitElement {
   }
 
   _handleRedirect() {
-    if (this._validateURL(this.targetURL) && !this.isDesignMode) {
+    const isValidURL = this._validateURL(this.targetURL);
+    console.log('Is valid URL:', isValidURL);
+    console.log('Is design mode:', this.isDesignMode);
+    if (isValidURL && !this.isDesignMode) {
+      console.log('Redirecting to:', this.targetURL);
       window.location.href = this.targetURL;
+    } else {
+      console.log('Redirect not performed.');
     }
   }
 
