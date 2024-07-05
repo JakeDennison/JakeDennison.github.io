@@ -281,7 +281,17 @@ class NeoCardsElement extends LitElement {
       findAllMatches: true,
       tokenize: true,
       getFn: (obj, path) => {
-        const value = Fuse.Fuse.$get(obj, path);
+        // Handle nested paths or properties using a safe approach
+        const keys = path.split('.'); // Handle nested properties
+        let value = obj;
+        for (const key of keys) {
+          if (value && typeof value === 'object' && key in value) {
+            value = value[key];
+          } else {
+            value = undefined;
+            break;
+          }
+        }
         if (typeof value === 'string') {
           return value.toLowerCase();
         }
@@ -293,8 +303,7 @@ class NeoCardsElement extends LitElement {
     const searchResults = fuse.search(this.searchTerm.toLowerCase());
     
     return searchResults.map(result => result.item);
-  }
-  
+  }  
 
   getCardLayoutClass() {
     switch (this.cardLayout) {
