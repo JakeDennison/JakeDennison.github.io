@@ -81,7 +81,7 @@ class NeoCardsElement extends LitElement {
         searchTags: {
           type: 'string',
           title: 'Filter Field Tags',
-          description: 'Comma-separated list of fields to use for filter. Use * to search all fields.'
+          description: 'Comma-separated list of fields to use for filter, leave empty to remove search'
         }
       },
       events: ["ntx-value-change"],
@@ -210,31 +210,21 @@ class NeoCardsElement extends LitElement {
   }
 
   render() {
+    const showSearchBar = !!this.searchTags; 
+
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
       
-      <div class="search-bar">
-        <input 
-          type="text" 
-          class="search-input" 
-          placeholder="Search..." 
-          @input="${this.handleSearchInput}"
-        />
-      </div>
-
-      <!-- Debug Section -->
-      <div class="debug-section">
-        <h3>Debug Information</h3>
-        <h4>Search Term:</h4>
-        <pre>${this.searchTerm}</pre>
-        
-        <h4>Original JSON Data (inputobject):</h4>
-        <pre>${JSON.stringify(this.inputobject, null, 2)}</pre>
-        
-        <h4>Filtered JSON Data:</h4>
-        <pre>${JSON.stringify(this.filteredItems(), null, 2)}</pre>
-      </div>
-      <!-- End Debug Section -->
+      ${showSearchBar ? html`
+        <div class="search-bar">
+          <input 
+            type="text" 
+            class="search-input" 
+            placeholder="Search..." 
+            @input="${this.handleSearchInput}"
+          />
+        </div>
+      ` : ''}
 
       <div class="${this.getCardLayoutClass()}">
         ${this.filteredItems().map(item => {
@@ -284,19 +274,13 @@ class NeoCardsElement extends LitElement {
     }
     
     const fuseOptions = {
-      keys: searchTagsArray.length > 0 ? searchTagsArray : [],
+      keys: searchTagsArray, // Use searchTagsArray directly
       includeScore: true,
-      isCaseSensitive: false,
-      findAllMatches: false,
-      threshold: 0.3,
+      threshold: 0.4,
     };
     
     const fuse = new Fuse(this.inputobject, fuseOptions);
     const searchResults = fuse.search(this.searchTerm.toLowerCase());
-    
-    console.log('Search Term:', this.searchTerm);
-    console.log('Search Tags Array:', searchTagsArray);
-    console.log('Search Results:', searchResults);
     
     return searchResults.map(result => result.item);
   }
