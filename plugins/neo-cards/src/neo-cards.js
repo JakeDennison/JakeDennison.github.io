@@ -264,8 +264,11 @@ class NeoCardsElement extends LitElement {
   filteredItems() {
     if (!this.searchTerm) return this.inputobject;
 
-    const searchTagsArray = this.searchTags ? this.searchTags.split(',').map(tag => tag.trim()) : [];
-    console.log(searchTagsArray)
+    let searchTagsArray = [];
+    if (this.searchTags) {
+      searchTagsArray = this.searchTags.split(',').map(tag => tag.trim());
+    }
+    
     const fuseOptions = {
       keys: searchTagsArray,
       includeScore: true,
