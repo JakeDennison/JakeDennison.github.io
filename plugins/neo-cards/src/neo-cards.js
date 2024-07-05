@@ -286,7 +286,9 @@ class NeoCardsElement extends LitElement {
     const fuseOptions = {
       keys: searchTagsArray.length > 0 ? searchTagsArray : [],
       includeScore: true,
-      threshold: 0.4,
+      isCaseSensitive: false,
+      findAllMatches: false,
+      threshold: 0.3,
     };
     
     const fuse = new Fuse(this.inputobject, fuseOptions);
