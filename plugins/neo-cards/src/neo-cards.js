@@ -267,7 +267,7 @@ class NeoCardsElement extends LitElement {
 
   filteredItems() {
     if (!this.searchTerm) return this.inputobject;
-
+  
     let searchTagsArray = [];
     if (this.searchTags) {
       searchTagsArray = this.searchTags.split(',').map(tag => tag.trim());
@@ -277,9 +277,16 @@ class NeoCardsElement extends LitElement {
       keys: searchTagsArray,
       includeScore: true,
       threshold: 0.2,
-      ignoreLocation: true, // Ignore where in the string the match is found
-      findAllMatches: true, // Find all matches, not just the first
-      tokenize: true, // Tokenize the search term for more flexible matching
+      ignoreLocation: true,
+      findAllMatches: true,
+      tokenize: true,
+      getFn: (obj, path) => {
+        const value = Fuse.Fuse.$get(obj, path);
+        if (typeof value === 'string') {
+          return value.toLowerCase();
+        }
+        return value;
+      },
     };
     
     const fuse = new Fuse(this.inputobject, fuseOptions);
@@ -287,6 +294,7 @@ class NeoCardsElement extends LitElement {
     
     return searchResults.map(result => result.item);
   }
+  
 
   getCardLayoutClass() {
     switch (this.cardLayout) {
