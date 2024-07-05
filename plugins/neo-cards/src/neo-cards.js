@@ -224,8 +224,7 @@ class NeoCardsElement extends LitElement {
       <div class="${this.getCardLayoutClass()}">
         ${this.filteredItems().map(item => {
           const imageUrlString = this.interpolateTemplate(this.imgurl, item);
-          const imageUrl = this.extractImageUrl(imageUrlString);
-          const imageDescription = this.extractImageDescription(imageUrlString);
+          const [imageUrl, imageDescription] = this.extractImageUrlAndDescription(imageUrlString);
           const imageHeight = this.interpolateTemplate(this.imgheight, item);
 
           return html`
@@ -297,26 +296,24 @@ class NeoCardsElement extends LitElement {
 
   interpolateTemplate(template, data) {
     return template.replace(/{{(.*?)}}/g, (match, p1) => {
-        const keys = p1.trim().split('.');
-        let value = data;
-        for (const key of keys) {
-            if (value[key] === undefined) {
-                return match;
-            }
-            value = value[key];
+      const keys = p1.trim().split('.');
+      let value = data;
+      for (const key of keys) {
+        if (value[key] === undefined) {
+          return match;
         }
-        return value;
+        value = value[key];
+      }
+      return value;
     });
   }
 
-  extractImageUrl(template) {
-    const match = template.match(/src\s*=\s*"([^"]*)"/i);
-    return match ? match[1] : template;
-  }
-
-  extractImageDescription(template) {
-    const match = template.match(/alt\s*=\s*"([^"]*)"/i);
-    return match ? match[1] : '';
+  extractImageUrlAndDescription(template) {
+    const parts = template.split(',');
+    if (parts.length === 2) {
+      return [parts[0].trim(), parts[1].trim()];
+    }
+    return [template, ''];
   }
 }
 
