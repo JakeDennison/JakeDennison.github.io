@@ -276,7 +276,7 @@ class NeoCardsElement extends LitElement {
     const fuseOptions = {
       keys: searchTagsArray,
       includeScore: true,
-      threshold: 0.4,
+      threshold: 0.2,
       ignoreLocation: true, // Ignore where in the string the match is found
       findAllMatches: true, // Find all matches, not just the first
       tokenize: true, // Tokenize the search term for more flexible matching
