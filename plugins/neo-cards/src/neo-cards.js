@@ -275,29 +275,12 @@ class NeoCardsElement extends LitElement {
     
     const fuseOptions = {
       keys: searchTagsArray,
+      threshold: 0.3,
+      location: 0,
+      distance: 100,
+      includeMatches: true,
       includeScore: true,
-      threshold: 0.2,
-      ignoreLocation: true,
-      findAllMatches: true,
-      tokenize: true,
-      getFn: (obj, path) => {
-        // Handle nested paths or properties using a safe approach
-        if (!path) return undefined; // Return undefined if path is not defined
-        const keys = path.split('.'); // Handle nested properties
-        let value = obj;
-        for (const key of keys) {
-          if (value && typeof value === 'object' && key in value) {
-            value = value[key];
-          } else {
-            value = undefined;
-            break;
-          }
-        }
-        if (typeof value === 'string') {
-          return value.toLowerCase();
-        }
-        return value;
-      },
+      useExtendedSearch: true
     };
     
     const fuse = new Fuse(this.inputobject, fuseOptions);
