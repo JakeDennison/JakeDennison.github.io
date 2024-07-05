@@ -222,6 +222,20 @@ class NeoCardsElement extends LitElement {
         />
       </div>
 
+      <!-- Debug Section -->
+      <div class="debug-section">
+        <h3>Debug Information</h3>
+        <h4>Search Term:</h4>
+        <pre>${this.searchTerm}</pre>
+        
+        <h4>Original JSON Data (inputobject):</h4>
+        <pre>${JSON.stringify(this.inputobject, null, 2)}</pre>
+        
+        <h4>Filtered JSON Data:</h4>
+        <pre>${JSON.stringify(this.filteredItems(), null, 2)}</pre>
+      </div>
+      <!-- End Debug Section -->
+
       <div class="${this.getCardLayoutClass()}">
         ${this.filteredItems().map(item => {
           const imageUrlString = this.interpolateTemplate(this.imgurl, item);
@@ -263,20 +277,24 @@ class NeoCardsElement extends LitElement {
 
   filteredItems() {
     if (!this.searchTerm) return this.inputobject;
-  
+
     let searchTagsArray = [];
     if (this.searchTags) {
       searchTagsArray = this.searchTags.split(',').map(tag => tag.trim());
     }
     
     const fuseOptions = {
-      keys: searchTagsArray.length > 0 ? searchTagsArray : [], // Ensure keys are correctly set
+      keys: searchTagsArray.length > 0 ? searchTagsArray : [],
       includeScore: true,
       threshold: 0.4,
     };
     
     const fuse = new Fuse(this.inputobject, fuseOptions);
     const searchResults = fuse.search(this.searchTerm.toLowerCase());
+    
+    console.log('Search Term:', this.searchTerm);
+    console.log('Search Tags Array:', searchTagsArray);
+    console.log('Search Results:', searchResults);
     
     return searchResults.map(result => result.item);
   }
