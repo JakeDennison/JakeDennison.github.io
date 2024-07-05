@@ -296,16 +296,16 @@ class NeoCardsElement extends LitElement {
   }
 
   interpolateTemplate(template, data) {
-    if (!template) return '';
-    const regex = /\{\{(.*?)\}\}/g;
-    return template.replace(regex, (_, key) => {
-      const keys = key.trim().split('.');
-      let value = data;
-      for (const k of keys) {
-        value = value[k];
-        if (value === undefined) return '';
-      }
-      return value;
+    return template.replace(/{{(.*?)}}/g, (match, p1) => {
+        const keys = p1.trim().split('.');
+        let value = data;
+        for (const key of keys) {
+            if (value[key] === undefined) {
+                return match;
+            }
+            value = value[key];
+        }
+        return value;
     });
   }
 
