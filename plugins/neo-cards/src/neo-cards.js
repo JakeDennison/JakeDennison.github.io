@@ -274,9 +274,12 @@ class NeoCardsElement extends LitElement {
     }
     
     const fuseOptions = {
-      keys: searchTagsArray, // Use searchTagsArray directly
+      keys: searchTagsArray,
       includeScore: true,
       threshold: 0.4,
+      ignoreLocation: true, // Ignore where in the string the match is found
+      findAllMatches: true, // Find all matches, not just the first
+      tokenize: true, // Tokenize the search term for more flexible matching
     };
     
     const fuse = new Fuse(this.inputobject, fuseOptions);
