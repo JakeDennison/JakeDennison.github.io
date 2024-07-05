@@ -282,6 +282,7 @@ class NeoCardsElement extends LitElement {
       tokenize: true,
       getFn: (obj, path) => {
         // Handle nested paths or properties using a safe approach
+        if (!path) return undefined; // Return undefined if path is not defined
         const keys = path.split('.'); // Handle nested properties
         let value = obj;
         for (const key of keys) {
@@ -303,7 +304,8 @@ class NeoCardsElement extends LitElement {
     const searchResults = fuse.search(this.searchTerm.toLowerCase());
     
     return searchResults.map(result => result.item);
-  }  
+  }
+  
 
   getCardLayoutClass() {
     switch (this.cardLayout) {
