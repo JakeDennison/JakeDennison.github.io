@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Fuse from 'fuse.js';
 
 class NeoCardsElement extends LitElement {
