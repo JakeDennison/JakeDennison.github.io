@@ -19,6 +19,7 @@
   "homepage": "https://github.com/JSDenintex/JSDenintex.github.io#readme",
   "dependencies": {
     "css-loader": "^6.8.1",
+    "fuse.js": "^7.0.0",
     "lit": "^2.6.1",
     "style-loader": "^3.3.3",
     "webpack": "^5.75.0",

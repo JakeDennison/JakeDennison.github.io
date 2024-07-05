@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Fuse from 'fuse.js';
 
 class NeoCardsElement extends LitElement {
   static getMetaConfig() {
@@ -264,22 +265,15 @@ class NeoCardsElement extends LitElement {
     if (!this.searchTerm) return this.inputobject;
 
     const searchTags = this.searchTags ? this.searchTags.split(',').map(tag => tag.trim()) : [];
-    const searchAllFields = searchTags.includes('*');
-
-    return this.inputobject.filter(item => {
-      if (searchAllFields) {
-        return Object.values(item).some(value => {
-          return value && value.toString().toLowerCase().includes(this.searchTerm);
-        });
-      }
-
-      return searchTags.some(tag => {
-        if (item[tag]) {
-          return item[tag].toString().toLowerCase().includes(this.searchTerm);
-        }
-        return false;
-      });
-    });
+    const fuseOptions = {
+      keys: searchTags,
+      includeScore: true,
+      threshold: 0.4, // Adjust the threshold as needed
+    };
+    const fuse = new Fuse(this.inputobject, fuseOptions);
+    const searchResults = fuse.search(this.searchTerm.toLowerCase());
+    
+    return searchResults.map(result => result.item);
   }
 
   getCardLayoutClass() {
@@ -296,15 +290,15 @@ class NeoCardsElement extends LitElement {
 
   interpolateTemplate(template, data) {
     return template.replace(/{{(.*?)}}/g, (match, p1) => {
-      const keys = p1.trim().split('.');
-      let value = data;
-      for (const key of keys) {
-        if (value[key] === undefined) {
-          return match;
+        const keys = p1.trim().split('.');
+        let value = data;
+        for (const key of keys) {
+            if (value[key] === undefined) {
+                return match;
+            }
+            value = value[key];
         }
-        value = value[key];
-      }
-      return value;
+        return value;
     });
   }
 
