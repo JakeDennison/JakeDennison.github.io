@@ -77,10 +77,10 @@ class NeoCardsElement extends LitElement {
           verticalLayout: true,
           defaultValue: 'Grid',
         },
-        filterTags: {
+        searchTags: {
           type: 'string',
           title: 'Filter Field Tags',
-          description: 'Comma-separated list of fields to use for filtering'
+          description: 'Comma-separated list of fields to use for filter. Use * to search all fields.'
         }
       },
       events: ["ntx-value-change"],
@@ -104,10 +104,8 @@ class NeoCardsElement extends LitElement {
       style: { type: String },
       borderstyle: { type: String },
       cardLayout: { type: String },
-      filterTags: { type: String },
-      selectedFilters: { type: Object },
-      options: { type: Array },
-      selectedOptions: { type: Array },
+      searchTags: { type: String },
+      searchTerm: { type: String }
     };
   }
 
@@ -181,59 +179,14 @@ class NeoCardsElement extends LitElement {
         margin-top: 20px;
         white-space: pre-wrap;
       }
-      .filter-bar {
+      .search-bar {
         margin-bottom: 16px;
       }
-      .filter-dropdown {
-        margin-right: 8px;
-      }
-
-
-
-      .dropdown {
+      .search-input {
+        width: 100%;
+        padding: 8px;
         border: 1px solid #ccc;
-        padding: 10px;
-        position: relative;
-        width: 300px;
-      }
-      .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 300px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
-      }
-      .dropdown-content.show {
-        display: block;
-      }
-      .dropdown-content div {
-        padding: 12px 16px;
-        cursor: pointer;
-      }
-      .dropdown-content div:hover {
-        background-color: #f1f1f1;
-      }
-      .pills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-        margin-bottom: 10px;
-      }
-      .pill {
-        background-color: #007bff;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-      }
-      .pill button {
-        background: none;
-        border: none;
-        color: white;
-        margin-left: 5px;
-        cursor: pointer;
+        border-radius: 4px;
       }
     `;
   }
@@ -251,38 +204,23 @@ class NeoCardsElement extends LitElement {
     this.style = '';
     this.borderstyle = '';
     this.cardLayout = 'Grid';
-    this.filterTags = '';
-    this.selectedFilters = {};
-    this.options = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
-    this.selectedOptions = [];
+    this.searchTags = '';
+    this.searchTerm = '';
   }
 
   render() {
     return html`
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-      <div class="dropdown">
-        <div @click="${this.toggleDropdown}">
-          ${this.selectedOptions.length === 0 ? 'Select options' : ''}
-          <div class="pills">
-            ${this.selectedOptions.map((option, index) => html`
-              <div class="pill">
-                ${option}
-                <button @click="${() => this.removeOption(index)}">&times;</button>
-              </div>
-            `)}
-          </div>
-        </div>
-        <div class="dropdown-content ${this.showDropdown ? 'show' : ''}">
-          ${this.options.map(option => html`
-            <div @click="${() => this.selectOption(option)}">${option}</div>
-          `)}
-        </div>
+      
+      <div class="search-bar">
+        <input 
+          type="text" 
+          class="search-input" 
+          placeholder="Search..." 
+          @input="${this.handleSearchInput}"
+        />
       </div>
 
-      <div class="filter-bar">
-        ${this.renderFilterDropdowns()}
-      </div>
       <div class="${this.getCardLayoutClass()}">
         ${this.filteredItems().map(item => {
           const imageUrlString = this.interpolateTemplate(this.imgurl, item);
@@ -318,61 +256,29 @@ class NeoCardsElement extends LitElement {
     `;
   }
 
-  //
-
-  toggleDropdown() {
-    this.showDropdown = !this.showDropdown;
-  }
-
-  selectOption(option) {
-    if (!this.selectedOptions.includes(option)) {
-      this.selectedOptions = [...this.selectedOptions, option];
-    }
-    this.showDropdown = false;
-  }
-
-  removeOption(index) {
-    this.selectedOptions = this.selectedOptions.filter((_, i) => i !== index);
-  }
-
-  //
-
-  renderFilterDropdowns() {
-    if (!this.filterTags) return;
-
-    const tags = this.filterTags.split(',').map(tag => tag.trim());
-    const uniqueValues = this.getUniqueValuesForTags(tags);
-
-    return tags.map(tag => html`
-      <select class="filter-dropdown form-select" @change="${e => this.handleFilterChange(e, tag)}" multiple>
-        ${uniqueValues[tag].map(value => html`
-          <option value="${value}">${value}</option>
-        `)}
-      </select>
-    `);
-  }
-
-  handleFilterChange(event, tag) {
-    const selectedOptions = Array.from(event.target.selectedOptions).map(option => option.value);
-    this.selectedFilters = { ...this.selectedFilters, [tag]: selectedOptions };
+  handleSearchInput(event) {
+    this.searchTerm = event.target.value.toLowerCase();
     this.requestUpdate();
   }
 
-  getUniqueValuesForTags(tags) {
-    const uniqueValues = {};
-    tags.forEach(tag => {
-      uniqueValues[tag] = [...new Set(this.inputobject.map(item => item[tag]))];
-    });
-    return uniqueValues;
-  }
-
   filteredItems() {
-    if (!Object.keys(this.selectedFilters).length) return this.inputobject;
+    if (!this.searchTerm) return this.inputobject;
+
+    const searchTags = this.searchTags ? this.searchTags.split(',').map(tag => tag.trim()) : [];
+    const searchAllFields = searchTags.includes('*');
 
     return this.inputobject.filter(item => {
-      return Object.keys(this.selectedFilters).every(tag => {
-        if (!this.selectedFilters[tag].length) return true;
-        return this.selectedFilters[tag].includes(item[tag]);
+      if (searchAllFields) {
+        return Object.values(item).some(value => {
+          return value && value.toString().toLowerCase().includes(this.searchTerm);
+        });
+      }
+
+      return searchTags.some(tag => {
+        if (item[tag]) {
+          return item[tag].toString().toLowerCase().includes(this.searchTerm);
+        }
+        return false;
       });
     });
   }
@@ -390,39 +296,27 @@ class NeoCardsElement extends LitElement {
   }
 
   interpolateTemplate(template, data) {
-    const regex = /\${(.*?)}/g;
-    return template.replace(regex, (match, expression) => {
-      const key = expression.trim();
-      if (key.startsWith('$.')) {
-        const nestedKeys = key.substring(2).split('.');
-        let value = data;
-        for (const nestedKey of nestedKeys) {
-          if (value.hasOwnProperty(nestedKey)) {
-            value = value[nestedKey];
-          } else {
-            return match;
-          }
-        }
-        return value;
-      } else {
-        return data.hasOwnProperty(key) ? data[key] : match;
+    if (!template) return '';
+    const regex = /\{\{(.*?)\}\}/g;
+    return template.replace(regex, (_, key) => {
+      const keys = key.trim().split('.');
+      let value = data;
+      for (const k of keys) {
+        value = value[k];
+        if (value === undefined) return '';
       }
+      return value;
     });
   }
 
-  extractImageUrl(imageUrlString) {
-    const parts = imageUrlString.split(',');
-    const url = parts[0].trim();
-    return this.isValidUrl(url) ? url : '';
+  extractImageUrl(template) {
+    const match = template.match(/src\s*=\s*"([^"]*)"/i);
+    return match ? match[1] : template;
   }
 
-  extractImageDescription(imageUrlString) {
-    const parts = imageUrlString.split(',');
-    return parts.length > 1 ? parts[1].trim() : '';
-  }
-
-  isValidUrl(url) {
-    return /^https?:\/\//.test(url);
+  extractImageDescription(template) {
+    const match = template.match(/alt\s*=\s*"([^"]*)"/i);
+    return match ? match[1] : '';
   }
 }
 
