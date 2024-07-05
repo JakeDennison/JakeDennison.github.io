@@ -71,7 +71,7 @@ class NeoCardsElement extends LitElement {
         },
         cardLayout: {
           type: 'string',
-          title: 'Choice field',
+          title: 'Card Layout',
           enum: ['Grid', 'Vertical Group', 'Horizontal Group'],
           showAsRadio: true,
           verticalLayout: true,
