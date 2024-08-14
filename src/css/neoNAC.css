@@ -1,8 +1,12 @@
 .nx-form{
-    margin-top:100px;
+    margin-top:150px;
+    border-radius: 25px;
+    border: none;
 }
 
 .nx-form-runtime-content {
     background-image: url("https://jsdenintex.github.io/src/img/nwp.png");
+    background-repeat: no-repeat, repeat;
     background-color: #50348a;
+    background-size: cover; 
 }
