@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import '@fullcalendar/web-component';
+import '@fullcalendar/web-component/global'
 
 class fullcalendarElement extends LitElement {
   static getMetaConfig() {
@@ -41,10 +41,13 @@ class fullcalendarElement extends LitElement {
     return css`
       :host {
         display: block;
+        width: 100%;
+        height: 100%;
       }
       full-calendar {
         width: 100%;
         height: 100%;
+        display: block;
       }
     `;
   }
@@ -56,11 +59,14 @@ class fullcalendarElement extends LitElement {
   }
 
   firstUpdated() {
-    this.updateCalendar(this.inputobj);
+    // Check if inputobj has data before initializing the calendar
+    if (this.inputobj && Object.keys(this.inputobj).length > 0) {
+      this.updateCalendar(this.inputobj);
+    }
   }
 
   updated(changedProperties) {
-    if (changedProperties.has('inputobj')) {
+    if (changedProperties.has('inputobj') && Object.keys(this.inputobj).length > 0) {
       this.updateCalendar(this.inputobj);
     }
   }
@@ -69,15 +75,14 @@ class fullcalendarElement extends LitElement {
     const calendar = this.shadowRoot.querySelector('full-calendar');
     if (calendar) {
       calendar.options = {
-        initialView: 'dayGridMonth', // You can set this dynamically based on your inputObj
-        events: inputObj.events || [], // Set the events from inputObj
-        dateClick: this.handleDateClick.bind(this), // Handle date clicks
-        eventClick: this.handleEventClick.bind(this), // Handle event clicks
-        ...inputObj // Spread any other properties from inputObj into the options
+        initialView: 'dayGridMonth',
+        events: inputObj.events || [],
+        dateClick: this.handleDateClick.bind(this),
+        eventClick: this.handleEventClick.bind(this),
+        ...inputObj // Apply any additional inputObj settings
       };
     }
   }
-  
 
   handleDateClick(info) {
     const detail = { date: info.dateStr };
@@ -99,13 +104,7 @@ class fullcalendarElement extends LitElement {
 
   render() {
     return html`
-      <full-calendar shadow options='{
-      "headerToolbar": {
-        "left": "prev,next today",
-        "center": "title",
-        "right": "dayGridMonth,dayGridWeek,dayGridDay"
-      }
-    }' />
+      <full-calendar></full-calendar>
     `;
   }
 }
