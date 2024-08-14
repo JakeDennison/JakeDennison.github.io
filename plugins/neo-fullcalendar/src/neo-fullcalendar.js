@@ -99,7 +99,13 @@ class fullcalendarElement extends LitElement {
 
   render() {
     return html`
-      <full-calendar></full-calendar>
+      <full-calendar shadow options='{
+      "headerToolbar": {
+        "left": "prev,next today",
+        "center": "title",
+        "right": "dayGridMonth,dayGridWeek,dayGridDay"
+      }
+    }' />
     `;
   }
 }
