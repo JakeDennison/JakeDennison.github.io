@@ -9,7 +9,7 @@ class fullcalendarElement extends LitElement {
       fallbackDisableSubmit: false,
       description: '',
       iconUrl: "date-picker",
-      groupName: 'NEO',
+      groupName: 'neo',
       version: '1.0',
       properties: {
         inputobj: {
@@ -69,15 +69,15 @@ class fullcalendarElement extends LitElement {
     const calendar = this.shadowRoot.querySelector('full-calendar');
     if (calendar) {
       calendar.options = {
-        initialView: 'dayGridMonth',
-        events: inputObj.events || [],
-        dateClick: this.handleDateClick.bind(this),
-        eventClick: this.handleEventClick.bind(this),
-        ...inputObj
+        initialView: 'dayGridMonth', // You can set this dynamically based on your inputObj
+        events: inputObj.events || [], // Set the events from inputObj
+        dateClick: this.handleDateClick.bind(this), // Handle date clicks
+        eventClick: this.handleEventClick.bind(this), // Handle event clicks
+        ...inputObj // Spread any other properties from inputObj into the options
       };
-      calendar.render();
     }
   }
+  
 
   handleDateClick(info) {
     const detail = { date: info.dateStr };
