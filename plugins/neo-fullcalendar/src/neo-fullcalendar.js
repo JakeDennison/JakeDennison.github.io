@@ -69,8 +69,14 @@ class fullcalendarElement extends LitElement {
     background-color: #999;
     color: white;
   }
-  .schedule-table th, .schedule-table td {
+  .schedule-table th {
     padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+    width: 14.28%; /* Ensures each column takes up equal space */
+  }
+  .schedule-table td {
+    padding: 5px;
     text-align: center;
     border: 1px solid #ccc;
     width: 14.28%; /* Ensures each column takes up equal space */
