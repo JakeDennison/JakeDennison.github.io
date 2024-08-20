@@ -56,28 +56,35 @@ class fullcalendarElement extends LitElement {
   }
 
   static styles = css`
-    .day-schedule-selector {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .schedule-table th, .schedule-table td {
-      padding: 10px;
-      text-align: center;
-      border: 1px solid #ccc;
-    }
-    .time-slot[data-selected] {
-      background-color: #007bff;
-      color: white;
-    }
-    .time-slot[data-selecting] {
-      background-color: #6c757d;
-      color: white;
-    }
-    .time-slot[data-disabled] {
-      pointer-events: none;
-      opacity: 0.5;
-    }
-  `;
+  .day-schedule-selector {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .schedule-table {
+    width: 100%;
+    table-layout: fixed; /* Ensures all cells share the available space equally */
+    border-collapse: collapse;
+  }
+  .schedule-table th, .schedule-table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+    width: 14.28%; /* Ensures each column takes up equal space */
+  }
+  .time-slot[data-selected] {
+    background-color: #007bff;
+    color: white;
+  }
+  .time-slot[data-selecting] {
+    background-color: #6c757d;
+    color: white;
+  }
+  .time-slot[data-disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+`;
+
 
   render() {
     return html`
