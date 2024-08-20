@@ -44,10 +44,10 @@ class fullcalendarElement extends LitElement {
 
   constructor() {
     super();
-    this.days = [0, 1, 2, 3, 4, 5, 6]; // Sun - Sat
-    this.startTime = '08:00'; // HH:mm format
-    this.endTime = '20:00'; // HH:mm format
-    this.interval = 30; // minutes
+    this.days = [1, 2, 3, 4, 5, 6, 0]; // Sun - Sat
+    this.startTime = '00:00'; // HH:mm format
+    this.endTime = '23:00'; // HH:mm format
+    this.interval = 60; // minutes
     this.stringDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     this.selections = {};
     this.selectingStart = null;
