@@ -65,11 +65,18 @@ class fullcalendarElement extends LitElement {
     table-layout: fixed; /* Ensures all cells share the available space equally */
     border-collapse: collapse;
   }
+  .schedule-header {
+    background-color: #999;
+    color: white;
+  }
   .schedule-table th, .schedule-table td {
     padding: 10px;
     text-align: center;
     border: 1px solid #ccc;
     width: 14.28%; /* Ensures each column takes up equal space */
+  }
+  .time-label{
+    background-color: #ddd;
   }
   .time-slot[data-selected] {
     background-color: #007bff;
